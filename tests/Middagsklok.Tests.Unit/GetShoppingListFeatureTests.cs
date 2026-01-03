@@ -5,6 +5,13 @@ namespace Middagsklok.Tests.Unit;
 
 public class GetShoppingListFeatureTests
 {
+    private static Dish CreateDish(string name, List<DishIngredient> ingredients) =>
+        new(Guid.NewGuid(), name, 
+            ActiveMinutes: 10, TotalMinutes: 20, 
+            KidRating: 3, FamilyRating: 4, 
+            IsPescetarian: true, HasOptionalMeatVariant: false, 
+            ingredients);
+
     [Fact]
     public void Execute_IgnoresOptionalIngredients()
     {
@@ -12,7 +19,7 @@ public class GetShoppingListFeatureTests
         var tomato = new Ingredient(Guid.NewGuid(), "Tomat", "Grønnsaker", "stk");
         var basil = new Ingredient(Guid.NewGuid(), "Basilikum", "Urter", "stk");
 
-        var dish = new Dish(Guid.NewGuid(), "Salat",
+        var dish = CreateDish("Salat",
         [
             new DishIngredient(tomato, 2, "stk", Optional: false),
             new DishIngredient(basil, 1, "stk", Optional: true)
@@ -37,12 +44,12 @@ public class GetShoppingListFeatureTests
         var pastaId = Guid.NewGuid();
         var pasta = new Ingredient(pastaId, "Pasta", "Tørrvarer", "g");
 
-        var dish1 = new Dish(Guid.NewGuid(), "Bolognese",
+        var dish1 = CreateDish("Bolognese",
         [
             new DishIngredient(pasta, 400, "g", Optional: false)
         ]);
 
-        var dish2 = new Dish(Guid.NewGuid(), "Carbonara",
+        var dish2 = CreateDish("Carbonara",
         [
             new DishIngredient(pasta, 300, "g", Optional: false)
         ]);
@@ -73,7 +80,7 @@ public class GetShoppingListFeatureTests
         var onion = new Ingredient(Guid.NewGuid(), "Løk", "Grønnsaker", "stk");
         var pasta = new Ingredient(Guid.NewGuid(), "Pasta", "Tørrvarer", "g");
 
-        var dish = new Dish(Guid.NewGuid(), "Middag",
+        var dish = CreateDish("Middag",
         [
             new DishIngredient(pasta, 400, "g", Optional: false),
             new DishIngredient(tomato, 2, "stk", Optional: false),

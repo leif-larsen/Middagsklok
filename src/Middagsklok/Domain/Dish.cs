@@ -3,4 +3,10 @@ namespace Middagsklok.Domain;
 public record Dish(
     Guid Id,
     string Name,
-    List<DishIngredient> Ingredients);
+    int ActiveMinutes,
+    int TotalMinutes,
+    int KidRating,
+    int FamilyRating,
+    bool IsPescetarian,
+    bool HasOptionalMeatVariant,
+    IReadOnlyList<DishIngredient> Ingredients);
