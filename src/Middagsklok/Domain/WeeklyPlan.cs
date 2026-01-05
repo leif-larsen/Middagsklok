@@ -1,5 +1,7 @@
 namespace Middagsklok.Domain;
 
 public record WeeklyPlan(
+    Guid Id,
     DateOnly WeekStartDate,
-    List<WeeklyPlanItem> Items);
+    DateTimeOffset CreatedAt,
+    IReadOnlyList<WeeklyPlanItem> Items);

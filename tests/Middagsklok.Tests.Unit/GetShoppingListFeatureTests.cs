@@ -26,7 +26,9 @@ public class GetShoppingListFeatureTests
         ]);
 
         var plan = new WeeklyPlan(
+            Id: Guid.NewGuid(),
             WeekStartDate: new DateOnly(2026, 1, 5),
+            CreatedAt: DateTimeOffset.UtcNow,
             Items: [new WeeklyPlanItem(DayIndex: 0, Dish: dish)]);
 
         // Act
@@ -55,7 +57,9 @@ public class GetShoppingListFeatureTests
         ]);
 
         var plan = new WeeklyPlan(
+            Id: Guid.NewGuid(),
             WeekStartDate: new DateOnly(2026, 1, 5),
+            CreatedAt: DateTimeOffset.UtcNow,
             Items:
             [
                 new WeeklyPlanItem(DayIndex: 0, Dish: dish1),
@@ -88,7 +92,9 @@ public class GetShoppingListFeatureTests
         ]);
 
         var plan = new WeeklyPlan(
+            Id: Guid.NewGuid(),
             WeekStartDate: new DateOnly(2026, 1, 5),
+            CreatedAt: DateTimeOffset.UtcNow,
             Items: [new WeeklyPlanItem(DayIndex: 0, Dish: dish)]);
 
         // Act

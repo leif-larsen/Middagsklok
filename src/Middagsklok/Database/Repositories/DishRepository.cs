@@ -7,6 +7,7 @@ namespace Middagsklok.Database.Repositories;
 public interface IDishRepository
 {
     Task<IReadOnlyList<Dish>> GetAllWithIngredients(CancellationToken ct = default);
+    Task<Dish?> GetByIdWithIngredients(Guid dishId, CancellationToken ct = default);
 }
 
 public class DishRepository : IDishRepository
@@ -30,6 +31,17 @@ public class DishRepository : IDishRepository
         return entities
             .Select(MapToDomain)
             .ToList();
+    }
+
+    public async Task<Dish?> GetByIdWithIngredients(Guid dishId, CancellationToken ct = default)
+    {
+        var entity = await _context.Dishes
+            .AsNoTracking()
+            .Include(d => d.DishIngredients)
+                .ThenInclude(di => di.Ingredient)
+            .FirstOrDefaultAsync(d => d.Id == dishId, ct);
+
+        return entity is null ? null : MapToDomain(entity);
     }
 
     private static Dish MapToDomain(DishEntity entity)
