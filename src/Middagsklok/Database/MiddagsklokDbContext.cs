@@ -11,6 +11,7 @@ public class MiddagsklokDbContext : DbContext
     public DbSet<DishIngredientEntity> DishIngredients => Set<DishIngredientEntity>();
     public DbSet<WeeklyPlanEntity> WeeklyPlans => Set<WeeklyPlanEntity>();
     public DbSet<WeeklyPlanItemEntity> WeeklyPlanItems => Set<WeeklyPlanItemEntity>();
+    public DbSet<DishHistoryEntity> DishHistory => Set<DishHistoryEntity>();
 
     public MiddagsklokDbContext(DbContextOptions<MiddagsklokDbContext> options)
         : base(options)
@@ -24,5 +25,6 @@ public class MiddagsklokDbContext : DbContext
         modelBuilder.ApplyConfiguration(new DishIngredientConfiguration());
         modelBuilder.ApplyConfiguration(new WeeklyPlanConfiguration());
         modelBuilder.ApplyConfiguration(new WeeklyPlanItemConfiguration());
+        modelBuilder.ApplyConfiguration(new DishHistoryConfiguration());
     }
 }
