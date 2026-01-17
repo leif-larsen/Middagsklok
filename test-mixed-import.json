@@ -1,0 +1,80 @@
+{
+  "dishes": [
+    {
+      "name": "Valid New Dish",
+      "activeMinutes": 20,
+      "totalMinutes": 30,
+      "kidRating": 4,
+      "familyRating": 5,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": null,
+      "ingredients": [
+        {
+          "name": "ingredient1",
+          "category": "produce",
+          "amount": 100,
+          "unit": "g",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Laks med ovnsgrønnsaker",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 4,
+      "familyRating": 5,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": null,
+      "ingredients": [
+        {
+          "name": "laks",
+          "category": "fish",
+          "amount": 600,
+          "unit": "g",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Invalid Dish - Bad Rating",
+      "activeMinutes": 20,
+      "totalMinutes": 30,
+      "kidRating": 10,
+      "familyRating": 5,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": null,
+      "ingredients": [
+        {
+          "name": "ingredient2",
+          "category": "produce",
+          "amount": 100,
+          "unit": "g",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Another Valid Dish",
+      "activeMinutes": 25,
+      "totalMinutes": 40,
+      "kidRating": 3,
+      "familyRating": 4,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": null,
+      "ingredients": [
+        {
+          "name": "ingredient3",
+          "category": "dairy",
+          "amount": 200,
+          "unit": "ml",
+          "optional": false
+        }
+      ]
+    }
+  ]
+}

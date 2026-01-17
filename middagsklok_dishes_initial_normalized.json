@@ -1,0 +1,1452 @@
+{
+  "dishes": [
+    {
+      "name": "Italiensk torskepanne",
+      "activeMinutes": 15,
+      "totalMinutes": 40,
+      "kidRating": 4,
+      "familyRating": 2,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Torsk",
+          "category": "fish",
+          "amount": 400,
+          "unit": "g",
+          "optional": false
+        },
+        {
+          "name": "Creme Fraiche",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Mozzarella",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Potet",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Hakkede Tomater - Hvitløk og Oregano",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kylling quesadillas",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 1,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Kyllingfilet",
+          "category": "meat",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Fullkornstortilla",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Løk",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Vårløk",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Paprika",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Rapsolje",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Hvitost",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pytt i panne",
+      "activeMinutes": 15,
+      "totalMinutes": 20,
+      "kidRating": 4,
+      "familyRating": 2,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Pytt i Panne",
+          "category": "frozen",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Smårettskinke",
+          "category": "meat",
+          "amount": 250,
+          "unit": "g",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Polarpizza med ost og skinke",
+      "activeMinutes": 5,
+      "totalMinutes": 20,
+      "kidRating": 5,
+      "familyRating": 3,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": true,
+      "ingredients": [
+        {
+          "name": "Tomatpure",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Hvitost",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Polarbrød",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Kokt skinke",
+          "category": "meat",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Gryterett",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Karbonadedeig",
+          "category": "meat",
+          "amount": 1,
+          "unit": "stk",
+          "optional": true
+        },
+        {
+          "name": "Meksikans gryte",
+          "category": "premade",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Hvitløksbaguette",
+          "category": "bakery",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Burrito Bowl",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 1,
+      "familyRating": 4,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Kyllingfilet",
+          "category": "meat",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Røde bønner",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Mais",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Creme Fraiche",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Salat",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Tortillachips",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Ost",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Tacosaus",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kyllingsalat",
+      "activeMinutes": 15,
+      "totalMinutes": 15,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Kyllingkjøttdeig",
+          "category": "meat",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Salat",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Fetaost",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Hamburger",
+      "activeMinutes": 15,
+      "totalMinutes": 25,
+      "kidRating": 5,
+      "familyRating": 5,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": true,
+      "ingredients": [
+        {
+          "name": "Hamburgerbrød",
+          "category": "bakery",
+          "amount": 4,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Agurk",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Salat",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Hamburger",
+          "category": "meat",
+          "amount": 4,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Hamburgerdressing",
+          "category": "condiment",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Ketchup",
+          "category": "condiment",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "torsk m/pastasalt og pesto",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 2,
+      "familyRating": 2,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Torsk",
+          "category": "fish",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Salat",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Pasta",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Grønn pesto",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kjappkjo",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 5,
+      "familyRating": 5,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Baconterning",
+          "category": "meat",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Makaroni",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Tomatpure",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Lasagne",
+      "activeMinutes": 15,
+      "totalMinutes": 45,
+      "kidRating": 5,
+      "familyRating": 5,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Lasagne",
+          "category": "premade",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Melk",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Kyllingkjøttdeig",
+          "category": "meat",
+          "amount": 400,
+          "unit": "g",
+          "optional": false
+        },
+        {
+          "name": "Ost",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Nachos",
+      "activeMinutes": 15,
+      "totalMinutes": 20,
+      "kidRating": 4,
+      "familyRating": 5,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Nachips",
+          "category": "premade",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Vegetardeig",
+          "category": "vegetarian",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Ost",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Mais",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Paprika",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Ørret m/ pasta",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 2,
+      "familyRating": 4,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Ørret",
+          "category": "fish",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Pasta",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Purreløk",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Blomkål",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Erter",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Matfløte",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Gresk yoghurt",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pasta Bolognese",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 4,
+      "familyRating": 2,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Vegetardeig",
+          "category": "vegetarian",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Spaghetti",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Bolognese",
+          "category": "premade",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Hjemmelagd Pizza",
+      "activeMinutes": 15,
+      "totalMinutes": 30,
+      "kidRating": 5,
+      "familyRating": 5,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": true,
+      "ingredients": [
+        {
+          "name": "Pizzabunn",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Kjøttdeig",
+          "category": "meat",
+          "amount": 100,
+          "unit": "g",
+          "optional": false
+        },
+        {
+          "name": "Pizzasaus",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Ost",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Kokt skinke",
+          "category": "meat",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Alt-i-ett pasta med vegetarboller",
+      "activeMinutes": 15,
+      "totalMinutes": 20,
+      "kidRating": 5,
+      "familyRating": 2,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Hakkede Tomater",
+          "category": "canned",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Vegetarboller",
+          "category": "vegetarian",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Pasta",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Taco",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 5,
+      "familyRating": 5,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": true,
+      "ingredients": [
+        {
+          "name": "Tortillalefser",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Tortilla tubs",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Kjøttdeig",
+          "category": "meat",
+          "amount": 400,
+          "unit": "g",
+          "optional": false
+        },
+        {
+          "name": "Ost",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Fetaost",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Paprika",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Agurk",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Mais",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Salat",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Rømme",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Tacosaus",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Hamburgerdressing",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Fiskeboller i hvitsaus",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Potet",
+          "category": "produce",
+          "amount": 7,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Hvetemel",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Melk",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Karri",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Fiskeboller",
+          "category": "fish",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Gulrot",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Flytende margarin",
+          "category": "premade",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pasta og skinke i hvit saus",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Melk",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Hvetemel",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Flytende margarin",
+          "category": "premade",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Erter",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Pasts",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Strimlet skinke",
+          "category": "meat",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pannekake",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Hvetemel",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Egg",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Melk",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Blåbærsyltetøy",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Flytende margarin",
+          "category": "premade",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Salt",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Jordbærsyltetøy",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Vegetarboller i brunsaus",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Potet",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Gulrot",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Brunsaus",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Vegetarboller",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Quesedilas m/kikerter og rømme",
+      "activeMinutes": 15,
+      "totalMinutes": 15,
+      "kidRating": 4,
+      "familyRating": 4,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Tortillalefse",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Kikerter",
+          "category": "canned",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Seterømme",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Rømme",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Tacosaus",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Guacamole",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Ost",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Laks m/erte- og potetstappe",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Potet",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Erter",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Laks",
+          "category": "fish",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Spekepølse",
+          "category": "meat",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kyllingwok",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Wokgrønnsaker",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Nudler",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Sweet&Sour saus",
+          "category": "sauce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Kyllingfilet",
+          "category": "meat",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Fiskegrateng",
+      "activeMinutes": 15,
+      "totalMinutes": 50,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Fiskegrateng",
+          "category": "fish",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Amerikansk blanding",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Rømme",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Fiskekake i pitabrød",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Fiskekaker",
+          "category": "fish",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Pitabrød",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Eple",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Sukkerert",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Rømme",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "ChiliGinger saus",
+          "category": "sauce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Sushi",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Sushi",
+          "category": "fish",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Tortelloini",
+      "activeMinutes": 4,
+      "totalMinutes": 4,
+      "kidRating": 3,
+      "familyRating": 5,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Tortelloni",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Fish´n´chips",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Sprøbakte fiskefileter",
+          "category": "fish",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Pommes Express",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Chipotle Mayo",
+          "category": "sauce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Fiskekaker i brun saus",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Fiskekaker i brun saus",
+          "category": "fish",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Potet",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Gulrot",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Brunsaus",
+          "category": "sauce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pastasalat",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Pasta",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Paprika",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Agurk",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Mais",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Fetaost",
+          "category": "dairy",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Lapskaus m/vegetarboller",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": false,
+      "ingredients": [
+        {
+          "name": "Vegetarboller",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Purreløk",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Potet",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Gulrot",
+          "category": "produce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pinsapizza",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": true,
+      "ingredients": [
+        {
+          "name": "Pinsa",
+          "category": "dry",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Pizzasaus",
+          "category": "sauce",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Ost",
+          "category": "fish",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Kokt skinke",
+          "category": "meat",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Kyllingfilet",
+          "category": "meat",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    }
+  ]
+}

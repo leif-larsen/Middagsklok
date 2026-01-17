@@ -1,0 +1,225 @@
+{
+  "dishes": [
+    {
+      "name": "Laks med ovnsgrønnsaker",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 4,
+      "familyRating": 5,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": ["fish", "quick"],
+      "ingredients": [
+        {
+          "name": "laks",
+          "category": "fish",
+          "amount": 600,
+          "unit": "g",
+          "optional": false
+        },
+        {
+          "name": "potet",
+          "category": "produce",
+          "amount": 800,
+          "unit": "g",
+          "optional": false
+        },
+        {
+          "name": "gulrot",
+          "category": "produce",
+          "amount": 300,
+          "unit": "g",
+          "optional": false
+        },
+        {
+          "name": "olivenolje",
+          "category": "pantry",
+          "amount": 2,
+          "unit": "ss",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Veggie taco",
+      "activeMinutes": 20,
+      "totalMinutes": 35,
+      "kidRating": 4,
+      "familyRating": 4,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": true,
+      "tags": ["taco", "quick"],
+      "ingredients": [
+        {
+          "name": "tortilla",
+          "category": "dry",
+          "amount": 8,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "bønner",
+          "category": "dry",
+          "amount": 2,
+          "unit": "boks",
+          "optional": false
+        },
+        {
+          "name": "ost",
+          "category": "dairy",
+          "amount": 200,
+          "unit": "g",
+          "optional": true
+        },
+        {
+          "name": "tomat",
+          "category": "produce",
+          "amount": 2,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pasta Carbonara",
+      "activeMinutes": 20,
+      "totalMinutes": 30,
+      "kidRating": 5,
+      "familyRating": 5,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": false,
+      "tags": ["pasta", "comfort"],
+      "ingredients": [
+        {
+          "name": "pasta",
+          "category": "dry",
+          "amount": 400,
+          "unit": "g",
+          "optional": false
+        },
+        {
+          "name": "bacon",
+          "category": "meat",
+          "amount": 150,
+          "unit": "g",
+          "optional": false
+        },
+        {
+          "name": "egg",
+          "category": "dairy",
+          "amount": 3,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "parmesan",
+          "category": "dairy",
+          "amount": 100,
+          "unit": "g",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kylling Tikka Masala",
+      "activeMinutes": 30,
+      "totalMinutes": 45,
+      "kidRating": 3,
+      "familyRating": 5,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": false,
+      "tags": ["indian", "curry"],
+      "ingredients": [
+        {
+          "name": "kylling",
+          "category": "meat",
+          "amount": 600,
+          "unit": "g",
+          "optional": false
+        },
+        {
+          "name": "løk",
+          "category": "produce",
+          "amount": 2,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "hvitløk",
+          "category": "produce",
+          "amount": 3,
+          "unit": "fedd",
+          "optional": false
+        },
+        {
+          "name": "tomat",
+          "category": "produce",
+          "amount": 400,
+          "unit": "g",
+          "optional": false
+        },
+        {
+          "name": "kremfløte",
+          "category": "dairy",
+          "amount": 200,
+          "unit": "ml",
+          "optional": false
+        },
+        {
+          "name": "ris",
+          "category": "dry",
+          "amount": 300,
+          "unit": "g",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Fiskekaker med potetmos",
+      "activeMinutes": 25,
+      "totalMinutes": 35,
+      "kidRating": 5,
+      "familyRating": 4,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": ["fish", "norwegian"],
+      "ingredients": [
+        {
+          "name": "fiskekaker",
+          "category": "frozen",
+          "amount": 500,
+          "unit": "g",
+          "optional": false
+        },
+        {
+          "name": "potet",
+          "category": "produce",
+          "amount": 800,
+          "unit": "g",
+          "optional": false
+        },
+        {
+          "name": "melk",
+          "category": "dairy",
+          "amount": 150,
+          "unit": "ml",
+          "optional": false
+        },
+        {
+          "name": "smør",
+          "category": "dairy",
+          "amount": 50,
+          "unit": "g",
+          "optional": false
+        },
+        {
+          "name": "gulrot",
+          "category": "produce",
+          "amount": 300,
+          "unit": "g",
+          "optional": false
+        }
+      ]
+    }
+  ]
+}

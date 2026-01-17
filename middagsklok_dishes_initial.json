@@ -1,0 +1,3016 @@
+{
+  "dishes": [
+    {
+      "name": "Toast",
+      "activeMinutes": 15,
+      "totalMinutes": 15,
+      "kidRating": 5,
+      "familyRating": 3,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": true,
+      "tags": [
+      ],
+      "ingredients": [
+        {
+          "name": "Brød",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Hvitost",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Skinke",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Speltlompe med egg og pålegg",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "christin",
+        "kveldsmat"
+      ],
+      "ingredients": [
+        {
+          "name": "Eggs",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Speltlompe",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Hvitost",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Skinke",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Italiensk torskepanne",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "middag",
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "Torsk",
+          "category": "fish",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Creme Fraiche",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Mozzarella",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Potet",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Hakkede Tomater",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Hvitlø&Oregano",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Karbonadedeig med ris og avokado",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "middag"
+      ],
+      "ingredients": [
+        {
+          "name": "Karbonadedeig",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Ris",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Avocado",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Rapsolje",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kylling quesadillas",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "middag"
+      ],
+      "ingredients": [
+        {
+          "name": "Kyllingfilet",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Fullkornstortilla",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Løk",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Vårløk",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Paprika",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Rapsolje",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Hvitost",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pytt i panne",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "middag"
+      ],
+      "ingredients": [
+        {
+          "name": "Pytt i Panne",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Smårettskinke",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Eple",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Sjøørret med pasta",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "middag",
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "Fullkornspasta",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Purreløk",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Blomkål",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Erter",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Matfløte",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Matyoghurt",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Sjøørret",
+          "category": "fish",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Polarpizza med ost og skinke",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "middag"
+      ],
+      "ingredients": [
+        {
+          "name": "Tomatpure",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Hvitost",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Polarbrød",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Kokt skinke",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Rød pesto",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kremet pasta med strandaskinke og parmesan",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Gryterett",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "Karbonadedeig",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Meksikans gryte",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Burrito Bowl",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "Kyllingfilet",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Røde bønner",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Mais",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Creme Fraiche",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Salat",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Tortillachips",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Ost",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Tacosaus",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Laks i pita",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "Laks",
+          "category": "fish",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Pita",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Salat",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Smørost",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kyllingsalat",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "Kyllingkjøttdeig",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Salat",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Fetaost",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pita med karbonadedeig",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "Pita",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Karbonadedeig",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Mais",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Ost",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Kesam",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Fetaost",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Hermetisk ananas",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Klemetin",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kremet pastasalat",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "Rømme",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Lett majones",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Pasta",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Mais",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Salat",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Skinke",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Kalkunbacon",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Vårruller",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Laks med spekeskinke",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Hamburger",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": true,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "torsk m/pastasalt og pesto",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "Torsk",
+          "category": "fish",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Salat",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Pasta",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Grønn pesto",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kjappkjo",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "Baconterning",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Makaroni",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Tomatpure",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Ovnsbakt laks m/sitron",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "Laks",
+          "category": "fish",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Avocado",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Salat",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Ris",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Sitron",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Soyasaus",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Olivenolje",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pasta classico med kylling og parmesan",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "Kyllingkjøttdeig",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Pasta classico",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Parmesan",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Koteletter m/ fries",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "Koteletter",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Pommes Frites",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Salat",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Bearnaise",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Biff m/fløtegratinerte poteter",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "Biff",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Fløtegratinerte poteter",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Salat",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Bearnaise",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Lasagne",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Nachos",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Ørret m/ pasta",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "Ørret",
+          "category": "fish",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Pasta",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Purreløk",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Blomkål",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Erter",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Matfløte",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Gresk yoghurt",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pasta Bolognese",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "Karbonadedeig",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Spaghetti",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Bolognese",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Tapas",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Biffwok",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Spaghetti bolognese",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kalkunbryst",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "Kalkunbryst",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Gulrot",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Potet",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Rosenkål",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Fjordland",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Svinewok",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Hjemmelagd Pizza",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pizza",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kjøttkaker",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "Potet",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Gulrot",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Brun saus",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Kjøttkaker",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pølsepanne",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "Kjøpttpølse",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Makaroni",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Tomatpure",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Brokkolitopper",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Alt-i-ett pasta med kjøttboller",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Taco",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": true,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Fiskeboller i hvitsaus",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pasta og skinke i hvit saus",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pølse i brød",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pannekake",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Grillet laks med potetsalat",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Enchilada",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Grillmat",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Grønnsaksmos",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Lapskaus m/kjøttdeig",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Honninglaks",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "middag",
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "Laks",
+          "category": "fish",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Akasiehonning",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Soyasaus",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Sesamolje",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Spisskumin",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Hasselnøtter",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Ris",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Grønnsaker",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kjøttkaker i brun saus",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Gratinert torsk",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pasta med vegetarragu",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Søtpotetsuppe med kokos og ingefær",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "Søtpotet",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Naan brød",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Gulrot",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Hvitløk",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Ingefær",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Lime",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Grønnsaksbuljong",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Kokosmelk",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pastagrateng m/laks og brokkolini",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Mac’n’cheese",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Grøt",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Bakt laksetortilla",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": true,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Julemat",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Ball",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kyllinggryte",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "Kyllingkjøttdeig",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        },
+        {
+          "name": "Potet",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pølse m/fries",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Alt-i-ett panne m/kylling og mango",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Innbakt Pølse",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kjøttboller i brun saus",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Torskegryte ala Christin",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Stekt egg m/ris",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Laks m/basilikum og kremet brokkolipasta",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kremet kyllingpanne m/ løk og paprika",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kremet laksepanne",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Gulrotsuppe m/ricotta tortellini",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Quesedilas m/kikerter og rømme",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Laks m/erte- og potetstappe",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kremet torsk- og potetform m/chorizo",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Biff m/fries",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Tandoori kyllingburger",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": true,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Stekt ris m/laks",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Fiskepinner",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kjøttbo",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Quesedilas m/kylling",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kyllingwok",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Rester",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Karbonader",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Fiskegrateng",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Fiskekake i pitabrød",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kremet pasta m/ laks og basilikum",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Rask Thai nudelsalat m/råkost og peanøtter",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Rask grønnsaksbolognese m/tagliatelle",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Gulrot og pastinakksuppe",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Chili sin carne",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kremet pasta med paprika",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Vegetarquesedilas",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Korma med kikerter og spinat",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Kremet pasta m/brokkoli",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Junkfood",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Vegetarisk spaghetti carbonara",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Suppe med søtpotet og bacon",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Rask pasta med vegetarragu",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Gryte",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Sushi",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Turmat",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Wok",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Tacopai",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": true,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Tortellini",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Fish´n´chips",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Fiskekakeform m/fløtegratinerte poteter",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Rask pasta med rød pesto og mozzarella",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Ovnsbakt laks med rotgrønnsaker",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pasta m/ostesaus, brokkoli og laks",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Tortelloni",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Rask gnocchi carbonara med laks",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Fiskekaker i brun saus",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [
+        "fish"
+      ],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pastasalat",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Lapskaus m/vegetarboller",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "Pinsapizza",
+      "activeMinutes": 15,
+      "totalMinutes": 35,
+      "kidRating": 3,
+      "familyRating": 3,
+      "isPescetarian": true,
+      "hasOptionalMeatVariant": false,
+      "tags": [],
+      "ingredients": [
+        {
+          "name": "TODO",
+          "category": "unknown",
+          "amount": 1,
+          "unit": "stk",
+          "optional": false
+        }
+      ]
+    }
+  ]
+}
