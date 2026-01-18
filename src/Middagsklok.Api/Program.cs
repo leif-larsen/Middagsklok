@@ -1,6 +1,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Middagsklok.Api.Converters;
+using Middagsklok.Api.Endpoints;
 using Middagsklok.Database;
 using Middagsklok.Database.Repositories;
 using Middagsklok.Features.BatchImportDishes;
@@ -73,93 +75,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Health endpoint
-app.MapGet("/health", () => new { status = "ok" })
-    .WithName("GetHealth");
-
-// Dish endpoints
-app.MapGet("/dishes", async (GetDishesFeature feature, CancellationToken ct) =>
-{
-    var dishes = await feature.Execute(ct);
-    return Results.Ok(dishes.Select(d => new
-    {
-        id = d.Id,
-        name = d.Name,
-        activeMinutes = d.ActiveMinutes,
-        totalMinutes = d.TotalMinutes
-    }));
-})
-.WithName("GetDishes");
-
-app.MapPost("/dishes/import", async (BatchImportDishesCommand command, BatchImportDishesFeature feature, CancellationToken ct) =>
-{
-    try
-    {
-        var result = await feature.Execute(command, ct);
-        return Results.Ok(result);
-    }
-    catch (ArgumentException ex)
-    {
-        return Results.BadRequest(new { error = ex.Message });
-    }
-})
-.WithName("ImportDishes");
-
-// Weekly plan endpoints
-app.MapGet("/weekly-plan/{weekStartDate}", async (string weekStartDate, GetWeeklyPlanFeature feature, CancellationToken ct) =>
-{
-    if (!DateOnly.TryParse(weekStartDate, out var date))
-    {
-        return Results.BadRequest(new { error = "Invalid date format. Use YYYY-MM-DD." });
-    }
-
-    var plan = await feature.Execute(date, ct);
-    if (plan == null)
-    {
-        return Results.NotFound(new { error = "No plan found for the specified week." });
-    }
-
-    return Results.Ok(plan);
-})
-.WithName("GetWeeklyPlan");
-
-app.MapPost("/weekly-plan/generate", async (GenerateWeeklyPlanRequest request, GenerateWeeklyPlanFeature feature, CancellationToken ct) =>
-{
-    try
-    {
-        var result = await feature.Execute(request, ct);
-        return Results.Ok(result);
-    }
-    catch (InvalidOperationException ex)
-    {
-        return Results.BadRequest(new { error = ex.Message });
-    }
-})
-.WithName("GenerateWeeklyPlan");
+// Register endpoints
+app.MapHealthEndpoints();
+app.MapDishEndpoints();
+app.MapWeeklyPlanEndpoints();
 
 app.Run();
-
-// Custom JSON converter for DateOnly
-public class DateOnlyJsonConverter : JsonConverter<DateOnly>
-{
-    public override DateOnly Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        var value = reader.GetString();
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new JsonException("Date value cannot be null or empty.");
-        }
-
-        if (!DateOnly.TryParse(value, out var date))
-        {
-            throw new JsonException($"Invalid date format: '{value}'. Expected format: YYYY-MM-DD.");
-        }
-
-        return date;
-    }
-
-    public override void Write(Utf8JsonWriter writer, DateOnly value, JsonSerializerOptions options)
-    {
-        writer.WriteStringValue(value.ToString("yyyy-MM-dd"));
-    }
-}
