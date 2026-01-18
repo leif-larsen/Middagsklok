@@ -50,21 +50,11 @@ builder.Services.AddScoped<GenerateWeeklyPlanFeature>();
 builder.Services.AddScoped<GetWeeklyPlanFeature>();
 builder.Services.AddScoped<WeeklyPlanRulesValidator>();
 
-// Register services
-builder.Services.AddScoped<DbBootstrapper>();
-
 // Add Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
-// Initialize database
-using (var scope = app.Services.CreateScope())
-{
-    var bootstrapper = scope.ServiceProvider.GetRequiredService<DbBootstrapper>();
-    await bootstrapper.InitializeAsync();
-}
 
 // Configure middleware
 app.UseCors();
