@@ -1,6 +1,59 @@
 @Middagsklok.Api_HostAddress = http://localhost:5000
 
-GET {{Middagsklok.Api_HostAddress}}/weatherforecast/
+### Health Check
+GET {{Middagsklok.Api_HostAddress}}/health
 Accept: application/json
+
+###
+
+### Get All Dishes
+GET {{Middagsklok.Api_HostAddress}}/dishes
+Accept: application/json
+
+###
+
+### Get Weekly Plan
+GET {{Middagsklok.Api_HostAddress}}/weekly-plan/2026-01-19
+Accept: application/json
+
+###
+
+### Generate Weekly Plan
+POST {{Middagsklok.Api_HostAddress}}/weekly-plan/generate
+Content-Type: application/json
+
+{
+  "weekStartDate": "2026-01-19"
+}
+
+###
+
+### Import Dishes
+POST {{Middagsklok.Api_HostAddress}}/dishes/import
+Content-Type: application/json
+
+{
+  "dishes": [
+    {
+      "name": "Example Dish",
+      "activeMinutes": 15,
+      "totalMinutes": 30,
+      "kidRating": 4,
+      "familyRating": 5,
+      "isPescetarian": false,
+      "hasOptionalMeatVariant": false,
+      "tags": ["quick"],
+      "ingredients": [
+        {
+          "name": "Ingredient",
+          "category": "Category",
+          "amount": 100,
+          "unit": "g",
+          "optional": false
+        }
+      ]
+    }
+  ]
+}
 
 ###
