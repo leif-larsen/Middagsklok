@@ -98,7 +98,7 @@ public class WeeklyPlanRulesValidator
             var isWeekday = item.DayIndex >= 0 && item.DayIndex <= 4;
             var maxMinutes = isWeekday ? rules.WeekdayMaxTotalMinutes : rules.WeekendMaxTotalMinutes;
 
-            if (item.Dish.ActiveMinutes > maxMinutes)
+            if (item.Dish.TotalMinutes > maxMinutes)
             {
                 if (isWeekday)
                     weekdayViolations.Add(item.DayIndex);
