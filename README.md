@@ -23,7 +23,7 @@ cd src/Middagsklok.Api
 dotnet run
 ```
 
-The API will start on `http://localhost:5000` (or the port configured in `launchSettings.json`).
+The API will start on `http://localhost:5032` (or the port configured in `launchSettings.json`).
 
 ### API Endpoints
 
