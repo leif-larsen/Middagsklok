@@ -1,3 +1,4 @@
+using Middagsklok.Contracts.Dishes;
 using Middagsklok.Features.Dishes.Import;
 using Middagsklok.Features.Dishes.List;
 
@@ -10,22 +11,59 @@ public static class DishEndpoints
         app.MapGet("/dishes", async (GetDishesFeature feature, CancellationToken ct) =>
         {
             var dishes = await feature.Execute(ct);
-            return dishes.Select(d => new
-            {
-                id = d.Id,
-                name = d.Name,
-                activeMinutes = d.ActiveMinutes,
-                totalMinutes = d.TotalMinutes
-            });
+            var items = dishes.Select(d => new DishListItem(
+                Id: d.Id.ToString(),
+                Name: d.Name,
+                ActiveMinutes: d.ActiveMinutes,
+                TotalMinutes: d.TotalMinutes
+            )).ToList();
+            
+            return new DishListResponse(items);
         });
 
         app.MapPost("/dishes/import", async (
-            BatchImportDishesCommand command,
+            BatchImportDishesRequest request,
             BatchImportDishesFeature feature,
             CancellationToken ct) =>
         {
+            // Map from contract DTO to feature command
+            var command = new BatchImportDishesCommand(
+                request.Dishes.Select(d => new AddDishCommand(
+                    Name: d.Name,
+                    ActiveMinutes: d.ActiveMinutes,
+                    TotalMinutes: d.TotalMinutes,
+                    KidRating: d.KidRating,
+                    FamilyRating: d.FamilyRating,
+                    IsPescetarian: d.IsPescetarian,
+                    HasOptionalMeatVariant: d.HasOptionalMeatVariant,
+                    Tags: d.Tags,
+                    Ingredients: d.Ingredients.Select(i => new AddDishIngredientItem(
+                        Name: i.Name,
+                        Category: i.Category,
+                        Amount: i.Amount,
+                        Unit: i.Unit,
+                        Optional: i.Optional
+                    )).ToList()
+                )).ToList()
+            );
+            
             var result = await feature.Execute(command, ct);
-            return Results.Ok(result);
+            
+            // Map from feature result to contract DTO
+            var response = new BatchImportDishesResponse(
+                Total: result.Total,
+                Created: result.Created,
+                Skipped: result.Skipped,
+                Failed: result.Failed,
+                Results: result.Results.Select(r => new BatchImportDishResultItem(
+                    Name: r.Name,
+                    Status: r.Status,
+                    DishId: r.DishId?.ToString(),
+                    Error: r.Error
+                )).ToList()
+            );
+            
+            return Results.Ok(response);
         });
     }
 }

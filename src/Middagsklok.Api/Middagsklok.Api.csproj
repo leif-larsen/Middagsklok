@@ -8,6 +8,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Middagsklok\Middagsklok.csproj" />
+    <ProjectReference Include="..\Middagsklok.Contracts\Middagsklok.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.0" />
   </ItemGroup>
 
 </Project>
