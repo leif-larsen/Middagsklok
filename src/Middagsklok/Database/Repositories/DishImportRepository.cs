@@ -1,14 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Middagsklok.Database.Entities;
-using Middagsklok.Features.BatchImportDishes;
+using Middagsklok.Features.Dishes.Import;
 
 namespace Middagsklok.Database.Repositories;
-
-public interface IDishImportRepository
-{
-    Task<Guid?> FindDishIdByName(string name, CancellationToken ct = default);
-    Task<Guid> InsertDish(AddDishCommand cmd, CancellationToken ct = default);
-}
 
 public class DishImportRepository : IDishImportRepository
 {

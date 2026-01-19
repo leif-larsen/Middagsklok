@@ -1,7 +1,6 @@
 using FakeItEasy;
-using Middagsklok.Database.Repositories;
 using Middagsklok.Domain;
-using Middagsklok.Features.WeeklyPlanning;
+using Middagsklok.Features.WeeklyPlans.Generate;
 
 namespace Middagsklok.Tests.Unit;
 

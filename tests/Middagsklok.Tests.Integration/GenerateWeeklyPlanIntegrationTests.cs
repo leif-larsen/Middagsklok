@@ -3,16 +3,18 @@ using Middagsklok.Database;
 using Middagsklok.Database.Entities;
 using Middagsklok.Database.Repositories;
 using Middagsklok.Domain;
-using Middagsklok.Features.WeeklyPlanning;
+using Middagsklok.Features.WeeklyPlans.Generate;
+using Middagsklok.Features.WeeklyPlans.Get;
+using Middagsklok.Features.DishHistory.Log;
 
 namespace Middagsklok.Tests.Integration;
 
 public class GenerateWeeklyPlanIntegrationTests : IDisposable
 {
     private readonly MiddagsklokDbContext _context;
-    private readonly IDishRepository _dishRepository;
-    private readonly IDishHistoryRepository _historyRepository;
-    private readonly IWeeklyPlanRepository _planRepository;
+    private readonly DishRepository _dishRepository;
+    private readonly DishHistoryRepository _historyRepository;
+    private readonly WeeklyPlanRepository _planRepository;
     private readonly WeeklyPlanRulesValidator _validator;
     private readonly GenerateWeeklyPlanFeature _feature;
     private readonly DateOnly _weekStart = new(2026, 1, 12); // Monday

@@ -1,24 +1,11 @@
-using Middagsklok.Database.Repositories;
-using Middagsklok.Features.GetShoppingList;
+using Middagsklok.Domain;
 
-namespace Middagsklok.Features.WeeklyPlanning;
+namespace Middagsklok.Features.ShoppingList.GenerateForWeek;
 
-public class CreateShoppingListForWeekFeature
+public static class GetShoppingListFeature
 {
-    private readonly IWeeklyPlanRepository _weeklyPlanRepository;
-
-    public CreateShoppingListForWeekFeature(IWeeklyPlanRepository weeklyPlanRepository)
+    public static ShoppingList Execute(WeeklyPlan plan)
     {
-        _weeklyPlanRepository = weeklyPlanRepository;
-    }
-
-    public async Task<ShoppingList?> Execute(DateOnly weekStartDate, CancellationToken ct = default)
-    {
-        var plan = await _weeklyPlanRepository.GetByWeekStartDate(weekStartDate, ct);
-        
-        if (plan is null)
-            return null;
-
         var aggregated = plan.Items
             .SelectMany(item => item.Dish.Ingredients)
             .Where(di => !di.Optional)

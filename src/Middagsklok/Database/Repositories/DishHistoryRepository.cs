@@ -1,18 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using Middagsklok.Database.Entities;
 using Middagsklok.Domain;
+using Middagsklok.Features.DishHistory.Log;
+using Middagsklok.Features.DishHistory.Get;
+using Middagsklok.Features.DishHistory.GetLastEaten;
 
 namespace Middagsklok.Database.Repositories;
 
-public interface IDishHistoryRepository
-{
-    Task Add(DishHistoryEntry entry, CancellationToken ct = default);
-    Task<IReadOnlyList<DishHistoryEntry>> GetForDish(Guid dishId, CancellationToken ct = default);
-    Task<IReadOnlyList<DishHistoryEntry>> GetBetween(DateOnly from, DateOnly to, CancellationToken ct = default);
-    Task<Dictionary<Guid, DateOnly>> GetLastEatenByDish(CancellationToken ct = default);
-}
-
-public class DishHistoryRepository : IDishHistoryRepository
+public class DishHistoryRepository :
+    Features.DishHistory.Log.IDishHistoryRepository,
+    Features.DishHistory.Get.IDishHistoryRepository,
+    Features.DishHistory.GetLastEaten.IDishHistoryRepository,
+    Features.WeeklyPlans.Generate.IDishHistoryRepository
 {
     private readonly MiddagsklokDbContext _context;
 

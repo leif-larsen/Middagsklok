@@ -1,7 +1,6 @@
-using Middagsklok.Database.Repositories;
 using Middagsklok.Domain;
 
-namespace Middagsklok.Features.WeeklyPlanning;
+namespace Middagsklok.Features.WeeklyPlans.Generate;
 
 public class GenerateWeeklyPlanFeature
 {

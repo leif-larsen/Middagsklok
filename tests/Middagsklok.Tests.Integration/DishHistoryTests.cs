@@ -3,8 +3,10 @@ using Middagsklok.Database;
 using Middagsklok.Database.Entities;
 using Middagsklok.Database.Repositories;
 using Middagsklok.Domain;
-using Middagsklok.Features;
-using Middagsklok.Features.DishHistory;
+using Middagsklok.Features.Shared;
+using Middagsklok.Features.DishHistory.Log;
+using Middagsklok.Features.DishHistory.Get;
+using Middagsklok.Features.DishHistory.GetLastEaten;
 
 namespace Middagsklok.Tests.Integration;
 

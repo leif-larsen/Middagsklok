@@ -1,4 +1,4 @@
-namespace Middagsklok.Features;
+namespace Middagsklok.Features.Shared;
 
 public interface IClock
 {

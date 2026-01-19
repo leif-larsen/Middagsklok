@@ -1,4 +1,5 @@
-using Middagsklok.Features.WeeklyPlanning;
+using Middagsklok.Features.WeeklyPlans.Get;
+using Middagsklok.Features.WeeklyPlans.Generate;
 
 namespace Middagsklok.Api.Endpoints;
 

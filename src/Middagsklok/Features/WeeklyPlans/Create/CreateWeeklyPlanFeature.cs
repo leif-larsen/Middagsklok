@@ -1,7 +1,6 @@
-using Middagsklok.Database.Repositories;
 using Middagsklok.Domain;
 
-namespace Middagsklok.Features.WeeklyPlanning;
+namespace Middagsklok.Features.WeeklyPlans.Create;
 
 public record CreateWeeklyPlanRequest(DateOnly WeekStartDate, IReadOnlyList<Guid> DishIds);
 

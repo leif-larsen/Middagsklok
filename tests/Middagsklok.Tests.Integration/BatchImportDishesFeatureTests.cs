@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Middagsklok.Database;
 using Middagsklok.Database.Repositories;
-using Middagsklok.Features.BatchImportDishes;
+using Middagsklok.Features.Dishes.Import;
 
 namespace Middagsklok.Tests.Integration;
 

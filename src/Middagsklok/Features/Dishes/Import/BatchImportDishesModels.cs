@@ -1,4 +1,4 @@
-namespace Middagsklok.Features.BatchImportDishes;
+namespace Middagsklok.Features.Dishes.Import;
 
 public record AddDishCommand(
     string Name,
