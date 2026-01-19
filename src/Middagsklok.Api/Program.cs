@@ -45,7 +45,11 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        // Get allowed origins from configuration (supports Aspire service discovery)
+        var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>()
+            ?? new[] { "http://localhost:3000" };
+        
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
