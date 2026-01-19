@@ -3,28 +3,15 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-interface Ingredient {
-  ingredient: {
-    id: string;
-    name: string;
-    category: string;
-    defaultUnit: string;
-  };
-  amount: number;
-  unit: string;
-  optional: boolean;
-}
-
 interface Dish {
   id: string;
   name: string;
   activeMinutes: number;
   totalMinutes: number;
-  kidRating: number;
-  familyRating: number;
-  isPescetarian: boolean;
-  hasOptionalMeatVariant: boolean;
-  ingredients: Ingredient[];
+}
+
+interface DishListResponse {
+  items: Dish[];
 }
 
 interface ImportResult {
@@ -59,8 +46,8 @@ export default function DishesPage() {
       if (!response.ok) {
         throw new Error(`Failed to fetch dishes: ${response.status}`);
       }
-      const data = await response.json();
-      setDishes(data);
+      const data: DishListResponse = await response.json();
+      setDishes(data.items);
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load dishes');
@@ -191,23 +178,7 @@ export default function DishesPage() {
                   <div style={{ display: 'flex', gap: '2rem', fontSize: '0.9rem', color: '#666' }}>
                     <span>Active: {dish.activeMinutes}min</span>
                     <span>Total: {dish.totalMinutes}min</span>
-                    <span>Kid: {dish.kidRating}/5</span>
-                    <span>Family: {dish.familyRating}/5</span>
-                    {dish.isPescetarian && <span style={{ color: 'blue' }}>🐟 Pescetarian</span>}
                   </div>
-                  <details style={{ marginTop: '0.5rem' }}>
-                    <summary style={{ cursor: 'pointer', color: 'blue' }}>
-                      {dish.ingredients.length} ingredients
-                    </summary>
-                    <ul style={{ marginTop: '0.5rem' }}>
-                      {dish.ingredients.map((ing, idx) => (
-                        <li key={idx}>
-                          {ing.amount} {ing.unit} {ing.ingredient.name}
-                          {ing.optional && ' (optional)'}
-                        </li>
-                      ))}
-                    </ul>
-                  </details>
                 </div>
               ))}
             </div>

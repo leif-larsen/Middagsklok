@@ -5,7 +5,6 @@ import Link from 'next/link';
 
 interface HealthResponse {
   status: string;
-  timestamp: string;
 }
 
 export default function Home() {
@@ -55,8 +54,7 @@ export default function Home() {
           <div>
             <p style={{ color: 'green' }}>✓ API is healthy</p>
             <p style={{ fontSize: '0.9rem', color: '#666' }}>
-              Status: {health.status}<br />
-              Timestamp: {new Date(health.timestamp).toLocaleString()}
+              Status: {health.status}
             </p>
           </div>
         )}

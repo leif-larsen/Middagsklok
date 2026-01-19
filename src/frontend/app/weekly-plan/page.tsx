@@ -8,10 +8,6 @@ interface Dish {
   name: string;
   activeMinutes: number;
   totalMinutes: number;
-  kidRating: number;
-  familyRating: number;
-  isPescetarian: boolean;
-  hasOptionalMeatVariant: boolean;
 }
 
 interface WeeklyPlanItem {
@@ -20,10 +16,18 @@ interface WeeklyPlanItem {
 }
 
 interface WeeklyPlan {
-  id: string;
   weekStartDate: string;
-  createdAt: string;
   items: WeeklyPlanItem[];
+}
+
+interface PlannedDishExplanation {
+  dishId: string;
+  reasons: string[];
+}
+
+interface GenerateWeeklyPlanResponse {
+  plan: WeeklyPlan;
+  explanationsByDay: { [key: number]: PlannedDishExplanation };
 }
 
 const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -31,6 +35,7 @@ const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Satur
 export default function WeeklyPlanPage() {
   const [weekStart, setWeekStart] = useState('');
   const [plan, setPlan] = useState<WeeklyPlan | null>(null);
+  const [explanations, setExplanations] = useState<{ [key: number]: PlannedDishExplanation } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
@@ -52,7 +57,7 @@ export default function WeeklyPlanPage() {
     setError(null);
 
     try {
-      const response = await fetch(`${apiUrl}/weekly-plans/generate`, {
+      const response = await fetch(`${apiUrl}/weekly-plan/generate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -67,8 +72,9 @@ export default function WeeklyPlanPage() {
         throw new Error(errorData.error || `Failed to generate plan: ${response.status}`);
       }
 
-      const result = await response.json();
+      const result: GenerateWeeklyPlanResponse = await response.json();
       setPlan(result.plan);
+      setExplanations(result.explanationsByDay);
       setWeekStart(dateStr);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate plan');
@@ -85,7 +91,7 @@ export default function WeeklyPlanPage() {
     setPlan(null);
 
     try {
-      const response = await fetch(`${apiUrl}/weekly-plans?weekStart=${encodeURIComponent(dateStr)}`);
+      const response = await fetch(`${apiUrl}/weekly-plan/${encodeURIComponent(dateStr)}`);
 
       if (response.status === 404) {
         setError('No plan found for this week. Generate one first.');
@@ -96,8 +102,9 @@ export default function WeeklyPlanPage() {
         throw new Error(`Failed to load plan: ${response.status}`);
       }
 
-      const data = await response.json();
+      const data: WeeklyPlan = await response.json();
       setPlan(data);
+      setExplanations(null); // Explanations are only available on generation
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load plan');
     } finally {
@@ -185,10 +192,7 @@ export default function WeeklyPlanPage() {
 
       {plan && (
         <div style={{ margin: '2rem 0' }}>
-          <h2>Weekly Plan for {new Date(plan.weekStartDate).toLocaleDateString()}</h2>
-          <p style={{ fontSize: '0.9rem', color: '#666' }}>
-            Created: {new Date(plan.createdAt).toLocaleString()}
-          </p>
+          <h2>Weekly Plan for {plan.weekStartDate}</h2>
 
           <div style={{ display: 'grid', gap: '1rem', marginTop: '1rem' }}>
             {plan.items
@@ -211,12 +215,17 @@ export default function WeeklyPlanPage() {
                       <div style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666' }}>
                         <span>Active: {item.dish.activeMinutes}min</span>
                         <span style={{ marginLeft: '1rem' }}>Total: {item.dish.totalMinutes}min</span>
-                        <span style={{ marginLeft: '1rem' }}>Kid: {item.dish.kidRating}/5</span>
-                        <span style={{ marginLeft: '1rem' }}>Family: {item.dish.familyRating}/5</span>
-                        {item.dish.isPescetarian && (
-                          <span style={{ marginLeft: '1rem', color: 'blue' }}>🐟 Pescetarian</span>
-                        )}
                       </div>
+                      {explanations && explanations[item.dayIndex] && (
+                        <div style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#555' }}>
+                          <strong>Why this dish:</strong>
+                          <ul style={{ marginTop: '0.25rem', marginBottom: 0 }}>
+                            {explanations[item.dayIndex].reasons.map((reason, idx) => (
+                              <li key={idx}>{reason}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
