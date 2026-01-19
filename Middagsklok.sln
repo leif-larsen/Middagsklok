@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Middagsklok.Tests.Integrati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Middagsklok.AppHost", "src\Middagsklok.AppHost\Middagsklok.AppHost.csproj", "{55BB163D-78B4-48F6-8CAF-3CD6FAAC4570}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Middagsklok.Contracts", "src\Middagsklok.Contracts\Middagsklok.Contracts.csproj", "{9FAE5F27-3506-44E2-A2BA-8AB64A00EDF7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,18 @@ Global
 		{55BB163D-78B4-48F6-8CAF-3CD6FAAC4570}.Release|x64.Build.0 = Release|Any CPU
 		{55BB163D-78B4-48F6-8CAF-3CD6FAAC4570}.Release|x86.ActiveCfg = Release|Any CPU
 		{55BB163D-78B4-48F6-8CAF-3CD6FAAC4570}.Release|x86.Build.0 = Release|Any CPU
+		{9FAE5F27-3506-44E2-A2BA-8AB64A00EDF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FAE5F27-3506-44E2-A2BA-8AB64A00EDF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FAE5F27-3506-44E2-A2BA-8AB64A00EDF7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9FAE5F27-3506-44E2-A2BA-8AB64A00EDF7}.Debug|x64.Build.0 = Debug|Any CPU
+		{9FAE5F27-3506-44E2-A2BA-8AB64A00EDF7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9FAE5F27-3506-44E2-A2BA-8AB64A00EDF7}.Debug|x86.Build.0 = Debug|Any CPU
+		{9FAE5F27-3506-44E2-A2BA-8AB64A00EDF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FAE5F27-3506-44E2-A2BA-8AB64A00EDF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FAE5F27-3506-44E2-A2BA-8AB64A00EDF7}.Release|x64.ActiveCfg = Release|Any CPU
+		{9FAE5F27-3506-44E2-A2BA-8AB64A00EDF7}.Release|x64.Build.0 = Release|Any CPU
+		{9FAE5F27-3506-44E2-A2BA-8AB64A00EDF7}.Release|x86.ActiveCfg = Release|Any CPU
+		{9FAE5F27-3506-44E2-A2BA-8AB64A00EDF7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,5 +111,6 @@ Global
 		{D0ACD0EC-472C-451F-ADFF-F5FD611FE244} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{86E2DFE5-B11E-4C87-B4DF-4FD414B2271E} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{55BB163D-78B4-48F6-8CAF-3CD6FAAC4570} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{9FAE5F27-3506-44E2-A2BA-8AB64A00EDF7} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 EndGlobal

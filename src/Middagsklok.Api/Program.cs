@@ -18,6 +18,10 @@ using Middagsklok.Features.ShoppingList.GenerateForWeek;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// OpenAPI/Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 // Configure JSON options
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
@@ -64,6 +68,14 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+// Enable Swagger in all environments
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Middagsklok API v1");
+    c.RoutePrefix = "swagger";
+});
 
 // Ensure database is created (without seed data)
 using (var scope = app.Services.CreateScope())

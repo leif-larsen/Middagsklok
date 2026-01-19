@@ -1,0 +1,421 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Middagsklok.Api",
+    "version": "1.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "Middagsklok.Api"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dishes": {
+      "get": {
+        "tags": [
+          "Middagsklok.Api"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DishListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dishes/import": {
+      "post": {
+        "tags": [
+          "Middagsklok.Api"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchImportDishesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchImportDishesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/weekly-plan/{weekStartDate}": {
+      "get": {
+        "tags": [
+          "Middagsklok.Api"
+        ],
+        "parameters": [
+          {
+            "name": "weekStartDate",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeeklyPlanResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/weekly-plan/generate": {
+      "post": {
+        "tags": [
+          "Middagsklok.Api"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateWeeklyPlanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateWeeklyPlanResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BatchImportDishResultItem": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "dishId": {
+            "type": "string",
+            "nullable": true
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BatchImportDishesRequest": {
+        "type": "object",
+        "properties": {
+          "dishes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DishImportItem"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BatchImportDishesResponse": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "created": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "skipped": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "failed": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BatchImportDishResultItem"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DishImportItem": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "activeMinutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalMinutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "kidRating": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "familyRating": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isPescetarian": {
+            "type": "boolean"
+          },
+          "hasOptionalMeatVariant": {
+            "type": "boolean"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DishIngredientItem"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DishIngredientItem": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "unit": {
+            "type": "string",
+            "nullable": true
+          },
+          "optional": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DishListItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "activeMinutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalMinutes": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DishListResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DishListItem"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GenerateWeeklyPlanRequest": {
+        "type": "object",
+        "properties": {
+          "weekStartDate": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GenerateWeeklyPlanResponse": {
+        "type": "object",
+        "properties": {
+          "plan": {
+            "$ref": "#/components/schemas/WeeklyPlanResponse"
+          },
+          "explanationsByDay": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PlannedDishExplanationDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "HealthResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PlannedDishExplanationDto": {
+        "type": "object",
+        "properties": {
+          "dishId": {
+            "type": "string",
+            "nullable": true
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WeeklyPlanDishDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "activeMinutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalMinutes": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WeeklyPlanItemDto": {
+        "type": "object",
+        "properties": {
+          "dayIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dish": {
+            "$ref": "#/components/schemas/WeeklyPlanDishDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WeeklyPlanResponse": {
+        "type": "object",
+        "properties": {
+          "weekStartDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WeeklyPlanItemDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Middagsklok.Api"
+    }
+  ]
+}
