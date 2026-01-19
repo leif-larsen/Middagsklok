@@ -174,7 +174,19 @@ export default function DishesPage() {
                     padding: '1rem',
                   }}
                 >
-                  <h3>{dish.name}</h3>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <h3>{dish.name}</h3>
+                    <Link 
+                      href={`/dishes/${dish.id}`}
+                      style={{ 
+                        color: 'blue', 
+                        textDecoration: 'underline',
+                        fontSize: '0.9rem'
+                      }}
+                    >
+                      Edit
+                    </Link>
+                  </div>
                   <div style={{ display: 'flex', gap: '2rem', fontSize: '0.9rem', color: '#666' }}>
                     <span>Active: {dish.activeMinutes}min</span>
                     <span>Total: {dish.totalMinutes}min</span>
