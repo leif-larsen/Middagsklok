@@ -18,23 +18,6 @@ public class CreateShoppingListForWeekFeature
         if (plan is null)
             return null;
 
-        var aggregated = plan.Items
-            .SelectMany(item => item.Dish.Ingredients)
-            .Where(di => !di.Optional)
-            .GroupBy(di => (di.Ingredient.Id, di.Unit))
-            .Select(group =>
-            {
-                var first = group.First();
-                return new ShoppingListItem(
-                    IngredientName: first.Ingredient.Name,
-                    Category: first.Ingredient.Category,
-                    Amount: group.Sum(di => di.Amount),
-                    Unit: first.Unit);
-            })
-            .OrderBy(item => item.Category)
-            .ThenBy(item => item.IngredientName)
-            .ToList();
-
-        return new ShoppingList(aggregated);
+        return GetShoppingListFeature.Execute(plan);
     }
 }
