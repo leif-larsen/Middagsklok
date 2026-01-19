@@ -1,6 +1,4 @@
-using Middagsklok.Database.Repositories;
-
-namespace Middagsklok.Features.BatchImportDishes;
+namespace Middagsklok.Features.Dishes.Import;
 
 public class BatchImportDishesFeature
 {

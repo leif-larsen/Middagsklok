@@ -1,16 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using Middagsklok.Database.Entities;
 using Middagsklok.Domain;
+using Middagsklok.Features.Dishes.List;
+using Middagsklok.Features.DishHistory.Log;
+using Middagsklok.Features.DishHistory.Get;
+using Middagsklok.Features.WeeklyPlans.Create;
+using Middagsklok.Features.WeeklyPlans.Generate;
 
 namespace Middagsklok.Database.Repositories;
 
-public interface IDishRepository
-{
-    Task<IReadOnlyList<Dish>> GetAllWithIngredients(CancellationToken ct = default);
-    Task<Dish?> GetByIdWithIngredients(Guid dishId, CancellationToken ct = default);
-}
-
-public class DishRepository : IDishRepository
+public class DishRepository :
+    Features.Dishes.List.IDishRepository,
+    Features.DishHistory.Log.IDishRepository,
+    Features.DishHistory.Get.IDishRepository,
+    Features.WeeklyPlans.Create.IDishRepository,
+    Features.WeeklyPlans.Generate.IDishRepository
 {
     private readonly MiddagsklokDbContext _context;
 

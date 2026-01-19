@@ -1,6 +1,6 @@
 using Middagsklok.Domain;
 
-namespace Middagsklok.Features.GetShoppingList;
+namespace Middagsklok.Features.ShoppingList.GenerateForWeek;
 
 public static class GetShoppingListFeature
 {

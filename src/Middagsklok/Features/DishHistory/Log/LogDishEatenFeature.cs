@@ -1,7 +1,7 @@
-using Middagsklok.Database.Repositories;
 using Middagsklok.Domain;
+using Middagsklok.Features.Shared;
 
-namespace Middagsklok.Features.DishHistory;
+namespace Middagsklok.Features.DishHistory.Log;
 
 public record LogDishEatenRequest(
     Guid DishId,

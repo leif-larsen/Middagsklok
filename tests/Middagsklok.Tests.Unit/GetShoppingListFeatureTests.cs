@@ -1,5 +1,5 @@
 ﻿using Middagsklok.Domain;
-using Middagsklok.Features.GetShoppingList;
+using Middagsklok.Features.ShoppingList.GenerateForWeek;
 
 namespace Middagsklok.Tests.Unit;
 

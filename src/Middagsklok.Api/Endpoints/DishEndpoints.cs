@@ -1,5 +1,5 @@
-using Middagsklok.Features.BatchImportDishes;
-using Middagsklok.Features.GetDishes;
+using Middagsklok.Features.Dishes.Import;
+using Middagsklok.Features.Dishes.List;
 
 namespace Middagsklok.Api.Endpoints;
 

@@ -1,7 +1,6 @@
-using Middagsklok.Database.Repositories;
 using Middagsklok.Domain;
 
-namespace Middagsklok.Features.GetDishes;
+namespace Middagsklok.Features.Dishes.List;
 
 public class GetDishesFeature
 {

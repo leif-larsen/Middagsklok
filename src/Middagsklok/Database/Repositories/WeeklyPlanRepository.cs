@@ -1,16 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using Middagsklok.Database.Entities;
 using Middagsklok.Domain;
+using Middagsklok.Features.WeeklyPlans.Get;
+using Middagsklok.Features.WeeklyPlans.Create;
+using Middagsklok.Features.WeeklyPlans.Generate;
+using Middagsklok.Features.ShoppingList.GenerateForWeek;
 
 namespace Middagsklok.Database.Repositories;
 
-public interface IWeeklyPlanRepository
-{
-    Task<WeeklyPlan?> GetByWeekStartDate(DateOnly weekStart, CancellationToken ct = default);
-    Task<WeeklyPlan> CreateOrReplace(WeeklyPlan plan, CancellationToken ct = default);
-}
-
-public class WeeklyPlanRepository : IWeeklyPlanRepository
+public class WeeklyPlanRepository :
+    Features.WeeklyPlans.Get.IWeeklyPlanRepository,
+    Features.WeeklyPlans.Create.IWeeklyPlanRepository,
+    Features.WeeklyPlans.Generate.IWeeklyPlanRepository,
+    Features.ShoppingList.GenerateForWeek.IWeeklyPlanRepository
 {
     private readonly MiddagsklokDbContext _context;
 

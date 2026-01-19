@@ -1,6 +1,4 @@
-using Middagsklok.Database.Repositories;
-
-namespace Middagsklok.Features.DishHistory;
+namespace Middagsklok.Features.DishHistory.GetLastEaten;
 
 public class GetLastEatenByDishFeature
 {

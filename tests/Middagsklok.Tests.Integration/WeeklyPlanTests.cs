@@ -2,8 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Middagsklok.Database;
 using Middagsklok.Database.Repositories;
 using Middagsklok.Domain;
-using Middagsklok.Features.GetShoppingList;
-using Middagsklok.Features.WeeklyPlanning;
+using Middagsklok.Features.ShoppingList.GenerateForWeek;
+using Middagsklok.Features.WeeklyPlans.Create;
 
 namespace Middagsklok.Tests.Integration;
 

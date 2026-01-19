@@ -5,10 +5,16 @@ using Middagsklok.Api;
 using Middagsklok.Api.Endpoints;
 using Middagsklok.Database;
 using Middagsklok.Database.Repositories;
-using Middagsklok.Features;
-using Middagsklok.Features.BatchImportDishes;
-using Middagsklok.Features.GetDishes;
-using Middagsklok.Features.WeeklyPlanning;
+using Middagsklok.Features.Dishes.Import;
+using Middagsklok.Features.Dishes.List;
+using Middagsklok.Features.WeeklyPlans.Get;
+using Middagsklok.Features.WeeklyPlans.Generate;
+using Middagsklok.Features.Shared;
+using Middagsklok.Features.WeeklyPlans.Create;
+using Middagsklok.Features.DishHistory.Log;
+using Middagsklok.Features.DishHistory.Get;
+using Middagsklok.Features.DishHistory.GetLastEaten;
+using Middagsklok.Features.ShoppingList.GenerateForWeek;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,10 +31,12 @@ builder.Services.AddDbContext<MiddagsklokDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Repositories
-builder.Services.AddScoped<IDishRepository, DishRepository>();
-builder.Services.AddScoped<IDishImportRepository, DishImportRepository>();
-builder.Services.AddScoped<IWeeklyPlanRepository, WeeklyPlanRepository>();
-builder.Services.AddScoped<IDishHistoryRepository, DishHistoryRepository>();
+builder.Services.AddScoped<Middagsklok.Features.Dishes.List.IDishRepository, DishRepository>();
+builder.Services.AddScoped<Middagsklok.Features.Dishes.Import.IDishImportRepository, DishImportRepository>();
+builder.Services.AddScoped<Middagsklok.Features.WeeklyPlans.Get.IWeeklyPlanRepository, WeeklyPlanRepository>();
+builder.Services.AddScoped<Middagsklok.Features.WeeklyPlans.Generate.IWeeklyPlanRepository, WeeklyPlanRepository>();
+builder.Services.AddScoped<Middagsklok.Features.WeeklyPlans.Generate.IDishRepository, DishRepository>();
+builder.Services.AddScoped<Middagsklok.Features.WeeklyPlans.Generate.IDishHistoryRepository, DishHistoryRepository>();
 
 // Features
 builder.Services.AddScoped<GetDishesFeature>();

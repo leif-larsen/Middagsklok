@@ -1,4 +1,4 @@
-namespace Middagsklok.Features.GetShoppingList;
+namespace Middagsklok.Features.ShoppingList.GenerateForWeek;
 
 public record ShoppingListItem(
     string IngredientName,
