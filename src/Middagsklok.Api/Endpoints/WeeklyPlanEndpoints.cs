@@ -39,7 +39,9 @@ public static class WeeklyPlanEndpoints
             );
             
             return Results.Ok(response);
-        });
+        })
+        .Produces<WeeklyPlanResponse>()
+        .Produces(404);
 
         app.MapPost("/weekly-plan/generate", async (
             Middagsklok.Contracts.WeeklyPlans.GenerateWeeklyPlanRequest request,
@@ -86,6 +88,7 @@ public static class WeeklyPlanEndpoints
             );
             
             return Results.Ok(response);
-        });
+        })
+        .Produces<GenerateWeeklyPlanResponse>();
     }
 }

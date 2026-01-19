@@ -64,6 +64,7 @@ public static class DishEndpoints
             );
             
             return Results.Ok(response);
-        });
+        })
+        .Produces<BatchImportDishesResponse>();
     }
 }

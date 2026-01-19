@@ -60,7 +60,14 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchImportDishesResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -82,7 +89,17 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeeklyPlanResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -104,7 +121,14 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateWeeklyPlanResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -112,6 +136,28 @@
   },
   "components": {
     "schemas": {
+      "BatchImportDishResultItem": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "dishId": {
+            "type": "string",
+            "nullable": true
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "BatchImportDishesRequest": {
         "type": "object",
         "properties": {
@@ -119,6 +165,35 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/DishImportItem"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BatchImportDishesResponse": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "created": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "skipped": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "failed": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BatchImportDishResultItem"
             },
             "nullable": true
           }
@@ -241,11 +316,96 @@
         },
         "additionalProperties": false
       },
+      "GenerateWeeklyPlanResponse": {
+        "type": "object",
+        "properties": {
+          "plan": {
+            "$ref": "#/components/schemas/WeeklyPlanResponse"
+          },
+          "explanationsByDay": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PlannedDishExplanationDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "HealthResponse": {
         "type": "object",
         "properties": {
           "status": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PlannedDishExplanationDto": {
+        "type": "object",
+        "properties": {
+          "dishId": {
+            "type": "string",
+            "nullable": true
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WeeklyPlanDishDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "activeMinutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalMinutes": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WeeklyPlanItemDto": {
+        "type": "object",
+        "properties": {
+          "dayIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dish": {
+            "$ref": "#/components/schemas/WeeklyPlanDishDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WeeklyPlanResponse": {
+        "type": "object",
+        "properties": {
+          "weekStartDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WeeklyPlanItemDto"
+            },
             "nullable": true
           }
         },
