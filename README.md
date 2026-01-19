@@ -5,19 +5,54 @@ Weekly meal planning application.
 ## Project Structure
 
 - `src/Middagsklok` - Core business logic library
+- `src/Middagsklok.Api` - ASP.NET Core Web API
+- `src/Middagsklok.AppHost` - .NET Aspire orchestration for local development
 - `src/frontend/` - Next.js frontend application (developer UI)
 - `tests/` - Unit and integration tests
 
-## Frontend Setup
+## Getting Started
+
+### Option 1: Using .NET Aspire (Recommended for Local Development)
+
+The easiest way to run both the API and frontend together:
+
+```bash
+cd src/Middagsklok.AppHost
+dotnet run
+```
+
+This starts:
+- The Middagsklok API on http://localhost:5000
+- The Next.js frontend on http://localhost:3000
+- The Aspire Dashboard (typically at http://localhost:15070)
+
+All services are automatically configured with service discovery and proper environment variables.
+
+See [src/Middagsklok.AppHost/README.md](src/Middagsklok.AppHost/README.md) for more details.
+
+### Option 2: Manual Setup
+
+If you prefer to run services separately:
+
+#### Running the API
+
+```bash
+cd src/Middagsklok.Api
+dotnet run
+```
+
+The API will start on http://localhost:5000.
+
+#### Running the Frontend
 
 The frontend is a barebone Next.js application for local development and testing.
 
-### Prerequisites
+##### Prerequisites
 
 - Node.js 20+ and npm
 - A running Middagsklok API server
 
-### Configuration
+##### Configuration
 
 Create `src/frontend/.env.local`:
 
@@ -27,7 +62,7 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:5000
 
 Update the URL to match your API server location.
 
-### Running the Frontend
+##### Starting the Frontend
 
 ```bash
 cd src/frontend
