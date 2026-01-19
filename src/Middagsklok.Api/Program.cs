@@ -75,7 +75,14 @@ public class DateOnlyJsonConverter : JsonConverter<DateOnly>
 
     public override DateOnly Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        return DateOnly.ParseExact(reader.GetString()!, Format);
+        var value = reader.GetString();
+        if (string.IsNullOrEmpty(value))
+            throw new JsonException("Date value cannot be null or empty.");
+        
+        if (!DateOnly.TryParseExact(value, Format, out var date))
+            throw new JsonException($"Date must be in {Format} format.");
+        
+        return date;
     }
 
     public override void Write(Utf8JsonWriter writer, DateOnly value, JsonSerializerOptions options)
