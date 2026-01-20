@@ -33,6 +33,10 @@ export default function DishesPage() {
   const [error, setError] = useState<string | null>(null);
   const [importing, setImporting] = useState(false);
   const [importResult, setImportResult] = useState<ImportResult | null>(null);
+  
+  // Filter state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [maxTotalMinutes, setMaxTotalMinutes] = useState<number | ''>('');
 
   const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000';
 
@@ -93,6 +97,17 @@ export default function DishesPage() {
       event.target.value = '';
     }
   };
+
+  // Filter dishes based on search query and max total minutes
+  const filteredDishes = dishes.filter(dish => {
+    // Filter by name (case-insensitive)
+    const matchesSearch = dish.name.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    // Filter by max total minutes
+    const matchesMaxTime = maxTotalMinutes === '' || (dish.totalMinutes != null && dish.totalMinutes <= maxTotalMinutes);
+    
+    return matchesSearch && matchesMaxTime;
+  });
 
   return (
     <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
@@ -160,12 +175,96 @@ export default function DishesPage() {
 
       {!loading && !error && (
         <div>
-          <h2>All Dishes ({dishes.length})</h2>
-          {dishes.length === 0 ? (
-            <p>No dishes found. Import some dishes to get started.</p>
+          {/* Search and Filter Controls */}
+          <div style={{ 
+            marginBottom: '2rem', 
+            padding: '1rem', 
+            border: '1px solid #ccc', 
+            borderRadius: '4px',
+            backgroundColor: '#f9f9f9'
+          }}>
+            <h2 style={{ marginTop: 0 }}>Søk og filtre</h2>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1rem' }}>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+                  Søk etter navn
+                </label>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Skriv for å søke..."
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                  }}
+                />
+              </div>
+              
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+                  Maks totaltid (minutter)
+                </label>
+                <input
+                  type="number"
+                  value={maxTotalMinutes}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === '') {
+                      setMaxTotalMinutes('');
+                    } else {
+                      const parsed = parseInt(value, 10);
+                      if (!isNaN(parsed) && parsed > 0) {
+                        setMaxTotalMinutes(parsed);
+                      }
+                    }
+                  }}
+                  placeholder="Valgfritt"
+                  min="1"
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                  }}
+                />
+              </div>
+            </div>
+            
+            {(searchQuery || maxTotalMinutes !== '') && (
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setMaxTotalMinutes('');
+                }}
+                style={{
+                  marginTop: '1rem',
+                  padding: '0.5rem 1rem',
+                  backgroundColor: '#6c757d',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                }}
+              >
+                Nullstill filtre
+              </button>
+            )}
+          </div>
+
+          <h2>Viser {filteredDishes.length} av {dishes.length}</h2>
+          {filteredDishes.length === 0 ? (
+            <p style={{ padding: '2rem', textAlign: 'center', color: '#666', fontStyle: 'italic' }}>
+              {dishes.length === 0 
+                ? 'Ingen retter funnet. Importer noen retter for å komme i gang.' 
+                : 'Ingen retter matcher søket eller filtrene. Prøv å justere søkekriteriene.'}
+            </p>
           ) : (
             <div style={{ display: 'grid', gap: '1rem' }}>
-              {dishes.map((dish) => (
+              {filteredDishes.map((dish) => (
                 <div
                   key={dish.id}
                   style={{
