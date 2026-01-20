@@ -211,7 +211,17 @@ export default function DishesPage() {
                 <input
                   type="number"
                   value={maxTotalMinutes}
-                  onChange={(e) => setMaxTotalMinutes(e.target.value === '' ? '' : parseInt(e.target.value))}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === '') {
+                      setMaxTotalMinutes('');
+                    } else {
+                      const parsed = parseInt(value, 10);
+                      if (!isNaN(parsed)) {
+                        setMaxTotalMinutes(parsed);
+                      }
+                    }
+                  }}
                   placeholder="Valgfritt"
                   min="1"
                   style={{
