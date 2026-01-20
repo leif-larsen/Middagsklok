@@ -104,7 +104,7 @@ export default function DishesPage() {
     const matchesSearch = dish.name.toLowerCase().includes(searchQuery.toLowerCase());
     
     // Filter by max total minutes
-    const matchesMaxTime = maxTotalMinutes === '' || dish.totalMinutes <= maxTotalMinutes;
+    const matchesMaxTime = maxTotalMinutes === '' || (dish.totalMinutes != null && dish.totalMinutes <= maxTotalMinutes);
     
     return matchesSearch && matchesMaxTime;
   });
@@ -217,7 +217,7 @@ export default function DishesPage() {
                       setMaxTotalMinutes('');
                     } else {
                       const parsed = parseInt(value, 10);
-                      if (!isNaN(parsed)) {
+                      if (!isNaN(parsed) && parsed > 0) {
                         setMaxTotalMinutes(parsed);
                       }
                     }
@@ -259,7 +259,7 @@ export default function DishesPage() {
           {filteredDishes.length === 0 ? (
             <p style={{ padding: '2rem', textAlign: 'center', color: '#666', fontStyle: 'italic' }}>
               {dishes.length === 0 
-                ? 'No dishes found. Import some dishes to get started.' 
+                ? 'Ingen retter funnet. Importer noen retter for å komme i gang.' 
                 : 'Ingen retter matcher søket eller filtrene. Prøv å justere søkekriteriene.'}
             </p>
           ) : (
