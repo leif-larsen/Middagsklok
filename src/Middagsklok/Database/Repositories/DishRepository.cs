@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Middagsklok.Database.Entities;
 using Middagsklok.Domain;
 using Middagsklok.Features.Dishes.List;
+using Middagsklok.Features.Dishes.GetDishDetails;
 using Middagsklok.Features.DishHistory.Log;
 using Middagsklok.Features.DishHistory.Get;
 using Middagsklok.Features.WeeklyPlans.Create;
@@ -11,6 +12,7 @@ namespace Middagsklok.Database.Repositories;
 
 public class DishRepository :
     Features.Dishes.List.IDishRepository,
+    Features.Dishes.GetDishDetails.IDishDetailsRepository,
     Features.DishHistory.Log.IDishRepository,
     Features.DishHistory.Get.IDishRepository,
     Features.WeeklyPlans.Create.IDishRepository,
