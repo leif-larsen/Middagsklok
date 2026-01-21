@@ -84,6 +84,12 @@ export default function Home() {
             </Link>
             {' - Generate and view weekly plans'}
           </li>
+          <li>
+            <Link href="/shopping-list" style={{ color: 'blue', textDecoration: 'underline' }}>
+              Shopping List
+            </Link>
+            {' - View shopping list for the week'}
+          </li>
         </ul>
       </div>
     </div>
