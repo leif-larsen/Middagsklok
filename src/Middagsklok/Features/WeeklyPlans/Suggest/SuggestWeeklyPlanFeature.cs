@@ -1,3 +1,4 @@
+using Middagsklok.Domain;
 using Middagsklok.Features.WeeklyPlans.Generate;
 
 namespace Middagsklok.Features.WeeklyPlans.Suggest;
@@ -33,7 +34,7 @@ public class SuggestWeeklyPlanFeature
             return new SuggestedWeeklyPlanResult(
                 Plan: result.Plan,
                 ExplanationsByDay: result.ExplanationsByDay,
-                Violations: Array.Empty<Domain.RuleViolation>());
+                Violations: Array.Empty<RuleViolation>());
         }
         catch (InvalidOperationException ex) when (ex.Message.Contains("Failed to generate valid plan"))
         {

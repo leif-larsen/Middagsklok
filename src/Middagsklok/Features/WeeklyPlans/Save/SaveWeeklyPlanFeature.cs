@@ -11,6 +11,8 @@ namespace Middagsklok.Features.WeeklyPlans.Save;
 /// </summary>
 public class SaveWeeklyPlanFeature
 {
+    private const string PlannedMealNotes = "Planned meal";
+    
     private readonly IDishRepository _dishRepository;
     private readonly IWeeklyPlanRepository _planRepository;
     private readonly IDishHistoryRepository _historyRepository;
@@ -93,7 +95,7 @@ public class SaveWeeklyPlanFeature
                         DishId: item.Dish.Id,
                         Date: date,
                         RatingOverride: null,
-                        Notes: "Planned meal");
+                        Notes: PlannedMealNotes);
                     
                     historyEntries.Add(entry);
                 }
