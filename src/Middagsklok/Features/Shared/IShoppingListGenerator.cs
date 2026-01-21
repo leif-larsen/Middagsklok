@@ -13,7 +13,6 @@ public class ShoppingListGenerator : IShoppingListGenerator
     {
         var aggregated = plan.Items
             .SelectMany(item => item.Dish.Ingredients)
-            .Where(di => !di.Optional)
             .GroupBy(di => (di.Ingredient.Id, di.Unit))
             .Select(group =>
             {
