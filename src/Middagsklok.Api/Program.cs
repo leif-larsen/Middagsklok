@@ -57,6 +57,7 @@ builder.Services.AddScoped<BatchImportDishesFeature>();
 builder.Services.AddScoped<GetWeeklyPlanFeature>();
 builder.Services.AddScoped<GenerateWeeklyPlanFeature>();
 builder.Services.AddScoped<WeeklyPlanRulesValidator>();
+builder.Services.AddScoped<GetShoppingListForWeekFeature>();
 
 // Clock
 builder.Services.AddSingleton<IClock, SystemClock>();
@@ -102,5 +103,6 @@ app.MapDefaultEndpoints();
 app.MapHealthEndpoints();
 app.MapDishEndpoints();
 app.MapWeeklyPlanEndpoints();
+app.MapShoppingListEndpoints();
 
 app.Run();

@@ -209,6 +209,41 @@
           }
         }
       }
+    },
+    "/shopping-list/{weekStartDate}": {
+      "get": {
+        "tags": [
+          "Middagsklok.Api"
+        ],
+        "parameters": [
+          {
+            "name": "weekStartDate",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShoppingListResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -498,6 +533,45 @@
             "type": "array",
             "items": {
               "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ShoppingListItemDto": {
+        "type": "object",
+        "properties": {
+          "ingredientName": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "unit": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ShoppingListResponse": {
+        "type": "object",
+        "properties": {
+          "weekStartDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShoppingListItemDto"
             },
             "nullable": true
           }
