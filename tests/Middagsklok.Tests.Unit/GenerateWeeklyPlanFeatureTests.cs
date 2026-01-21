@@ -10,6 +10,7 @@ public class GenerateWeeklyPlanFeatureTests
     private readonly IDishHistoryRepository _historyRepository;
     private readonly IWeeklyPlanRepository _planRepository;
     private readonly WeeklyPlanRulesValidator _validator;
+    private readonly IWeeklyPlanGenerationService _generationService;
     private readonly GenerateWeeklyPlanFeature _feature;
     private readonly DateOnly _today = new(2026, 1, 17);
     private readonly DateOnly _weekStart = new(2026, 1, 12); // Monday
@@ -20,11 +21,13 @@ public class GenerateWeeklyPlanFeatureTests
         _historyRepository = A.Fake<IDishHistoryRepository>();
         _planRepository = A.Fake<IWeeklyPlanRepository>();
         _validator = new WeeklyPlanRulesValidator();
-        _feature = new GenerateWeeklyPlanFeature(
+        _generationService = new WeeklyPlanGenerationService(
             _dishRepository,
             _historyRepository,
-            _planRepository,
             _validator);
+        _feature = new GenerateWeeklyPlanFeature(
+            _generationService,
+            _planRepository);
     }
 
     [Fact]

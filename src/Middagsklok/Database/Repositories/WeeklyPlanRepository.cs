@@ -14,7 +14,8 @@ public class WeeklyPlanRepository :
     Features.WeeklyPlans.Create.IWeeklyPlanRepository,
     Features.WeeklyPlans.Generate.IWeeklyPlanRepository,
     Features.WeeklyPlans.Edit.IWeeklyPlanRepository,
-    Features.ShoppingList.GenerateForWeek.IWeeklyPlanRepository
+    Features.ShoppingList.GenerateForWeek.IWeeklyPlanRepository,
+    Features.WeeklyPlans.Save.IWeeklyPlanRepository
 {
     private readonly MiddagsklokDbContext _context;
 

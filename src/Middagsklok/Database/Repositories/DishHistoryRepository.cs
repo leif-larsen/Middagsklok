@@ -11,7 +11,8 @@ public class DishHistoryRepository :
     Features.DishHistory.Log.IDishHistoryRepository,
     Features.DishHistory.Get.IDishHistoryRepository,
     Features.DishHistory.GetLastEaten.IDishHistoryRepository,
-    Features.WeeklyPlans.Generate.IDishHistoryRepository
+    Features.WeeklyPlans.Generate.IDishHistoryRepository,
+    Features.WeeklyPlans.Save.IDishHistoryRepository
 {
     private readonly MiddagsklokDbContext _context;
 
@@ -33,6 +34,39 @@ public class DishHistoryRepository :
 
         _context.Set<DishHistoryEntity>().Add(entity);
         await _context.SaveChangesAsync(ct);
+    }
+
+    public async Task AddBatch(IEnumerable<DishHistoryEntry> entries, CancellationToken ct = default)
+    {
+        var entities = entries.Select(entry => new DishHistoryEntity
+        {
+            Id = entry.Id,
+            DishId = entry.DishId,
+            Date = entry.Date,
+            RatingOverride = entry.RatingOverride,
+            Notes = entry.Notes
+        }).ToList();
+
+        // Use ExecuteUpdate to handle conflicts gracefully
+        // If a duplicate (dish_id, date) exists due to unique index, it will be ignored
+        foreach (var entity in entities)
+        {
+            _context.Set<DishHistoryEntity>().Add(entity);
+        }
+
+        try
+        {
+            await _context.SaveChangesAsync(ct);
+        }
+        catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("UNIQUE constraint failed") == true)
+        {
+            // Ignore duplicate entries - this is expected when re-saving a plan
+            // Clear the tracked entities to avoid issues
+            foreach (var entity in entities)
+            {
+                _context.Entry(entity).State = EntityState.Detached;
+            }
+        }
     }
 
     public async Task<IReadOnlyList<DishHistoryEntry>> GetForDish(Guid dishId, CancellationToken ct = default)

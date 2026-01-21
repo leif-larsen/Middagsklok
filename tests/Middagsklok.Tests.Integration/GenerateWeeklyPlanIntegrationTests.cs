@@ -16,6 +16,7 @@ public class GenerateWeeklyPlanIntegrationTests : IDisposable
     private readonly DishHistoryRepository _historyRepository;
     private readonly WeeklyPlanRepository _planRepository;
     private readonly WeeklyPlanRulesValidator _validator;
+    private readonly WeeklyPlanGenerationService _generationService;
     private readonly GenerateWeeklyPlanFeature _feature;
     private readonly DateOnly _weekStart = new(2026, 1, 12); // Monday
 
@@ -35,11 +36,13 @@ public class GenerateWeeklyPlanIntegrationTests : IDisposable
         _historyRepository = new DishHistoryRepository(_context);
         _planRepository = new WeeklyPlanRepository(_context);
         _validator = new WeeklyPlanRulesValidator();
-        _feature = new GenerateWeeklyPlanFeature(
+        _generationService = new WeeklyPlanGenerationService(
             _dishRepository,
             _historyRepository,
-            _planRepository,
             _validator);
+        _feature = new GenerateWeeklyPlanFeature(
+            _generationService,
+            _planRepository);
     }
 
     [Fact]

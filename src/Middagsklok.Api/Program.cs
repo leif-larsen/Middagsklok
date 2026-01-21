@@ -12,6 +12,8 @@ using Middagsklok.Features.Dishes.UpdateDish;
 using Middagsklok.Features.WeeklyPlans.Get;
 using Middagsklok.Features.WeeklyPlans.Generate;
 using Middagsklok.Features.WeeklyPlans.Edit;
+using Middagsklok.Features.WeeklyPlans.Suggest;
+using Middagsklok.Features.WeeklyPlans.Save;
 using Middagsklok.Features.Shared;
 using Middagsklok.Features.WeeklyPlans.Create;
 using Middagsklok.Features.DishHistory.Log;
@@ -51,6 +53,9 @@ builder.Services.AddScoped<Middagsklok.Features.WeeklyPlans.Generate.IDishReposi
 builder.Services.AddScoped<Middagsklok.Features.WeeklyPlans.Generate.IDishHistoryRepository, DishHistoryRepository>();
 builder.Services.AddScoped<Middagsklok.Features.WeeklyPlans.Edit.IWeeklyPlanRepository, WeeklyPlanRepository>();
 builder.Services.AddScoped<Middagsklok.Features.WeeklyPlans.Edit.IDishRepository, DishRepository>();
+builder.Services.AddScoped<Middagsklok.Features.WeeklyPlans.Save.IWeeklyPlanRepository, WeeklyPlanRepository>();
+builder.Services.AddScoped<Middagsklok.Features.WeeklyPlans.Save.IDishRepository, DishRepository>();
+builder.Services.AddScoped<Middagsklok.Features.WeeklyPlans.Save.IDishHistoryRepository, DishHistoryRepository>();
 builder.Services.AddScoped<Middagsklok.Features.ShoppingList.GenerateForWeek.IWeeklyPlanRepository, WeeklyPlanRepository>();
 
 // Features
@@ -59,7 +64,10 @@ builder.Services.AddScoped<GetDishDetailsFeature>();
 builder.Services.AddScoped<UpdateDishFeature>();
 builder.Services.AddScoped<BatchImportDishesFeature>();
 builder.Services.AddScoped<GetWeeklyPlanFeature>();
+builder.Services.AddScoped<IWeeklyPlanGenerationService, WeeklyPlanGenerationService>();
 builder.Services.AddScoped<GenerateWeeklyPlanFeature>();
+builder.Services.AddScoped<SuggestWeeklyPlanFeature>();
+builder.Services.AddScoped<SaveWeeklyPlanFeature>();
 builder.Services.AddScoped<EditWeeklyPlanFeature>();
 builder.Services.AddScoped<WeeklyPlanRulesValidator>();
 builder.Services.AddSingleton(new Middagsklok.Domain.PlanningRules());

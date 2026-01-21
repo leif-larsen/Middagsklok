@@ -18,7 +18,8 @@ public class DishRepository :
     Features.DishHistory.Get.IDishRepository,
     Features.WeeklyPlans.Create.IDishRepository,
     Features.WeeklyPlans.Generate.IDishRepository,
-    Features.WeeklyPlans.Edit.IDishRepository
+    Features.WeeklyPlans.Edit.IDishRepository,
+    Features.WeeklyPlans.Save.IDishRepository
 {
     private readonly MiddagsklokDbContext _context;
 
@@ -64,6 +65,22 @@ public class DishRepository :
             .Include(d => d.DishIngredients)
                 .ThenInclude(di => di.Ingredient)
             .Where(d => dishIds.Contains(d.Id))
+            .ToListAsync(ct);
+
+        return entities
+            .Select(MapToDomain)
+            .ToList();
+    }
+
+    // Overload for IEnumerable (used by Save feature)
+    public async Task<IReadOnlyList<Dish>> GetByIds(IEnumerable<Guid> dishIds, CancellationToken ct = default)
+    {
+        var dishIdList = dishIds.ToList();
+        var entities = await _context.Dishes
+            .AsNoTracking()
+            .Include(d => d.DishIngredients)
+                .ThenInclude(di => di.Ingredient)
+            .Where(d => dishIdList.Contains(d.Id))
             .ToListAsync(ct);
 
         return entities
