@@ -2,6 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { PageTitle, EmptyState, SectionCard } from '@/components/ui-primitives';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Loader2, Upload, CheckCircle2, XCircle, AlertCircle, Search, Clock } from 'lucide-react';
 
 interface Dish {
   id: string;
@@ -100,200 +107,196 @@ export default function DishesPage() {
 
   // Filter dishes based on search query and max total minutes
   const filteredDishes = dishes.filter(dish => {
-    // Filter by name (case-insensitive)
     const matchesSearch = dish.name.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    // Filter by max total minutes
     const matchesMaxTime = maxTotalMinutes === '' || (dish.totalMinutes != null && dish.totalMinutes <= maxTotalMinutes);
-    
     return matchesSearch && matchesMaxTime;
   });
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '2rem' }}>
-        <Link href="/" style={{ color: 'blue', textDecoration: 'underline' }}>
-          ← Back to Home
-        </Link>
-      </div>
+    <div className="space-y-8">
+      <PageTitle>Dishes</PageTitle>
 
-      <h1>Dishes</h1>
-
-      <div style={{ margin: '2rem 0', padding: '1rem', border: '1px solid #ccc', borderRadius: '4px' }}>
-        <h2>Import Dishes</h2>
-        <p style={{ fontSize: '0.9rem', color: '#666' }}>
-          Upload a JSON file with dishes to import. Format: {'{'}dishes: [...]{'}'}
-        </p>
-        <input
-          type="file"
-          accept=".json"
-          onChange={handleFileUpload}
-          disabled={importing}
-          style={{ marginTop: '0.5rem' }}
-        />
-        {importing && <p>Importing...</p>}
-      </div>
-
-      {importResult && (
-        <div style={{ 
-          margin: '2rem 0', 
-          padding: '1rem', 
-          border: '1px solid #ccc', 
-          borderRadius: '4px',
-          backgroundColor: '#f5f5f5'
-        }}>
-          <h3>Import Results</h3>
-          <p>
-            Total: {importResult.total} | 
-            Created: {importResult.created} | 
-            Skipped: {importResult.skipped} | 
-            Failed: {importResult.failed}
-          </p>
-          <div style={{ maxHeight: '200px', overflowY: 'auto', marginTop: '1rem' }}>
-            {importResult.results.map((result, index) => (
-              <div 
-                key={index} 
-                style={{ 
-                  padding: '0.5rem', 
-                  borderBottom: '1px solid #ddd',
-                  color: result.status === 'created' ? 'green' : result.status === 'failed' ? 'red' : 'orange'
-                }}
-              >
-                {result.status === 'created' && '✓ '}
-                {result.status === 'failed' && '✗ '}
-                {result.status === 'skipped' && '→ '}
-                {result.name} [{result.status}]
-                {result.error && ` - ${result.error}`}
+      <Card>
+        <CardHeader>
+          <CardTitle>Import Dishes</CardTitle>
+          <CardDescription>
+            Upload a JSON file with dishes to import. Format: {'{'}dishes: [...]{'}'}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center gap-4">
+            <Input
+              type="file"
+              accept=".json"
+              onChange={handleFileUpload}
+              disabled={importing}
+              className="max-w-md"
+            />
+            {importing && (
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span className="text-sm">Importing...</span>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {loading && <p>Loading dishes...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      {!loading && !error && (
-        <div>
-          {/* Search and Filter Controls */}
-          <div style={{ 
-            marginBottom: '2rem', 
-            padding: '1rem', 
-            border: '1px solid #ccc', 
-            borderRadius: '4px',
-            backgroundColor: '#f9f9f9'
-          }}>
-            <h2 style={{ marginTop: 0 }}>Søk og filtre</h2>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1rem' }}>
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-                  Søk etter navn
-                </label>
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Skriv for å søke..."
-                  style={{
-                    width: '100%',
-                    padding: '0.5rem',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                  }}
-                />
-              </div>
-              
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-                  Maks totaltid (minutter)
-                </label>
-                <input
-                  type="number"
-                  value={maxTotalMinutes}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    if (value === '') {
-                      setMaxTotalMinutes('');
-                    } else {
-                      const parsed = parseInt(value, 10);
-                      if (!isNaN(parsed) && parsed > 0) {
-                        setMaxTotalMinutes(parsed);
-                      }
-                    }
-                  }}
-                  placeholder="Valgfritt"
-                  min="1"
-                  style={{
-                    width: '100%',
-                    padding: '0.5rem',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                  }}
-                />
-              </div>
-            </div>
-            
-            {(searchQuery || maxTotalMinutes !== '') && (
-              <button
-                onClick={() => {
-                  setSearchQuery('');
-                  setMaxTotalMinutes('');
-                }}
-                style={{
-                  marginTop: '1rem',
-                  padding: '0.5rem 1rem',
-                  backgroundColor: '#6c757d',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                }}
-              >
-                Nullstill filtre
-              </button>
             )}
           </div>
+        </CardContent>
+      </Card>
 
-          <h2>Viser {filteredDishes.length} av {dishes.length}</h2>
-          {filteredDishes.length === 0 ? (
-            <p style={{ padding: '2rem', textAlign: 'center', color: '#666', fontStyle: 'italic' }}>
-              {dishes.length === 0 
-                ? 'Ingen retter funnet. Importer noen retter for å komme i gang.' 
-                : 'Ingen retter matcher søket eller filtrene. Prøv å justere søkekriteriene.'}
-            </p>
-          ) : (
-            <div style={{ display: 'grid', gap: '1rem' }}>
-              {filteredDishes.map((dish) => (
-                <div
-                  key={dish.id}
-                  style={{
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    padding: '1rem',
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <h3>{dish.name}</h3>
-                    <Link 
-                      href={`/dishes/${dish.id}`}
-                      style={{ 
-                        color: 'blue', 
-                        textDecoration: 'underline',
-                        fontSize: '0.9rem'
-                      }}
-                    >
-                      Edit
-                    </Link>
-                  </div>
-                  <div style={{ display: 'flex', gap: '2rem', fontSize: '0.9rem', color: '#666' }}>
-                    <span>Active: {dish.activeMinutes}min</span>
-                    <span>Total: {dish.totalMinutes}min</span>
-                  </div>
+      {importResult && (
+        <Alert className="border-blue-200 bg-blue-50">
+          <AlertCircle className="h-4 w-4 text-blue-600" />
+          <AlertTitle className="text-blue-900">Import Results</AlertTitle>
+          <AlertDescription className="text-blue-900">
+            <div className="mt-2 flex gap-4 text-sm">
+              <span>Total: <Badge variant="secondary">{importResult.total}</Badge></span>
+              <span>Created: <Badge variant="secondary">{importResult.created}</Badge></span>
+              <span>Skipped: <Badge variant="secondary">{importResult.skipped}</Badge></span>
+              <span>Failed: <Badge variant="secondary">{importResult.failed}</Badge></span>
+            </div>
+            <div className="mt-4 max-h-40 overflow-y-auto space-y-1">
+              {importResult.results.map((result, index) => (
+                <div key={index} className="text-sm flex items-center gap-2">
+                  {result.status === 'created' && <CheckCircle2 className="h-3 w-3 text-green-600" />}
+                  {result.status === 'failed' && <XCircle className="h-3 w-3 text-red-600" />}
+                  {result.status === 'skipped' && <AlertCircle className="h-3 w-3 text-orange-600" />}
+                  <span className={
+                    result.status === 'created' ? 'text-green-900' :
+                    result.status === 'failed' ? 'text-red-900' :
+                    'text-orange-900'
+                  }>
+                    {result.name} [{result.status}]
+                    {result.error && ` - ${result.error}`}
+                  </span>
                 </div>
               ))}
             </div>
-          )}
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {loading && (
+        <div className="flex items-center justify-center py-8">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          <span className="ml-2 text-muted-foreground">Loading dishes...</span>
+        </div>
+      )}
+
+      {error && (
+        <Alert variant="destructive">
+          <XCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
+
+      {!loading && !error && (
+        <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Search and Filter</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Search by name</label>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Type to search..."
+                      className="pl-9"
+                    />
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Max total time (minutes)</label>
+                  <div className="relative">
+                    <Clock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      type="number"
+                      value={maxTotalMinutes}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === '') {
+                          setMaxTotalMinutes('');
+                        } else {
+                          const parsed = parseInt(value, 10);
+                          if (!isNaN(parsed) && parsed > 0) {
+                            setMaxTotalMinutes(parsed);
+                          }
+                        }
+                      }}
+                      placeholder="Optional"
+                      min="1"
+                      className="pl-9"
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              {(searchQuery || maxTotalMinutes !== '') && (
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSearchQuery('');
+                    setMaxTotalMinutes('');
+                  }}
+                  className="mt-4"
+                >
+                  Clear filters
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+
+          <div>
+            <h2 className="text-xl font-semibold mb-4">
+              Showing {filteredDishes.length} of {dishes.length} dishes
+            </h2>
+            
+            {filteredDishes.length === 0 ? (
+              <EmptyState
+                title={dishes.length === 0 ? "No dishes found" : "No dishes match your search"}
+                description={
+                  dishes.length === 0
+                    ? "Import some dishes to get started."
+                    : "Try adjusting your search criteria."
+                }
+              />
+            ) : (
+              <div className="grid gap-4">
+                {filteredDishes.map((dish) => (
+                  <Card key={dish.id} className="hover:shadow-md transition-shadow">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <h3 className="text-lg font-semibold">{dish.name}</h3>
+                          <div className="mt-2 flex items-center gap-4 text-sm text-muted-foreground">
+                            <span className="flex items-center gap-1">
+                              <Clock className="h-4 w-4" />
+                              Active: {dish.activeMinutes}min
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Clock className="h-4 w-4" />
+                              Total: {dish.totalMinutes}min
+                            </span>
+                          </div>
+                        </div>
+                        <Button variant="outline" asChild>
+                          <Link href={`/dishes/${dish.id}`}>
+                            Edit
+                          </Link>
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
