@@ -63,6 +63,9 @@ builder.Services.AddScoped<GetShoppingListForWeekFeature>();
 // Clock
 builder.Services.AddSingleton<IClock, SystemClock>();
 
+// Shopping List Generator
+builder.Services.AddScoped<IShoppingListGenerator, ShoppingListGenerator>();
+
 // CORS
 builder.Services.AddCors(options =>
 {
