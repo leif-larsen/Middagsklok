@@ -37,6 +37,7 @@ interface PlannedDishExplanation {
 interface GenerateWeeklyPlanResponse {
   plan: WeeklyPlan;
   explanationsByDay: { [key: number]: PlannedDishExplanation };
+  violations?: RuleViolation[];
 }
 
 interface DishListResponse {
@@ -64,11 +65,13 @@ export default function WeeklyPlanPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
+  const [suggesting, setSuggesting] = useState(false);
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [editMode, setEditMode] = useState(false);
   const [editedPlan, setEditedPlan] = useState<{ [dayIndex: number]: string }>({});
   const [saving, setSaving] = useState(false);
   const [violations, setViolations] = useState<RuleViolation[]>([]);
+  const [isSuggestedPlan, setIsSuggestedPlan] = useState(false);
 
   const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000';
 
@@ -106,6 +109,7 @@ export default function WeeklyPlanPage() {
     setPlan(null);
     setViolations([]);
     setEditMode(false);
+    setIsSuggestedPlan(false);
 
     try {
       const response = await fetch(`${apiUrl}/weekly-plan/${encodeURIComponent(dateStr)}`);
@@ -124,6 +128,7 @@ export default function WeeklyPlanPage() {
       const data: WeeklyPlan = await response.json();
       setPlan(data);
       setExplanations(null);
+      setIsSuggestedPlan(false);
       initializeEditedPlanFromExisting(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load plan');
@@ -181,11 +186,50 @@ export default function WeeklyPlanPage() {
       setExplanations(result.explanationsByDay);
       setWeekStart(dateStr);
       setEditMode(false);
+      setIsSuggestedPlan(false);
       initializeEditedPlanFromExisting(result.plan);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate plan');
     } finally {
       setGenerating(false);
+    }
+  };
+
+  const handleSuggestPlan = async () => {
+    const dateStr = weekStart || getMonday(new Date());
+    
+    setSuggesting(true);
+    setError(null);
+    setViolations([]);
+
+    try {
+      const response = await fetch(`${apiUrl}/weekly-plan/suggest`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          weekStartDate: dateStr,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Failed to suggest plan: ${response.status}`);
+      }
+
+      const result: GenerateWeeklyPlanResponse = await response.json();
+      setPlan(result.plan);
+      setExplanations(result.explanationsByDay);
+      setWeekStart(dateStr);
+      setEditMode(false);
+      setIsSuggestedPlan(true);
+      setViolations(result.violations || []);
+      initializeEditedPlanFromExisting(result.plan);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to suggest plan');
+    } finally {
+      setSuggesting(false);
     }
   };
 
@@ -231,8 +275,8 @@ export default function WeeklyPlanPage() {
         dishId: dishId
       }));
 
-      const response = await fetch(`${apiUrl}/weekly-plan/${encodeURIComponent(dateStr)}`, {
-        method: 'PUT',
+      const response = await fetch(`${apiUrl}/weekly-plan/save`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -256,6 +300,7 @@ export default function WeeklyPlanPage() {
 
       // Success - reload the plan
       setEditMode(false);
+      setIsSuggestedPlan(false);
       await loadPlanForWeek(dateStr);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save plan');
@@ -306,6 +351,25 @@ export default function WeeklyPlanPage() {
           </div>
 
           <div className="flex flex-wrap gap-3">
+            <Button
+              onClick={handleSuggestPlan}
+              disabled={suggesting}
+              variant="secondary"
+              size="lg"
+            >
+              {suggesting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Suggesting...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  Suggest Plan
+                </>
+              )}
+            </Button>
+
             <Button
               onClick={handleGeneratePlan}
               disabled={generating}
@@ -372,14 +436,57 @@ export default function WeeklyPlanPage() {
         </Alert>
       )}
 
+      {isSuggestedPlan && plan && !editMode && (
+        <Alert className="mb-8 border-blue-500 bg-blue-50 dark:bg-blue-950/20">
+          <Sparkles className="h-4 w-4 text-blue-600" />
+          <AlertTitle className="text-blue-800 dark:text-blue-400">Suggested Plan - Not Yet Saved</AlertTitle>
+          <AlertDescription className="mt-2">
+            <p className="text-sm text-blue-800 dark:text-blue-400 mb-3">
+              This is a suggested meal plan with AI-generated explanations. The plan has not been saved yet.
+            </p>
+            <div className="flex gap-2">
+              <Button
+                onClick={handleSavePlan}
+                disabled={saving}
+                size="default"
+              >
+                {saving ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="mr-2 h-4 w-4" />
+                    Save This Plan
+                  </>
+                )}
+              </Button>
+              <Button
+                onClick={handleEditPlan}
+                variant="outline"
+              >
+                <Edit className="mr-2 h-4 w-4" />
+                Edit Before Saving
+              </Button>
+            </div>
+          </AlertDescription>
+        </Alert>
+      )}
+
       {editMode && (
         <Card className="mb-8">
           <CardHeader>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <CardTitle>Edit Weekly Plan</CardTitle>
+                <CardTitle>
+                  {isSuggestedPlan ? 'Edit Suggested Plan' : 'Edit Weekly Plan'}
+                </CardTitle>
                 <CardDescription className="mt-1.5">
-                  Planning for week of {weekStart}
+                  {isSuggestedPlan 
+                    ? `Editing suggested plan for week of ${weekStart} (not yet saved)`
+                    : `Planning for week of ${weekStart}`
+                  }
                 </CardDescription>
               </div>
               <div className="flex gap-2">

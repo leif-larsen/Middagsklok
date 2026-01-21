@@ -250,6 +250,70 @@
         }
       }
     },
+    "/weekly-plan/suggest": {
+      "post": {
+        "tags": [
+          "Middagsklok.Api"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SuggestWeeklyPlanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuggestWeeklyPlanResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/weekly-plan/save": {
+      "post": {
+        "tags": [
+          "Middagsklok.Api"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveWeeklyPlanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SaveWeeklyPlanResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
     "/shopping-list/{weekStartDate}": {
       "get": {
         "tags": [
@@ -601,6 +665,58 @@
         },
         "additionalProperties": false
       },
+      "SaveWeeklyPlanItemDto": {
+        "type": "object",
+        "properties": {
+          "dayIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dishId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SaveWeeklyPlanRequest": {
+        "type": "object",
+        "properties": {
+          "weekStartDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SaveWeeklyPlanItemDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SaveWeeklyPlanResponse": {
+        "type": "object",
+        "properties": {
+          "weekStartDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "violations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RuleViolationDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "ShoppingListItemDto": {
         "type": "object",
         "properties": {
@@ -634,6 +750,47 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ShoppingListItemDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SuggestWeeklyPlanRequest": {
+        "type": "object",
+        "properties": {
+          "weekStartDate": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SuggestWeeklyPlanResponse": {
+        "type": "object",
+        "properties": {
+          "weekStartDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WeeklyPlanItemDto"
+            },
+            "nullable": true
+          },
+          "explanationsByDay": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PlannedDishExplanationDto"
+            },
+            "nullable": true
+          },
+          "violations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RuleViolationDto"
             },
             "nullable": true
           }
