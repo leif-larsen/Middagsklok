@@ -1,6 +1,8 @@
 using Middagsklok.Contracts.WeeklyPlans;
+using Middagsklok.Contracts.WeeklyPlans.Edit;
 using Middagsklok.Features.WeeklyPlans.Get;
 using Middagsklok.Features.WeeklyPlans.Generate;
+using Middagsklok.Features.WeeklyPlans.Edit;
 
 namespace Middagsklok.Api.Endpoints;
 
@@ -90,5 +92,56 @@ public static class WeeklyPlanEndpoints
             return Results.Ok(response);
         })
         .Produces<GenerateWeeklyPlanResponse>();
+
+        app.MapPut("/weekly-plan/{weekStartDate}", async (
+            string weekStartDate,
+            UpdateWeeklyPlanRequest request,
+            EditWeeklyPlanFeature feature,
+            CancellationToken ct) =>
+        {
+            if (!DateOnly.TryParseExact(weekStartDate, "yyyy-MM-dd", out var date))
+            {
+                return Results.BadRequest(new { error = "Invalid date format. Use yyyy-MM-dd" });
+            }
+
+            // Map from contract DTO to feature request
+            var items = request.Items.Select(i => 
+                new EditWeeklyPlanItemRequest(i.DayIndex, Guid.Parse(i.DishId))).ToList();
+            var featureRequest = new EditWeeklyPlanRequest(date, items);
+
+            try
+            {
+                var (plan, violations) = await feature.Execute(featureRequest, ct);
+
+                if (violations.Any())
+                {
+                    var violationDtos = violations.Select(v => new RuleViolationDto(
+                        v.RuleCode,
+                        v.Message,
+                        v.DayIndices.ToList()
+                    )).ToList();
+
+                    return Results.BadRequest(new UpdateWeeklyPlanResponse(
+                        WeekStartDate: date.ToString("yyyy-MM-dd"),
+                        Status: "validation_failed",
+                        Violations: violationDtos
+                    ));
+                }
+
+                var response = new UpdateWeeklyPlanResponse(
+                    WeekStartDate: date.ToString("yyyy-MM-dd"),
+                    Status: "updated",
+                    Violations: Array.Empty<RuleViolationDto>()
+                );
+
+                return Results.Ok(response);
+            }
+            catch (ArgumentException ex)
+            {
+                return Results.BadRequest(new { error = ex.Message });
+            }
+        })
+        .Produces<UpdateWeeklyPlanResponse>()
+        .Produces(400);
     }
 }

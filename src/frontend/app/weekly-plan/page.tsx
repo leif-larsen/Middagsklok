@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 interface Dish {
@@ -30,6 +30,22 @@ interface GenerateWeeklyPlanResponse {
   explanationsByDay: { [key: number]: PlannedDishExplanation };
 }
 
+interface DishListResponse {
+  items: Dish[];
+}
+
+interface RuleViolation {
+  ruleCode: string;
+  message: string;
+  dayIndices: number[];
+}
+
+interface UpdateWeeklyPlanResponse {
+  weekStartDate: string;
+  status: string;
+  violations: RuleViolation[];
+}
+
 const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 export default function WeeklyPlanPage() {
@@ -39,8 +55,33 @@ export default function WeeklyPlanPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
+  const [dishes, setDishes] = useState<Dish[]>([]);
+  const [editMode, setEditMode] = useState(false);
+  const [editedPlan, setEditedPlan] = useState<{ [dayIndex: number]: string }>({});
+  const [saving, setSaving] = useState(false);
+  const [violations, setViolations] = useState<RuleViolation[]>([]);
 
   const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000';
+
+  useEffect(() => {
+    fetchDishes();
+    const monday = getMonday(new Date());
+    setWeekStart(monday);
+    loadPlanForWeek(monday);
+  }, []);
+
+  const fetchDishes = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/dishes`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch dishes: ${response.status}`);
+      }
+      const data: DishListResponse = await response.json();
+      setDishes(data.items);
+    } catch (err) {
+      console.error('Failed to load dishes:', err);
+    }
+  };
 
   const getMonday = (date: Date): string => {
     const d = new Date(date);
@@ -50,11 +91,65 @@ export default function WeeklyPlanPage() {
     return d.toISOString().split('T')[0];
   };
 
+  const loadPlanForWeek = async (dateStr: string) => {
+    setLoading(true);
+    setError(null);
+    setPlan(null);
+    setViolations([]);
+    setEditMode(false);
+
+    try {
+      const response = await fetch(`${apiUrl}/weekly-plan/${encodeURIComponent(dateStr)}`);
+
+      if (response.status === 404) {
+        setError('No plan found for this week. Generate one or create a new plan.');
+        setEditMode(true);
+        initializeEmptyPlan();
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error(`Failed to load plan: ${response.status}`);
+      }
+
+      const data: WeeklyPlan = await response.json();
+      setPlan(data);
+      setExplanations(null);
+      initializeEditedPlanFromExisting(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load plan');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const initializeEmptyPlan = () => {
+    const emptyPlan: { [dayIndex: number]: string } = {};
+    for (let i = 0; i < 7; i++) {
+      emptyPlan[i] = '';
+    }
+    setEditedPlan(emptyPlan);
+  };
+
+  const initializeEditedPlanFromExisting = (existingPlan: WeeklyPlan) => {
+    const editPlan: { [dayIndex: number]: string } = {};
+    existingPlan.items.forEach(item => {
+      editPlan[item.dayIndex] = item.dish.id;
+    });
+    setEditedPlan(editPlan);
+  };
+
+  const handleWeekChange = (newWeekStart: string) => {
+    setWeekStart(newWeekStart);
+    loadPlanForWeek(newWeekStart);
+  };
+
   const handleGeneratePlan = async () => {
     const dateStr = weekStart || getMonday(new Date());
     
     setGenerating(true);
     setError(null);
+    setViolations([]);
 
     try {
       const response = await fetch(`${apiUrl}/weekly-plan/generate`, {
@@ -76,6 +171,8 @@ export default function WeeklyPlanPage() {
       setPlan(result.plan);
       setExplanations(result.explanationsByDay);
       setWeekStart(dateStr);
+      setEditMode(false);
+      initializeEditedPlanFromExisting(result.plan);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate plan');
     } finally {
@@ -83,32 +180,78 @@ export default function WeeklyPlanPage() {
     }
   };
 
-  const handleLoadPlan = async () => {
+  const handleEditPlan = () => {
+    setEditMode(true);
+    setExplanations(null);
+  };
+
+  const handleCancelEdit = () => {
+    setEditMode(false);
+    setViolations([]);
+    if (plan) {
+      initializeEditedPlanFromExisting(plan);
+    }
+  };
+
+  const handleDishChange = (dayIndex: number, dishId: string) => {
+    setEditedPlan(prev => ({
+      ...prev,
+      [dayIndex]: dishId
+    }));
+  };
+
+  const handleSavePlan = async () => {
     const dateStr = weekStart || getMonday(new Date());
     
-    setLoading(true);
+    // Validate that all days have a dish selected
+    const allDaysSelected = Object.keys(editedPlan).length === 7 && 
+      Object.values(editedPlan).every(dishId => dishId !== '');
+    
+    if (!allDaysSelected) {
+      setError('Please select a dish for all 7 days before saving.');
+      return;
+    }
+
+    setSaving(true);
     setError(null);
-    setPlan(null);
+    setViolations([]);
 
     try {
-      const response = await fetch(`${apiUrl}/weekly-plan/${encodeURIComponent(dateStr)}`);
+      const items = Object.entries(editedPlan).map(([dayIndex, dishId]) => ({
+        dayIndex: parseInt(dayIndex),
+        dishId: dishId
+      }));
 
-      if (response.status === 404) {
-        setError('No plan found for this week. Generate one first.');
+      const response = await fetch(`${apiUrl}/weekly-plan/${encodeURIComponent(dateStr)}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          weekStartDate: dateStr,
+          items: items
+        }),
+      });
+
+      const result: UpdateWeeklyPlanResponse = await response.json();
+
+      if (!response.ok || result.status === 'validation_failed') {
+        if (result.violations && result.violations.length > 0) {
+          setViolations(result.violations);
+          setError('Plan has validation errors. Please fix them before saving.');
+        } else {
+          throw new Error(`Failed to save plan: ${response.status}`);
+        }
         return;
       }
 
-      if (!response.ok) {
-        throw new Error(`Failed to load plan: ${response.status}`);
-      }
-
-      const data: WeeklyPlan = await response.json();
-      setPlan(data);
-      setExplanations(null); // Explanations are only available on generation
+      // Success - reload the plan
+      setEditMode(false);
+      await loadPlanForWeek(dateStr);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load plan');
+      setError(err instanceof Error ? err.message : 'Failed to save plan');
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   };
 
@@ -130,12 +273,12 @@ export default function WeeklyPlanPage() {
             <input
               type="date"
               value={weekStart}
-              onChange={(e) => setWeekStart(e.target.value)}
+              onChange={(e) => handleWeekChange(e.target.value)}
               style={{ marginLeft: '0.5rem', padding: '0.5rem' }}
             />
           </label>
           <button
-            onClick={() => setWeekStart(getMonday(new Date()))}
+            onClick={() => handleWeekChange(getMonday(new Date()))}
             style={{ padding: '0.5rem 1rem', cursor: 'pointer' }}
           >
             Use This Week
@@ -159,21 +302,21 @@ export default function WeeklyPlanPage() {
             {generating ? 'Generating...' : 'Generate New Plan'}
           </button>
 
-          <button
-            onClick={handleLoadPlan}
-            disabled={loading}
-            style={{
-              padding: '0.75rem 1.5rem',
-              backgroundColor: '#2196F3',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.6 : 1,
-            }}
-          >
-            {loading ? 'Loading...' : 'Load Existing Plan'}
-          </button>
+          {plan && !editMode && (
+            <button
+              onClick={handleEditPlan}
+              style={{
+                padding: '0.75rem 1.5rem',
+                backgroundColor: '#FF9800',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+              }}
+            >
+              Edit Plan
+            </button>
+          )}
         </div>
       </div>
 
@@ -190,7 +333,116 @@ export default function WeeklyPlanPage() {
         </div>
       )}
 
-      {plan && (
+      {violations.length > 0 && (
+        <div style={{ 
+          margin: '2rem 0', 
+          padding: '1rem', 
+          border: '1px solid orange', 
+          borderRadius: '4px',
+          backgroundColor: '#fff3cd',
+          color: '#856404'
+        }}>
+          <h3 style={{ marginTop: 0 }}>Validation Errors</h3>
+          {violations.map((violation, idx) => (
+            <div key={idx} style={{ marginBottom: '0.5rem' }}>
+              <strong>{violation.ruleCode}:</strong> {violation.message}
+              {violation.dayIndices.length > 0 && (
+                <span style={{ marginLeft: '0.5rem', fontSize: '0.9rem' }}>
+                  (Days: {violation.dayIndices.map(d => dayNames[d]).join(', ')})
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {editMode && (
+        <div style={{ margin: '2rem 0' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <h2>Edit Weekly Plan for {weekStart}</h2>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button
+                onClick={handleSavePlan}
+                disabled={saving}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  backgroundColor: '#2196F3',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: saving ? 'not-allowed' : 'pointer',
+                  opacity: saving ? 0.6 : 1,
+                }}
+              >
+                {saving ? 'Saving...' : 'Save Plan'}
+              </button>
+              <button
+                onClick={handleCancelEdit}
+                disabled={saving}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  backgroundColor: '#6c757d',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: saving ? 'not-allowed' : 'pointer',
+                  opacity: saving ? 0.6 : 1,
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gap: '1rem' }}>
+            {[0, 1, 2, 3, 4, 5, 6].map((dayIndex) => {
+              const selectedDish = dishes.find(d => d.id === editedPlan[dayIndex]);
+              return (
+                <div
+                  key={dayIndex}
+                  style={{
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    padding: '1rem',
+                    backgroundColor: '#f9f9f9',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <label style={{ minWidth: '100px', fontWeight: 'bold' }}>
+                      {dayNames[dayIndex]}:
+                    </label>
+                    <select
+                      value={editedPlan[dayIndex] || ''}
+                      onChange={(e) => handleDishChange(dayIndex, e.target.value)}
+                      style={{
+                        flex: 1,
+                        padding: '0.5rem',
+                        border: '1px solid #ccc',
+                        borderRadius: '4px',
+                        fontSize: '1rem'
+                      }}
+                    >
+                      <option value="">-- Select a dish --</option>
+                      {dishes.map(dish => (
+                        <option key={dish.id} value={dish.id}>
+                          {dish.name} ({dish.totalMinutes}min)
+                        </option>
+                      ))}
+                    </select>
+                    {selectedDish && (
+                      <div style={{ fontSize: '0.85rem', color: '#666', minWidth: '150px' }}>
+                        Active: {selectedDish.activeMinutes}min | Total: {selectedDish.totalMinutes}min
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {plan && !editMode && (
         <div style={{ margin: '2rem 0' }}>
           <h2>Weekly Plan for {plan.weekStartDate}</h2>
 
