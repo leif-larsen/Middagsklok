@@ -4,6 +4,7 @@ using Middagsklok.Domain;
 using Middagsklok.Features.WeeklyPlans.Get;
 using Middagsklok.Features.WeeklyPlans.Create;
 using Middagsklok.Features.WeeklyPlans.Generate;
+using Middagsklok.Features.WeeklyPlans.Edit;
 using Middagsklok.Features.ShoppingList.GenerateForWeek;
 
 namespace Middagsklok.Database.Repositories;
@@ -12,6 +13,7 @@ public class WeeklyPlanRepository :
     Features.WeeklyPlans.Get.IWeeklyPlanRepository,
     Features.WeeklyPlans.Create.IWeeklyPlanRepository,
     Features.WeeklyPlans.Generate.IWeeklyPlanRepository,
+    Features.WeeklyPlans.Edit.IWeeklyPlanRepository,
     Features.ShoppingList.GenerateForWeek.IWeeklyPlanRepository
 {
     private readonly MiddagsklokDbContext _context;

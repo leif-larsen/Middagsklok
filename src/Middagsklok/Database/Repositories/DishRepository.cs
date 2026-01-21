@@ -7,6 +7,7 @@ using Middagsklok.Features.DishHistory.Log;
 using Middagsklok.Features.DishHistory.Get;
 using Middagsklok.Features.WeeklyPlans.Create;
 using Middagsklok.Features.WeeklyPlans.Generate;
+using Middagsklok.Features.WeeklyPlans.Edit;
 
 namespace Middagsklok.Database.Repositories;
 
@@ -16,7 +17,8 @@ public class DishRepository :
     Features.DishHistory.Log.IDishRepository,
     Features.DishHistory.Get.IDishRepository,
     Features.WeeklyPlans.Create.IDishRepository,
-    Features.WeeklyPlans.Generate.IDishRepository
+    Features.WeeklyPlans.Generate.IDishRepository,
+    Features.WeeklyPlans.Edit.IDishRepository
 {
     private readonly MiddagsklokDbContext _context;
 
@@ -48,6 +50,25 @@ public class DishRepository :
             .FirstOrDefaultAsync(d => d.Id == dishId, ct);
 
         return entity is null ? null : MapToDomain(entity);
+    }
+
+    public async Task<Dish?> GetById(Guid dishId, CancellationToken ct = default)
+    {
+        return await GetByIdWithIngredients(dishId, ct);
+    }
+
+    public async Task<IReadOnlyList<Dish>> GetByIds(IReadOnlyList<Guid> dishIds, CancellationToken ct = default)
+    {
+        var entities = await _context.Dishes
+            .AsNoTracking()
+            .Include(d => d.DishIngredients)
+                .ThenInclude(di => di.Ingredient)
+            .Where(d => dishIds.Contains(d.Id))
+            .ToListAsync(ct);
+
+        return entities
+            .Select(MapToDomain)
+            .ToList();
     }
 
     private static Dish MapToDomain(DishEntity entity)
