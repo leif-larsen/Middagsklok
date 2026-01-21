@@ -1,5 +1,3 @@
-using Middagsklok.Features.WeeklyPlans.Get;
-
 namespace Middagsklok.Features.ShoppingList.GenerateForWeek;
 
 public class GetShoppingListForWeekFeature
