@@ -20,6 +20,9 @@ using Middagsklok.Features.ShoppingList.GenerateForWeek;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add Aspire service defaults (telemetry, health checks, service discovery)
+builder.AddServiceDefaults();
+
 // OpenAPI/Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -91,6 +94,9 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseCors();
+
+// Map Aspire default endpoints (health checks, etc.)
+app.MapDefaultEndpoints();
 
 // Register endpoints
 app.MapHealthEndpoints();

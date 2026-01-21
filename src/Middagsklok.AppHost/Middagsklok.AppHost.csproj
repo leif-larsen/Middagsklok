@@ -1,7 +1,10 @@
 <Project Sdk="Aspire.AppHost.Sdk/13.1.0">
 
+  <Sdk Name="Aspire.AppHost.Sdk" Version="9.5.0" />
+
   <ItemGroup>
     <ProjectReference Include="..\Middagsklok.Api\Middagsklok.Api.csproj" />
+    <ProjectReference Include="..\Middagsklok.ServiceDefaults\Middagsklok.ServiceDefaults.csproj" IsAspireProjectResource="false" />
   </ItemGroup>
 
   <ItemGroup>

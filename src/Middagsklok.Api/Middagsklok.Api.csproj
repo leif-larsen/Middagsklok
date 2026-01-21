@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Middagsklok\Middagsklok.csproj" />
     <ProjectReference Include="..\Middagsklok.Contracts\Middagsklok.Contracts.csproj" />
+    <ProjectReference Include="..\Middagsklok.ServiceDefaults\Middagsklok.ServiceDefaults.csproj" />
   </ItemGroup>
 
   <ItemGroup>
