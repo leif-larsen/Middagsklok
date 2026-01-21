@@ -48,6 +48,7 @@ builder.Services.AddScoped<Middagsklok.Features.WeeklyPlans.Get.IWeeklyPlanRepos
 builder.Services.AddScoped<Middagsklok.Features.WeeklyPlans.Generate.IWeeklyPlanRepository, WeeklyPlanRepository>();
 builder.Services.AddScoped<Middagsklok.Features.WeeklyPlans.Generate.IDishRepository, DishRepository>();
 builder.Services.AddScoped<Middagsklok.Features.WeeklyPlans.Generate.IDishHistoryRepository, DishHistoryRepository>();
+builder.Services.AddScoped<Middagsklok.Features.ShoppingList.GenerateForWeek.IWeeklyPlanRepository, WeeklyPlanRepository>();
 
 // Features
 builder.Services.AddScoped<GetDishesFeature>();
@@ -57,9 +58,13 @@ builder.Services.AddScoped<BatchImportDishesFeature>();
 builder.Services.AddScoped<GetWeeklyPlanFeature>();
 builder.Services.AddScoped<GenerateWeeklyPlanFeature>();
 builder.Services.AddScoped<WeeklyPlanRulesValidator>();
+builder.Services.AddScoped<GetShoppingListForWeekFeature>();
 
 // Clock
 builder.Services.AddSingleton<IClock, SystemClock>();
+
+// Shopping List Generator
+builder.Services.AddScoped<IShoppingListGenerator, ShoppingListGenerator>();
 
 // CORS
 builder.Services.AddCors(options =>
@@ -102,5 +107,6 @@ app.MapDefaultEndpoints();
 app.MapHealthEndpoints();
 app.MapDishEndpoints();
 app.MapWeeklyPlanEndpoints();
+app.MapShoppingListEndpoints();
 
 app.Run();
