@@ -83,19 +83,6 @@ export default function WeeklyPlanPage() {
     }
   };
 
-  const fetchDishes = async () => {
-    try {
-      const response = await fetch(`${apiUrl}/dishes`);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch dishes: ${response.status}`);
-      }
-      const data: DishListResponse = await response.json();
-      setDishes(data.items);
-    } catch (err) {
-      console.error('Failed to load dishes:', err);
-    }
-  };
-
   const getMonday = (date: Date): string => {
     const d = new Date(date);
     const day = d.getDay();
