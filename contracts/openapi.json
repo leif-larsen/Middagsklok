@@ -179,6 +179,46 @@
             "description": "Not Found"
           }
         }
+      },
+      "put": {
+        "tags": [
+          "Middagsklok.Api"
+        ],
+        "parameters": [
+          {
+            "name": "weekStartDate",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWeeklyPlanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateWeeklyPlanResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
       }
     },
     "/weekly-plan/generate": {
@@ -539,6 +579,28 @@
         },
         "additionalProperties": false
       },
+      "RuleViolationDto": {
+        "type": "object",
+        "properties": {
+          "ruleCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "dayIndices": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "ShoppingListItemDto": {
         "type": "object",
         "properties": {
@@ -657,6 +719,58 @@
             "type": "array",
             "items": {
               "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateWeeklyPlanItemDto": {
+        "type": "object",
+        "properties": {
+          "dayIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dishId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateWeeklyPlanRequest": {
+        "type": "object",
+        "properties": {
+          "weekStartDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UpdateWeeklyPlanItemDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateWeeklyPlanResponse": {
+        "type": "object",
+        "properties": {
+          "weekStartDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "violations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RuleViolationDto"
             },
             "nullable": true
           }
