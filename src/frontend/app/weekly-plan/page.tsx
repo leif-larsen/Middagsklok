@@ -2,6 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
+import { PageTitle } from '@/components/ui-primitives';
+import { Loader2, AlertCircle, CalendarDays, ChevronLeft, Save, X, Edit, Sparkles, Clock } from 'lucide-react';
 
 interface Dish {
   id: string;
@@ -256,234 +265,267 @@ export default function WeeklyPlanPage() {
   };
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '2rem' }}>
-        <Link href="/" style={{ color: 'blue', textDecoration: 'underline' }}>
-          ← Back to Home
+    <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <div className="mb-6">
+        <Link href="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <ChevronLeft className="mr-1 h-4 w-4" />
+          Back to Home
         </Link>
       </div>
 
-      <h1>Weekly Plan</h1>
+      <PageTitle className="mb-8">Weekly Plan</PageTitle>
 
-      <div style={{ margin: '2rem 0', padding: '1rem', border: '1px solid #ccc', borderRadius: '4px' }}>
-        <h2>Select Week</h2>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginTop: '1rem' }}>
-          <label>
-            Week start (Monday):
-            <input
-              type="date"
-              value={weekStart}
-              onChange={(e) => handleWeekChange(e.target.value)}
-              style={{ marginLeft: '0.5rem', padding: '0.5rem' }}
-            />
-          </label>
-          <button
-            onClick={() => handleWeekChange(getMonday(new Date()))}
-            style={{ padding: '0.5rem 1rem', cursor: 'pointer' }}
-          >
-            Use This Week
-          </button>
-        </div>
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <CalendarDays className="h-5 w-5" />
+            Select Week
+          </CardTitle>
+          <CardDescription>Choose a week to view or create a meal plan</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1 space-y-2">
+              <Label htmlFor="week-start">Week start (Monday)</Label>
+              <Input
+                id="week-start"
+                type="date"
+                value={weekStart}
+                onChange={(e) => handleWeekChange(e.target.value)}
+                className="max-w-xs"
+              />
+            </div>
+            <div className="flex items-end">
+              <Button
+                onClick={() => handleWeekChange(getMonday(new Date()))}
+                variant="outline"
+              >
+                Use This Week
+              </Button>
+            </div>
+          </div>
 
-        <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-          <button
-            onClick={handleGeneratePlan}
-            disabled={generating}
-            style={{
-              padding: '0.75rem 1.5rem',
-              backgroundColor: '#4CAF50',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: generating ? 'not-allowed' : 'pointer',
-              opacity: generating ? 0.6 : 1,
-            }}
-          >
-            {generating ? 'Generating...' : 'Generate New Plan'}
-          </button>
-
-          {plan && !editMode && (
-            <button
-              onClick={handleEditPlan}
-              style={{
-                padding: '0.75rem 1.5rem',
-                backgroundColor: '#FF9800',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-              }}
+          <div className="flex flex-wrap gap-3">
+            <Button
+              onClick={handleGeneratePlan}
+              disabled={generating}
+              size="lg"
             >
-              Edit Plan
-            </button>
-          )}
-        </div>
-      </div>
+              {generating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  Generate New Plan
+                </>
+              )}
+            </Button>
+
+            {plan && !editMode && (
+              <Button
+                onClick={handleEditPlan}
+                variant="secondary"
+                size="lg"
+              >
+                <Edit className="mr-2 h-4 w-4" />
+                Edit Plan
+              </Button>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
       {error && (
-        <div style={{ 
-          margin: '2rem 0', 
-          padding: '1rem', 
-          border: '1px solid red', 
-          borderRadius: '4px',
-          backgroundColor: '#ffebee',
-          color: 'red'
-        }}>
-          <strong>Error:</strong> {error}
-        </div>
+        <Alert variant="destructive" className="mb-8">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       )}
 
       {violations.length > 0 && (
-        <div style={{ 
-          margin: '2rem 0', 
-          padding: '1rem', 
-          border: '1px solid orange', 
-          borderRadius: '4px',
-          backgroundColor: '#fff3cd',
-          color: '#856404'
-        }}>
-          <h3 style={{ marginTop: 0 }}>Validation Errors</h3>
-          {violations.map((violation, idx) => (
-            <div key={idx} style={{ marginBottom: '0.5rem' }}>
-              <strong>{violation.ruleCode}:</strong> {violation.message}
-              {violation.dayIndices.length > 0 && (
-                <span style={{ marginLeft: '0.5rem', fontSize: '0.9rem' }}>
-                  (Days: {violation.dayIndices.map(d => dayNames[d]).join(', ')})
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
+        <Alert className="mb-8 border-orange-500 bg-orange-50 dark:bg-orange-950/20">
+          <AlertCircle className="h-4 w-4 text-orange-600" />
+          <AlertTitle className="text-orange-800 dark:text-orange-400">Validation Errors</AlertTitle>
+          <AlertDescription className="mt-2 space-y-2">
+            {violations.map((violation, idx) => (
+              <div key={idx} className="text-sm">
+                <span className="font-semibold text-orange-900 dark:text-orange-300">
+                  {violation.ruleCode}:
+                </span>{' '}
+                <span className="text-orange-800 dark:text-orange-400">{violation.message}</span>
+                {violation.dayIndices.length > 0 && (
+                  <div className="mt-1 flex flex-wrap gap-1">
+                    {violation.dayIndices.map((d) => (
+                      <Badge key={d} variant="outline" className="text-xs border-orange-300 text-orange-700">
+                        {dayNames[d]}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </AlertDescription>
+        </Alert>
       )}
 
       {editMode && (
-        <div style={{ margin: '2rem 0' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <h2>Edit Weekly Plan for {weekStart}</h2>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <button
-                onClick={handleSavePlan}
-                disabled={saving}
-                style={{
-                  padding: '0.75rem 1.5rem',
-                  backgroundColor: '#2196F3',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: saving ? 'not-allowed' : 'pointer',
-                  opacity: saving ? 0.6 : 1,
-                }}
-              >
-                {saving ? 'Saving...' : 'Save Plan'}
-              </button>
-              <button
-                onClick={handleCancelEdit}
-                disabled={saving}
-                style={{
-                  padding: '0.75rem 1.5rem',
-                  backgroundColor: '#6c757d',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: saving ? 'not-allowed' : 'pointer',
-                  opacity: saving ? 0.6 : 1,
-                }}
-              >
-                Cancel
-              </button>
+        <Card className="mb-8">
+          <CardHeader>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <CardTitle>Edit Weekly Plan</CardTitle>
+                <CardDescription className="mt-1.5">
+                  Planning for week of {weekStart}
+                </CardDescription>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleSavePlan}
+                  disabled={saving}
+                  size="default"
+                >
+                  {saving ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="mr-2 h-4 w-4" />
+                      Save Plan
+                    </>
+                  )}
+                </Button>
+                <Button
+                  onClick={handleCancelEdit}
+                  disabled={saving}
+                  variant="outline"
+                >
+                  <X className="mr-2 h-4 w-4" />
+                  Cancel
+                </Button>
+              </div>
             </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {[0, 1, 2, 3, 4, 5, 6].map((dayIndex) => {
+                const selectedDish = dishes.find(d => d.id === editedPlan[dayIndex]);
+                return (
+                  <Card key={dayIndex} className="bg-muted/50">
+                    <CardContent className="pt-6">
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+                        <div className="lg:col-span-2">
+                          <Label className="text-base font-semibold">
+                            {dayNames[dayIndex]}
+                          </Label>
+                        </div>
+                        <div className="lg:col-span-7 space-y-2">
+                          <Select
+                            value={editedPlan[dayIndex] || ''}
+                            onChange={(e) => handleDishChange(dayIndex, e.target.value)}
+                          >
+                            <option value="">-- Select a dish --</option>
+                            {dishes.map(dish => (
+                              <option key={dish.id} value={dish.id}>
+                                {dish.name} ({dish.totalMinutes}min)
+                              </option>
+                            ))}
+                          </Select>
+                        </div>
+                        {selectedDish && (
+                          <div className="lg:col-span-3 flex items-center gap-3 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <Clock className="h-3 w-3" />
+                              <span>Active: {selectedDish.activeMinutes}m</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Clock className="h-3 w-3" />
+                              <span>Total: {selectedDish.totalMinutes}m</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {plan && !editMode && (
+        <div className="space-y-6">
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight mb-4">
+              Weekly Plan for {plan.weekStartDate}
+            </h2>
           </div>
 
-          <div style={{ display: 'grid', gap: '1rem' }}>
-            {[0, 1, 2, 3, 4, 5, 6].map((dayIndex) => {
-              const selectedDish = dishes.find(d => d.id === editedPlan[dayIndex]);
-              return (
-                <div
-                  key={dayIndex}
-                  style={{
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    padding: '1rem',
-                    backgroundColor: '#f9f9f9',
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <label style={{ minWidth: '100px', fontWeight: 'bold' }}>
-                      {dayNames[dayIndex]}:
-                    </label>
-                    <select
-                      value={editedPlan[dayIndex] || ''}
-                      onChange={(e) => handleDishChange(dayIndex, e.target.value)}
-                      style={{
-                        flex: 1,
-                        padding: '0.5rem',
-                        border: '1px solid #ccc',
-                        borderRadius: '4px',
-                        fontSize: '1rem'
-                      }}
-                    >
-                      <option value="">-- Select a dish --</option>
-                      {dishes.map(dish => (
-                        <option key={dish.id} value={dish.id}>
-                          {dish.name} ({dish.totalMinutes}min)
-                        </option>
-                      ))}
-                    </select>
-                    {selectedDish && (
-                      <div style={{ fontSize: '0.85rem', color: '#666', minWidth: '150px' }}>
-                        Active: {selectedDish.activeMinutes}min | Total: {selectedDish.totalMinutes}min
+          <div className="space-y-4">
+            {plan.items
+              .sort((a, b) => a.dayIndex - b.dayIndex)
+              .map((item) => (
+                <Card key={item.dayIndex}>
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div className="space-y-1 flex-1">
+                        <CardTitle className="flex items-center gap-3">
+                          <Badge variant="outline" className="text-sm font-normal">
+                            {dayNames[item.dayIndex]}
+                          </Badge>
+                          <span>{item.dish.name}</span>
+                        </CardTitle>
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-1">
+                            <Clock className="h-3 w-3" />
+                            <span>Active: {item.dish.activeMinutes}min</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Clock className="h-3 w-3" />
+                            <span>Total: {item.dish.totalMinutes}min</span>
+                          </div>
+                        </div>
                       </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+                    </div>
+                  </CardHeader>
+                  {explanations && explanations[item.dayIndex] && (
+                    <CardContent>
+                      <div className="rounded-lg bg-muted/50 p-4">
+                        <p className="text-sm font-semibold mb-2 text-foreground">
+                          Why this dish:
+                        </p>
+                        <ul className="space-y-1 text-sm text-muted-foreground">
+                          {explanations[item.dayIndex].reasons.map((reason, idx) => (
+                            <li key={idx} className="flex items-start gap-2">
+                              <span className="text-primary mt-0.5">•</span>
+                              <span>{reason}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </CardContent>
+                  )}
+                </Card>
+              ))}
           </div>
         </div>
       )}
 
-      {plan && !editMode && (
-        <div style={{ margin: '2rem 0' }}>
-          <h2>Weekly Plan for {plan.weekStartDate}</h2>
-
-          <div style={{ display: 'grid', gap: '1rem', marginTop: '1rem' }}>
-            {plan.items
-              .sort((a, b) => a.dayIndex - b.dayIndex)
-              .map((item) => (
-                <div
-                  key={item.dayIndex}
-                  style={{
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    padding: '1rem',
-                    backgroundColor: '#f9f9f9',
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-                    <div>
-                      <h3 style={{ margin: 0 }}>
-                        {dayNames[item.dayIndex]} - {item.dish.name}
-                      </h3>
-                      <div style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666' }}>
-                        <span>Active: {item.dish.activeMinutes}min</span>
-                        <span style={{ marginLeft: '1rem' }}>Total: {item.dish.totalMinutes}min</span>
-                      </div>
-                      {explanations && explanations[item.dayIndex] && (
-                        <div style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#555' }}>
-                          <strong>Why this dish:</strong>
-                          <ul style={{ marginTop: '0.25rem', marginBottom: 0 }}>
-                            {explanations[item.dayIndex].reasons.map((reason, idx) => (
-                              <li key={idx}>{reason}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
+      {loading && (
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+              <span className="ml-3 text-muted-foreground">Loading plan...</span>
+            </div>
+          </CardContent>
+        </Card>
       )}
     </div>
   );

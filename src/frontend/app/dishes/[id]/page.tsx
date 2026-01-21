@@ -3,6 +3,14 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { PageTitle, FormRow } from '@/components/ui-primitives';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Loader2, CheckCircle2, XCircle, Trash2, Plus } from 'lucide-react';
 
 interface Ingredient {
   name: string;
@@ -134,363 +142,233 @@ export default function EditDishPage() {
 
   if (loading) {
     return (
-      <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
-        <p>Loading dish...</p>
+      <div className="flex items-center justify-center py-8">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        <span className="ml-2 text-muted-foreground">Loading dish...</span>
       </div>
     );
   }
 
   if (error && !name) {
     return (
-      <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
-        <div style={{ marginBottom: '2rem' }}>
-          <Link href="/dishes" style={{ color: 'blue', textDecoration: 'underline' }}>
-            ← Back to Dishes
-          </Link>
-        </div>
-        <p style={{ color: 'red' }}>{error}</p>
+      <div className="space-y-4">
+        <Alert variant="destructive">
+          <XCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+        <Button variant="outline" asChild>
+          <Link href="/dishes">Back to Dishes</Link>
+        </Button>
       </div>
     );
   }
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '2rem' }}>
-        <Link href="/dishes" style={{ color: 'blue', textDecoration: 'underline' }}>
-          ← Back to Dishes
-        </Link>
+    <div className="space-y-8">
+      <div className="flex items-center justify-between">
+        <PageTitle>Edit Dish</PageTitle>
+        <Button variant="outline" asChild>
+          <Link href="/dishes">Back to Dishes</Link>
+        </Button>
       </div>
 
-      <h1>Edit Dish</h1>
-
       {success && (
-        <div
-          style={{
-            padding: '1rem',
-            marginBottom: '1rem',
-            backgroundColor: '#d4edda',
-            color: '#155724',
-            border: '1px solid #c3e6cb',
-            borderRadius: '4px',
-          }}
-        >
-          ✓ Dish updated successfully!
-        </div>
+        <Alert className="border-green-200 bg-green-50">
+          <CheckCircle2 className="h-4 w-4 text-green-600" />
+          <AlertTitle className="text-green-900">Success!</AlertTitle>
+          <AlertDescription className="text-green-900">
+            Dish updated successfully!
+          </AlertDescription>
+        </Alert>
       )}
 
       {error && (
-        <div
-          style={{
-            padding: '1rem',
-            marginBottom: '1rem',
-            backgroundColor: '#f8d7da',
-            color: '#721c24',
-            border: '1px solid #f5c6cb',
-            borderRadius: '4px',
-          }}
-        >
-          {error}
-        </div>
+        <Alert variant="destructive">
+          <XCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       )}
 
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-            Name *
-          </label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            style={{
-              width: '100%',
-              padding: '0.5rem',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-            }}
-          />
-        </div>
+      <form onSubmit={handleSubmit} className="space-y-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Basic Information</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <FormRow label="Name" required>
+              <Input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </FormRow>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
-          <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-              Active Minutes *
-            </label>
-            <input
-              type="number"
-              value={activeMinutes}
-              onChange={(e) => setActiveMinutes(parseInt(e.target.value) || 0)}
-              required
-              min="0"
-              style={{
-                width: '100%',
-                padding: '0.5rem',
-                border: '1px solid #ccc',
-                borderRadius: '4px',
-              }}
-            />
-          </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <FormRow label="Active Minutes" required>
+                <Input
+                  type="number"
+                  value={activeMinutes}
+                  onChange={(e) => setActiveMinutes(parseInt(e.target.value) || 0)}
+                  required
+                  min="0"
+                />
+              </FormRow>
 
-          <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-              Total Minutes *
-            </label>
-            <input
-              type="number"
-              value={totalMinutes}
-              onChange={(e) => setTotalMinutes(parseInt(e.target.value) || 0)}
-              required
-              min="1"
-              style={{
-                width: '100%',
-                padding: '0.5rem',
-                border: '1px solid #ccc',
-                borderRadius: '4px',
-              }}
-            />
-          </div>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
-          <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-              Kid Rating (1-5) *
-            </label>
-            <input
-              type="number"
-              value={kidRating}
-              onChange={(e) => setKidRating(parseInt(e.target.value) || 1)}
-              required
-              min="1"
-              max="5"
-              style={{
-                width: '100%',
-                padding: '0.5rem',
-                border: '1px solid #ccc',
-                borderRadius: '4px',
-              }}
-            />
-          </div>
-
-          <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-              Family Rating (1-5) *
-            </label>
-            <input
-              type="number"
-              value={familyRating}
-              onChange={(e) => setFamilyRating(parseInt(e.target.value) || 1)}
-              required
-              min="1"
-              max="5"
-              style={{
-                width: '100%',
-                padding: '0.5rem',
-                border: '1px solid #ccc',
-                borderRadius: '4px',
-              }}
-            />
-          </div>
-        </div>
-
-        <div style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-            <input
-              type="checkbox"
-              checked={isPescetarian}
-              onChange={(e) => setIsPescetarian(e.target.checked)}
-            />
-            <span>Is Pescetarian</span>
-          </label>
-        </div>
-
-        <div style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-            <input
-              type="checkbox"
-              checked={hasOptionalMeatVariant}
-              onChange={(e) => setHasOptionalMeatVariant(e.target.checked)}
-            />
-            <span>Has Optional Meat Variant</span>
-          </label>
-        </div>
-
-        <div style={{ marginBottom: '1.5rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <h2 style={{ margin: 0 }}>Ingredients</h2>
-            <button
-              type="button"
-              onClick={addIngredient}
-              style={{
-                padding: '0.5rem 1rem',
-                backgroundColor: '#28a745',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-              }}
-            >
-              + Add Ingredient
-            </button>
-          </div>
-
-          {ingredients.length === 0 && (
-            <p style={{ color: '#666', fontStyle: 'italic' }}>
-              No ingredients yet. Click "Add Ingredient" to add one.
-            </p>
-          )}
-
-          {ingredients.map((ingredient, index) => (
-            <div
-              key={index}
-              style={{
-                border: '1px solid #ccc',
-                borderRadius: '4px',
-                padding: '1rem',
-                marginBottom: '1rem',
-              }}
-            >
-              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.25rem' }}>
-                    Name *
-                  </label>
-                  <input
-                    type="text"
-                    value={ingredient.name}
-                    onChange={(e) => updateIngredient(index, 'name', e.target.value)}
-                    required
-                    style={{
-                      width: '100%',
-                      padding: '0.5rem',
-                      border: '1px solid #ccc',
-                      borderRadius: '4px',
-                    }}
-                  />
-                </div>
-
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.25rem' }}>
-                    Category
-                  </label>
-                  <input
-                    type="text"
-                    value={ingredient.category}
-                    onChange={(e) => updateIngredient(index, 'category', e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '0.5rem',
-                      border: '1px solid #ccc',
-                      borderRadius: '4px',
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.25rem' }}>
-                    Amount *
-                  </label>
-                  <input
-                    type="number"
-                    value={ingredient.amount}
-                    onChange={(e) => updateIngredient(index, 'amount', parseFloat(e.target.value) || 0)}
-                    required
-                    min="0.01"
-                    step="0.01"
-                    style={{
-                      width: '100%',
-                      padding: '0.5rem',
-                      border: '1px solid #ccc',
-                      borderRadius: '4px',
-                    }}
-                  />
-                </div>
-
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.25rem' }}>
-                    Unit *
-                  </label>
-                  <input
-                    type="text"
-                    value={ingredient.unit}
-                    onChange={(e) => updateIngredient(index, 'unit', e.target.value)}
-                    required
-                    style={{
-                      width: '100%',
-                      padding: '0.5rem',
-                      border: '1px solid #ccc',
-                      borderRadius: '4px',
-                    }}
-                  />
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-                    <input
-                      type="checkbox"
-                      checked={ingredient.optional}
-                      onChange={(e) => updateIngredient(index, 'optional', e.target.checked)}
-                    />
-                    <span style={{ fontSize: '0.9rem' }}>Optional</span>
-                  </label>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => removeIngredient(index)}
-                style={{
-                  padding: '0.25rem 0.75rem',
-                  backgroundColor: '#dc3545',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '0.9rem',
-                }}
-              >
-                Remove
-              </button>
+              <FormRow label="Total Minutes" required>
+                <Input
+                  type="number"
+                  value={totalMinutes}
+                  onChange={(e) => setTotalMinutes(parseInt(e.target.value) || 0)}
+                  required
+                  min="1"
+                />
+              </FormRow>
             </div>
-          ))}
-        </div>
 
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          <button
-            type="submit"
-            disabled={saving}
-            style={{
-              padding: '0.75rem 2rem',
-              backgroundColor: saving ? '#ccc' : '#007bff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: saving ? 'not-allowed' : 'pointer',
-              fontSize: '1rem',
-              fontWeight: 'bold',
-            }}
-          >
+            <div className="grid gap-4 md:grid-cols-2">
+              <FormRow label="Kid Rating (1-5)" required>
+                <Input
+                  type="number"
+                  value={kidRating}
+                  onChange={(e) => setKidRating(parseInt(e.target.value) || 1)}
+                  required
+                  min="1"
+                  max="5"
+                />
+              </FormRow>
+
+              <FormRow label="Family Rating (1-5)" required>
+                <Input
+                  type="number"
+                  value={familyRating}
+                  onChange={(e) => setFamilyRating(parseInt(e.target.value) || 1)}
+                  required
+                  min="1"
+                  max="5"
+                />
+              </FormRow>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="flex items-center gap-2 cursor-pointer">
+                <Checkbox
+                  checked={isPescetarian}
+                  onChange={(e) => setIsPescetarian(e.target.checked)}
+                />
+                <span>Is Pescetarian</span>
+              </Label>
+
+              <Label className="flex items-center gap-2 cursor-pointer">
+                <Checkbox
+                  checked={hasOptionalMeatVariant}
+                  onChange={(e) => setHasOptionalMeatVariant(e.target.checked)}
+                />
+                <span>Has Optional Meat Variant</span>
+              </Label>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Ingredients</CardTitle>
+            <Button type="button" onClick={addIngredient} size="sm">
+              <Plus className="h-4 w-4 mr-2" />
+              Add Ingredient
+            </Button>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {ingredients.length === 0 && (
+              <p className="text-sm text-muted-foreground italic text-center py-4">
+                No ingredients yet. Click "Add Ingredient" to add one.
+              </p>
+            )}
+
+            {ingredients.map((ingredient, index) => (
+              <Card key={index} className="bg-muted/50">
+                <CardContent className="pt-6 space-y-4">
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label>Name *</Label>
+                      <Input
+                        type="text"
+                        value={ingredient.name}
+                        onChange={(e) => updateIngredient(index, 'name', e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Category</Label>
+                      <Input
+                        type="text"
+                        value={ingredient.category}
+                        onChange={(e) => updateIngredient(index, 'category', e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid gap-4 md:grid-cols-3">
+                    <div className="space-y-2">
+                      <Label>Amount *</Label>
+                      <Input
+                        type="number"
+                        value={ingredient.amount}
+                        onChange={(e) => updateIngredient(index, 'amount', parseFloat(e.target.value) || 0)}
+                        required
+                        min="0.01"
+                        step="0.01"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Unit *</Label>
+                      <Input
+                        type="text"
+                        value={ingredient.unit}
+                        onChange={(e) => updateIngredient(index, 'unit', e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <div className="flex items-end">
+                      <Label className="flex items-center gap-2 cursor-pointer pb-2">
+                        <Checkbox
+                          checked={ingredient.optional}
+                          onChange={(e) => updateIngredient(index, 'optional', e.target.checked)}
+                        />
+                        <span>Optional</span>
+                      </Label>
+                    </div>
+                  </div>
+
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => removeIngredient(index)}
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Remove
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </CardContent>
+        </Card>
+
+        <div className="flex gap-4">
+          <Button type="submit" disabled={saving}>
+            {saving && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
             {saving ? 'Saving...' : 'Save Changes'}
-          </button>
+          </Button>
 
-          <Link
-            href="/dishes"
-            style={{
-              display: 'inline-block',
-              padding: '0.75rem 2rem',
-              backgroundColor: '#6c757d',
-              color: 'white',
-              textDecoration: 'none',
-              borderRadius: '4px',
-              fontSize: '1rem',
-              fontWeight: 'bold',
-            }}
-          >
-            Cancel
-          </Link>
+          <Button type="button" variant="outline" asChild>
+            <Link href="/dishes">Cancel</Link>
+          </Button>
         </div>
       </form>
     </div>

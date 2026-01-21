@@ -2,6 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { Calendar, ShoppingCart, Loader2, AlertCircle, ChevronRight } from 'lucide-react';
+import { PageTitle, EmptyState } from '@/components/ui-primitives';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
 
 interface ShoppingListItem {
   ingredientName: string;
@@ -14,8 +22,6 @@ interface ShoppingListResponse {
   weekStartDate: string;
   items: ShoppingListItem[];
 }
-
-const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 export default function ShoppingListPage() {
   const [weekStart, setWeekStart] = useState('');
@@ -83,117 +89,149 @@ export default function ShoppingListPage() {
   const categories = Object.keys(groupedItems).sort();
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '2rem' }}>
-        <Link href="/" style={{ color: 'blue', textDecoration: 'underline' }}>
-          ← Back to Home
+    <div className="container mx-auto max-w-5xl px-4 py-8">
+      <div className="mb-6">
+        <Link 
+          href="/" 
+          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <ChevronRight className="h-4 w-4 mr-1 rotate-180" />
+          Back to Home
         </Link>
       </div>
 
-      <h1>Handleliste</h1>
+      <PageTitle className="mb-8 flex items-center gap-2">
+        <ShoppingCart className="h-8 w-8" />
+        Handleliste
+      </PageTitle>
 
-      <div style={{ margin: '2rem 0', padding: '1rem', border: '1px solid #ccc', borderRadius: '4px' }}>
-        <h2>Velg uke</h2>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginTop: '1rem' }}>
-          <label>
-            Ukestart (mandag):
-            <input
-              type="date"
-              value={weekStart}
-              onChange={(e) => setWeekStart(e.target.value)}
-              style={{ marginLeft: '0.5rem', padding: '0.5rem' }}
-            />
-          </label>
-          <button
-            onClick={() => setWeekStart(getMonday(new Date()))}
-            style={{ padding: '0.5rem 1rem', cursor: 'pointer' }}
-          >
-            Bruk denne uken
-          </button>
-        </div>
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Calendar className="h-5 w-5" />
+            Velg uke
+          </CardTitle>
+          <CardDescription>
+            Velg hvilken uke du vil se handlelisten for
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-end">
+            <div className="space-y-2 flex-1">
+              <Label htmlFor="week-start">Ukestart (mandag)</Label>
+              <Input
+                id="week-start"
+                type="date"
+                value={weekStart}
+                onChange={(e) => setWeekStart(e.target.value)}
+                className="max-w-xs"
+              />
+            </div>
+            <Button
+              variant="outline"
+              onClick={() => setWeekStart(getMonday(new Date()))}
+            >
+              <Calendar className="h-4 w-4 mr-2" />
+              Bruk denne uken
+            </Button>
+          </div>
 
-        <div style={{ marginTop: '1rem' }}>
-          <button
-            onClick={handleLoadShoppingList}
-            disabled={loading}
-            style={{
-              padding: '0.75rem 1.5rem',
-              backgroundColor: '#2196F3',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.6 : 1,
-            }}
-          >
-            {loading ? 'Laster...' : 'Last handleliste'}
-          </button>
-        </div>
-      </div>
+          <div className="mt-4">
+            <Button
+              onClick={handleLoadShoppingList}
+              disabled={loading}
+              className="w-full sm:w-auto"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Laster...
+                </>
+              ) : (
+                <>
+                  <ShoppingCart className="h-4 w-4 mr-2" />
+                  Last handleliste
+                </>
+              )}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {error && (
-        <div style={{ 
-          margin: '2rem 0', 
-          padding: '1rem', 
-          border: '1px solid red', 
-          borderRadius: '4px',
-          backgroundColor: '#ffebee',
-          color: 'red'
-        }}>
-          <strong>Feil:</strong> {error}
-        </div>
+        <Alert variant="destructive" className="mb-8">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            <strong>Feil:</strong> {error}
+          </AlertDescription>
+        </Alert>
       )}
 
-      {shoppingList && (
-        <div style={{ margin: '2rem 0' }}>
-          <h2>Handleliste for uke {shoppingList.weekStartDate}</h2>
-
-          {categories.length === 0 ? (
-            <p style={{ marginTop: '1rem', color: '#666' }}>
-              Ingen varer på handlelisten for denne uken.
-            </p>
-          ) : (
-            <div style={{ marginTop: '1rem' }}>
-              {categories.map((category) => (
-                <div key={category} style={{ marginBottom: '2rem' }}>
-                  <h3 style={{ 
-                    margin: '1rem 0 0.5rem 0', 
-                    borderBottom: '2px solid #ccc', 
-                    paddingBottom: '0.5rem',
-                    fontSize: '1.2rem'
-                  }}>
-                    {category}
-                  </h3>
-                  <ul style={{ 
-                    listStyle: 'none', 
-                    padding: 0, 
-                    margin: 0 
-                  }}>
-                    {groupedItems[category].map((item, idx) => (
-                      <li 
-                        key={idx}
-                        style={{ 
-                          padding: '0.75rem 1rem',
-                          backgroundColor: idx % 2 === 0 ? '#f9f9f9' : 'white',
-                          border: '1px solid #e0e0e0',
-                          borderTop: idx === 0 ? '1px solid #e0e0e0' : 'none',
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center'
-                        }}
-                      >
-                        <span style={{ fontWeight: 500 }}>{item.ingredientName}</span>
-                        <span style={{ color: '#666' }}>
-                          {item.amount} {item.unit}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+      {loading && !shoppingList && (
+        <Card>
+          <CardContent className="py-12">
+            <div className="flex flex-col items-center justify-center">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground mb-4" />
+              <p className="text-sm text-muted-foreground">Laster handleliste...</p>
             </div>
-          )}
-        </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {shoppingList && !loading && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Handleliste for uke {shoppingList.weekStartDate}</CardTitle>
+            <CardDescription>
+              {categories.length > 0 && (
+                <>
+                  {shoppingList.items.length} varer i {categories.length} kategorier
+                </>
+              )}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {categories.length === 0 ? (
+              <EmptyState
+                icon={<ShoppingCart className="h-12 w-12" />}
+                title="Ingen varer på handlelisten"
+                description="Denne uken har ingen varer på handlelisten. Generer en ukesplan for å lage en handleliste."
+              />
+            ) : (
+              <div className="space-y-8">
+                {categories.map((category) => (
+                  <div key={category}>
+                    <div className="flex items-center gap-2 mb-3">
+                      <h3 className="text-lg font-semibold">
+                        {category}
+                      </h3>
+                      <Badge variant="secondary" className="ml-auto">
+                        {groupedItems[category].length}
+                      </Badge>
+                    </div>
+                    <div className="rounded-md border">
+                      <ul className="divide-y">
+                        {groupedItems[category].map((item, idx) => (
+                          <li
+                            key={idx}
+                            className="flex items-center justify-between px-4 py-3 hover:bg-muted/50 transition-colors"
+                          >
+                            <span className="font-medium text-sm">
+                              {item.ingredientName}
+                            </span>
+                            <span className="text-sm text-muted-foreground">
+                              {item.amount} {item.unit}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       )}
     </div>
   );
