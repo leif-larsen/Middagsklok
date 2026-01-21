@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import AppLayout from "@/components/app-layout";
 
 export const metadata: Metadata = {
   title: "Middagsklok - Weekly Meal Planning",
@@ -14,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
+        <AppLayout>{children}</AppLayout>
       </body>
     </html>
   );
