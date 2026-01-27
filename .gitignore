@@ -210,3 +210,33 @@ FakesAssemblies/
 
 # JetBrains Rider
 *.sln.iml
+
+# Next.js build output
+.next/
+out/
+
+# Dependencies
+node_modules/
+
+# Environment files
+.env*.local
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+
+# TypeScript declaration file
+next-env.d.ts
+
+# Optional: VS Code settings
+.vscode/
+
+# Optional: Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Optional: Development and production build artifacts
+pnpm-lock.yaml
+yarn.lock
