@@ -46,6 +46,7 @@
 - Favor collection initializers and object initializers.
 - Use string interpolation instead of string.Format or concatenation.
 - Favor primary constructors for all types.
+- For our .NET projects, we use centralised package management. Do not add or update NuGet packages directly in the .csproj files. Instead, update the CentralPackageVersions.props file in the solution root.
 
 ## Exceptions
 
