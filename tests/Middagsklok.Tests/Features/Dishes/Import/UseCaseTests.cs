@@ -145,4 +145,134 @@ public sealed class UseCaseTests
 
         await Assert.That(hasNameFailure).IsTrue();
     }
+
+    // Verifies that duplicate ingredient names within a dish are deduplicated.
+    [Test]
+    public async Task DeduplicatesIngredientsWithinDish()
+    {
+        var databaseName = Guid.NewGuid().ToString("N");
+        await using var context = CreateContext(databaseName);
+        var useCase = new UseCase(context);
+
+        var request = CreateRequest(new DishInput(
+            "Ingredient Dedup Dish",
+            5,
+            10,
+            new[]
+            {
+                new IngredientInput("Salt", "produce", 1, "stk"),
+                new IngredientInput("salt", "produce", 2, "stk")
+            }));
+
+        var response = await useCase.Execute(request, CancellationToken.None);
+
+        await Assert.That(response.Imported).IsEqualTo(1);
+        await Assert.That(response.Failed).IsEqualTo(0);
+
+        var dish = await context.Dishes.SingleAsync(CancellationToken.None);
+
+        await Assert.That(dish.Ingredients.Count).IsEqualTo(1);
+    }
+
+    // Verifies that unknown units fall back to category defaults.
+    [Test]
+    public async Task MapsUnknownUnitToDefault()
+    {
+        var databaseName = Guid.NewGuid().ToString("N");
+        await using var context = CreateContext(databaseName);
+        var useCase = new UseCase(context);
+
+        var request = CreateRequest(new DishInput(
+            "Unit Default Dish",
+            5,
+            10,
+            new[]
+            {
+                new IngredientInput("Olive Oil", "oil", 10, "unknown")
+            }));
+
+        var response = await useCase.Execute(request, CancellationToken.None);
+
+        await Assert.That(response.Imported).IsEqualTo(1);
+        await Assert.That(response.Failed).IsEqualTo(0);
+
+        var dish = await context.Dishes.SingleAsync(CancellationToken.None);
+        var ingredient = dish.Ingredients.Single();
+
+        await Assert.That(ingredient.Unit).IsEqualTo(Unit.Ml);
+    }
+
+    // Verifies that unknown categories map to Other.
+    [Test]
+    public async Task MapsUnknownCategoryToOther()
+    {
+        var databaseName = Guid.NewGuid().ToString("N");
+        await using var context = CreateContext(databaseName);
+        var useCase = new UseCase(context);
+
+        var request = CreateRequest(new DishInput(
+            "Category Default Dish",
+            5,
+            10,
+            new[]
+            {
+                new IngredientInput("Mystery Ingredient", "mystery", 1, "stk")
+            }));
+
+        var response = await useCase.Execute(request, CancellationToken.None);
+
+        await Assert.That(response.Imported).IsEqualTo(1);
+        await Assert.That(response.Failed).IsEqualTo(0);
+
+        var ingredient = await context.Ingredients.SingleAsync(CancellationToken.None);
+
+        await Assert.That(ingredient.Category).IsEqualTo(IngredientCategory.Other);
+    }
+
+    // Verifies that invalid ingredient amounts fail the dish import.
+    [Test]
+    public async Task ReportsFailureForInvalidIngredientAmount()
+    {
+        var databaseName = Guid.NewGuid().ToString("N");
+        await using var context = CreateContext(databaseName);
+        var useCase = new UseCase(context);
+
+        var request = CreateRequest(new DishInput(
+            "Bad Ingredient Dish",
+            5,
+            10,
+            new[]
+            {
+                new IngredientInput("Sugar", "produce", 0, "g")
+            }));
+
+        var response = await useCase.Execute(request, CancellationToken.None);
+
+        await Assert.That(response.Imported).IsEqualTo(0);
+        await Assert.That(response.Failed).IsEqualTo(1);
+
+        var hasAmountFailure = response.Failures.Any(f => f.Reason.Contains("Ingredient amount must be > 0.", StringComparison.Ordinal));
+
+        await Assert.That(hasAmountFailure).IsTrue();
+    }
+
+    // Verifies that duplicate dish names within the request are skipped.
+    [Test]
+    public async Task SkipsDuplicateDishNamesInRequest()
+    {
+        var databaseName = Guid.NewGuid().ToString("N");
+        await using var context = CreateContext(databaseName);
+        var useCase = new UseCase(context);
+
+        var request = CreateRequest(
+            CreateDish("Duplicate In Request", "Salt"),
+            CreateDish("duplicate in request", "Pepper"));
+
+        var response = await useCase.Execute(request, CancellationToken.None);
+
+        await Assert.That(response.Attempted).IsEqualTo(2);
+        await Assert.That(response.Imported).IsEqualTo(1);
+        await Assert.That(response.Skipped).IsEqualTo(1);
+        await Assert.That(response.Failed).IsEqualTo(0);
+    }
 }
