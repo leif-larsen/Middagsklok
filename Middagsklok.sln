@@ -5,11 +5,15 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2962BB17-55AD-4ABD-A3F9-8C9D41AD6419}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Middagsklok.Api", "src\Middagsklok.Api\Middagsklok.Api.csproj", "{689F0004-9F7C-422A-B390-493026B8CF31}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Middagsklok.AppHost", "src\Middagsklok.AppHost\Middagsklok.AppHost.csproj", "{BD7A3705-5365-42C8-92CA-F897028B28CA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Middagsklok.ServiceDefaults", "src\Middagsklok.ServiceDefaults\Middagsklok.ServiceDefaults.csproj", "{166273B3-E097-401B-845D-B4F1F48931FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Middagsklok.Tests", "tests\Middagsklok.Tests\Middagsklok.Tests.csproj", "{ECAE7459-BADD-4431-95A6-2F74B32224D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +61,18 @@ Global
 		{166273B3-E097-401B-845D-B4F1F48931FF}.Release|x64.Build.0 = Release|Any CPU
 		{166273B3-E097-401B-845D-B4F1F48931FF}.Release|x86.ActiveCfg = Release|Any CPU
 		{166273B3-E097-401B-845D-B4F1F48931FF}.Release|x86.Build.0 = Release|Any CPU
+		{ECAE7459-BADD-4431-95A6-2F74B32224D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECAE7459-BADD-4431-95A6-2F74B32224D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECAE7459-BADD-4431-95A6-2F74B32224D5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{ECAE7459-BADD-4431-95A6-2F74B32224D5}.Debug|x64.Build.0 = Debug|Any CPU
+		{ECAE7459-BADD-4431-95A6-2F74B32224D5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ECAE7459-BADD-4431-95A6-2F74B32224D5}.Debug|x86.Build.0 = Debug|Any CPU
+		{ECAE7459-BADD-4431-95A6-2F74B32224D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECAE7459-BADD-4431-95A6-2F74B32224D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECAE7459-BADD-4431-95A6-2F74B32224D5}.Release|x64.ActiveCfg = Release|Any CPU
+		{ECAE7459-BADD-4431-95A6-2F74B32224D5}.Release|x64.Build.0 = Release|Any CPU
+		{ECAE7459-BADD-4431-95A6-2F74B32224D5}.Release|x86.ActiveCfg = Release|Any CPU
+		{ECAE7459-BADD-4431-95A6-2F74B32224D5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,5 +81,6 @@ Global
 		{689F0004-9F7C-422A-B390-493026B8CF31} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{BD7A3705-5365-42C8-92CA-F897028B28CA} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{166273B3-E097-401B-845D-B4F1F48931FF} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{ECAE7459-BADD-4431-95A6-2F74B32224D5} = {2962BB17-55AD-4ABD-A3F9-8C9D41AD6419}
 	EndGlobalSection
 EndGlobal
