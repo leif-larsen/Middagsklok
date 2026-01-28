@@ -1,10 +1,12 @@
 using Middagsklok.Api.Database;
+using Middagsklok.Api.Features.Dishes.Import;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddNpgsqlDbContext<AppDbContext>("middagsklok");
 
 builder.Services.AddOpenApi();
+builder.Services.AddScoped<UseCase>();
 
 var app = builder.Build();
 
@@ -15,6 +17,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+DishesImportEndpoint.Map(app);
 
 var summaries = new[]
 {

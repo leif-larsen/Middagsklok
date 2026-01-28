@@ -1,8 +1,8 @@
-namespace Middagsklok.Api.Database;
-
 using Microsoft.EntityFrameworkCore;
 using Middagsklok.Api.Domain.Dish;
 using Middagsklok.Api.Domain.Ingredient;
+
+namespace Middagsklok.Api.Database;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {

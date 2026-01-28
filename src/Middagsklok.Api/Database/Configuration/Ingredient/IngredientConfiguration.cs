@@ -1,12 +1,12 @@
-namespace Middagsklok.Api.Database.Configuration.Ingredient;
-
+using IngredientEntity = Middagsklok.Api.Domain.Ingredient.Ingredient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Middagsklok.Api.Domain.Ingredient;
 
-public class IngredientConfiguration : IEntityTypeConfiguration<Ingredient>
+namespace Middagsklok.Api.Database.Configuration.Ingredient;
+
+public class IngredientConfiguration : IEntityTypeConfiguration<IngredientEntity>
 {
-    public void Configure(EntityTypeBuilder<Ingredient> builder)
+    public void Configure(EntityTypeBuilder<IngredientEntity> builder)
     {
         builder.ToTable("ingredients");
 

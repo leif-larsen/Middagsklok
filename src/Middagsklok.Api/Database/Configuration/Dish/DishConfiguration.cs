@@ -1,13 +1,14 @@
-namespace Middagsklok.Api.Database.Configuration.Dish;
-
+using DishEntity = Middagsklok.Api.Domain.Dish.Dish;
+using DishIngredientEntity = Middagsklok.Api.Domain.Dish.DishIngredient;
+using IngredientEntity = Middagsklok.Api.Domain.Ingredient.Ingredient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Middagsklok.Api.Domain.Dish;
-using Middagsklok.Api.Domain.Ingredient;
 
-public class DishConfiguration : IEntityTypeConfiguration<Dish>
+namespace Middagsklok.Api.Database.Configuration.Dish;
+
+public class DishConfiguration : IEntityTypeConfiguration<DishEntity>
 {
-    public void Configure(EntityTypeBuilder<Dish> builder)
+    public void Configure(EntityTypeBuilder<DishEntity> builder)
     {
         builder.ToTable("dishes");
 
@@ -83,13 +84,13 @@ public class DishConfiguration : IEntityTypeConfiguration<Dish>
             ingredientBuilder.Property(i => i.SortOrder)
                 .HasColumnName("sort_order");
 
-            ingredientBuilder.HasOne<Ingredient>()
+            ingredientBuilder.HasOne<IngredientEntity>()
                 .WithMany()
                 .HasForeignKey(i => i.IngredientId)
                 .HasConstraintName("fk_dish_ingredients_ingredient_id")
                 .OnDelete(DeleteBehavior.Restrict);
 
-            ingredientBuilder.HasIndex("dish_id", nameof(DishIngredient.SortOrder))
+            ingredientBuilder.HasIndex("dish_id", nameof(DishIngredientEntity.SortOrder))
                 .HasDatabaseName("ix_dish_ingredients_dish_id_sort_order");
         });
 

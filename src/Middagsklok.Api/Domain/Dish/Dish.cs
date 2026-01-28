@@ -1,6 +1,6 @@
-namespace Middagsklok.Api.Domain.Dish;
-
 using Middagsklok.Api.Domain.Ingredient;
+
+namespace Middagsklok.Api.Domain.Dish;
 
 public class Dish(
     string name,
@@ -29,6 +29,7 @@ public record DishIngredient(
 
 public enum CuisineType
 {
+    None,
     Italian,
     Asian,
     Mediterranean,

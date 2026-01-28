@@ -51,6 +51,7 @@ Represents one ingredient line inside a dish. This is the real link between `Dis
 ### `CuisineType`
 | Enum name | Display name |
 |---|---|
+| `NONE` | None |
 | `ITALIAN` | Italian |
 | `ASIAN` | Asian |
 | `MEDITERRANEAN` | Mediterranean |
