@@ -1,4 +1,13 @@
+"use client";
+
 import Sidebar from "../components/Sidebar";
+import Modal from "../components/Modal";
+import { useMemo, useState } from "react";
+
+type Ingredient = {
+  id: string;
+  label: string;
+};
 
 type Dish = {
   id: string;
@@ -7,7 +16,8 @@ type Dish = {
   prepMinutes: number;
   cookMinutes: number;
   serves: number;
-  ingredients: string[];
+  instructions?: string;
+  ingredients: Ingredient[];
 };
 
 const dishes: Dish[] = [
@@ -18,7 +28,14 @@ const dishes: Dish[] = [
     prepMinutes: 10,
     cookMinutes: 20,
     serves: 4,
-    ingredients: ["400 g Spaghetti", "4 pcs Eggs", "200 g Bacon", "50 g Parmesan"],
+    instructions:
+      "Cook spaghetti according to package instructions. Fry bacon until crispy. Mix eggs and cheese. Combine all ingredients while pasta is hot.",
+    ingredients: [
+      { id: "spaghetti", label: "400 g Spaghetti" },
+      { id: "eggs", label: "4 pcs Eggs" },
+      { id: "bacon", label: "200 g Bacon" },
+      { id: "parmesan", label: "100 g Parmesan cheese" },
+    ],
   },
   {
     id: "thai-green-curry",
@@ -27,11 +44,13 @@ const dishes: Dish[] = [
     prepMinutes: 15,
     cookMinutes: 25,
     serves: 4,
+    instructions:
+      "Sauté curry paste, add coconut milk, then simmer with chicken and vegetables until tender.",
     ingredients: [
-      "500 g Chicken breast",
-      "400 ml Coconut milk",
-      "3 tbsp Green curry paste",
-      "1 bunch Basil",
+      { id: "chicken", label: "500 g Chicken breast" },
+      { id: "coconut", label: "400 ml Coconut milk" },
+      { id: "paste", label: "3 tbsp Green curry paste" },
+      { id: "basil", label: "1 bunch Basil" },
     ],
   },
   {
@@ -41,7 +60,13 @@ const dishes: Dish[] = [
     prepMinutes: 15,
     cookMinutes: 0,
     serves: 4,
-    ingredients: ["4 pcs Tomatoes", "1 pcs Cucumber", "200 g Feta cheese", "1 tsp Oregano"],
+    instructions: "Chop vegetables and toss with feta, olive oil, and oregano.",
+    ingredients: [
+      { id: "tomatoes", label: "4 pcs Tomatoes" },
+      { id: "cucumber", label: "1 pcs Cucumber" },
+      { id: "feta", label: "200 g Feta cheese" },
+      { id: "oregano", label: "1 tsp Oregano" },
+    ],
   },
   {
     id: "beef-tacos",
@@ -50,11 +75,12 @@ const dishes: Dish[] = [
     prepMinutes: 15,
     cookMinutes: 20,
     serves: 4,
+    instructions: "Cook beef with spices, then assemble tacos with toppings.",
     ingredients: [
-      "500 g Ground beef",
-      "12 pcs Taco shells",
-      "200 g Lettuce",
-      "100 g Cheddar",
+      { id: "beef", label: "500 g Ground beef" },
+      { id: "shells", label: "12 pcs Taco shells" },
+      { id: "lettuce", label: "200 g Lettuce" },
+      { id: "cheddar", label: "100 g Cheddar" },
     ],
   },
   {
@@ -64,7 +90,13 @@ const dishes: Dish[] = [
     prepMinutes: 30,
     cookMinutes: 40,
     serves: 6,
-    ingredients: ["800 g Chicken breast", "2 pcs Eggs", "150 ml Cream"],
+    instructions:
+      "Marinate chicken, grill until charred, then simmer in spiced tomato cream sauce.",
+    ingredients: [
+      { id: "tikka-chicken", label: "800 g Chicken breast" },
+      { id: "eggs", label: "2 pcs Eggs" },
+      { id: "cream", label: "150 ml Cream" },
+    ],
   },
   {
     id: "caesar-salad",
@@ -73,13 +105,45 @@ const dishes: Dish[] = [
     prepMinutes: 10,
     cookMinutes: 0,
     serves: 2,
-    ingredients: ["1 head Lettuce", "50 g Parmesan cheese", "150 g Croutons"],
+    instructions: "Toss lettuce with dressing, croutons, and parmesan.",
+    ingredients: [
+      { id: "lettuce", label: "1 head Lettuce" },
+      { id: "parmesan", label: "50 g Parmesan cheese" },
+      { id: "croutons", label: "150 g Croutons" },
+    ],
   },
 ];
+
+const emptyDish: Dish = {
+  id: "new-dish",
+  name: "",
+  cuisine: "",
+  prepMinutes: 0,
+  cookMinutes: 0,
+  serves: 0,
+  instructions: "",
+  ingredients: [],
+};
 
 const formatMinutes = (value: number) => `${value}m`;
 
 export default function DishesPage() {
+  const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+
+  const activeDish = useMemo(
+    () => (isCreateOpen ? emptyDish : selectedDish ?? emptyDish),
+    [isCreateOpen, selectedDish],
+  );
+
+  const isModalOpen = isCreateOpen || selectedDish !== null;
+  const isEditMode = selectedDish !== null;
+
+  const closeModal = () => {
+    setIsCreateOpen(false);
+    setSelectedDish(null);
+  };
+
   return (
     <div className="min-h-screen w-full p-6 sm:p-8">
       <div className="flex flex-wrap items-start gap-6">
@@ -109,6 +173,10 @@ export default function DishesPage() {
               </button>
               <button
                 type="button"
+                onClick={() => {
+                  setSelectedDish(null);
+                  setIsCreateOpen(true);
+                }}
                 className="inline-flex items-center gap-2 rounded-full bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_24px_-18px_rgba(32,78,54,0.9)] transition hover:bg-[#2a5c46]"
               >
                 <PlusIcon className="h-4 w-4" />
@@ -150,6 +218,10 @@ export default function DishesPage() {
                       <button
                         type="button"
                         aria-label={`Edit ${dish.name}`}
+                        onClick={() => {
+                          setIsCreateOpen(false);
+                          setSelectedDish(dish);
+                        }}
                         className="grid h-9 w-9 place-items-center rounded-full border border-[#e3eadf] text-[#6e7c72] transition hover:bg-[#f4f7f1]"
                       >
                         <EditIcon className="h-4 w-4" />
@@ -185,9 +257,12 @@ export default function DishesPage() {
                     </div>
                     <ul className="mt-3 space-y-2 text-sm text-[#3d4c43]">
                       {previewIngredients.map((ingredient) => (
-                        <li key={ingredient} className="flex items-center gap-2">
+                        <li
+                          key={ingredient.id}
+                          className="flex items-center gap-2"
+                        >
                           <span className="h-2 w-2 rounded-full bg-[#9bb09f]" />
-                          {ingredient}
+                          {ingredient.label}
                         </li>
                       ))}
                       {remainingCount > 0 ? (
@@ -203,6 +278,148 @@ export default function DishesPage() {
           </section>
         </main>
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        title={isEditMode ? "Edit Dish" : "Add Dish"}
+        description={
+          isEditMode
+            ? "Update the dish details below"
+            : "Add the dish details below"
+        }
+        maxWidthClassName="max-w-2xl"
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={closeModal}
+              className="inline-flex items-center justify-center rounded-xl border border-[#dfe6da] bg-white px-4 py-2 text-sm font-semibold text-[#3f4b43] transition hover:bg-[#f3f6ef]"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center justify-center rounded-xl bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_22px_-18px_rgba(30,68,48,0.8)] transition hover:bg-[#2a5c46]"
+            >
+              {isEditMode ? "Update Dish" : "Create Dish"}
+            </button>
+          </>
+        }
+      >
+        <div className="mt-6 grid gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
+              Dish Name
+              <input
+                type="text"
+                defaultValue={activeDish.name}
+                placeholder="Dish name"
+                className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
+              />
+            </label>
+            <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
+              Category
+              <input
+                type="text"
+                defaultValue={activeDish.cuisine}
+                placeholder="Cuisine type"
+                className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
+              />
+            </label>
+          </div>
+
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
+              Prep Time (min)
+              <input
+                type="number"
+                defaultValue={isEditMode ? activeDish.prepMinutes : ""}
+                placeholder="0"
+                className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
+              />
+            </label>
+            <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
+              Cook Time (min)
+              <input
+                type="number"
+                defaultValue={isEditMode ? activeDish.cookMinutes : ""}
+                placeholder="0"
+                className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
+              />
+            </label>
+            <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
+              Servings
+              <input
+                type="number"
+                defaultValue={isEditMode ? activeDish.serves : ""}
+                placeholder="0"
+                className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
+              />
+            </label>
+          </div>
+
+          <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
+            Instructions (optional)
+            <textarea
+              defaultValue={activeDish.instructions}
+              placeholder="Write the steps to cook the dish..."
+              rows={4}
+              className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
+            />
+          </label>
+
+          <div>
+            <div className="text-sm font-semibold text-[#3f4b43]">
+              Ingredients
+            </div>
+            <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_140px_auto]">
+              <div className="flex items-center gap-3 rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#6f7c73]">
+                <span>Select an ingredient</span>
+                <ChevronDownIcon className="ml-auto h-4 w-4" />
+              </div>
+              <input
+                type="text"
+                placeholder="Amount"
+                className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
+              />
+              <button
+                type="button"
+                className="inline-flex items-center justify-center rounded-xl border border-[#dfe6da] bg-white px-4 py-2 text-sm font-semibold text-[#3f4b43] transition hover:bg-[#f3f6ef]"
+              >
+                Add
+              </button>
+            </div>
+
+            <ul className="mt-4 space-y-3 text-sm text-[#3d4c43]">
+              {activeDish.ingredients.length > 0 ? (
+                activeDish.ingredients.map((ingredient) => (
+                  <li
+                    key={ingredient.id}
+                    className="flex items-center justify-between gap-3"
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className="h-2 w-2 rounded-full bg-[#9bb09f]" />
+                      {ingredient.label}
+                    </span>
+                    <button
+                      type="button"
+                      aria-label={`Remove ${ingredient.label}`}
+                      className="grid h-8 w-8 place-items-center rounded-full border border-[#f0dada] text-[#d76b6b] transition hover:bg-[#fbeeee]"
+                    >
+                      <TrashIcon className="h-4 w-4" />
+                    </button>
+                  </li>
+                ))
+              ) : (
+                <li className="text-sm text-[#8a968f]">
+                  No ingredients added yet.
+                </li>
+              )}
+            </ul>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
@@ -371,6 +588,23 @@ function PeopleIcon({ className }: { className?: string }) {
       <path d="M15.5 12.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
       <path d="M3.5 19.5a5.5 5.5 0 0 1 10 0" />
       <path d="M14 19.5a4.5 4.5 0 0 1 6 0" />
+    </svg>
+  );
+}
+
+function ChevronDownIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M6 9l6 6 6-6" />
     </svg>
   );
 }
