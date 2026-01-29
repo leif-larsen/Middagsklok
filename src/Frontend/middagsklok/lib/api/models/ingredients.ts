@@ -9,3 +9,15 @@ export type DishOverviewIngredient = {
   id: string;
   label: string;
 };
+
+export type IngredientOverview = {
+  id: string;
+  name: string;
+  category: string;
+  defaultUnit: string;
+  usedIn: number;
+};
+
+export type IngredientsOverviewResponse = {
+  ingredients: IngredientOverview[];
+};

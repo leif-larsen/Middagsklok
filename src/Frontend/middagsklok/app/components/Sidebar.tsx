@@ -21,7 +21,7 @@ const menuItems: MenuItem[] = [
   { label: "Shopping List", icon: CartIcon },
   { label: "Recipes", icon: BookIcon },
   { label: "Settings", icon: SettingsIcon },
-  { label: "Ingredients", icon: LeafIcon },
+  { label: "Ingredients", href: "/ingredients", icon: LeafIcon },
 ];
 
 export default function Sidebar() {
