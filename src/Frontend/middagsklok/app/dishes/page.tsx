@@ -2,6 +2,7 @@
 
 import Sidebar from "../components/Sidebar";
 import Modal from "../components/Modal";
+import { apiClient, ApiError } from "../../lib/api/client";
 import { useMemo, useState } from "react";
 
 type Ingredient = {
@@ -130,6 +131,17 @@ const formatMinutes = (value: number) => `${value}m`;
 export default function DishesPage() {
   const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isImportOpen, setIsImportOpen] = useState(false);
+  const [importFile, setImportFile] = useState<File | null>(null);
+  const [isImporting, setIsImporting] = useState(false);
+  const [importError, setImportError] = useState<string | null>(null);
+  const [importResult, setImportResult] = useState<{
+    attempted: number;
+    imported: number;
+    skipped: number;
+    failed: number;
+    failures: { dishName?: string | null; reason: string; ingredientName?: string | null }[];
+  } | null>(null);
 
   const activeDish = useMemo(
     () => (isCreateOpen ? emptyDish : selectedDish ?? emptyDish),
@@ -142,6 +154,72 @@ export default function DishesPage() {
   const closeModal = () => {
     setIsCreateOpen(false);
     setSelectedDish(null);
+  };
+
+  const closeImportModal = () => {
+    setIsImportOpen(false);
+    setImportFile(null);
+    setImportError(null);
+    setImportResult(null);
+  };
+
+  const parseImportPayload = async (file: File) => {
+    const raw = await file.text();
+    const parsed = JSON.parse(raw) as unknown;
+
+    if (Array.isArray(parsed)) {
+      return { dishes: parsed };
+    }
+
+    if (parsed && typeof parsed === "object" && "dishes" in parsed) {
+      return parsed as { dishes?: unknown };
+    }
+
+    throw new Error("Invalid JSON format. Expected an array or an object with a dishes property.");
+  };
+
+  const handleImport = async () => {
+    if (!importFile || isImporting) {
+      return;
+    }
+
+    setIsImporting(true);
+    setImportError(null);
+    setImportResult(null);
+
+    try {
+      const payload = await parseImportPayload(importFile);
+      const response = await apiClient.importDishes(payload);
+      setImportResult(response);
+    } catch (error) {
+      if (error instanceof ApiError) {
+        const body = error.body;
+        const message = typeof body === "string" ? body : error.message;
+        setImportError(message);
+        if (body && typeof body === "object" && "failures" in body) {
+          const response = body as {
+            attempted?: number;
+            imported?: number;
+            skipped?: number;
+            failed?: number;
+            failures?: { dishName?: string | null; reason: string; ingredientName?: string | null }[];
+          };
+          setImportResult({
+            attempted: response.attempted ?? 0,
+            imported: response.imported ?? 0,
+            skipped: response.skipped ?? 0,
+            failed: response.failed ?? 0,
+            failures: response.failures ?? [],
+          });
+        }
+      } else if (error instanceof Error) {
+        setImportError(error.message);
+      } else {
+        setImportError("Unexpected error while importing dishes.");
+      }
+    } finally {
+      setIsImporting(false);
+    }
   };
 
   return (
@@ -166,6 +244,10 @@ export default function DishesPage() {
             <div className="flex flex-wrap items-center gap-3">
               <button
                 type="button"
+                onClick={() => {
+                  closeModal();
+                  setIsImportOpen(true);
+                }}
                 className="inline-flex items-center gap-2 rounded-full border border-[#d6e0d2] bg-white px-4 py-2 text-sm font-semibold text-[#3b4c42] transition hover:bg-[#f3f6ef]"
               >
                 <ImportIcon className="h-4 w-4" />
@@ -418,6 +500,99 @@ export default function DishesPage() {
               )}
             </ul>
           </div>
+        </div>
+      </Modal>
+
+      <Modal
+        isOpen={isImportOpen}
+        onClose={closeImportModal}
+        title="Import dishes"
+        description="Upload a JSON file to import dishes and ingredients."
+        maxWidthClassName="max-w-xl"
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={closeImportModal}
+              className="inline-flex items-center justify-center rounded-xl border border-[#dfe6da] bg-white px-4 py-2 text-sm font-semibold text-[#3f4b43] transition hover:bg-[#f3f6ef]"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleImport}
+              disabled={!importFile || isImporting}
+              className="inline-flex items-center justify-center rounded-xl bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_22px_-18px_rgba(30,68,48,0.8)] transition hover:bg-[#2a5c46] disabled:cursor-not-allowed disabled:bg-[#98b6a6]"
+            >
+              {isImporting ? "Importing..." : "Import dishes"}
+            </button>
+          </>
+        }
+      >
+        <div className="mt-6 grid gap-4">
+          <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
+            JSON file
+            <input
+              type="file"
+              accept="application/json,.json"
+              onChange={(event) => {
+                const file = event.target.files?.[0] ?? null;
+                setImportFile(file);
+                setImportError(null);
+                setImportResult(null);
+              }}
+              className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] file:mr-3 file:rounded-lg file:border-0 file:bg-[#edf1ea] file:px-3 file:py-1 file:text-xs file:font-semibold file:text-[#3f4b43]"
+            />
+          </label>
+
+          {importFile ? (
+            <div className="text-xs font-semibold text-[#5a675e]">
+              Selected: {importFile.name}
+            </div>
+          ) : null}
+
+          {importError ? (
+            <div className="rounded-xl border border-[#f0dada] bg-[#fff5f5] px-4 py-3 text-sm text-[#b14a4a]">
+              {importError}
+            </div>
+          ) : null}
+
+          {importResult ? (
+            <div className="rounded-2xl border border-[#e3eadf] bg-[#f6faf5] px-4 py-4 text-sm text-[#2e3b33]">
+              <div className="grid gap-1 text-sm font-semibold text-[#2f6b4f]">
+                Import summary
+              </div>
+              <div className="mt-2 grid gap-2 text-xs font-semibold text-[#5a675e] sm:grid-cols-2">
+                <div>Attempted: {importResult.attempted}</div>
+                <div>Imported: {importResult.imported}</div>
+                <div>Skipped: {importResult.skipped}</div>
+                <div>Failed: {importResult.failed}</div>
+              </div>
+              {importResult.failures.length > 0 ? (
+                <div className="mt-4">
+                  <div className="text-xs font-semibold uppercase tracking-[0.18em] text-[#7a887f]">
+                    Failures
+                  </div>
+                  <ul className="mt-3 space-y-2 text-sm text-[#a04242]">
+                    {importResult.failures.map((failure, index) => (
+                      <li key={`${failure.dishName ?? "dish"}-${index}`}>
+                        <span className="font-semibold">
+                          {failure.dishName ?? "Unknown dish"}
+                        </span>
+                        {failure.ingredientName ? (
+                          <span className="text-[#7c3c3c]">
+                            {" "}
+                            ({failure.ingredientName})
+                          </span>
+                        ) : null}
+                        : {failure.reason}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       </Modal>
     </div>

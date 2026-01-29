@@ -8,6 +8,18 @@ builder.AddNpgsqlDbContext<AppDbContext>("middagsklok");
 
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<UseCase>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("DevFrontend", policy =>
+    {
+        var origins = builder.Configuration.GetSection("Cors:AllowedOrigins")
+            .Get<string[]>() ?? Array.Empty<string>();
+
+        policy.WithOrigins(origins)
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -22,7 +34,11 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+app.UseCors("DevFrontend");
 
 DishesImportEndpoint.Map(app);
 

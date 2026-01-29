@@ -1,8 +1,3 @@
-type ClientOptions = {
-  baseUrl?: string;
-  fetcher?: typeof fetch;
-};
-
 export type DishIngredientInput = {
   name?: string | null;
   category?: string | null;
@@ -49,24 +44,6 @@ export class ApiError extends Error {
   }
 }
 
-const normalizeBaseUrl = (value?: string) => {
-  if (!value) {
-    return "";
-  }
-
-  return value.endsWith("/") ? value.slice(0, -1) : value;
-};
-
-const buildUrl = (baseUrl: string, path: string) => {
-  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-
-  if (!baseUrl) {
-    return normalizedPath;
-  }
-
-  return `${baseUrl}${normalizedPath}`;
-};
-
 const parseResponseBody = async (response: Response) => {
   if (response.status === 204) {
     return null;
@@ -80,13 +57,7 @@ const parseResponseBody = async (response: Response) => {
   return response.text();
 };
 
-const getDefaultOptions = (): Required<ClientOptions> => ({
-  baseUrl: normalizeBaseUrl(process.env.NEXT_PUBLIC_API_URL),
-  fetcher: fetch,
-});
-
 const request = async <T>(
-  options: Required<ClientOptions>,
   path: string,
   init: RequestInit = {},
 ): Promise<T> => {
@@ -95,7 +66,7 @@ const request = async <T>(
     headers.set("content-type", "application/json");
   }
 
-  const response = await options.fetcher(buildUrl(options.baseUrl, path), {
+  const response = await globalThis.fetch(path, {
     ...init,
     headers,
   });
@@ -121,20 +92,11 @@ export type ApiClient = {
   ) => Promise<DishesImportResponse>;
 };
 
-export const createApiClient = (options: ClientOptions = {}): ApiClient => {
-  const resolvedOptions: Required<ClientOptions> = {
-    ...getDefaultOptions(),
-    ...options,
-  };
-
-  return {
-    importDishes: (payload, init) =>
-      request<DishesImportResponse>(resolvedOptions, "/dishes/import", {
-        method: "POST",
-        body: JSON.stringify(payload),
-        ...init,
-      }),
-  };
+export const apiClient: ApiClient = {
+  importDishes: (payload, init) =>
+    request<DishesImportResponse>("/api/dishes/import", {
+      method: "POST",
+      body: JSON.stringify(payload),
+      ...init,
+    }),
 };
-
-export const apiClient = createApiClient();

@@ -11,13 +11,16 @@ var postgres = builder.AddAzurePostgresFlexibleServer("postgres")
 
 var database = postgres.AddDatabase("middagsklok");
 
-var apiService = builder.AddProject<Projects.Middagsklok_Api>("api")
+var apiService = builder.AddProject<Projects.Middagsklok_Api>("api", launchProfileName: "http")
     .WithReference(database)
-    .WaitFor(database);
+    .WaitFor(database)
+    .WithExternalHttpEndpoints();
 
 var frontend = builder.AddJavaScriptApp("frontend", "../frontend/middagsklok/")
-    .WithHttpEndpoint(targetPort: 3000, env: "PORT")
-    .WithExternalHttpEndpoints()
-    .WithEnvironment("NEXT_PUBLIC_API_URL", apiService.GetEndpoint("http"));
+    .WithReference(apiService)
+    .WithHttpEndpoint(env: "PORT")
+    .WithExternalHttpEndpoints();
+
+apiService.WithEnvironment("Cors__AllowedOrigins__0", frontend.GetEndpoint("http"));
     
 builder.Build().Run();
