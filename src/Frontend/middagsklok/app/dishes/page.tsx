@@ -35,6 +35,7 @@ const emptyDish: Dish = {
 const formatMinutes = (value: number) => `${value}m`;
 
 export default function DishesPage() {
+  const [searchQuery, setSearchQuery] = useState("");
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -81,6 +82,15 @@ export default function DishesPage() {
     () => (isCreateOpen ? emptyDish : selectedDish ?? emptyDish),
     [isCreateOpen, selectedDish],
   );
+
+  const visibleDishes = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) {
+      return dishes;
+    }
+
+    return dishes.filter((dish) => dish.name.toLowerCase().includes(query));
+  }, [dishes, searchQuery]);
 
   const isModalOpen = isCreateOpen || selectedDish !== null;
   const isEditMode = selectedDish !== null;
@@ -206,13 +216,15 @@ export default function DishesPage() {
             <input
               type="text"
               aria-label="Search dishes"
-              placeholder="Search dishes by name or category..."
+              placeholder="Search dishes by name..."
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
               className="w-full bg-transparent text-sm text-[#2e3b33] placeholder:text-[#9aa69f] focus:outline-none"
             />
           </div>
 
           <section className="grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
-            {dishes.map((dish) => {
+            {visibleDishes.map((dish) => {
               const previewIngredients = dish.ingredients.slice(0, 3);
               const remainingCount = dish.ingredients.length - previewIngredients.length;
 
