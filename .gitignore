@@ -73,6 +73,8 @@ ScaffoldingReadMe.txt
 # StyleCop
 StyleCopReport.xml
 
+**/bin/**
+
 # Files built by Visual Studio
 *_i.c
 *_p.c
@@ -240,3 +242,11 @@ pnpm-debug.log*
 # Optional: Development and production build artifacts
 pnpm-lock.yaml
 yarn.lock
+
+**/bin\Debug/*
+Microsoft.*.dll
+System.*.dll
+Newtonsoft.Json.dll
+Microsoft.CodeAnalysis.*.config
+Microsoft.CodeAnalysis.*.exe
+Microsoft.CodeAnalysis.*.json

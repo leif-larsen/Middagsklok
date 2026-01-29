@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Middagsklok.Api.Database;
 using Middagsklok.Api.Features.Dishes.Import;
 
@@ -13,6 +14,11 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    await dbContext.Database.MigrateAsync();
+
     app.MapOpenApi();
 }
 
