@@ -1,13 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using Middagsklok.Api.Database;
 using Middagsklok.Api.Features.Dishes.Import;
+using Middagsklok.Api.Features.Dishes.Overview;
+using DishesImportUseCase = Middagsklok.Api.Features.Dishes.Import.UseCase;
+using DishesOverviewUseCase = Middagsklok.Api.Features.Dishes.Overview.UseCase;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddNpgsqlDbContext<AppDbContext>("middagsklok");
 
 builder.Services.AddOpenApi();
-builder.Services.AddScoped<UseCase>();
+builder.Services.AddScoped<DishesImportUseCase>();
+builder.Services.AddScoped<DishesOverviewUseCase>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("DevFrontend", policy =>
@@ -41,6 +45,7 @@ if (!app.Environment.IsDevelopment())
 app.UseCors("DevFrontend");
 
 DishesImportEndpoint.Map(app);
+DishesOverviewEndpoint.Map(app);
 
 var summaries = new[]
 {

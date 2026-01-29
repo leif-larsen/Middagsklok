@@ -3,7 +3,7 @@
 import Sidebar from "../components/Sidebar";
 import Modal from "../components/Modal";
 import { apiClient, ApiError } from "../../lib/api/client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Ingredient = {
   id: string;
@@ -17,103 +17,9 @@ type Dish = {
   prepMinutes: number;
   cookMinutes: number;
   serves: number;
-  instructions?: string;
+  instructions?: string | null;
   ingredients: Ingredient[];
 };
-
-const dishes: Dish[] = [
-  {
-    id: "spaghetti-carbonara",
-    name: "Spaghetti Carbonara",
-    cuisine: "Italian",
-    prepMinutes: 10,
-    cookMinutes: 20,
-    serves: 4,
-    instructions:
-      "Cook spaghetti according to package instructions. Fry bacon until crispy. Mix eggs and cheese. Combine all ingredients while pasta is hot.",
-    ingredients: [
-      { id: "spaghetti", label: "400 g Spaghetti" },
-      { id: "eggs", label: "4 pcs Eggs" },
-      { id: "bacon", label: "200 g Bacon" },
-      { id: "parmesan", label: "100 g Parmesan cheese" },
-    ],
-  },
-  {
-    id: "thai-green-curry",
-    name: "Thai Green Curry",
-    cuisine: "Asian",
-    prepMinutes: 15,
-    cookMinutes: 25,
-    serves: 4,
-    instructions:
-      "Sauté curry paste, add coconut milk, then simmer with chicken and vegetables until tender.",
-    ingredients: [
-      { id: "chicken", label: "500 g Chicken breast" },
-      { id: "coconut", label: "400 ml Coconut milk" },
-      { id: "paste", label: "3 tbsp Green curry paste" },
-      { id: "basil", label: "1 bunch Basil" },
-    ],
-  },
-  {
-    id: "greek-salad",
-    name: "Greek Salad",
-    cuisine: "Mediterranean",
-    prepMinutes: 15,
-    cookMinutes: 0,
-    serves: 4,
-    instructions: "Chop vegetables and toss with feta, olive oil, and oregano.",
-    ingredients: [
-      { id: "tomatoes", label: "4 pcs Tomatoes" },
-      { id: "cucumber", label: "1 pcs Cucumber" },
-      { id: "feta", label: "200 g Feta cheese" },
-      { id: "oregano", label: "1 tsp Oregano" },
-    ],
-  },
-  {
-    id: "beef-tacos",
-    name: "Beef Tacos",
-    cuisine: "Mexican",
-    prepMinutes: 15,
-    cookMinutes: 20,
-    serves: 4,
-    instructions: "Cook beef with spices, then assemble tacos with toppings.",
-    ingredients: [
-      { id: "beef", label: "500 g Ground beef" },
-      { id: "shells", label: "12 pcs Taco shells" },
-      { id: "lettuce", label: "200 g Lettuce" },
-      { id: "cheddar", label: "100 g Cheddar" },
-    ],
-  },
-  {
-    id: "chicken-tikka-masala",
-    name: "Chicken Tikka Masala",
-    cuisine: "Indian",
-    prepMinutes: 30,
-    cookMinutes: 40,
-    serves: 6,
-    instructions:
-      "Marinate chicken, grill until charred, then simmer in spiced tomato cream sauce.",
-    ingredients: [
-      { id: "tikka-chicken", label: "800 g Chicken breast" },
-      { id: "eggs", label: "2 pcs Eggs" },
-      { id: "cream", label: "150 ml Cream" },
-    ],
-  },
-  {
-    id: "caesar-salad",
-    name: "Caesar Salad",
-    cuisine: "American",
-    prepMinutes: 10,
-    cookMinutes: 0,
-    serves: 2,
-    instructions: "Toss lettuce with dressing, croutons, and parmesan.",
-    ingredients: [
-      { id: "lettuce", label: "1 head Lettuce" },
-      { id: "parmesan", label: "50 g Parmesan cheese" },
-      { id: "croutons", label: "150 g Croutons" },
-    ],
-  },
-];
 
 const emptyDish: Dish = {
   id: "new-dish",
@@ -129,6 +35,7 @@ const emptyDish: Dish = {
 const formatMinutes = (value: number) => `${value}m`;
 
 export default function DishesPage() {
+  const [dishes, setDishes] = useState<Dish[]>([]);
   const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isImportOpen, setIsImportOpen] = useState(false);
@@ -142,6 +49,33 @@ export default function DishesPage() {
     failed: number;
     failures: { dishName?: string | null; reason: string; ingredientName?: string | null }[];
   } | null>(null);
+
+  useEffect(() => {
+    let isActive = true;
+
+    const loadDishes = async () => {
+      try {
+        const response = await apiClient.getDishes();
+        if (isActive) {
+          setDishes(response.dishes ?? []);
+        }
+      } catch (error) {
+        if (error instanceof ApiError) {
+          console.error("Failed to load dishes:", error.body ?? error.message);
+        } else if (error instanceof Error) {
+          console.error("Failed to load dishes:", error.message);
+        } else {
+          console.error("Failed to load dishes.");
+        }
+      }
+    };
+
+    void loadDishes();
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   const activeDish = useMemo(
     () => (isCreateOpen ? emptyDish : selectedDish ?? emptyDish),

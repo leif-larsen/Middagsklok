@@ -1,0 +1,17 @@
+namespace Middagsklok.Api.Features.Dishes.Overview;
+
+public sealed record Response(IEnumerable<DishOverview> Dishes);
+
+public sealed record DishOverview(
+    string Id,
+    string Name,
+    string Cuisine,
+    int PrepMinutes,
+    int CookMinutes,
+    int Serves,
+    string? Instructions,
+    IEnumerable<DishIngredientOverview> Ingredients);
+
+public sealed record DishIngredientOverview(
+    string Id,
+    string Label);

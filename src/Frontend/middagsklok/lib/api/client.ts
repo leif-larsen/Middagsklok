@@ -30,6 +30,26 @@ export type DishesImportResponse = {
   failures: DishesImportFailure[];
 };
 
+export type DishOverviewIngredient = {
+  id: string;
+  label: string;
+};
+
+export type DishOverview = {
+  id: string;
+  name: string;
+  cuisine: string;
+  prepMinutes: number;
+  cookMinutes: number;
+  serves: number;
+  instructions?: string | null;
+  ingredients: DishOverviewIngredient[];
+};
+
+export type DishesOverviewResponse = {
+  dishes: DishOverview[];
+};
+
 export class ApiError extends Error {
   readonly status: number;
   readonly statusText: string;
@@ -90,6 +110,7 @@ export type ApiClient = {
     payload: DishesImportRequest,
     init?: RequestInit,
   ) => Promise<DishesImportResponse>;
+  getDishes: (init?: RequestInit) => Promise<DishesOverviewResponse>;
 };
 
 export const apiClient: ApiClient = {
@@ -97,6 +118,11 @@ export const apiClient: ApiClient = {
     request<DishesImportResponse>("/api/dishes/import", {
       method: "POST",
       body: JSON.stringify(payload),
+      ...init,
+    }),
+  getDishes: (init) =>
+    request<DishesOverviewResponse>("/api/dishes", {
+      method: "GET",
       ...init,
     }),
 };
