@@ -10,6 +10,8 @@ var apiService = builder.AddProject<Projects.Middagsklok_Api>("api")
     .WaitFor(database);
 
 var frontend = builder.AddJavaScriptApp("frontend", "../frontend/middagsklok/")
-    .WithExternalHttpEndpoints();
-
-builder.Build().Run(); 
+    .WithHttpEndpoint(targetPort: 3000, env: "PORT")
+    .WithExternalHttpEndpoints()
+    .WithEnvironment("NEXT_PUBLIC_API_URL", apiService.GetEndpoint("http"));
+    
+builder.Build().Run();
