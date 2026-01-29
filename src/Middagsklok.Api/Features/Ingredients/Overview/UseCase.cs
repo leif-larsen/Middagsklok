@@ -76,38 +76,11 @@ internal sealed class UseCase(AppDbContext dbContext)
         return overview;
     }
 
-    // Formats category values for display.
+    // Formats category values for API responses.
     private static string FormatCategory(IngredientCategory category) =>
-        category switch
-        {
-            IngredientCategory.Produce => "Produce",
-            IngredientCategory.Meat => "Meat",
-            IngredientCategory.Poultry => "Poultry",
-            IngredientCategory.Seafood => "Seafood",
-            IngredientCategory.DairyAndEggs => "Dairy & Eggs",
-            IngredientCategory.PastaAndGrains => "Pasta & Grains",
-            IngredientCategory.Bakery => "Bakery",
-            IngredientCategory.CannedGoods => "Canned Goods",
-            IngredientCategory.FrozenFoods => "Frozen Foods",
-            IngredientCategory.Condiments => "Condiments",
-            IngredientCategory.SpicesAndHerbs => "Spices & Herbs",
-            IngredientCategory.Baking => "Baking",
-            IngredientCategory.OilsAndVinegars => "Oils & Vinegars",
-            IngredientCategory.Beverages => "Beverages",
-            IngredientCategory.Snacks => "Snacks",
-            IngredientCategory.Other => "Other",
-            _ => "Other"
-        };
+        category.ToString();
 
-    // Formats unit values for display.
+    // Formats unit values for API responses.
     private static string FormatUnit(Unit unit) =>
-        unit switch
-        {
-            Unit.G => "g",
-            Unit.Kg => "kg",
-            Unit.Ml => "ml",
-            Unit.L => "l",
-            Unit.Pcs => "pcs",
-            _ => string.Empty
-        };
+        unit.ToString();
 }

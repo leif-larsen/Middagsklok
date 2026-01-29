@@ -5,6 +5,7 @@ import Sidebar from "../components/Sidebar";
 import Modal from "../components/Modal";
 import { ApiError, apiClient } from "../../lib/api/client";
 import type { IngredientOverview } from "../../lib/api/models/ingredients";
+import { useIngredientsMetadata } from "../components/IngredientsMetadataProvider";
 
 type Ingredient = IngredientOverview;
 
@@ -16,29 +17,16 @@ const emptyIngredient: Ingredient = {
   usedIn: 0,
 };
 
-const modalCategoryOptions = [
-  "Produce",
-  "Meat",
-  "Dairy & Eggs",
-  "Pasta & Grains",
-  "Canned Goods",
-  "Condiments",
-  "Spices & Herbs",
-  "Baking",
-  "Other",
-];
-
-const unitOptions = ["g", "ml", "pcs", "tbsp", "tsp", "cup"];
-
 const formatUsage = (count: number) => `${count} dish(es)`;
 
 export default function IngredientsPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All Categories");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedIngredient, setSelectedIngredient] =
     useState<Ingredient | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  const { categories, units } = useIngredientsMetadata();
 
   useEffect(() => {
     let isActive = true;
@@ -74,7 +62,7 @@ export default function IngredientsPage() {
       const matchesSearch = !query
         || ingredient.name.toLowerCase().includes(query);
       const matchesCategory =
-        selectedCategory === "All Categories"
+        selectedCategory === "all"
         || ingredient.category === selectedCategory;
 
       return matchesSearch && matchesCategory;
@@ -82,11 +70,50 @@ export default function IngredientsPage() {
   }, [ingredients, searchQuery, selectedCategory]);
 
   const categoryOptions = useMemo(() => {
-    const categories = new Set<string>();
-    ingredients.forEach((ingredient) => categories.add(ingredient.category));
+    const fallback = Array.from(
+      new Set(ingredients.map((ingredient) => ingredient.category)),
+    ).map((value) => ({
+      value,
+      label: value,
+    }));
 
-    return ["All Categories", ...Array.from(categories).sort()];
-  }, [ingredients]);
+    const categoryItems = categories.length > 0 ? categories : fallback;
+
+    return [
+      { value: "all", label: "All Categories" },
+      ...categoryItems,
+    ];
+  }, [categories, ingredients]);
+
+  const categoryLabels = useMemo(
+    () => new Map(categories.map((category) => [category.value, category.label])),
+    [categories],
+  );
+
+  const unitLabels = useMemo(
+    () => new Map(units.map((unit) => [unit.value, unit.label])),
+    [units],
+  );
+
+  const modalCategoryOptions = useMemo(() => {
+    if (categories.length > 0) {
+      return categories;
+    }
+
+    return Array.from(
+      new Set(ingredients.map((ingredient) => ingredient.category)),
+    ).map((value) => ({ value, label: value }));
+  }, [categories, ingredients]);
+
+  const unitOptions = useMemo(() => {
+    if (units.length > 0) {
+      return units;
+    }
+
+    return Array.from(
+      new Set(ingredients.map((ingredient) => ingredient.defaultUnit)),
+    ).map((value) => ({ value, label: value }));
+  }, [ingredients, units]);
 
   const totalIngredients = ingredients.length;
   const usedIngredients = ingredients.filter(
@@ -154,8 +181,8 @@ export default function IngredientsPage() {
                 className="w-full appearance-none rounded-2xl border border-[#e1e8dc] bg-white/80 px-4 py-3 text-sm font-semibold text-[#3b4c42] shadow-[0_10px_30px_-26px_rgba(30,60,40,0.4)] focus:outline-none"
               >
                 {categoryOptions.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
+                  <option key={category.value} value={category.value}>
+                    {category.label}
                   </option>
                 ))}
               </select>
@@ -186,11 +213,13 @@ export default function IngredientsPage() {
                       </td>
                       <td className="px-5 py-4">
                         <span className="inline-flex rounded-full bg-[#edf1ea] px-3 py-1 text-xs font-semibold text-[#4f5f55]">
-                          {ingredient.category}
+                          {categoryLabels.get(ingredient.category)
+                            ?? ingredient.category}
                         </span>
                       </td>
                       <td className="px-5 py-4 text-[#536157]">
-                        {ingredient.defaultUnit}
+                        {unitLabels.get(ingredient.defaultUnit)
+                          ?? ingredient.defaultUnit}
                       </td>
                       <td className="px-5 py-4 text-[#6c7a70]">
                         {formatUsage(ingredient.usedIn)}
@@ -282,8 +311,8 @@ export default function IngredientsPage() {
                     Select category
                   </option>
                   {modalCategoryOptions.map((category) => (
-                    <option key={category} value={category}>
-                      {category}
+                    <option key={category.value} value={category.value}>
+                      {category.label}
                     </option>
                   ))}
                 </select>
@@ -302,8 +331,8 @@ export default function IngredientsPage() {
                     Select unit
                   </option>
                   {unitOptions.map((unit) => (
-                    <option key={unit} value={unit}>
-                      {unit}
+                    <option key={unit.value} value={unit.value}>
+                      {unit.label}
                     </option>
                   ))}
                 </select>

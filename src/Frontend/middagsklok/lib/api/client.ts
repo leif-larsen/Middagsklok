@@ -3,7 +3,10 @@ import type {
   DishesImportResponse,
   DishesOverviewResponse,
 } from "./models/dishes";
-import type { IngredientsOverviewResponse } from "./models/ingredients";
+import type {
+  IngredientsMetadataResponse,
+  IngredientsOverviewResponse,
+} from "./models/ingredients";
 
 export class ApiError extends Error {
   readonly status: number;
@@ -67,6 +70,9 @@ export type ApiClient = {
   ) => Promise<DishesImportResponse>;
   getDishes: (init?: RequestInit) => Promise<DishesOverviewResponse>;
   getIngredients: (init?: RequestInit) => Promise<IngredientsOverviewResponse>;
+  getIngredientsMetadata: (
+    init?: RequestInit,
+  ) => Promise<IngredientsMetadataResponse>;
 };
 
 export const apiClient: ApiClient = {
@@ -83,6 +89,11 @@ export const apiClient: ApiClient = {
     }),
   getIngredients: (init) =>
     request<IngredientsOverviewResponse>("/api/ingredients", {
+      method: "GET",
+      ...init,
+    }),
+  getIngredientsMetadata: (init) =>
+    request<IngredientsMetadataResponse>("/api/ingredients/metadata", {
       method: "GET",
       ...init,
     }),
