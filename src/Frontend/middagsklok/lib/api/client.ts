@@ -21,6 +21,10 @@ import type {
   WeeklyPlanUpsertResponse,
   WeeklyPlanResponse,
 } from "./models/weekly-plans";
+import type {
+  PlanningSettingsRequest,
+  PlanningSettingsResponse,
+} from "./models/settings";
 
 export class ApiError extends Error {
   readonly status: number;
@@ -117,6 +121,11 @@ export type ApiClient = {
     startDate: string,
     init?: RequestInit,
   ) => Promise<WeeklyPlanResponse>;
+  getPlanningSettings: (init?: RequestInit) => Promise<PlanningSettingsResponse>;
+  upsertPlanningSettings: (
+    payload: PlanningSettingsRequest,
+    init?: RequestInit,
+  ) => Promise<PlanningSettingsResponse>;
 };
 
 export const apiClient: ApiClient = {
@@ -189,6 +198,17 @@ export const apiClient: ApiClient = {
   getWeeklyPlan: (startDate, init) =>
     request<WeeklyPlanResponse>(`/api/weekly-plans/${startDate}`, {
       method: "GET",
+      ...init,
+    }),
+  getPlanningSettings: (init) =>
+    request<PlanningSettingsResponse>("/api/planning-settings", {
+      method: "GET",
+      ...init,
+    }),
+  upsertPlanningSettings: (payload, init) =>
+    request<PlanningSettingsResponse>("/api/planning-settings", {
+      method: "PUT",
+      body: JSON.stringify(payload),
       ...init,
     }),
 };

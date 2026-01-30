@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ApiError, apiClient } from "../../lib/api/client";
 import Sidebar from "../components/Sidebar";
 
 const cuisineOptions = [
@@ -22,6 +23,16 @@ const restrictionOptions = [
   "Soy",
   "Wheat",
   "Fish",
+];
+
+const weekStartOptions = [
+  { value: "Monday", label: "Monday", dayIndex: 1 },
+  { value: "Tuesday", label: "Tuesday", dayIndex: 2 },
+  { value: "Wednesday", label: "Wednesday", dayIndex: 3 },
+  { value: "Thursday", label: "Thursday", dayIndex: 4 },
+  { value: "Friday", label: "Friday", dayIndex: 5 },
+  { value: "Saturday", label: "Saturday", dayIndex: 6 },
+  { value: "Sunday", label: "Sunday", dayIndex: 0 },
 ];
 
 type ToggleRowProps = {
@@ -71,6 +82,12 @@ export default function SettingsPage() {
   const [diversityScore, setDiversityScore] = useState(70);
   const [maxPrepMinutes, setMaxPrepMinutes] = useState(60);
   const [defaultServings, setDefaultServings] = useState(4);
+  const [weekStartsOn, setWeekStartsOn] = useState("Monday");
+  const [isLoadingSettings, setIsLoadingSettings] = useState(true);
+  const [settingsLoadError, setSettingsLoadError] = useState<string | null>(null);
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [preferredCategories, setPreferredCategories] = useState<string[]>([
     "Italian",
     "Asian",
@@ -107,6 +124,81 @@ export default function SettingsPage() {
     );
   };
 
+  useEffect(() => {
+    let isActive = true;
+
+    const loadSettings = async () => {
+      setIsLoadingSettings(true);
+      setSettingsLoadError(null);
+
+      try {
+        const response = await apiClient.getPlanningSettings();
+        if (isActive) {
+          const matched = weekStartOptions.find(
+            (option) =>
+              option.value.toLowerCase()
+              === response.weekStartsOn.trim().toLowerCase(),
+          );
+          setWeekStartsOn(matched?.value ?? "Monday");
+        }
+      } catch (error) {
+        if (error instanceof ApiError && error.status === 404) {
+          if (isActive) {
+            setWeekStartsOn("Monday");
+          }
+        } else {
+          if (error instanceof ApiError) {
+            console.error("Failed to load planning settings:", error.body ?? error.message);
+          } else if (error instanceof Error) {
+            console.error("Failed to load planning settings:", error.message);
+          } else {
+            console.error("Failed to load planning settings.");
+          }
+
+          if (isActive) {
+            setSettingsLoadError("Unable to load planning settings.");
+          }
+        }
+      } finally {
+        if (isActive) {
+          setIsLoadingSettings(false);
+        }
+      }
+    };
+
+    void loadSettings();
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
+
+  const handleSaveSettings = async () => {
+    setIsSavingSettings(true);
+    setSaveError(null);
+    setSaveMessage(null);
+
+    try {
+      const response = await apiClient.upsertPlanningSettings({
+        weekStartsOn,
+      });
+      setWeekStartsOn(response.weekStartsOn ?? weekStartsOn);
+      setSaveMessage("Settings saved.");
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error("Failed to save planning settings:", error.body ?? error.message);
+      } else if (error instanceof Error) {
+        console.error("Failed to save planning settings:", error.message);
+      } else {
+        console.error("Failed to save planning settings.");
+      }
+
+      setSaveError("Unable to save settings.");
+    } finally {
+      setIsSavingSettings(false);
+    }
+  };
+
   return (
     <div className="min-h-screen w-full p-6 sm:p-8">
       <div className="flex flex-wrap items-start gap-6">
@@ -128,11 +220,23 @@ export default function SettingsPage() {
             </div>
             <button
               type="button"
+              onClick={handleSaveSettings}
+              disabled={isSavingSettings}
               className="inline-flex items-center gap-2 rounded-full bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_24px_-18px_rgba(32,78,54,0.9)] transition hover:bg-[#2a5c46]"
             >
               <SaveIcon className="h-4 w-4" />
-              Save Settings
+              {isSavingSettings ? "Saving..." : "Save Settings"}
             </button>
+            {saveMessage ? (
+              <span className="text-xs font-semibold text-[#2f6b4f]">
+                {saveMessage}
+              </span>
+            ) : null}
+            {saveError ? (
+              <span className="text-xs font-semibold text-[#a04646]">
+                {saveError}
+              </span>
+            ) : null}
           </header>
 
           <div className="grid gap-6 xl:grid-cols-2">
@@ -148,6 +252,30 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="mt-5 space-y-5">
+                  <label className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#e1e8dc] bg-white/70 px-4 py-3 text-sm font-semibold text-[#1f2a22] shadow-[0_12px_24px_-20px_rgba(32,70,48,0.35)]">
+                    <span>Week Starts On</span>
+                    <span className="relative">
+                      <select
+                        aria-label="Week starts on"
+                        value={weekStartsOn}
+                        onChange={(event) => setWeekStartsOn(event.target.value)}
+                        disabled={isLoadingSettings}
+                        className="appearance-none bg-transparent pr-6 text-sm font-semibold text-[#2f6b4f] focus:outline-none"
+                      >
+                        {weekStartOptions.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDownIcon className="pointer-events-none absolute right-0 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7b8a7f]" />
+                    </span>
+                  </label>
+                  {settingsLoadError ? (
+                    <p className="text-xs font-semibold text-[#a04646]">
+                      {settingsLoadError}
+                    </p>
+                  ) : null}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm font-semibold text-[#1f2a22]">
                       <span>Maximum Dishes per Week</span>
@@ -425,6 +553,23 @@ function TipIcon({ className }: { className?: string }) {
       <path d="M9 18h6" />
       <path d="M10 21h4" />
       <path d="M8 13a4 4 0 1 1 8 0c0 1.6-.8 2.4-1.6 3.2-.6.6-1 1.2-1.1 2.3h-2.8c-.1-1.1-.5-1.7-1.1-2.3C8.8 15.4 8 14.6 8 13Z" />
+    </svg>
+  );
+}
+
+function ChevronDownIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="m6 9 6 6 6-6" />
     </svg>
   );
 }

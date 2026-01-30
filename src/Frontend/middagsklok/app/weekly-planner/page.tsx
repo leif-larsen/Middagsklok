@@ -14,15 +14,20 @@ type WeekDay = {
   date: Date;
 };
 
-const startDayOptions = [
-  { value: 1, label: "Monday" },
-  { value: 2, label: "Tuesday" },
-  { value: 3, label: "Wednesday" },
-  { value: 4, label: "Thursday" },
-  { value: 5, label: "Friday" },
-  { value: 6, label: "Saturday" },
-  { value: 0, label: "Sunday" },
-];
+const weekStartLookup = new Map<string, number>([
+  ["sunday", 0],
+  ["monday", 1],
+  ["tuesday", 2],
+  ["wednesday", 3],
+  ["thursday", 4],
+  ["friday", 5],
+  ["saturday", 6],
+]);
+
+const parseWeekStartsOn = (value: string | null | undefined) => {
+  const normalized = value?.trim().toLowerCase() ?? "";
+  return weekStartLookup.get(normalized) ?? 1;
+};
 
 const formatDayKey = (date: Date) => {
   const year = date.getFullYear();
@@ -121,6 +126,37 @@ export default function WeeklyPlannerPage() {
     };
 
     void loadDishes();
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let isActive = true;
+
+    const loadSettings = async () => {
+      try {
+        const response = await apiClient.getPlanningSettings();
+        if (isActive) {
+          setStartDay(parseWeekStartsOn(response.weekStartsOn));
+        }
+      } catch (error) {
+        if (error instanceof ApiError && error.status === 404) {
+          return;
+        }
+
+        if (error instanceof ApiError) {
+          console.error("Failed to load planning settings:", error.body ?? error.message);
+        } else if (error instanceof Error) {
+          console.error("Failed to load planning settings:", error.message);
+        } else {
+          console.error("Failed to load planning settings.");
+        }
+      }
+    };
+
+    void loadSettings();
 
     return () => {
       isActive = false;
@@ -345,29 +381,6 @@ export default function WeeklyPlannerPage() {
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              <label className="inline-flex items-center gap-3 rounded-full border border-[#d6e0d2] bg-white px-4 py-2 text-sm font-semibold text-[#3b4c42] shadow-[0_12px_24px_-20px_rgba(40,70,50,0.35)]">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#7b8a7f]">
-                  Start
-                </span>
-                <span className="relative">
-                  <select
-                    aria-label="Select start day"
-                    value={startDay}
-                    onChange={(event) => {
-                      setStartDay(Number(event.target.value));
-                      setOpenDayKey(null);
-                    }}
-                    className="appearance-none bg-transparent pr-6 text-sm font-semibold text-[#2f3f35] focus:outline-none"
-                  >
-                    {startDayOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDownIcon className="pointer-events-none absolute right-0 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7b8a7f]" />
-                </span>
-              </label>
               <button
                 type="button"
                 className="inline-flex items-center gap-2 rounded-full border border-[#d6e0d2] bg-white px-4 py-2 text-sm font-semibold text-[#3b4c42] transition hover:bg-[#f3f6ef]"
