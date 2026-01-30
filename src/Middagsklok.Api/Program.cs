@@ -2,10 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using Middagsklok.Api.Database;
 using Middagsklok.Api.Features.Dishes.Import;
 using Middagsklok.Api.Features.Dishes.Overview;
+using Middagsklok.Api.Features.Ingredients.Create;
 using Middagsklok.Api.Features.Ingredients.Metadata;
 using Middagsklok.Api.Features.Ingredients.Overview;
 using DishesImportUseCase = Middagsklok.Api.Features.Dishes.Import.UseCase;
 using DishesOverviewUseCase = Middagsklok.Api.Features.Dishes.Overview.UseCase;
+using IngredientsCreateUseCase = Middagsklok.Api.Features.Ingredients.Create.UseCase;
 using IngredientsMetadataUseCase = Middagsklok.Api.Features.Ingredients.Metadata.UseCase;
 using IngredientsOverviewUseCase = Middagsklok.Api.Features.Ingredients.Overview.UseCase;
 
@@ -16,6 +18,7 @@ builder.AddNpgsqlDbContext<AppDbContext>("middagsklok");
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<DishesImportUseCase>();
 builder.Services.AddScoped<DishesOverviewUseCase>();
+builder.Services.AddScoped<IngredientsCreateUseCase>();
 builder.Services.AddScoped<IngredientsMetadataUseCase>();
 builder.Services.AddScoped<IngredientsOverviewUseCase>();
 builder.Services.AddCors(options =>
@@ -52,6 +55,7 @@ app.UseCors("DevFrontend");
 
 DishesImportEndpoint.Map(app);
 DishesOverviewEndpoint.Map(app);
+IngredientsCreateEndpoint.Map(app);
 IngredientsMetadataEndpoint.Map(app);
 IngredientsOverviewEndpoint.Map(app);
 

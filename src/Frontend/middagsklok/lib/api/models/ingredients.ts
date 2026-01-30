@@ -23,6 +23,24 @@ export type IngredientOverview = {
   usedIn: number;
 };
 
+export type IngredientCreateRequest = {
+  name: string;
+  category: IngredientCategoryValue;
+  defaultUnit: IngredientUnitValue;
+};
+
+export type IngredientCreateResponse = IngredientOverview;
+
+export type IngredientValidationError = {
+  field: string;
+  message: string;
+};
+
+export type IngredientCreateErrorResponse = {
+  message: string;
+  errors: IngredientValidationError[];
+};
+
 export type IngredientsOverviewResponse = {
   ingredients: IngredientOverview[];
 };

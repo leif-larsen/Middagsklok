@@ -4,6 +4,8 @@ import type {
   DishesOverviewResponse,
 } from "./models/dishes";
 import type {
+  IngredientCreateRequest,
+  IngredientCreateResponse,
   IngredientsMetadataResponse,
   IngredientsOverviewResponse,
 } from "./models/ingredients";
@@ -70,6 +72,10 @@ export type ApiClient = {
   ) => Promise<DishesImportResponse>;
   getDishes: (init?: RequestInit) => Promise<DishesOverviewResponse>;
   getIngredients: (init?: RequestInit) => Promise<IngredientsOverviewResponse>;
+  createIngredient: (
+    payload: IngredientCreateRequest,
+    init?: RequestInit,
+  ) => Promise<IngredientCreateResponse>;
   getIngredientsMetadata: (
     init?: RequestInit,
   ) => Promise<IngredientsMetadataResponse>;
@@ -90,6 +96,12 @@ export const apiClient: ApiClient = {
   getIngredients: (init) =>
     request<IngredientsOverviewResponse>("/api/ingredients", {
       method: "GET",
+      ...init,
+    }),
+  createIngredient: (payload, init) =>
+    request<IngredientCreateResponse>("/api/ingredients", {
+      method: "POST",
+      body: JSON.stringify(payload),
       ...init,
     }),
   getIngredientsMetadata: (init) =>

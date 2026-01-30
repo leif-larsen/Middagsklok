@@ -4,7 +4,11 @@ import { useEffect, useMemo, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Modal from "../components/Modal";
 import { ApiError, apiClient } from "../../lib/api/client";
-import type { IngredientOverview } from "../../lib/api/models/ingredients";
+import type {
+  IngredientCreateErrorResponse,
+  IngredientOverview,
+  IngredientValidationError,
+} from "../../lib/api/models/ingredients";
 import { useIngredientsMetadata } from "../components/IngredientsMetadataProvider";
 
 type Ingredient = IngredientOverview;
@@ -26,6 +30,18 @@ export default function IngredientsPage() {
     useState<Ingredient | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  const [formName, setFormName] = useState("");
+  const [formCategory, setFormCategory] = useState<Ingredient["category"] | "">(
+    "",
+  );
+  const [formDefaultUnit, setFormDefaultUnit] = useState<
+    Ingredient["defaultUnit"] | ""
+  >("");
+  const [validationErrors, setValidationErrors] = useState<
+    IngredientValidationError[]
+  >([]);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
   const { categories, units } = useIngredientsMetadata();
 
   useEffect(() => {
@@ -124,9 +140,89 @@ export default function IngredientsPage() {
   const isEditMode = selectedIngredient !== null;
   const activeIngredient = selectedIngredient ?? emptyIngredient;
 
+  useEffect(() => {
+    if (!isModalOpen) {
+      return;
+    }
+
+    setFormName(activeIngredient.name ?? "");
+    setFormCategory(activeIngredient.category ?? "");
+    setFormDefaultUnit(activeIngredient.defaultUnit ?? "");
+    setValidationErrors([]);
+    setSubmitError(null);
+  }, [activeIngredient, isModalOpen]);
+
   const closeModal = () => {
     setIsCreateOpen(false);
     setSelectedIngredient(null);
+  };
+
+  const appendIngredient = (ingredient: Ingredient) => {
+    setIngredients((current) => {
+      if (current.some((item) => item.id === ingredient.id)) {
+        return current;
+      }
+
+      return [...current, ingredient].sort((left, right) =>
+        left.name.localeCompare(right.name));
+    });
+  };
+
+  const parseValidationErrors = (body: unknown) => {
+    if (!body || typeof body !== "object") {
+      return null;
+    }
+
+    const payload = body as IngredientCreateErrorResponse;
+    if (!Array.isArray(payload.errors)) {
+      return null;
+    }
+
+    return payload;
+  };
+
+  const handleSave = async () => {
+    if (isSaving) {
+      return;
+    }
+
+    if (isEditMode) {
+      setSubmitError("Updating ingredients is not available yet.");
+      return;
+    }
+
+    setIsSaving(true);
+    setValidationErrors([]);
+    setSubmitError(null);
+
+    try {
+      const payload = {
+        name: formName.trim(),
+        category: formCategory as Ingredient["category"],
+        defaultUnit: formDefaultUnit as Ingredient["defaultUnit"],
+      };
+
+      const created = await apiClient.createIngredient(payload);
+      appendIngredient(created);
+      closeModal();
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 400) {
+        const payload = parseValidationErrors(error.body);
+        if (payload) {
+          setValidationErrors(payload.errors);
+          setSubmitError(payload.message ?? null);
+          return;
+        }
+      }
+
+      if (error instanceof Error) {
+        setSubmitError(error.message);
+      } else {
+        setSubmitError("Failed to create ingredient.");
+      }
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -275,25 +371,54 @@ export default function IngredientsPage() {
             <button
               type="button"
               onClick={closeModal}
+              disabled={isSaving}
               className="inline-flex items-center justify-center rounded-xl border border-[#dfe6da] bg-white px-4 py-2 text-sm font-semibold text-[#3f4b43] transition hover:bg-[#f3f6ef]"
             >
               Cancel
             </button>
             <button
               type="button"
-              className="inline-flex items-center justify-center rounded-xl bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_22px_-18px_rgba(30,68,48,0.8)] transition hover:bg-[#2a5c46]"
+              onClick={() => {
+                void handleSave();
+              }}
+              disabled={isSaving}
+              className="inline-flex items-center justify-center rounded-xl bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_22px_-18px_rgba(30,68,48,0.8)] transition hover:bg-[#2a5c46] disabled:cursor-not-allowed disabled:opacity-70"
             >
-              {isEditMode ? "Update Ingredient" : "Create Ingredient"}
+              {isSaving
+                ? "Creating..."
+                : isEditMode
+                  ? "Update Ingredient"
+                  : "Create Ingredient"}
             </button>
           </>
         }
       >
+        {isSaving ? (
+          <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-[#e1e7dd]">
+            <div className="h-full w-1/2 animate-pulse rounded-full bg-[#2f6b4f]" />
+          </div>
+        ) : null}
+        {submitError ? (
+          <div className="mt-4 rounded-2xl border border-[#f0dada] bg-[#fff6f6] px-4 py-3 text-sm text-[#b45151]">
+            {submitError}
+          </div>
+        ) : null}
+        {validationErrors.length > 0 ? (
+          <ul className="mt-4 grid gap-2 rounded-2xl border border-[#f0dada] bg-[#fff6f6] px-4 py-3 text-sm text-[#b45151]">
+            {validationErrors.map((error, index) => (
+              <li key={`${error.field}-${index}`}>
+                {error.field ? `${error.field}: ` : ""}{error.message}
+              </li>
+            ))}
+          </ul>
+        ) : null}
         <div className="mt-6 grid gap-4">
           <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
             Ingredient Name
             <input
               type="text"
-              defaultValue={activeIngredient?.name}
+              value={formName}
+              onChange={(event) => setFormName(event.target.value)}
               placeholder="Ingredient name"
               className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
             />
@@ -304,7 +429,8 @@ export default function IngredientsPage() {
               Category
               <div className="relative">
                 <select
-                  defaultValue={activeIngredient?.category}
+                  value={formCategory}
+                  onChange={(event) => setFormCategory(event.target.value)}
                   className="w-full appearance-none rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
                 >
                   <option value="" disabled>
@@ -324,7 +450,8 @@ export default function IngredientsPage() {
               Default Unit
               <div className="relative">
                 <select
-                  defaultValue={activeIngredient?.defaultUnit}
+                  value={formDefaultUnit}
+                  onChange={(event) => setFormDefaultUnit(event.target.value)}
                   className="w-full appearance-none rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
                 >
                   <option value="" disabled>
