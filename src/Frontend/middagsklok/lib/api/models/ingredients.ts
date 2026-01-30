@@ -12,6 +12,8 @@ export type DishIngredientInput = {
 
 export type DishOverviewIngredient = {
   id: string;
+  ingredientId: string;
+  amount: number;
   label: string;
 };
 

@@ -14,10 +14,15 @@ import type {
 
 type Ingredient = {
   id: string;
+  ingredientId: string;
+  amount: number;
   label: string;
 };
 
-type DraftIngredient = Ingredient & {
+type DraftIngredient = {
+  id: string;
+  ingredientId: string;
+  label: string;
   amount?: string | null;
 };
 
@@ -169,8 +174,10 @@ export default function DishesPage() {
     setIsSaving(false);
     setDraftIngredients(
       activeDish.ingredients.map((ingredient) => ({
-        ...ingredient,
-        amount: "",
+        id: ingredient.ingredientId,
+        ingredientId: ingredient.ingredientId,
+        label: ingredient.label,
+        amount: String(ingredient.amount),
       })),
     );
     setSelectedIngredientId("");
@@ -271,7 +278,7 @@ export default function DishesPage() {
         serves: parseNumber(formServes),
         instructions: instructions ? instructions : null,
         ingredients: draftIngredients.map((ingredient) => ({
-          id: ingredient.id,
+          id: ingredient.ingredientId,
           name: ingredient.label,
           amount: parseNumber(ingredient.amount ?? ""),
         })),
@@ -407,6 +414,7 @@ export default function DishesPage() {
         ...current,
         {
           id: selected.id,
+          ingredientId: selected.id,
           label: selected.name,
           amount: normalizedAmount ? normalizedAmount : null,
         },

@@ -12,6 +12,8 @@ public sealed record Response(
 
 public sealed record DishIngredientResponse(
     string Id,
+    string IngredientId,
+    double Amount,
     string Label);
 
 public sealed record ErrorResponse(

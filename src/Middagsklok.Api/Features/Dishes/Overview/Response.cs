@@ -14,4 +14,6 @@ public sealed record DishOverview(
 
 public sealed record DishIngredientOverview(
     string Id,
+    string IngredientId,
+    double Amount,
     string Label);

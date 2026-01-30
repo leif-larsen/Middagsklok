@@ -211,10 +211,15 @@ internal sealed class UseCase(AppDbContext dbContext)
                     ? ingredientEntity.Name
                     : string.Empty;
 
+                var ingredientId = ingredient.IngredientId;
                 var label = BuildIngredientLabel(ingredient.Quantity, ingredient.Unit, ingredientName);
-                var id = $"{ingredient.IngredientId:D}-{index + 1}";
+                var id = $"{ingredientId:D}-{index + 1}";
 
-                return new DishIngredientResponse(id, label);
+                return new DishIngredientResponse(
+                    id,
+                    ingredientId.ToString("D"),
+                    ingredient.Quantity,
+                    label);
             })
             .ToArray();
 

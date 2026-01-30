@@ -79,7 +79,11 @@ internal sealed class UseCase(AppDbContext dbContext)
                 var label = BuildIngredientLabel(ingredient.Quantity, ingredient.Unit, ingredientName);
                 var id = $"{ingredientId:D}-{index + 1}";
 
-                return new DishIngredientOverview(id, label);
+                return new DishIngredientOverview(
+                    id,
+                    ingredientId.ToString("D"),
+                    ingredient.Quantity,
+                    label);
             })
             .ToArray();
 
