@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Middagsklok.Api.Domain.Dish;
 using Middagsklok.Api.Domain.Ingredient;
+using Middagsklok.Api.Domain.WeeklyPlan;
 
 namespace Middagsklok.Api.Database;
 
@@ -8,6 +9,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 {
     public DbSet<Ingredient> Ingredients => Set<Ingredient>();
     public DbSet<Dish> Dishes => Set<Dish>();
+    public DbSet<WeeklyPlan> WeeklyPlans => Set<WeeklyPlan>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
