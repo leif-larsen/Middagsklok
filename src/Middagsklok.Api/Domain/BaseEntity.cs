@@ -12,4 +12,10 @@ public abstract class BaseEntity
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
     }
+
+    // Updates the last modified timestamp.
+    protected void Touch()
+    {
+        UpdatedAt = DateTime.UtcNow;
+    }
 }

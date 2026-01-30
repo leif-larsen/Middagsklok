@@ -5,11 +5,13 @@ using Middagsklok.Api.Features.Dishes.Overview;
 using Middagsklok.Api.Features.Ingredients.Create;
 using Middagsklok.Api.Features.Ingredients.Metadata;
 using Middagsklok.Api.Features.Ingredients.Overview;
+using Middagsklok.Api.Features.Ingredients.Update;
 using DishesImportUseCase = Middagsklok.Api.Features.Dishes.Import.UseCase;
 using DishesOverviewUseCase = Middagsklok.Api.Features.Dishes.Overview.UseCase;
 using IngredientsCreateUseCase = Middagsklok.Api.Features.Ingredients.Create.UseCase;
 using IngredientsMetadataUseCase = Middagsklok.Api.Features.Ingredients.Metadata.UseCase;
 using IngredientsOverviewUseCase = Middagsklok.Api.Features.Ingredients.Overview.UseCase;
+using IngredientsUpdateUseCase = Middagsklok.Api.Features.Ingredients.Update.UseCase;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,7 @@ builder.Services.AddScoped<DishesOverviewUseCase>();
 builder.Services.AddScoped<IngredientsCreateUseCase>();
 builder.Services.AddScoped<IngredientsMetadataUseCase>();
 builder.Services.AddScoped<IngredientsOverviewUseCase>();
+builder.Services.AddScoped<IngredientsUpdateUseCase>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("DevFrontend", policy =>
@@ -58,6 +61,7 @@ DishesOverviewEndpoint.Map(app);
 IngredientsCreateEndpoint.Map(app);
 IngredientsMetadataEndpoint.Map(app);
 IngredientsOverviewEndpoint.Map(app);
+IngredientsUpdateEndpoint.Map(app);
 
 var summaries = new[]
 {

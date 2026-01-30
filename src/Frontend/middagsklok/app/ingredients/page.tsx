@@ -5,7 +5,7 @@ import Sidebar from "../components/Sidebar";
 import Modal from "../components/Modal";
 import { ApiError, apiClient } from "../../lib/api/client";
 import type {
-  IngredientCreateErrorResponse,
+  IngredientErrorResponse,
   IngredientOverview,
   IngredientValidationError,
 } from "../../lib/api/models/ingredients";
@@ -173,7 +173,7 @@ export default function IngredientsPage() {
       return null;
     }
 
-    const payload = body as IngredientCreateErrorResponse;
+    const payload = body as IngredientErrorResponse;
     if (!Array.isArray(payload.errors)) {
       return null;
     }
@@ -183,11 +183,6 @@ export default function IngredientsPage() {
 
   const handleSave = async () => {
     if (isSaving) {
-      return;
-    }
-
-    if (isEditMode) {
-      setSubmitError("Updating ingredients is not available yet.");
       return;
     }
 
@@ -202,11 +197,29 @@ export default function IngredientsPage() {
         defaultUnit: formDefaultUnit as Ingredient["defaultUnit"],
       };
 
+      if (isEditMode) {
+        if (!selectedIngredient) {
+          setSubmitError("Ingredient is required for updates.");
+          return;
+        }
+
+        const updated = await apiClient.updateIngredient(
+          selectedIngredient.id,
+          payload,
+        );
+        setIngredients((current) =>
+          current
+            .map((item) => (item.id === updated.id ? updated : item))
+            .sort((left, right) => left.name.localeCompare(right.name)));
+        closeModal();
+        return;
+      }
+
       const created = await apiClient.createIngredient(payload);
       appendIngredient(created);
       closeModal();
     } catch (error) {
-      if (error instanceof ApiError && error.status === 400) {
+      if (error instanceof ApiError && [400, 404, 409].includes(error.status)) {
         const payload = parseValidationErrors(error.body);
         if (payload) {
           setValidationErrors(payload.errors);
@@ -385,7 +398,9 @@ export default function IngredientsPage() {
               className="inline-flex items-center justify-center rounded-xl bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_22px_-18px_rgba(30,68,48,0.8)] transition hover:bg-[#2a5c46] disabled:cursor-not-allowed disabled:opacity-70"
             >
               {isSaving
-                ? "Creating..."
+                ? isEditMode
+                  ? "Updating..."
+                  : "Creating..."
                 : isEditMode
                   ? "Update Ingredient"
                   : "Create Ingredient"}

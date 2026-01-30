@@ -36,10 +36,14 @@ export type IngredientValidationError = {
   message: string;
 };
 
-export type IngredientCreateErrorResponse = {
+export type IngredientErrorResponse = {
   message: string;
   errors: IngredientValidationError[];
 };
+
+export type IngredientUpdateRequest = IngredientCreateRequest;
+
+export type IngredientUpdateResponse = IngredientOverview;
 
 export type IngredientsOverviewResponse = {
   ingredients: IngredientOverview[];

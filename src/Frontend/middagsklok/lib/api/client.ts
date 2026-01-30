@@ -6,6 +6,8 @@ import type {
 import type {
   IngredientCreateRequest,
   IngredientCreateResponse,
+  IngredientUpdateRequest,
+  IngredientUpdateResponse,
   IngredientsMetadataResponse,
   IngredientsOverviewResponse,
 } from "./models/ingredients";
@@ -76,6 +78,11 @@ export type ApiClient = {
     payload: IngredientCreateRequest,
     init?: RequestInit,
   ) => Promise<IngredientCreateResponse>;
+  updateIngredient: (
+    id: string,
+    payload: IngredientUpdateRequest,
+    init?: RequestInit,
+  ) => Promise<IngredientUpdateResponse>;
   getIngredientsMetadata: (
     init?: RequestInit,
   ) => Promise<IngredientsMetadataResponse>;
@@ -101,6 +108,12 @@ export const apiClient: ApiClient = {
   createIngredient: (payload, init) =>
     request<IngredientCreateResponse>("/api/ingredients", {
       method: "POST",
+      body: JSON.stringify(payload),
+      ...init,
+    }),
+  updateIngredient: (id, payload, init) =>
+    request<IngredientUpdateResponse>(`/api/ingredients/${id}`, {
+      method: "PUT",
       body: JSON.stringify(payload),
       ...init,
     }),
