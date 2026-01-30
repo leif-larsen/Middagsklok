@@ -5,7 +5,7 @@ import { ApiError, apiClient } from "../../lib/api/client";
 import type { DishLookup } from "../../lib/api/models/dishes";
 import type {
   WeeklyPlanUpsertRequest,
-  WeeklyPlanUpsertResponse,
+  WeeklyPlanResponse,
 } from "../../lib/api/models/weekly-plans";
 import Sidebar from "../components/Sidebar";
 
@@ -79,6 +79,7 @@ export default function WeeklyPlannerPage() {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const [isSavingPlan, setIsSavingPlan] = useState(false);
+  const [isLoadingPlan, setIsLoadingPlan] = useState(false);
 
   useEffect(() => {
     let isActive = true;
@@ -194,7 +195,7 @@ export default function WeeklyPlannerPage() {
 
   const formatSelectionType = (value: string) => value.trim().toUpperCase();
 
-  const mapResponseToPlan = (response: WeeklyPlanUpsertResponse) => {
+  const mapResponseToPlan = (response: WeeklyPlanResponse) => {
     const nextPlan: Record<string, string | null> = {};
 
     response.days.forEach((day) => {
@@ -242,6 +243,52 @@ export default function WeeklyPlannerPage() {
       setIsSavingPlan(false);
     }
   };
+
+  useEffect(() => {
+    let isActive = true;
+
+    const loadPlan = async () => {
+      const startDate = weekDays[0]?.key ?? "";
+      if (!startDate) {
+        return;
+      }
+
+      setIsLoadingPlan(true);
+      setSaveError(null);
+      setSaveMessage(null);
+
+      try {
+        const response = await apiClient.getWeeklyPlan(startDate);
+        if (isActive) {
+          setPlan(mapResponseToPlan(response));
+        }
+      } catch (error) {
+        if (error instanceof ApiError && error.status === 404) {
+          if (isActive) {
+            setPlan(buildPlan(weekDays));
+          }
+        } else {
+          if (error instanceof ApiError) {
+            console.error("Failed to load weekly plan:", error.body ?? error.message);
+          } else if (error instanceof Error) {
+            console.error("Failed to load weekly plan:", error.message);
+          } else {
+            console.error("Failed to load weekly plan.");
+          }
+        }
+      } finally {
+        if (isActive) {
+          setIsLoadingPlan(false);
+        }
+      }
+    };
+
+    void loadPlan();
+
+    return () => {
+      isActive = false;
+    };
+  }, [weekDays]);
 
   return (
     <div className="min-h-screen w-full p-6 sm:p-8">
@@ -296,7 +343,7 @@ export default function WeeklyPlannerPage() {
               <button
                 type="button"
                 onClick={handleSavePlan}
-                disabled={isSavingPlan}
+                disabled={isSavingPlan || isLoadingPlan}
                 className="inline-flex items-center gap-2 rounded-full bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_24px_-18px_rgba(32,78,54,0.9)] transition hover:bg-[#2a5c46]"
               >
                 <SaveIcon className="h-4 w-4" />

@@ -27,3 +27,5 @@ export type WeeklyPlanUpsertResponse = {
   startDate: string;
   days: WeeklyPlanDay[];
 };
+
+export type WeeklyPlanResponse = WeeklyPlanUpsertResponse;

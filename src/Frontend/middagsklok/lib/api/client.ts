@@ -19,6 +19,7 @@ import type {
 import type {
   WeeklyPlanUpsertRequest,
   WeeklyPlanUpsertResponse,
+  WeeklyPlanResponse,
 } from "./models/weekly-plans";
 
 export class ApiError extends Error {
@@ -112,6 +113,10 @@ export type ApiClient = {
     payload: WeeklyPlanUpsertRequest,
     init?: RequestInit,
   ) => Promise<WeeklyPlanUpsertResponse>;
+  getWeeklyPlan: (
+    startDate: string,
+    init?: RequestInit,
+  ) => Promise<WeeklyPlanResponse>;
 };
 
 export const apiClient: ApiClient = {
@@ -179,6 +184,11 @@ export const apiClient: ApiClient = {
     request<WeeklyPlanUpsertResponse>(`/api/weekly-plans/${startDate}`, {
       method: "PUT",
       body: JSON.stringify(payload),
+      ...init,
+    }),
+  getWeeklyPlan: (startDate, init) =>
+    request<WeeklyPlanResponse>(`/api/weekly-plans/${startDate}`, {
+      method: "GET",
       ...init,
     }),
 };
