@@ -83,6 +83,25 @@ A discriminated union describing either a selected dish or an explicit empty sel
 
 ---
 
+## Supporting Data (Dish Lookup)
+The weekly planner UI needs a lightweight list of dishes for selection.
+Expose a lookup endpoint that returns only the data needed for the picker.
+
+**Endpoint**
+- `GET /dishes/lookup`
+
+**Response (JSON)**
+```json
+{
+  "dishes": [
+    { "id": "c13a7f...", "name": "Spaghetti Carbonara", "cuisine": "Italian" }
+  ]
+}
+```
+
+
+---
+
 ## Example (JSON)
 
 ```json

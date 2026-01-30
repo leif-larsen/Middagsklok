@@ -1,28 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { ApiError, apiClient } from "../../lib/api/client";
+import type { DishLookup } from "../../lib/api/models/dishes";
 import Sidebar from "../components/Sidebar";
-
-type DishOption = {
-  id: string;
-  name: string;
-  cuisine: string;
-};
 
 type WeekDay = {
   key: string;
   date: Date;
 };
-
-const dishOptions: DishOption[] = [
-  { id: "spaghetti-carbonara", name: "Spaghetti Carbonara", cuisine: "Italian" },
-  { id: "thai-green-curry", name: "Thai Green Curry", cuisine: "Thai" },
-  { id: "greek-salad", name: "Greek Salad", cuisine: "Mediterranean" },
-  { id: "beef-tacos", name: "Beef Tacos", cuisine: "Mexican" },
-  { id: "chicken-tikka-masala", name: "Chicken Tikka Masala", cuisine: "Indian" },
-  { id: "caesar-salad", name: "Caesar Salad", cuisine: "Classic" },
-  { id: "pad-thai", name: "Pad Thai", cuisine: "Thai" },
-];
 
 const startDayOptions = [
   { value: 1, label: "Monday" },
@@ -32,16 +18,6 @@ const startDayOptions = [
   { value: 5, label: "Friday" },
   { value: 6, label: "Saturday" },
   { value: 0, label: "Sunday" },
-];
-
-const planTemplate: Array<string | null> = [
-  "spaghetti-carbonara",
-  "thai-green-curry",
-  "greek-salad",
-  "beef-tacos",
-  "chicken-tikka-masala",
-  null,
-  null,
 ];
 
 const formatDayKey = (date: Date) => {
@@ -72,12 +48,11 @@ const anchorDate = new Date(2026, 0, 30);
 const baseWeekStart = startOfWeek(anchorDate, 1);
 
 const buildPlan = (days: WeekDay[]) =>
-  days.reduce<Record<string, string | null>>((accumulator, day, index) => {
-    accumulator[day.key] = planTemplate[index] ?? null;
+  days.reduce<Record<string, string | null>>((accumulator, day) => {
+    accumulator[day.key] = null;
     return accumulator;
   }, {});
 
-const dishLookup = new Map(dishOptions.map((dish) => [dish.id, dish]));
 const monthFormatter = new Intl.DateTimeFormat("en-US", {
   month: "long",
   year: "numeric",
@@ -91,8 +66,54 @@ const dayFormatter = new Intl.DateTimeFormat("en-US", {
 });
 
 export default function WeeklyPlannerPage() {
+  const [dishOptions, setDishOptions] = useState<DishLookup[]>([]);
+  const [dishLoadError, setDishLoadError] = useState<string | null>(null);
+  const [isLoadingDishes, setIsLoadingDishes] = useState(true);
   const [startDay, setStartDay] = useState(1);
   const [openDayKey, setOpenDayKey] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isActive = true;
+
+    const loadDishes = async () => {
+      setIsLoadingDishes(true);
+      setDishLoadError(null);
+
+      try {
+        const response = await apiClient.getDishesLookup();
+        if (isActive) {
+          setDishOptions(response.dishes ?? []);
+        }
+      } catch (error) {
+        if (error instanceof ApiError) {
+          console.error("Failed to load dish lookup:", error.body ?? error.message);
+        } else if (error instanceof Error) {
+          console.error("Failed to load dish lookup:", error.message);
+        } else {
+          console.error("Failed to load dish lookup.");
+        }
+
+        if (isActive) {
+          setDishLoadError("Unable to load dishes.");
+        }
+      } finally {
+        if (isActive) {
+          setIsLoadingDishes(false);
+        }
+      }
+    };
+
+    void loadDishes();
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
+
+  const dishLookup = useMemo(
+    () => new Map(dishOptions.map((dish) => [dish.id, dish])),
+    [dishOptions],
+  );
 
   const weekDays = useMemo(() => {
     const startDate = addDays(baseWeekStart, offsetFromMonday(startDay));
@@ -142,7 +163,7 @@ export default function WeeklyPlannerPage() {
         dishId: plan[day.key] ?? null,
         dish: plan[day.key] ? dishLookup.get(plan[day.key] ?? "") : null,
       })),
-    [plan, weekDays],
+    [dishLookup, plan, weekDays],
   );
 
   return (
@@ -286,29 +307,43 @@ export default function WeeklyPlannerPage() {
                               <span>No dish</span>
                               {!day.dishId ? <CheckIcon className="h-4 w-4" /> : null}
                             </button>
-                            {dishOptions.map((dish) => {
-                              const isSelected = dish.id === day.dishId;
+                            {isLoadingDishes ? (
+                              <div className="px-4 py-2.5 text-xs font-semibold text-[#7b8a7f]">
+                                Loading dishes...
+                              </div>
+                            ) : dishLoadError ? (
+                              <div className="px-4 py-2.5 text-xs font-semibold text-[#9f4c4c]">
+                                {dishLoadError}
+                              </div>
+                            ) : dishOptions.length === 0 ? (
+                              <div className="px-4 py-2.5 text-xs font-semibold text-[#7b8a7f]">
+                                No dishes available
+                              </div>
+                            ) : (
+                              dishOptions.map((dish) => {
+                                const isSelected = dish.id === day.dishId;
 
-                              return (
-                                <button
-                                  key={dish.id}
-                                  type="button"
-                                  role="option"
-                                  aria-selected={isSelected}
-                                  onClick={() => handleSelect(day.key, dish.id)}
-                                  className={`flex w-full items-center justify-between px-4 py-2.5 text-left transition hover:bg-[#f4f7f1] ${
-                                    isSelected
-                                      ? "bg-[#e9f3ea] text-[#2f6b4f]"
-                                      : "text-[#2a3a2f]"
-                                  }`}
-                                >
-                                  <span>{dish.name}</span>
-                                  {isSelected ? (
-                                    <CheckIcon className="h-4 w-4" />
-                                  ) : null}
-                                </button>
-                              );
-                            })}
+                                return (
+                                  <button
+                                    key={dish.id}
+                                    type="button"
+                                    role="option"
+                                    aria-selected={isSelected}
+                                    onClick={() => handleSelect(day.key, dish.id)}
+                                    className={`flex w-full items-center justify-between px-4 py-2.5 text-left transition hover:bg-[#f4f7f1] ${
+                                      isSelected
+                                        ? "bg-[#e9f3ea] text-[#2f6b4f]"
+                                        : "text-[#2a3a2f]"
+                                    }`}
+                                  >
+                                    <span>{dish.name}</span>
+                                    {isSelected ? (
+                                      <CheckIcon className="h-4 w-4" />
+                                    ) : null}
+                                  </button>
+                                );
+                              })
+                            )}
                           </div>
                         ) : null}
                       </div>

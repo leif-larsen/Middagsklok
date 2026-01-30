@@ -5,6 +5,7 @@ import type {
   DishUpdateResponse,
   DishesImportRequest,
   DishesImportResponse,
+  DishesLookupResponse,
   DishesOverviewResponse,
 } from "./models/dishes";
 import type {
@@ -87,6 +88,7 @@ export type ApiClient = {
   ) => Promise<DishUpdateResponse>;
   deleteDish: (id: string, init?: RequestInit) => Promise<void>;
   getDishes: (init?: RequestInit) => Promise<DishesOverviewResponse>;
+  getDishesLookup: (init?: RequestInit) => Promise<DishesLookupResponse>;
   getIngredients: (init?: RequestInit) => Promise<IngredientsOverviewResponse>;
   createIngredient: (
     payload: IngredientCreateRequest,
@@ -129,6 +131,11 @@ export const apiClient: ApiClient = {
     }),
   getDishes: (init) =>
     request<DishesOverviewResponse>("/api/dishes", {
+      method: "GET",
+      ...init,
+    }),
+  getDishesLookup: (init) =>
+    request<DishesLookupResponse>("/api/dishes/lookup", {
       method: "GET",
       ...init,
     }),

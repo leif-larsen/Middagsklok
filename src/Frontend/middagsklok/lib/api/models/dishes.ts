@@ -40,6 +40,16 @@ export type DishesOverviewResponse = {
   dishes: DishOverview[];
 };
 
+export type DishLookup = {
+  id: string;
+  name: string;
+  cuisine: string;
+};
+
+export type DishesLookupResponse = {
+  dishes: DishLookup[];
+};
+
 export type DishCreateIngredientInput = {
   id?: string | null;
   name?: string | null;
