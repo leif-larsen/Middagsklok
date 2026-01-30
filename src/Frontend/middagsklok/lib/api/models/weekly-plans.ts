@@ -29,3 +29,12 @@ export type WeeklyPlanUpsertResponse = {
 };
 
 export type WeeklyPlanResponse = WeeklyPlanUpsertResponse;
+
+export type WeeklyPlanSummary = {
+  startDate: string;
+  endDate: string;
+};
+
+export type WeeklyPlansResponse = {
+  plans: WeeklyPlanSummary[];
+};

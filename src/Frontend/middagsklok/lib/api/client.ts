@@ -19,6 +19,7 @@ import type {
 import type {
   WeeklyPlanUpsertRequest,
   WeeklyPlanUpsertResponse,
+  WeeklyPlansResponse,
   WeeklyPlanResponse,
 } from "./models/weekly-plans";
 import type {
@@ -122,6 +123,7 @@ export type ApiClient = {
     startDate: string,
     init?: RequestInit,
   ) => Promise<WeeklyPlanResponse>;
+  getWeeklyPlans: (init?: RequestInit) => Promise<WeeklyPlansResponse>;
   getPlanningSettings: (init?: RequestInit) => Promise<PlanningSettingsResponse>;
   upsertPlanningSettings: (
     payload: PlanningSettingsRequest,
@@ -202,6 +204,11 @@ export const apiClient: ApiClient = {
     }),
   getWeeklyPlan: (startDate, init) =>
     request<WeeklyPlanResponse>(`/api/weekly-plans/${startDate}`, {
+      method: "GET",
+      ...init,
+    }),
+  getWeeklyPlans: (init) =>
+    request<WeeklyPlansResponse>("/api/weekly-plans", {
       method: "GET",
       ...init,
     }),

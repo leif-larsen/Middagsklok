@@ -3,64 +3,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { ApiError, apiClient } from "../../lib/api/client";
 import type { ShoppingListResponse } from "../../lib/api/models/shopping-list";
+import type { WeeklyPlanSummary } from "../../lib/api/models/weekly-plans";
 import Sidebar from "../components/Sidebar";
 
-type PlanOption = {
-  startDate: string;
-  label: string;
-  subtitle: string;
-};
-
-const weekStartsOn = 1;
-const anchorDate = new Date(2026, 0, 30);
 const rangeFormatter = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric",
 });
-
-const addDays = (date: Date, amount: number) => {
-  const next = new Date(date);
-  next.setDate(date.getDate() + amount);
-
-  return next;
-};
-
-const startOfWeek = (date: Date, weekStartsOnValue: number) => {
-  const dayIndex = date.getDay();
-  const diff = (dayIndex - weekStartsOnValue + 7) % 7;
-
-  return addDays(date, -diff);
-};
-
-const formatDateKey = (date: Date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-};
-
-const buildPlanOptions = (): PlanOption[] => {
-  const baseWeekStart = startOfWeek(anchorDate, weekStartsOn);
-  const descriptors = [
-    { offset: 0, subtitle: "Current week plan" },
-    { offset: 1, subtitle: "Next week plan" },
-    { offset: 2, subtitle: "Upcoming plan" },
-  ];
-
-  return descriptors.map(({ offset, subtitle }) => {
-    const startDate = addDays(baseWeekStart, offset * 7);
-    const endDate = addDays(startDate, 6);
-
-    return {
-      startDate: formatDateKey(startDate),
-      label: `${rangeFormatter.format(startDate)} - ${rangeFormatter.format(endDate)}`,
-      subtitle,
-    };
-  });
-};
-
-const planOptions = buildPlanOptions();
 
 const categoryLabels: Record<string, string> = {
   DairyAndEggs: "Dairy & Eggs",
@@ -77,6 +26,21 @@ const formatCategoryLabel = (value: string) => {
   }
 
   return value.replace(/([a-z])([A-Z])/g, "$1 $2");
+};
+
+const parseDate = (value: string) => new Date(`${value}T00:00:00`);
+
+const formatRangeLabel = (startDate: string, endDate: string) => {
+  const start = parseDate(startDate);
+  const end = parseDate(endDate);
+  const startIsValid = !Number.isNaN(start.getTime());
+  const endIsValid = !Number.isNaN(end.getTime());
+
+  if (!startIsValid || !endIsValid) {
+    return `${startDate} - ${endDate}`;
+  }
+
+  return `${rangeFormatter.format(start)} - ${rangeFormatter.format(end)}`;
 };
 
 const unitLabels: Record<string, string> = {
@@ -106,18 +70,19 @@ const formatAmount = (amount: number, unit: string) =>
   `${formatQuantity(amount)} ${formatUnit(unit)}`.trim();
 
 export default function ShoppingListPage() {
-  const [selectedPlanStartDate, setSelectedPlanStartDate] = useState(
-    planOptions[0]?.startDate ?? "",
-  );
+  const [planOptions, setPlanOptions] = useState<WeeklyPlanSummary[]>([]);
+  const [selectedPlanStartDate, setSelectedPlanStartDate] = useState("");
   const [shoppingList, setShoppingList] = useState<ShoppingListResponse | null>(
     null,
   );
   const [isLoading, setIsLoading] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [isLoadingPlans, setIsLoadingPlans] = useState(true);
+  const [planLoadError, setPlanLoadError] = useState<string | null>(null);
 
   const activePlan = useMemo(
     () => planOptions.find((plan) => plan.startDate === selectedPlanStartDate),
-    [selectedPlanStartDate],
+    [planOptions, selectedPlanStartDate],
   );
 
   const activeCategories = useMemo(
@@ -149,6 +114,63 @@ export default function ShoppingListPage() {
       })),
     [activeCategories],
   );
+
+  useEffect(() => {
+    let isActive = true;
+
+    const loadPlans = async () => {
+      setIsLoadingPlans(true);
+      setPlanLoadError(null);
+
+      try {
+        const response = await apiClient.getWeeklyPlans();
+        if (!isActive) {
+          return;
+        }
+
+        const plans = response.plans ?? [];
+
+        setPlanOptions(plans);
+        setSelectedPlanStartDate((current) => {
+          if (plans.length === 0) {
+            setShoppingList(null);
+            return "";
+          }
+
+          if (plans.some((plan) => plan.startDate === current)) {
+            return current;
+          }
+
+          return plans[0]?.startDate ?? "";
+        });
+      } catch (error) {
+        if (error instanceof ApiError) {
+          console.error("Failed to load weekly plans:", error.body ?? error.message);
+        } else if (error instanceof Error) {
+          console.error("Failed to load weekly plans:", error.message);
+        } else {
+          console.error("Failed to load weekly plans.");
+        }
+
+        if (isActive) {
+          setPlanLoadError("Unable to load plans.");
+          setPlanOptions([]);
+          setSelectedPlanStartDate("");
+          setShoppingList(null);
+        }
+      } finally {
+        if (isActive) {
+          setIsLoadingPlans(false);
+        }
+      }
+    };
+
+    void loadPlans();
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (!selectedPlanStartDate) {
@@ -205,6 +227,19 @@ export default function ShoppingListPage() {
   const summaryLabel = isLoading
     ? "Loading shopping list..."
     : `${totalItems} items across ${totalCategories} categories`;
+  const planHelperLabel = isLoadingPlans
+    ? "Loading plans..."
+    : planLoadError
+      ? planLoadError
+      : planOptions.length === 0
+        ? "No plans available"
+        : "Select a plan to view items";
+  const activePlanLabel = activePlan
+    ? formatRangeLabel(activePlan.startDate, activePlan.endDate)
+    : "Select plan";
+  const itemsHeading = activePlan
+    ? `Items for ${activePlanLabel}`
+    : "Items for this plan";
 
   return (
     <div className="min-h-screen w-full p-6 sm:p-8">
@@ -232,7 +267,7 @@ export default function ShoppingListPage() {
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-semibold text-[#1f2a22]">
-                    {activePlan?.label ?? "Select plan"}
+                    {activePlanLabel}
                   </span>
                   <div className="relative">
                     <select
@@ -241,11 +276,12 @@ export default function ShoppingListPage() {
                       onChange={(event) =>
                         setSelectedPlanStartDate(event.target.value)
                       }
+                      disabled={isLoadingPlans || planOptions.length === 0 || !!planLoadError}
                       className="appearance-none bg-transparent pr-6 text-sm font-semibold text-[#2f6b4f] focus:outline-none"
                     >
                       {planOptions.map((plan) => (
                         <option key={plan.startDate} value={plan.startDate}>
-                          {plan.label}
+                          {formatRangeLabel(plan.startDate, plan.endDate)}
                         </option>
                       ))}
                     </select>
@@ -253,7 +289,7 @@ export default function ShoppingListPage() {
                   </div>
                 </div>
                 <span className="text-xs text-[#7b8a7f]">
-                  {activePlan?.subtitle ?? "Pick a plan to view items"}
+                  {planHelperLabel}
                 </span>
               </div>
             </div>
@@ -263,25 +299,11 @@ export default function ShoppingListPage() {
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div className="space-y-1">
                 <h2 className="text-lg font-semibold text-[#1f2a22]">
-                  Items for {activePlan?.label ?? "this plan"}
+                  {itemsHeading}
                 </h2>
                 <p className="text-sm text-[#7b8a7f]">
                   Generated from the dishes in the selected plan
                 </p>
-              </div>
-              <div className="flex w-full max-w-md items-center gap-3 rounded-2xl border border-[#e1e8dc] bg-white/70 px-4 py-3 text-sm text-[#1f2a22] shadow-[0_12px_24px_-20px_rgba(32,70,48,0.35)]">
-                <input
-                  type="text"
-                  placeholder="Add custom item..."
-                  className="flex-1 bg-transparent text-sm font-medium text-[#1f2a22] placeholder:text-[#9aa79b] focus:outline-none"
-                />
-                <button
-                  type="button"
-                  className="grid h-9 w-9 place-items-center rounded-xl bg-[#2f6b4f] text-white shadow-[0_12px_24px_-18px_rgba(32,78,54,0.9)]"
-                  aria-label="Add custom item"
-                >
-                  <PlusIcon className="h-4 w-4" />
-                </button>
               </div>
             </div>
 
@@ -375,23 +397,6 @@ function CartIcon({ className }: { className?: string }) {
       <path d="M3 5h2l2.4 9.6a1 1 0 0 0 1 .8h8.7a1 1 0 0 0 1-.7l2.2-6.2H7.4" />
       <circle cx="10" cy="20" r="1.5" />
       <circle cx="18" cy="20" r="1.5" />
-    </svg>
-  );
-}
-
-function PlusIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M12 5v14M5 12h14" />
     </svg>
   );
 }
