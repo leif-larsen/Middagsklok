@@ -16,6 +16,10 @@ import type {
   IngredientsMetadataResponse,
   IngredientsOverviewResponse,
 } from "./models/ingredients";
+import type {
+  WeeklyPlanUpsertRequest,
+  WeeklyPlanUpsertResponse,
+} from "./models/weekly-plans";
 
 export class ApiError extends Error {
   readonly status: number;
@@ -103,6 +107,11 @@ export type ApiClient = {
   getIngredientsMetadata: (
     init?: RequestInit,
   ) => Promise<IngredientsMetadataResponse>;
+  upsertWeeklyPlan: (
+    startDate: string,
+    payload: WeeklyPlanUpsertRequest,
+    init?: RequestInit,
+  ) => Promise<WeeklyPlanUpsertResponse>;
 };
 
 export const apiClient: ApiClient = {
@@ -164,6 +173,12 @@ export const apiClient: ApiClient = {
   getIngredientsMetadata: (init) =>
     request<IngredientsMetadataResponse>("/api/ingredients/metadata", {
       method: "GET",
+      ...init,
+    }),
+  upsertWeeklyPlan: (startDate, payload, init) =>
+    request<WeeklyPlanUpsertResponse>(`/api/weekly-plans/${startDate}`, {
+      method: "PUT",
+      body: JSON.stringify(payload),
       ...init,
     }),
 };

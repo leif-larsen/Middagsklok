@@ -11,6 +11,7 @@ using Middagsklok.Api.Features.Ingredients.Delete;
 using Middagsklok.Api.Features.Ingredients.Metadata;
 using Middagsklok.Api.Features.Ingredients.Overview;
 using Middagsklok.Api.Features.Ingredients.Update;
+using Middagsklok.Api.Features.WeeklyPlans.Upsert;
 using DishesCreateUseCase = Middagsklok.Api.Features.Dishes.Create.UseCase;
 using DishesDeleteUseCase = Middagsklok.Api.Features.Dishes.Delete.UseCase;
 using DishesImportUseCase = Middagsklok.Api.Features.Dishes.Import.UseCase;
@@ -22,6 +23,7 @@ using IngredientsDeleteUseCase = Middagsklok.Api.Features.Ingredients.Delete.Use
 using IngredientsMetadataUseCase = Middagsklok.Api.Features.Ingredients.Metadata.UseCase;
 using IngredientsOverviewUseCase = Middagsklok.Api.Features.Ingredients.Overview.UseCase;
 using IngredientsUpdateUseCase = Middagsklok.Api.Features.Ingredients.Update.UseCase;
+using WeeklyPlansUpsertUseCase = Middagsklok.Api.Features.WeeklyPlans.Upsert.UseCase;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +41,7 @@ builder.Services.AddScoped<IngredientsDeleteUseCase>();
 builder.Services.AddScoped<IngredientsMetadataUseCase>();
 builder.Services.AddScoped<IngredientsOverviewUseCase>();
 builder.Services.AddScoped<IngredientsUpdateUseCase>();
+builder.Services.AddScoped<WeeklyPlansUpsertUseCase>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("DevFrontend", policy =>
@@ -82,6 +85,7 @@ IngredientsDeleteEndpoint.Map(app);
 IngredientsMetadataEndpoint.Map(app);
 IngredientsOverviewEndpoint.Map(app);
 IngredientsUpdateEndpoint.Map(app);
+WeeklyPlansUpsertEndpoint.Map(app);
 
 var summaries = new[]
 {

@@ -3,6 +3,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { ApiError, apiClient } from "../../lib/api/client";
 import type { DishLookup } from "../../lib/api/models/dishes";
+import type {
+  WeeklyPlanUpsertRequest,
+  WeeklyPlanUpsertResponse,
+} from "../../lib/api/models/weekly-plans";
 import Sidebar from "../components/Sidebar";
 
 type WeekDay = {
@@ -71,6 +75,10 @@ export default function WeeklyPlannerPage() {
   const [isLoadingDishes, setIsLoadingDishes] = useState(true);
   const [startDay, setStartDay] = useState(1);
   const [openDayKey, setOpenDayKey] = useState<string | null>(null);
+  const [dishSearchQuery, setDishSearchQuery] = useState("");
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  const [isSavingPlan, setIsSavingPlan] = useState(false);
 
   useEffect(() => {
     let isActive = true;
@@ -142,6 +150,7 @@ export default function WeeklyPlannerPage() {
 
   const handleToggle = (dayKey: string) => {
     setOpenDayKey((current) => (current === dayKey ? null : dayKey));
+    setDishSearchQuery("");
   };
 
   const handleSelect = (dayKey: string, dishId: string | null) => {
@@ -150,10 +159,13 @@ export default function WeeklyPlannerPage() {
       [dayKey]: dishId,
     }));
     setOpenDayKey(null);
+    setDishSearchQuery("");
+    setSaveMessage(null);
   };
 
   const handleCloseMenus = () => {
     setOpenDayKey(null);
+    setDishSearchQuery("");
   };
 
   const planEntries = useMemo(
@@ -165,6 +177,71 @@ export default function WeeklyPlannerPage() {
       })),
     [dishLookup, plan, weekDays],
   );
+
+  const filteredDishOptions = useMemo(() => {
+    const query = dishSearchQuery.trim().toLowerCase();
+    if (!query) {
+      return dishOptions;
+    }
+
+    return dishOptions.filter((dish) => {
+      const nameMatch = dish.name.toLowerCase().includes(query);
+      const cuisineMatch = dish.cuisine.toLowerCase().includes(query);
+
+      return nameMatch || cuisineMatch;
+    });
+  }, [dishOptions, dishSearchQuery]);
+
+  const formatSelectionType = (value: string) => value.trim().toUpperCase();
+
+  const mapResponseToPlan = (response: WeeklyPlanUpsertResponse) => {
+    const nextPlan: Record<string, string | null> = {};
+
+    response.days.forEach((day) => {
+      const selectionType = formatSelectionType(day.selection.type);
+      nextPlan[day.date] = selectionType === "DISH" ? day.selection.dishId ?? null : null;
+    });
+
+    return nextPlan;
+  };
+
+  const buildUpsertRequest = (): WeeklyPlanUpsertRequest => ({
+    days: weekDays.map((day) => {
+      const dishId = plan[day.key] ?? null;
+
+      return {
+        date: day.key,
+        selection: dishId
+          ? { type: "DISH", dishId }
+          : { type: "EMPTY", dishId: null },
+      };
+    }),
+  });
+
+  const handleSavePlan = async () => {
+    setSaveError(null);
+    setSaveMessage(null);
+    setIsSavingPlan(true);
+
+    try {
+      const startDate = weekDays[0]?.key ?? "";
+      const payload = buildUpsertRequest();
+      const response = await apiClient.upsertWeeklyPlan(startDate, payload);
+      setPlan(mapResponseToPlan(response));
+      setSaveMessage("Weekly plan saved.");
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error("Failed to save weekly plan:", error.body ?? error.message);
+      } else if (error instanceof Error) {
+        console.error("Failed to save weekly plan:", error.message);
+      } else {
+        console.error("Failed to save weekly plan.");
+      }
+      setSaveError("Unable to save weekly plan.");
+    } finally {
+      setIsSavingPlan(false);
+    }
+  };
 
   return (
     <div className="min-h-screen w-full p-6 sm:p-8">
@@ -218,11 +295,23 @@ export default function WeeklyPlannerPage() {
               </button>
               <button
                 type="button"
+                onClick={handleSavePlan}
+                disabled={isSavingPlan}
                 className="inline-flex items-center gap-2 rounded-full bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_24px_-18px_rgba(32,78,54,0.9)] transition hover:bg-[#2a5c46]"
               >
                 <SaveIcon className="h-4 w-4" />
-                Save Plan
+                {isSavingPlan ? "Saving..." : "Save Plan"}
               </button>
+              {saveMessage ? (
+                <span className="text-xs font-semibold text-[#2f6b4f]">
+                  {saveMessage}
+                </span>
+              ) : null}
+              {saveError ? (
+                <span className="text-xs font-semibold text-[#a04646]">
+                  {saveError}
+                </span>
+              ) : null}
             </div>
           </header>
 
@@ -295,55 +384,66 @@ export default function WeeklyPlannerPage() {
                             role="listbox"
                             className="absolute left-0 right-0 z-20 mt-2 overflow-hidden rounded-2xl border border-[#dfe7d7] bg-white text-sm shadow-[0_20px_40px_-26px_rgba(32,70,45,0.45)]"
                           >
-                            <button
-                              type="button"
-                              role="option"
-                              aria-selected={!day.dishId}
-                              onClick={() => handleSelect(day.key, null)}
-                              className={`flex w-full items-center justify-between px-4 py-2.5 text-left transition hover:bg-[#f4f7f1] ${
-                                !day.dishId ? "bg-[#e9f3ea] text-[#2f6b4f]" : ""
-                              }`}
-                            >
-                              <span>No dish</span>
-                              {!day.dishId ? <CheckIcon className="h-4 w-4" /> : null}
-                            </button>
-                            {isLoadingDishes ? (
-                              <div className="px-4 py-2.5 text-xs font-semibold text-[#7b8a7f]">
-                                Loading dishes...
-                              </div>
-                            ) : dishLoadError ? (
-                              <div className="px-4 py-2.5 text-xs font-semibold text-[#9f4c4c]">
-                                {dishLoadError}
-                              </div>
-                            ) : dishOptions.length === 0 ? (
-                              <div className="px-4 py-2.5 text-xs font-semibold text-[#7b8a7f]">
-                                No dishes available
-                              </div>
-                            ) : (
-                              dishOptions.map((dish) => {
-                                const isSelected = dish.id === day.dishId;
+                            <div className="border-b border-[#e4ece1] bg-[#f7fbf6] px-3 py-2">
+                              <input
+                                type="text"
+                                value={dishSearchQuery}
+                                onChange={(event) => setDishSearchQuery(event.target.value)}
+                                placeholder="Search dishes..."
+                                className="w-full rounded-xl border border-[#dfe7d7] bg-white px-3 py-2 text-xs font-semibold text-[#2a3a2f] shadow-[0_8px_16px_-14px_rgba(28,60,40,0.4)] focus:outline-none"
+                              />
+                            </div>
+                            <div className="max-h-56 overflow-y-auto">
+                              <button
+                                type="button"
+                                role="option"
+                                aria-selected={!day.dishId}
+                                onClick={() => handleSelect(day.key, null)}
+                                className={`flex w-full items-center justify-between px-4 py-2.5 text-left transition hover:bg-[#f4f7f1] ${
+                                  !day.dishId ? "bg-[#e9f3ea] text-[#2f6b4f]" : ""
+                                }`}
+                              >
+                                <span>No dish</span>
+                                {!day.dishId ? <CheckIcon className="h-4 w-4" /> : null}
+                              </button>
+                              {isLoadingDishes ? (
+                                <div className="px-4 py-2.5 text-xs font-semibold text-[#7b8a7f]">
+                                  Loading dishes...
+                                </div>
+                              ) : dishLoadError ? (
+                                <div className="px-4 py-2.5 text-xs font-semibold text-[#9f4c4c]">
+                                  {dishLoadError}
+                                </div>
+                              ) : filteredDishOptions.length === 0 ? (
+                                <div className="px-4 py-2.5 text-xs font-semibold text-[#7b8a7f]">
+                                  No dishes found
+                                </div>
+                              ) : (
+                                filteredDishOptions.map((dish) => {
+                                  const isSelected = dish.id === day.dishId;
 
-                                return (
-                                  <button
-                                    key={dish.id}
-                                    type="button"
-                                    role="option"
-                                    aria-selected={isSelected}
-                                    onClick={() => handleSelect(day.key, dish.id)}
-                                    className={`flex w-full items-center justify-between px-4 py-2.5 text-left transition hover:bg-[#f4f7f1] ${
-                                      isSelected
-                                        ? "bg-[#e9f3ea] text-[#2f6b4f]"
-                                        : "text-[#2a3a2f]"
-                                    }`}
-                                  >
-                                    <span>{dish.name}</span>
-                                    {isSelected ? (
-                                      <CheckIcon className="h-4 w-4" />
-                                    ) : null}
-                                  </button>
-                                );
-                              })
-                            )}
+                                  return (
+                                    <button
+                                      key={dish.id}
+                                      type="button"
+                                      role="option"
+                                      aria-selected={isSelected}
+                                      onClick={() => handleSelect(day.key, dish.id)}
+                                      className={`flex w-full items-center justify-between px-4 py-2.5 text-left transition hover:bg-[#f4f7f1] ${
+                                        isSelected
+                                          ? "bg-[#e9f3ea] text-[#2f6b4f]"
+                                          : "text-[#2a3a2f]"
+                                      }`}
+                                    >
+                                      <span>{dish.name}</span>
+                                      {isSelected ? (
+                                        <CheckIcon className="h-4 w-4" />
+                                      ) : null}
+                                    </button>
+                                  );
+                                })
+                              )}
+                            </div>
                           </div>
                         ) : null}
                       </div>
