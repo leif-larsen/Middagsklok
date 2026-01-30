@@ -4,10 +4,15 @@ import Sidebar from "../components/Sidebar";
 import Modal from "../components/Modal";
 import { apiClient, ApiError } from "../../lib/api/client";
 import { useEffect, useMemo, useState } from "react";
+import { useIngredientsCatalog } from "../components/IngredientsProvider";
 
 type Ingredient = {
   id: string;
   label: string;
+};
+
+type DraftIngredient = Ingredient & {
+  amount?: string | null;
 };
 
 type Dish = {
@@ -50,6 +55,14 @@ export default function DishesPage() {
     failed: number;
     failures: { dishName?: string | null; reason: string; ingredientName?: string | null }[];
   } | null>(null);
+  const [draftIngredients, setDraftIngredients] = useState<DraftIngredient[]>([]);
+  const [selectedIngredientId, setSelectedIngredientId] = useState("");
+  const [ingredientAmount, setIngredientAmount] = useState("");
+  const {
+    ingredients: availableIngredients,
+    isLoading: ingredientsLoading,
+    error: ingredientsError,
+  } = useIngredientsCatalog();
 
   useEffect(() => {
     let isActive = true;
@@ -83,6 +96,25 @@ export default function DishesPage() {
     [isCreateOpen, selectedDish],
   );
 
+  const ingredientOptions = useMemo(
+    () =>
+      [...availableIngredients].sort((left, right) =>
+        left.name.localeCompare(right.name)),
+    [availableIngredients],
+  );
+
+  const ingredientSelectMessage = ingredientsLoading
+    ? "Loading ingredients..."
+    : ingredientsError
+      ? "Unable to load ingredients"
+      : ingredientOptions.length === 0
+        ? "No ingredients available"
+        : "Select an ingredient";
+
+  const isIngredientSelectDisabled = ingredientsLoading
+    || !!ingredientsError
+    || ingredientOptions.length === 0;
+
   const visibleDishes = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
     if (!query) {
@@ -94,6 +126,21 @@ export default function DishesPage() {
 
   const isModalOpen = isCreateOpen || selectedDish !== null;
   const isEditMode = selectedDish !== null;
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      return;
+    }
+
+    setDraftIngredients(
+      activeDish.ingredients.map((ingredient) => ({
+        ...ingredient,
+        amount: "",
+      })),
+    );
+    setSelectedIngredientId("");
+    setIngredientAmount("");
+  }, [activeDish, isModalOpen]);
 
   const closeModal = () => {
     setIsCreateOpen(false);
@@ -164,6 +211,44 @@ export default function DishesPage() {
     } finally {
       setIsImporting(false);
     }
+  };
+
+  const handleAddIngredient = () => {
+    if (!selectedIngredientId) {
+      return;
+    }
+
+    const selected = ingredientOptions.find(
+      (ingredient) => ingredient.id === selectedIngredientId,
+    );
+
+    if (!selected) {
+      return;
+    }
+
+    const normalizedAmount = ingredientAmount.trim();
+
+    setDraftIngredients((current) => {
+      if (current.some((ingredient) => ingredient.id === selected.id)) {
+        return current;
+      }
+
+      return [
+        ...current,
+        {
+          id: selected.id,
+          label: selected.name,
+          amount: normalizedAmount ? normalizedAmount : null,
+        },
+      ];
+    });
+    setSelectedIngredientId("");
+    setIngredientAmount("");
+  };
+
+  const handleRemoveIngredient = (ingredientId: string) => {
+    setDraftIngredients((current) =>
+      current.filter((ingredient) => ingredient.id !== ingredientId));
   };
 
   return (
@@ -402,26 +487,51 @@ export default function DishesPage() {
               Ingredients
             </div>
             <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_140px_auto]">
-              <div className="flex items-center gap-3 rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#6f7c73]">
-                <span>Select an ingredient</span>
-                <ChevronDownIcon className="ml-auto h-4 w-4" />
+              <div className="relative">
+                <select
+                  aria-label="Select ingredient"
+                  value={selectedIngredientId}
+                  onChange={(event) =>
+                    setSelectedIngredientId(event.target.value)}
+                  disabled={isIngredientSelectDisabled}
+                  className="w-full appearance-none rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30 disabled:cursor-not-allowed disabled:bg-[#f6f8f4] disabled:text-[#9aa69f]"
+                >
+                  <option value="" disabled>
+                    {ingredientSelectMessage}
+                  </option>
+                  {ingredientOptions.map((ingredient) => (
+                    <option key={ingredient.id} value={ingredient.id}>
+                      {ingredient.name}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7a887f]" />
               </div>
               <input
                 type="text"
                 placeholder="Amount"
+                value={ingredientAmount}
+                onChange={(event) => setIngredientAmount(event.target.value)}
                 className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
               />
               <button
                 type="button"
-                className="inline-flex items-center justify-center rounded-xl border border-[#dfe6da] bg-white px-4 py-2 text-sm font-semibold text-[#3f4b43] transition hover:bg-[#f3f6ef]"
+                onClick={handleAddIngredient}
+                disabled={isIngredientSelectDisabled || !selectedIngredientId}
+                className="inline-flex items-center justify-center rounded-xl border border-[#dfe6da] bg-white px-4 py-2 text-sm font-semibold text-[#3f4b43] transition hover:bg-[#f3f6ef] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 Add
               </button>
             </div>
+            {ingredientsError ? (
+              <p className="mt-2 text-xs text-[#b14a4a]">
+                {ingredientsError}
+              </p>
+            ) : null}
 
             <ul className="mt-4 space-y-3 text-sm text-[#3d4c43]">
-              {activeDish.ingredients.length > 0 ? (
-                activeDish.ingredients.map((ingredient) => (
+              {draftIngredients.length > 0 ? (
+                draftIngredients.map((ingredient) => (
                   <li
                     key={ingredient.id}
                     className="flex items-center justify-between gap-3"
@@ -429,10 +539,16 @@ export default function DishesPage() {
                     <span className="flex items-center gap-2">
                       <span className="h-2 w-2 rounded-full bg-[#9bb09f]" />
                       {ingredient.label}
+                      {ingredient.amount ? (
+                        <span className="text-xs text-[#7a887f]">
+                          ({ingredient.amount})
+                        </span>
+                      ) : null}
                     </span>
                     <button
                       type="button"
                       aria-label={`Remove ${ingredient.label}`}
+                      onClick={() => handleRemoveIngredient(ingredient.id)}
                       className="grid h-8 w-8 place-items-center rounded-full border border-[#f0dada] text-[#d76b6b] transition hover:bg-[#fbeeee]"
                     >
                       <TrashIcon className="h-4 w-4" />
