@@ -25,15 +25,45 @@ public class Dish(
     {
     }
 
-    public string Name { get; } = name.Trim();
-    public CuisineType Cuisine { get; } = cuisine;
-    public int PrepTimeMinutes { get; } = prepTimeMinutes;
-    public int CookTimeMinutes { get; } = cookTimeMinutes;
-    public int Servings { get; } = servings;
-    public string? Instructions { get; } = string.IsNullOrWhiteSpace(instructions) ? null : instructions.Trim();
+    public string Name { get; private set; } = name.Trim();
+    public CuisineType Cuisine { get; private set; } = cuisine;
+    public int PrepTimeMinutes { get; private set; } = prepTimeMinutes;
+    public int CookTimeMinutes { get; private set; } = cookTimeMinutes;
+    public int Servings { get; private set; } = servings;
+    public string? Instructions { get; private set; } = NormalizeInstructions(instructions);
     public IReadOnlyList<DishIngredient> Ingredients => _ingredients;
 
     public int TotalTimeMinutes => PrepTimeMinutes + CookTimeMinutes;
+
+    // Updates dish details and ingredients.
+    public void Update(
+        string name,
+        CuisineType cuisine,
+        int prepTimeMinutes,
+        int cookTimeMinutes,
+        int servings,
+        string? instructions,
+        IEnumerable<DishIngredient> ingredients)
+    {
+        Name = name.Trim();
+        Cuisine = cuisine;
+        PrepTimeMinutes = prepTimeMinutes;
+        CookTimeMinutes = cookTimeMinutes;
+        Servings = servings;
+        Instructions = NormalizeInstructions(instructions);
+
+        _ingredients.Clear();
+        _ingredients.AddRange(ingredients);
+
+        Touch();
+    }
+
+    // Normalizes instructions for persistence.
+    private static string? NormalizeInstructions(string? value)
+    {
+        var trimmed = value?.Trim();
+        return string.IsNullOrWhiteSpace(trimmed) ? null : trimmed;
+    }
 }
 
 public record DishIngredient(

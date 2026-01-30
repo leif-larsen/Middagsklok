@@ -67,3 +67,11 @@ export type DishCreateErrorResponse = {
 };
 
 export type DishCreateResponse = DishOverview;
+
+export type DishUpdateRequest = DishCreateRequest;
+
+export type DishUpdateResponse = DishOverview;
+
+export type DishUpdateValidationError = DishCreateValidationError;
+
+export type DishUpdateErrorResponse = DishCreateErrorResponse;

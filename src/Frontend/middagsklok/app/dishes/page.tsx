@@ -8,6 +8,8 @@ import { useIngredientsCatalog } from "../components/IngredientsProvider";
 import type {
   DishCreateErrorResponse,
   DishCreateValidationError,
+  DishUpdateErrorResponse,
+  DishUpdateValidationError,
 } from "../../lib/api/models/dishes";
 
 type Ingredient = {
@@ -66,7 +68,7 @@ export default function DishesPage() {
   const [formServes, setFormServes] = useState("");
   const [formInstructions, setFormInstructions] = useState("");
   const [validationErrors, setValidationErrors] = useState<
-    DishCreateValidationError[]
+    DishCreateValidationError[] | DishUpdateValidationError[]
   >([]);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -200,7 +202,7 @@ export default function DishesPage() {
       return null;
     }
 
-    const payload = body as DishCreateErrorResponse;
+    const payload = body as DishCreateErrorResponse | DishUpdateErrorResponse;
     if (!Array.isArray(payload.errors)) {
       return null;
     }
@@ -233,11 +235,6 @@ export default function DishesPage() {
       return;
     }
 
-    if (isEditMode) {
-      setSubmitError("Updating dishes is not available yet.");
-      return;
-    }
-
     setIsSaving(true);
     setValidationErrors([]);
     setSubmitError(null);
@@ -259,6 +256,21 @@ export default function DishesPage() {
           amount: parseNumber(ingredient.amount ?? ""),
         })),
       };
+
+      if (isEditMode) {
+        if (!selectedDish) {
+          setSubmitError("Dish is required for updates.");
+          return;
+        }
+
+        const updated = await apiClient.updateDish(selectedDish.id, payload);
+        setDishes((current) =>
+          current
+            .map((dish) => (dish.id === updated.id ? updated : dish))
+            .sort((left, right) => left.name.localeCompare(right.name)));
+        closeModal();
+        return;
+      }
 
       const created = await apiClient.createDish(payload);
       appendDish(created);
