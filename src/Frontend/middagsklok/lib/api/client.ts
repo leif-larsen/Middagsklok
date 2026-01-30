@@ -83,6 +83,7 @@ export type ApiClient = {
     payload: IngredientUpdateRequest,
     init?: RequestInit,
   ) => Promise<IngredientUpdateResponse>;
+  deleteIngredient: (id: string, init?: RequestInit) => Promise<void>;
   getIngredientsMetadata: (
     init?: RequestInit,
   ) => Promise<IngredientsMetadataResponse>;
@@ -115,6 +116,11 @@ export const apiClient: ApiClient = {
     request<IngredientUpdateResponse>(`/api/ingredients/${id}`, {
       method: "PUT",
       body: JSON.stringify(payload),
+      ...init,
+    }),
+  deleteIngredient: (id, init) =>
+    request<void>(`/api/ingredients/${id}`, {
+      method: "DELETE",
       ...init,
     }),
   getIngredientsMetadata: (init) =>

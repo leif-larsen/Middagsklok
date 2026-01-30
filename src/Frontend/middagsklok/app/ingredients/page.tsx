@@ -42,6 +42,12 @@ export default function IngredientsPage() {
   >([]);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<Ingredient | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [deleteErrors, setDeleteErrors] = useState<IngredientValidationError[]>(
+    [],
+  );
+  const [isDeleting, setIsDeleting] = useState(false);
   const { categories, units } = useIngredientsMetadata();
 
   useEffect(() => {
@@ -152,9 +158,26 @@ export default function IngredientsPage() {
     setSubmitError(null);
   }, [activeIngredient, isModalOpen]);
 
+  useEffect(() => {
+    if (!deleteTarget) {
+      return;
+    }
+
+    setDeleteError(null);
+    setDeleteErrors([]);
+  }, [deleteTarget]);
+
   const closeModal = () => {
     setIsCreateOpen(false);
     setSelectedIngredient(null);
+  };
+
+  const closeDeleteModal = () => {
+    if (isDeleting) {
+      return;
+    }
+
+    setDeleteTarget(null);
   };
 
   const appendIngredient = (ingredient: Ingredient) => {
@@ -179,6 +202,40 @@ export default function IngredientsPage() {
     }
 
     return payload;
+  };
+
+  const handleDelete = async () => {
+    if (!deleteTarget || isDeleting) {
+      return;
+    }
+
+    setIsDeleting(true);
+    setDeleteError(null);
+    setDeleteErrors([]);
+
+    try {
+      await apiClient.deleteIngredient(deleteTarget.id);
+      setIngredients((current) =>
+        current.filter((item) => item.id !== deleteTarget.id));
+      setDeleteTarget(null);
+    } catch (error) {
+      if (error instanceof ApiError && [400, 404].includes(error.status)) {
+        const payload = parseValidationErrors(error.body);
+        if (payload) {
+          setDeleteErrors(payload.errors);
+          setDeleteError(payload.message ?? null);
+          return;
+        }
+      }
+
+      if (error instanceof Error) {
+        setDeleteError(error.message);
+      } else {
+        setDeleteError("Failed to delete ingredient.");
+      }
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const handleSave = async () => {
@@ -349,7 +406,9 @@ export default function IngredientsPage() {
                           <button
                             type="button"
                             aria-label={`Delete ${ingredient.name}`}
-                            className="grid h-9 w-9 place-items-center rounded-full border border-[#f0dada] text-[#d76b6b] transition hover:bg-[#fbeeee]"
+                            disabled={ingredient.usedIn > 0}
+                            onClick={() => setDeleteTarget(ingredient)}
+                            className="grid h-9 w-9 place-items-center rounded-full border border-[#f0dada] text-[#d76b6b] transition hover:bg-[#fbeeee] disabled:cursor-not-allowed disabled:border-[#f1e6e6] disabled:text-[#d6bcbc] disabled:hover:bg-transparent"
                           >
                             <TrashIcon className="h-4 w-4" />
                           </button>
@@ -368,6 +427,12 @@ export default function IngredientsPage() {
           </section>
         </main>
       </div>
+
+      {deleteError && !deleteTarget ? (
+        <div className="mt-6 rounded-2xl border border-[#f0dada] bg-[#fff6f6] px-4 py-3 text-sm text-[#b45151]">
+          {deleteError}
+        </div>
+      ) : null}
 
       <Modal
         isOpen={isModalOpen}
@@ -483,6 +548,55 @@ export default function IngredientsPage() {
             </label>
           </div>
         </div>
+      </Modal>
+
+      <Modal
+        isOpen={deleteTarget !== null}
+        onClose={closeDeleteModal}
+        title="Delete Ingredient"
+        description={
+          deleteTarget
+            ? `Are you sure you want to delete ${deleteTarget.name}?`
+            : ""
+        }
+        maxWidthClassName="max-w-lg"
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={closeDeleteModal}
+              disabled={isDeleting}
+              className="inline-flex items-center justify-center rounded-xl border border-[#dfe6da] bg-white px-4 py-2 text-sm font-semibold text-[#3f4b43] transition hover:bg-[#f3f6ef]"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                void handleDelete();
+              }}
+              disabled={isDeleting}
+              className="inline-flex items-center justify-center rounded-xl bg-[#d76b6b] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_22px_-18px_rgba(180,80,80,0.8)] transition hover:bg-[#c85f5f] disabled:cursor-not-allowed disabled:opacity-70"
+            >
+              {isDeleting ? "Deleting..." : "Yes"}
+            </button>
+          </>
+        }
+      >
+        {deleteError ? (
+          <div className="mt-4 rounded-2xl border border-[#f0dada] bg-[#fff6f6] px-4 py-3 text-sm text-[#b45151]">
+            {deleteError}
+          </div>
+        ) : null}
+        {deleteErrors.length > 0 ? (
+          <ul className="mt-4 grid gap-2 rounded-2xl border border-[#f0dada] bg-[#fff6f6] px-4 py-3 text-sm text-[#b45151]">
+            {deleteErrors.map((error, index) => (
+              <li key={`${error.field}-${index}`}>
+                {error.field ? `${error.field}: ` : ""}{error.message}
+              </li>
+            ))}
+          </ul>
+        ) : null}
       </Modal>
     </div>
   );
