@@ -1,0 +1,465 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import Sidebar from "../components/Sidebar";
+
+type DishOption = {
+  id: string;
+  name: string;
+  cuisine: string;
+};
+
+type WeekDay = {
+  key: string;
+  date: Date;
+};
+
+const dishOptions: DishOption[] = [
+  { id: "spaghetti-carbonara", name: "Spaghetti Carbonara", cuisine: "Italian" },
+  { id: "thai-green-curry", name: "Thai Green Curry", cuisine: "Thai" },
+  { id: "greek-salad", name: "Greek Salad", cuisine: "Mediterranean" },
+  { id: "beef-tacos", name: "Beef Tacos", cuisine: "Mexican" },
+  { id: "chicken-tikka-masala", name: "Chicken Tikka Masala", cuisine: "Indian" },
+  { id: "caesar-salad", name: "Caesar Salad", cuisine: "Classic" },
+  { id: "pad-thai", name: "Pad Thai", cuisine: "Thai" },
+];
+
+const startDayOptions = [
+  { value: 1, label: "Monday" },
+  { value: 2, label: "Tuesday" },
+  { value: 3, label: "Wednesday" },
+  { value: 4, label: "Thursday" },
+  { value: 5, label: "Friday" },
+  { value: 6, label: "Saturday" },
+  { value: 0, label: "Sunday" },
+];
+
+const planTemplate: Array<string | null> = [
+  "spaghetti-carbonara",
+  "thai-green-curry",
+  "greek-salad",
+  "beef-tacos",
+  "chicken-tikka-masala",
+  null,
+  null,
+];
+
+const formatDayKey = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
+
+const addDays = (date: Date, amount: number) => {
+  const next = new Date(date);
+  next.setDate(date.getDate() + amount);
+
+  return next;
+};
+
+const startOfWeek = (date: Date, weekStartsOn: number) => {
+  const dayIndex = date.getDay();
+  const diff = (dayIndex - weekStartsOn + 7) % 7;
+
+  return addDays(date, -diff);
+};
+
+const offsetFromMonday = (dayIndex: number) => (dayIndex + 6) % 7;
+
+const anchorDate = new Date(2026, 0, 30);
+const baseWeekStart = startOfWeek(anchorDate, 1);
+
+const buildPlan = (days: WeekDay[]) =>
+  days.reduce<Record<string, string | null>>((accumulator, day, index) => {
+    accumulator[day.key] = planTemplate[index] ?? null;
+    return accumulator;
+  }, {});
+
+const dishLookup = new Map(dishOptions.map((dish) => [dish.id, dish]));
+const monthFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "long",
+  year: "numeric",
+});
+const weekdayFormatter = new Intl.DateTimeFormat("en-US", {
+  weekday: "long",
+});
+const dayFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+});
+
+export default function WeeklyPlannerPage() {
+  const [startDay, setStartDay] = useState(1);
+  const [openDayKey, setOpenDayKey] = useState<string | null>(null);
+
+  const weekDays = useMemo(() => {
+    const startDate = addDays(baseWeekStart, offsetFromMonday(startDay));
+
+    return Array.from({ length: 7 }, (_, index) => {
+      const date = addDays(startDate, index);
+
+      return {
+        key: formatDayKey(date),
+        date,
+      };
+    });
+  }, [startDay]);
+
+  const defaultPlan = useMemo(() => buildPlan(weekDays), [weekDays]);
+  const [plan, setPlan] = useState<Record<string, string | null>>(
+    () => defaultPlan,
+  );
+
+  useEffect(() => {
+    setPlan(defaultPlan);
+    setOpenDayKey(null);
+  }, [defaultPlan]);
+
+  const monthLabel = monthFormatter.format(weekDays[0].date);
+
+  const handleToggle = (dayKey: string) => {
+    setOpenDayKey((current) => (current === dayKey ? null : dayKey));
+  };
+
+  const handleSelect = (dayKey: string, dishId: string | null) => {
+    setPlan((current) => ({
+      ...current,
+      [dayKey]: dishId,
+    }));
+    setOpenDayKey(null);
+  };
+
+  const handleCloseMenus = () => {
+    setOpenDayKey(null);
+  };
+
+  const planEntries = useMemo(
+    () =>
+      weekDays.map((day) => ({
+        ...day,
+        dishId: plan[day.key] ?? null,
+        dish: plan[day.key] ? dishLookup.get(plan[day.key] ?? "") : null,
+      })),
+    [plan, weekDays],
+  );
+
+  return (
+    <div className="min-h-screen w-full p-6 sm:p-8">
+      <div className="flex flex-wrap items-start gap-6">
+        <Sidebar />
+        <main className="min-w-[280px] flex-1 space-y-6">
+          <header className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#eef4ee] text-[#2f6b4f]">
+                <CalendarIcon className="h-5 w-5" />
+              </span>
+              <div>
+                <h1 className="text-2xl font-semibold text-[#1f2a22]">
+                  Weekly Meal Planner
+                </h1>
+                <p className="text-sm text-[#6c7a70]">
+                  Plan your meals for the week ahead
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <label className="inline-flex items-center gap-3 rounded-full border border-[#d6e0d2] bg-white px-4 py-2 text-sm font-semibold text-[#3b4c42] shadow-[0_12px_24px_-20px_rgba(40,70,50,0.35)]">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#7b8a7f]">
+                  Start
+                </span>
+                <span className="relative">
+                  <select
+                    aria-label="Select start day"
+                    value={startDay}
+                    onChange={(event) => {
+                      setStartDay(Number(event.target.value));
+                      setOpenDayKey(null);
+                    }}
+                    className="appearance-none bg-transparent pr-6 text-sm font-semibold text-[#2f3f35] focus:outline-none"
+                  >
+                    {startDayOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDownIcon className="pointer-events-none absolute right-0 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7b8a7f]" />
+                </span>
+              </label>
+              <button
+                type="button"
+                className="inline-flex items-center gap-2 rounded-full border border-[#d6e0d2] bg-white px-4 py-2 text-sm font-semibold text-[#3b4c42] transition hover:bg-[#f3f6ef]"
+              >
+                <RefreshIcon className="h-4 w-4" />
+                Generate Plan
+              </button>
+              <button
+                type="button"
+                className="inline-flex items-center gap-2 rounded-full bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_24px_-18px_rgba(32,78,54,0.9)] transition hover:bg-[#2a5c46]"
+              >
+                <SaveIcon className="h-4 w-4" />
+                Save Plan
+              </button>
+            </div>
+          </header>
+
+          <section className="rounded-[28px] border border-[#e1e8dc] bg-white/80 p-6 shadow-[0_20px_48px_-36px_rgba(30,60,40,0.4)]">
+            <div className="flex flex-col gap-6">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <button
+                  type="button"
+                  aria-label="Previous week"
+                  onClick={handleCloseMenus}
+                  className="grid h-10 w-10 place-items-center rounded-full border border-[#dfe7d7] bg-white text-[#5c6b60] transition hover:bg-[#f5f7f3]"
+                >
+                  <ChevronLeftIcon className="h-4 w-4" />
+                </button>
+                <div className="text-lg font-semibold text-[#1f2a22]">
+                  {monthLabel}
+                </div>
+                <button
+                  type="button"
+                  aria-label="Next week"
+                  onClick={handleCloseMenus}
+                  className="grid h-10 w-10 place-items-center rounded-full border border-[#dfe7d7] bg-white text-[#5c6b60] transition hover:bg-[#f5f7f3]"
+                >
+                  <ChevronRightIcon className="h-4 w-4" />
+                </button>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7">
+                {planEntries.map((day) => {
+                  const isOpen = openDayKey === day.key;
+                  const dishName = day.dish?.name ?? "Select dish";
+                  const cuisine = day.dish?.cuisine ?? "";
+
+                  return (
+                    <article
+                      key={day.key}
+                      className="relative flex min-h-[220px] flex-col gap-4 rounded-3xl border border-[#e1efe4] bg-[#f1faf2] p-4 shadow-[0_18px_36px_-28px_rgba(30,70,45,0.35)]"
+                    >
+                      <div>
+                        <div className="text-sm font-semibold text-[#1f2a22]">
+                          {weekdayFormatter.format(day.date)}
+                        </div>
+                        <div className="text-xs font-semibold text-[#7b8a7f]">
+                          {dayFormatter.format(day.date)}
+                        </div>
+                      </div>
+
+                      <div className="relative">
+                        <button
+                          type="button"
+                          aria-haspopup="listbox"
+                          aria-expanded={isOpen}
+                          onClick={() => handleToggle(day.key)}
+                          className="flex w-full items-center justify-between gap-3 rounded-2xl border border-[#dfe7d7] bg-white/90 px-4 py-2.5 text-left text-sm font-semibold text-[#2a3a2f] shadow-[0_12px_22px_-18px_rgba(28,60,40,0.4)] transition hover:bg-white"
+                        >
+                          <span
+                            className={`truncate ${day.dish ? "" : "text-[#92a097]"}`}
+                          >
+                            {dishName}
+                          </span>
+                          <ChevronDownIcon
+                            className={`h-4 w-4 text-[#7b8a7f] transition ${
+                              isOpen ? "rotate-180" : ""
+                            }`}
+                          />
+                        </button>
+
+                        {isOpen ? (
+                          <div
+                            role="listbox"
+                            className="absolute left-0 right-0 z-20 mt-2 overflow-hidden rounded-2xl border border-[#dfe7d7] bg-white text-sm shadow-[0_20px_40px_-26px_rgba(32,70,45,0.45)]"
+                          >
+                            <button
+                              type="button"
+                              role="option"
+                              aria-selected={!day.dishId}
+                              onClick={() => handleSelect(day.key, null)}
+                              className={`flex w-full items-center justify-between px-4 py-2.5 text-left transition hover:bg-[#f4f7f1] ${
+                                !day.dishId ? "bg-[#e9f3ea] text-[#2f6b4f]" : ""
+                              }`}
+                            >
+                              <span>No dish</span>
+                              {!day.dishId ? <CheckIcon className="h-4 w-4" /> : null}
+                            </button>
+                            {dishOptions.map((dish) => {
+                              const isSelected = dish.id === day.dishId;
+
+                              return (
+                                <button
+                                  key={dish.id}
+                                  type="button"
+                                  role="option"
+                                  aria-selected={isSelected}
+                                  onClick={() => handleSelect(day.key, dish.id)}
+                                  className={`flex w-full items-center justify-between px-4 py-2.5 text-left transition hover:bg-[#f4f7f1] ${
+                                    isSelected
+                                      ? "bg-[#e9f3ea] text-[#2f6b4f]"
+                                      : "text-[#2a3a2f]"
+                                  }`}
+                                >
+                                  <span>{dish.name}</span>
+                                  {isSelected ? (
+                                    <CheckIcon className="h-4 w-4" />
+                                  ) : null}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        ) : null}
+                      </div>
+
+                      <div className="mt-auto">
+                        {cuisine ? (
+                          <span className="inline-flex rounded-full bg-[#e7f0e8] px-3 py-1 text-xs font-semibold text-[#3a5a44]">
+                            {cuisine}
+                          </span>
+                        ) : (
+                          <span className="text-xs font-semibold text-[#a0ada5]">
+                            No cuisine selected
+                          </span>
+                        )}
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  );
+}
+
+type IconProps = {
+  className?: string;
+};
+
+function CalendarIcon({ className }: IconProps) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M7 3v3M17 3v3" />
+      <rect x="4" y="6" width="16" height="15" rx="2" />
+      <path d="M4 10h16" />
+    </svg>
+  );
+}
+
+function RefreshIcon({ className }: IconProps) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M20 12a8 8 0 1 1-2.3-5.7" />
+      <path d="M20 4v6h-6" />
+    </svg>
+  );
+}
+
+function SaveIcon({ className }: IconProps) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M5 4h11l3 3v13H5z" />
+      <path d="M8 4v6h8" />
+      <path d="M8 18h8" />
+    </svg>
+  );
+}
+
+function ChevronDownIcon({ className }: IconProps) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
+function ChevronLeftIcon({ className }: IconProps) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="m15 18-6-6 6-6" />
+    </svg>
+  );
+}
+
+function ChevronRightIcon({ className }: IconProps) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="m9 6 6 6-6 6" />
+    </svg>
+  );
+}
+
+function CheckIcon({ className }: IconProps) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M6 12l4 4 8-8" />
+    </svg>
+  );
+}

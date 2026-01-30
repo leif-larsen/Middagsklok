@@ -17,7 +17,7 @@ type MenuItem = {
 const menuItems: MenuItem[] = [
   { label: "Dashboard", href: "/", icon: HomeIcon },
   { label: "Dishes", href: "/dishes", icon: DishIcon },
-  { label: "Weekly Planner", icon: CalendarIcon },
+  { label: "Weekly Planner", href: "/weekly-planner", icon: CalendarIcon },
   { label: "Shopping List", icon: CartIcon },
   { label: "Recipes", icon: BookIcon },
   { label: "Settings", icon: SettingsIcon },
