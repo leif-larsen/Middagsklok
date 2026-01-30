@@ -25,6 +25,7 @@ import type {
   PlanningSettingsRequest,
   PlanningSettingsResponse,
 } from "./models/settings";
+import type { ShoppingListResponse } from "./models/shopping-list";
 
 export class ApiError extends Error {
   readonly status: number;
@@ -126,6 +127,10 @@ export type ApiClient = {
     payload: PlanningSettingsRequest,
     init?: RequestInit,
   ) => Promise<PlanningSettingsResponse>;
+  getShoppingList: (
+    startDate: string,
+    init?: RequestInit,
+  ) => Promise<ShoppingListResponse>;
 };
 
 export const apiClient: ApiClient = {
@@ -209,6 +214,11 @@ export const apiClient: ApiClient = {
     request<PlanningSettingsResponse>("/api/planning-settings", {
       method: "PUT",
       body: JSON.stringify(payload),
+      ...init,
+    }),
+  getShoppingList: (startDate, init) =>
+    request<ShoppingListResponse>(`/api/shopping-list/${startDate}`, {
+      method: "GET",
       ...init,
     }),
 };

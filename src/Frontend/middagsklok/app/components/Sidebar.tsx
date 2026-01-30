@@ -18,7 +18,7 @@ const menuItems: MenuItem[] = [
   { label: "Dashboard", href: "/", icon: HomeIcon },
   { label: "Dishes", href: "/dishes", icon: DishIcon },
   { label: "Weekly Planner", href: "/weekly-planner", icon: CalendarIcon },
-  { label: "Shopping List", icon: CartIcon },
+  { label: "Shopping List", href: "/shopping-list", icon: CartIcon },
   { label: "Recipes", icon: BookIcon },
   { label: "Settings", href: "/settings", icon: SettingsIcon },
   { label: "Ingredients", href: "/ingredients", icon: LeafIcon },
