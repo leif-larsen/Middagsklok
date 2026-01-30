@@ -17,6 +17,7 @@ import type {
   IngredientsOverviewResponse,
 } from "./models/ingredients";
 import type {
+  WeeklyPlanGenerateResponse,
   WeeklyPlanUpsertRequest,
   WeeklyPlanUpsertResponse,
   WeeklyPlansResponse,
@@ -119,6 +120,10 @@ export type ApiClient = {
     payload: WeeklyPlanUpsertRequest,
     init?: RequestInit,
   ) => Promise<WeeklyPlanUpsertResponse>;
+  generateWeeklyPlan: (
+    startDate: string,
+    init?: RequestInit,
+  ) => Promise<WeeklyPlanGenerateResponse>;
   getWeeklyPlan: (
     startDate: string,
     init?: RequestInit,
@@ -200,6 +205,11 @@ export const apiClient: ApiClient = {
     request<WeeklyPlanUpsertResponse>(`/api/weekly-plans/${startDate}`, {
       method: "PUT",
       body: JSON.stringify(payload),
+      ...init,
+    }),
+  generateWeeklyPlan: (startDate, init) =>
+    request<WeeklyPlanGenerateResponse>(`/api/weekly-plans/generate/${startDate}`, {
+      method: "POST",
       ...init,
     }),
   getWeeklyPlan: (startDate, init) =>

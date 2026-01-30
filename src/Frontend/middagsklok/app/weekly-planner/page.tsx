@@ -92,6 +92,7 @@ export default function WeeklyPlannerPage() {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const [isSavingPlan, setIsSavingPlan] = useState(false);
+  const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
   const [isLoadingPlan, setIsLoadingPlan] = useState(false);
 
   useEffect(() => {
@@ -315,6 +316,37 @@ export default function WeeklyPlannerPage() {
     }
   };
 
+  const handleGeneratePlan = async () => {
+    handleCloseMenus();
+    setSaveError(null);
+    setSaveMessage(null);
+    setIsGeneratingPlan(true);
+
+    const startDate = weekDays[0]?.key ?? "";
+    if (!startDate) {
+      setSaveError("Start date is missing.");
+      setIsGeneratingPlan(false);
+      return;
+    }
+
+    try {
+      const response = await apiClient.generateWeeklyPlan(startDate);
+      setPlan(mapResponseToPlan(response));
+      setSaveMessage("Weekly plan generated.");
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error("Failed to generate weekly plan:", error.body ?? error.message);
+      } else if (error instanceof Error) {
+        console.error("Failed to generate weekly plan:", error.message);
+      } else {
+        console.error("Failed to generate weekly plan.");
+      }
+      setSaveError("Unable to generate weekly plan.");
+    } finally {
+      setIsGeneratingPlan(false);
+    }
+  };
+
   useEffect(() => {
     let isActive = true;
 
@@ -383,10 +415,12 @@ export default function WeeklyPlannerPage() {
             <div className="flex flex-wrap items-center gap-3">
               <button
                 type="button"
+                onClick={handleGeneratePlan}
+                disabled={isGeneratingPlan || isLoadingPlan || isSavingPlan}
                 className="inline-flex items-center gap-2 rounded-full border border-[#d6e0d2] bg-white px-4 py-2 text-sm font-semibold text-[#3b4c42] transition hover:bg-[#f3f6ef]"
               >
                 <RefreshIcon className="h-4 w-4" />
-                Generate Plan
+                {isGeneratingPlan ? "Generating..." : "Generate Plan"}
               </button>
               <button
                 type="button"
