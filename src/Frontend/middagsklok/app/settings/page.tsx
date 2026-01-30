@@ -1,0 +1,430 @@
+"use client";
+
+import { useState } from "react";
+import Sidebar from "../components/Sidebar";
+
+const cuisineOptions = [
+  "Italian",
+  "Asian",
+  "Mexican",
+  "Mediterranean",
+  "Indian",
+  "American",
+  "French",
+];
+
+const restrictionOptions = [
+  "Shellfish",
+  "Peanuts",
+  "Tree Nuts",
+  "Dairy",
+  "Eggs",
+  "Soy",
+  "Wheat",
+  "Fish",
+];
+
+type ToggleRowProps = {
+  label: string;
+  description: string;
+  checked: boolean;
+  onToggle: () => void;
+};
+
+function ToggleRow({
+  label,
+  description,
+  checked,
+  onToggle,
+}: ToggleRowProps) {
+  return (
+    <div className="flex items-center justify-between gap-4">
+      <div>
+        <div className="text-sm font-semibold text-[#1f2a22]">{label}</div>
+        <p className="text-xs text-[#7b8a7f]">{description}</p>
+      </div>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={checked}
+        onClick={onToggle}
+        className={`relative inline-flex h-6 w-11 items-center rounded-full border border-[#d8e4d7] transition ${
+          checked ? "bg-[#2f6b4f]" : "bg-[#e4ebe2]"
+        }`}
+      >
+        <span
+          className={`inline-block h-5 w-5 rounded-full bg-white shadow-[0_6px_12px_-8px_rgba(18,40,26,0.45)] transition ${
+            checked ? "translate-x-5" : "translate-x-1"
+          }`}
+        />
+      </button>
+    </div>
+  );
+}
+
+export default function SettingsPage() {
+  const [maxDishes, setMaxDishes] = useState(7);
+  const [minDishes, setMinDishes] = useState(5);
+  const [allowRepeats, setAllowRepeats] = useState(false);
+  const [includeWeekends, setIncludeWeekends] = useState(true);
+  const [autoGeneratePlans, setAutoGeneratePlans] = useState(true);
+  const [diversityScore, setDiversityScore] = useState(70);
+  const [maxPrepMinutes, setMaxPrepMinutes] = useState(60);
+  const [defaultServings, setDefaultServings] = useState(4);
+  const [preferredCategories, setPreferredCategories] = useState<string[]>([
+    "Italian",
+    "Asian",
+    "Mexican",
+  ]);
+  const [excludedIngredients, setExcludedIngredients] = useState<string[]>([
+    "Shellfish",
+    "Peanuts",
+  ]);
+
+  const handleMaxDishesChange = (value: number) => {
+    setMaxDishes(value);
+    setMinDishes((current) => Math.min(current, value));
+  };
+
+  const handleMinDishesChange = (value: number) => {
+    setMinDishes(value);
+    setMaxDishes((current) => Math.max(current, value));
+  };
+
+  const togglePreferredCategory = (category: string) => {
+    setPreferredCategories((current) =>
+      current.includes(category)
+        ? current.filter((item) => item !== category)
+        : [...current, category],
+    );
+  };
+
+  const toggleRestrictedIngredient = (ingredient: string) => {
+    setExcludedIngredients((current) =>
+      current.includes(ingredient)
+        ? current.filter((item) => item !== ingredient)
+        : [...current, ingredient],
+    );
+  };
+
+  return (
+    <div className="min-h-screen w-full p-6 sm:p-8">
+      <div className="flex flex-wrap items-start gap-6">
+        <Sidebar />
+        <main className="min-w-[280px] flex-1 space-y-6">
+          <header className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#eef4ee] text-[#2f6b4f]">
+                <SettingsIcon className="h-5 w-5" />
+              </span>
+              <div>
+                <h1 className="text-2xl font-semibold text-[#1f2a22]">
+                  Admin Settings
+                </h1>
+                <p className="text-sm text-[#6c7a70]">
+                  Configure planning rules and preferences
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              className="inline-flex items-center gap-2 rounded-full bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_24px_-18px_rgba(32,78,54,0.9)] transition hover:bg-[#2a5c46]"
+            >
+              <SaveIcon className="h-4 w-4" />
+              Save Settings
+            </button>
+          </header>
+
+          <div className="grid gap-6 xl:grid-cols-2">
+            <div className="space-y-6">
+              <section className="rounded-[28px] border border-[#e1e8dc] bg-white/80 p-6 shadow-[0_20px_48px_-36px_rgba(30,60,40,0.4)]">
+                <div className="space-y-1">
+                  <h2 className="text-lg font-semibold text-[#1f2a22]">
+                    Weekly Planning Rules
+                  </h2>
+                  <p className="text-sm text-[#7b8a7f]">
+                    Set rules for automatic meal plan generation
+                  </p>
+                </div>
+
+                <div className="mt-5 space-y-5">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm font-semibold text-[#1f2a22]">
+                      <span>Maximum Dishes per Week</span>
+                      <span className="text-[#2f6b4f]">{maxDishes}</span>
+                    </div>
+                    <input
+                      type="range"
+                      min={minDishes}
+                      max={12}
+                      value={maxDishes}
+                      onChange={(event) =>
+                        handleMaxDishesChange(Number(event.target.value))
+                      }
+                      className="h-2 w-full cursor-pointer appearance-none rounded-full bg-[#e2e8dc] accent-[#2f6b4f]"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm font-semibold text-[#1f2a22]">
+                      <span>Minimum Dishes per Week</span>
+                      <span className="text-[#2f6b4f]">{minDishes}</span>
+                    </div>
+                    <input
+                      type="range"
+                      min={2}
+                      max={maxDishes}
+                      value={minDishes}
+                      onChange={(event) =>
+                        handleMinDishesChange(Number(event.target.value))
+                      }
+                      className="h-2 w-full cursor-pointer appearance-none rounded-full bg-[#e2e8dc] accent-[#2f6b4f]"
+                    />
+                  </div>
+
+                  <div className="space-y-4 border-t border-[#e1e8dc] pt-4">
+                    <ToggleRow
+                      label="Allow Repeat Dishes"
+                      description="Same dish can appear multiple times in a week"
+                      checked={allowRepeats}
+                      onToggle={() => setAllowRepeats((current) => !current)}
+                    />
+                    <ToggleRow
+                      label="Include Weekends"
+                      description="Generate plans for Saturday and Sunday"
+                      checked={includeWeekends}
+                      onToggle={() => setIncludeWeekends((current) => !current)}
+                    />
+                    <ToggleRow
+                      label="Auto-generate Plans"
+                      description="Automatically create new weekly plans"
+                      checked={autoGeneratePlans}
+                      onToggle={() => setAutoGeneratePlans((current) => !current)}
+                    />
+                  </div>
+                </div>
+              </section>
+
+              <section className="rounded-[28px] border border-[#e1e8dc] bg-white/80 p-6 shadow-[0_20px_48px_-36px_rgba(30,60,40,0.4)]">
+                <div className="space-y-1">
+                  <h2 className="text-lg font-semibold text-[#1f2a22]">
+                    Cooking Constraints
+                  </h2>
+                  <p className="text-sm text-[#7b8a7f]">
+                    Set time and serving preferences
+                  </p>
+                </div>
+
+                <div className="mt-5 space-y-4">
+                  <label className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#e1e8dc] bg-white/70 px-4 py-3 text-sm font-semibold text-[#1f2a22] shadow-[0_12px_24px_-20px_rgba(32,70,48,0.35)]">
+                    <span>Maximum Prep Time (minutes)</span>
+                    <input
+                      type="number"
+                      min={10}
+                      max={180}
+                      value={maxPrepMinutes}
+                      onChange={(event) =>
+                        setMaxPrepMinutes(Number(event.target.value))
+                      }
+                      className="w-20 rounded-xl border border-[#dfe7d7] bg-white px-3 py-2 text-right text-sm font-semibold text-[#2f6b4f] focus:outline-none"
+                    />
+                  </label>
+
+                  <label className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#e1e8dc] bg-white/70 px-4 py-3 text-sm font-semibold text-[#1f2a22] shadow-[0_12px_24px_-20px_rgba(32,70,48,0.35)]">
+                    <span>Default Servings</span>
+                    <input
+                      type="number"
+                      min={1}
+                      max={12}
+                      value={defaultServings}
+                      onChange={(event) =>
+                        setDefaultServings(Number(event.target.value))
+                      }
+                      className="w-20 rounded-xl border border-[#dfe7d7] bg-white px-3 py-2 text-right text-sm font-semibold text-[#2f6b4f] focus:outline-none"
+                    />
+                  </label>
+                </div>
+              </section>
+            </div>
+
+            <div className="space-y-6">
+              <section className="rounded-[28px] border border-[#e1e8dc] bg-white/80 p-6 shadow-[0_20px_48px_-36px_rgba(30,60,40,0.4)]">
+                <div className="space-y-1">
+                  <h2 className="text-lg font-semibold text-[#1f2a22]">
+                    Diversity & Preferences
+                  </h2>
+                  <p className="text-sm text-[#7b8a7f]">
+                    Control variety and category distribution
+                  </p>
+                </div>
+
+                <div className="mt-5 space-y-5">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm font-semibold text-[#1f2a22]">
+                      <span>Diversity Score</span>
+                      <span className="text-[#2f6b4f]">{diversityScore}%</span>
+                    </div>
+                    <p className="text-xs text-[#7b8a7f]">
+                      Higher values prioritize variety in weekly plans
+                    </p>
+                    <input
+                      type="range"
+                      min={0}
+                      max={100}
+                      value={diversityScore}
+                      onChange={(event) =>
+                        setDiversityScore(Number(event.target.value))
+                      }
+                      className="h-2 w-full cursor-pointer appearance-none rounded-full bg-[#e2e8dc] accent-[#2f6b4f]"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="text-sm font-semibold text-[#1f2a22]">
+                      Preferred Categories
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {cuisineOptions.map((category) => {
+                        const isSelected =
+                          preferredCategories.includes(category);
+
+                        return (
+                          <button
+                            key={category}
+                            type="button"
+                            onClick={() => togglePreferredCategory(category)}
+                            className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
+                              isSelected
+                                ? "border-[#2f6b4f] bg-[#2f6b4f] text-white"
+                                : "border-[#dfe7d7] bg-white text-[#4b5b51] hover:bg-[#f3f7f1]"
+                            }`}
+                          >
+                            {category}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section className="rounded-[28px] border border-[#e1e8dc] bg-white/80 p-6 shadow-[0_20px_48px_-36px_rgba(30,60,40,0.4)]">
+                <div className="space-y-1">
+                  <h2 className="text-lg font-semibold text-[#1f2a22]">
+                    Dietary Restrictions
+                  </h2>
+                  <p className="text-sm text-[#7b8a7f]">
+                    Exclude ingredients from meal planning
+                  </p>
+                </div>
+
+                <div className="mt-4">
+                  <div className="text-sm font-semibold text-[#1f2a22]">
+                    Excluded Ingredients
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {restrictionOptions.map((ingredient) => {
+                      const isExcluded =
+                        excludedIngredients.includes(ingredient);
+
+                      return (
+                        <button
+                          key={ingredient}
+                          type="button"
+                          onClick={() => toggleRestrictedIngredient(ingredient)}
+                          className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
+                            isExcluded
+                              ? "border-[#d76b6b] bg-[#d76b6b] text-white"
+                              : "border-[#dfe7d7] bg-white text-[#4b5b51] hover:bg-[#f3f7f1]"
+                          }`}
+                        >
+                          {ingredient}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <p className="mt-3 text-xs text-[#7b8a7f]">
+                    Click to toggle ingredients. Red badges are excluded from
+                    meal planning.
+                  </p>
+                </div>
+              </section>
+            </div>
+          </div>
+
+          <section className="flex flex-wrap items-center gap-4 rounded-2xl border border-[#dfe7d7] bg-[#eaf7ea] px-5 py-4 text-sm text-[#2f5a3d] shadow-[0_18px_36px_-28px_rgba(35,70,45,0.35)]">
+            <span className="grid h-10 w-10 place-items-center rounded-2xl bg-white text-[#2f6b4f]">
+              <TipIcon className="h-5 w-5" />
+            </span>
+            <div>
+              <div className="text-sm font-semibold text-[#1f2a22]">
+                Pro Tip
+              </div>
+              <p className="text-xs text-[#6c7a70]">
+                Adjust the diversity score to control how much variety you want
+                in your weekly plans. A higher score ensures different cuisines
+                and ingredients throughout the week.
+              </p>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  );
+}
+
+function SettingsIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M12 3.5v2.2M12 18.3v2.2M4.7 7.3l1.6 1.2M17.7 16.6l1.6 1.2M3.5 12h2.2M18.3 12h2.2M4.7 16.6l1.6-1.2M17.7 7.3l1.6-1.2" />
+      <circle cx="12" cy="12" r="3.4" />
+    </svg>
+  );
+}
+
+function SaveIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M4 5.5a2 2 0 0 1 2-2h9.5l4.5 4.5v8.5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" />
+      <path d="M8 3.5v5h7v-5" />
+      <path d="M8 20v-6h8v6" />
+    </svg>
+  );
+}
+
+function TipIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M9 18h6" />
+      <path d="M10 21h4" />
+      <path d="M8 13a4 4 0 1 1 8 0c0 1.6-.8 2.4-1.6 3.2-.6.6-1 1.2-1.1 2.3h-2.8c-.1-1.1-.5-1.7-1.1-2.3C8.8 15.4 8 14.6 8 13Z" />
+    </svg>
+  );
+}
