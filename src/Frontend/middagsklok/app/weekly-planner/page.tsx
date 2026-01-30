@@ -61,6 +61,13 @@ const monthFormatter = new Intl.DateTimeFormat("en-US", {
   month: "long",
   year: "numeric",
 });
+const rangeFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+});
+const yearFormatter = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+});
 const weekdayFormatter = new Intl.DateTimeFormat("en-US", {
   weekday: "long",
 });
@@ -74,6 +81,7 @@ export default function WeeklyPlannerPage() {
   const [dishLoadError, setDishLoadError] = useState<string | null>(null);
   const [isLoadingDishes, setIsLoadingDishes] = useState(true);
   const [startDay, setStartDay] = useState(1);
+  const [weekOffset, setWeekOffset] = useState(0);
   const [openDayKey, setOpenDayKey] = useState<string | null>(null);
   const [dishSearchQuery, setDishSearchQuery] = useState("");
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -125,7 +133,8 @@ export default function WeeklyPlannerPage() {
   );
 
   const weekDays = useMemo(() => {
-    const startDate = addDays(baseWeekStart, offsetFromMonday(startDay));
+    const weekStart = addDays(baseWeekStart, weekOffset * 7);
+    const startDate = addDays(weekStart, offsetFromMonday(startDay));
 
     return Array.from({ length: 7 }, (_, index) => {
       const date = addDays(startDate, index);
@@ -135,7 +144,7 @@ export default function WeeklyPlannerPage() {
         date,
       };
     });
-  }, [startDay]);
+  }, [startDay, weekOffset]);
 
   const defaultPlan = useMemo(() => buildPlan(weekDays), [weekDays]);
   const [plan, setPlan] = useState<Record<string, string | null>>(
@@ -147,7 +156,23 @@ export default function WeeklyPlannerPage() {
     setOpenDayKey(null);
   }, [defaultPlan]);
 
-  const monthLabel = monthFormatter.format(weekDays[0].date);
+  const weekRangeLabel = useMemo(() => {
+    const startDate = weekDays[0]?.date;
+    const endDate = weekDays[6]?.date;
+
+    if (!startDate || !endDate) {
+      return monthFormatter.format(weekDays[0]?.date ?? anchorDate);
+    }
+
+    const startYear = yearFormatter.format(startDate);
+    const endYear = yearFormatter.format(endDate);
+
+    if (startYear === endYear) {
+      return `${rangeFormatter.format(startDate)} – ${rangeFormatter.format(endDate)} ${endYear}`;
+    }
+
+    return `${rangeFormatter.format(startDate)} ${startYear} – ${rangeFormatter.format(endDate)} ${endYear}`;
+  }, [weekDays]);
 
   const handleToggle = (dayKey: string) => {
     setOpenDayKey((current) => (current === dayKey ? null : dayKey));
@@ -167,6 +192,16 @@ export default function WeeklyPlannerPage() {
   const handleCloseMenus = () => {
     setOpenDayKey(null);
     setDishSearchQuery("");
+  };
+
+  const handlePreviousWeek = () => {
+    handleCloseMenus();
+    setWeekOffset((current) => current - 1);
+  };
+
+  const handleNextWeek = () => {
+    handleCloseMenus();
+    setWeekOffset((current) => current + 1);
   };
 
   const planEntries = useMemo(
@@ -368,18 +403,18 @@ export default function WeeklyPlannerPage() {
                 <button
                   type="button"
                   aria-label="Previous week"
-                  onClick={handleCloseMenus}
+                  onClick={handlePreviousWeek}
                   className="grid h-10 w-10 place-items-center rounded-full border border-[#dfe7d7] bg-white text-[#5c6b60] transition hover:bg-[#f5f7f3]"
                 >
                   <ChevronLeftIcon className="h-4 w-4" />
                 </button>
                 <div className="text-lg font-semibold text-[#1f2a22]">
-                  {monthLabel}
+                  {weekRangeLabel}
                 </div>
                 <button
                   type="button"
                   aria-label="Next week"
-                  onClick={handleCloseMenus}
+                  onClick={handleNextWeek}
                   className="grid h-10 w-10 place-items-center rounded-full border border-[#dfe7d7] bg-white text-[#5c6b60] transition hover:bg-[#f5f7f3]"
                 >
                   <ChevronRightIcon className="h-4 w-4" />
