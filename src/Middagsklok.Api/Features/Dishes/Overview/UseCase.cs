@@ -90,7 +90,7 @@ internal sealed class UseCase(AppDbContext dbContext)
             dish.PrepTimeMinutes,
             dish.CookTimeMinutes,
             dish.Servings,
-            null,
+            dish.Instructions,
             ingredients);
 
         return overview;

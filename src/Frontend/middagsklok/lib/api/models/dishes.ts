@@ -39,3 +39,31 @@ export type DishOverview = {
 export type DishesOverviewResponse = {
   dishes: DishOverview[];
 };
+
+export type DishCreateIngredientInput = {
+  id?: string | null;
+  name?: string | null;
+  amount: number;
+};
+
+export type DishCreateRequest = {
+  name?: string | null;
+  cuisine?: string | null;
+  prepMinutes: number;
+  cookMinutes: number;
+  serves: number;
+  instructions?: string | null;
+  ingredients?: DishCreateIngredientInput[] | null;
+};
+
+export type DishCreateValidationError = {
+  field: string;
+  message: string;
+};
+
+export type DishCreateErrorResponse = {
+  message: string;
+  errors: DishCreateValidationError[];
+};
+
+export type DishCreateResponse = DishOverview;

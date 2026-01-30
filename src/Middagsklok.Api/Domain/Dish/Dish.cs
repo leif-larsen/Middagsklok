@@ -8,13 +8,20 @@ public class Dish(
     int prepTimeMinutes,
     int cookTimeMinutes,
     int servings,
+    string? instructions,
     IEnumerable<DishIngredient> ingredients) : BaseEntity
 {
     private readonly List<DishIngredient> _ingredients = ingredients.ToList();
 
     // Required by EF Core.
-    private Dish(string name, CuisineType cuisine, int prepTimeMinutes, int cookTimeMinutes, int servings)
-        : this(name, cuisine, prepTimeMinutes, cookTimeMinutes, servings, Array.Empty<DishIngredient>())
+    private Dish(
+        string name,
+        CuisineType cuisine,
+        int prepTimeMinutes,
+        int cookTimeMinutes,
+        int servings,
+        string? instructions)
+        : this(name, cuisine, prepTimeMinutes, cookTimeMinutes, servings, instructions, Array.Empty<DishIngredient>())
     {
     }
 
@@ -23,6 +30,7 @@ public class Dish(
     public int PrepTimeMinutes { get; } = prepTimeMinutes;
     public int CookTimeMinutes { get; } = cookTimeMinutes;
     public int Servings { get; } = servings;
+    public string? Instructions { get; } = string.IsNullOrWhiteSpace(instructions) ? null : instructions.Trim();
     public IReadOnlyList<DishIngredient> Ingredients => _ingredients;
 
     public int TotalTimeMinutes => PrepTimeMinutes + CookTimeMinutes;

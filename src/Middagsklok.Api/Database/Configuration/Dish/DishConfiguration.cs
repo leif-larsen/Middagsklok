@@ -40,6 +40,10 @@ public class DishConfiguration : IEntityTypeConfiguration<DishEntity>
             .HasColumnName("servings")
             .IsRequired();
 
+        builder.Property(d => d.Instructions)
+            .HasColumnName("instructions")
+            .HasMaxLength(5000);
+
         builder.Property(d => d.CreatedAt)
             .HasColumnName("created_at")
             .IsRequired();

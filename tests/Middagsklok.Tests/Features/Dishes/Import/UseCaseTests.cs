@@ -103,6 +103,7 @@ public sealed class UseCaseTests
             5,
             10,
             4,
+            null,
             new List<DishIngredient>
             {
                 new(ingredient.Id, 1, Unit.Pcs, null, 1)

@@ -5,6 +5,10 @@ import Modal from "../components/Modal";
 import { apiClient, ApiError } from "../../lib/api/client";
 import { useEffect, useMemo, useState } from "react";
 import { useIngredientsCatalog } from "../components/IngredientsProvider";
+import type {
+  DishCreateErrorResponse,
+  DishCreateValidationError,
+} from "../../lib/api/models/dishes";
 
 type Ingredient = {
   id: string;
@@ -55,6 +59,17 @@ export default function DishesPage() {
     failed: number;
     failures: { dishName?: string | null; reason: string; ingredientName?: string | null }[];
   } | null>(null);
+  const [formName, setFormName] = useState("");
+  const [formCuisine, setFormCuisine] = useState("");
+  const [formPrepMinutes, setFormPrepMinutes] = useState("");
+  const [formCookMinutes, setFormCookMinutes] = useState("");
+  const [formServes, setFormServes] = useState("");
+  const [formInstructions, setFormInstructions] = useState("");
+  const [validationErrors, setValidationErrors] = useState<
+    DishCreateValidationError[]
+  >([]);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
   const [draftIngredients, setDraftIngredients] = useState<DraftIngredient[]>([]);
   const [selectedIngredientId, setSelectedIngredientId] = useState("");
   const [ingredientAmount, setIngredientAmount] = useState("");
@@ -132,6 +147,21 @@ export default function DishesPage() {
       return;
     }
 
+    setFormName(activeDish.name ?? "");
+    setFormCuisine(activeDish.cuisine ?? "");
+    setFormPrepMinutes(
+      isEditMode ? String(activeDish.prepMinutes ?? 0) : "",
+    );
+    setFormCookMinutes(
+      isEditMode ? String(activeDish.cookMinutes ?? 0) : "",
+    );
+    setFormServes(
+      isEditMode ? String(activeDish.serves ?? 0) : "",
+    );
+    setFormInstructions(activeDish.instructions ?? "");
+    setValidationErrors([]);
+    setSubmitError(null);
+    setIsSaving(false);
     setDraftIngredients(
       activeDish.ingredients.map((ingredient) => ({
         ...ingredient,
@@ -140,7 +170,7 @@ export default function DishesPage() {
     );
     setSelectedIngredientId("");
     setIngredientAmount("");
-  }, [activeDish, isModalOpen]);
+  }, [activeDish, isEditMode, isModalOpen]);
 
   const closeModal = () => {
     setIsCreateOpen(false);
@@ -152,6 +182,35 @@ export default function DishesPage() {
     setImportFile(null);
     setImportError(null);
     setImportResult(null);
+  };
+
+  const appendDish = (dish: Dish) => {
+    setDishes((current) => {
+      if (current.some((item) => item.id === dish.id)) {
+        return current;
+      }
+
+      return [...current, dish].sort((left, right) =>
+        left.name.localeCompare(right.name));
+    });
+  };
+
+  const parseValidationErrors = (body: unknown) => {
+    if (!body || typeof body !== "object") {
+      return null;
+    }
+
+    const payload = body as DishCreateErrorResponse;
+    if (!Array.isArray(payload.errors)) {
+      return null;
+    }
+
+    return payload;
+  };
+
+  const parseNumber = (value: string) => {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : 0;
   };
 
   const parseImportPayload = async (file: File) => {
@@ -167,6 +226,61 @@ export default function DishesPage() {
     }
 
     throw new Error("Invalid JSON format. Expected an array or an object with a dishes property.");
+  };
+
+  const handleSave = async () => {
+    if (isSaving) {
+      return;
+    }
+
+    if (isEditMode) {
+      setSubmitError("Updating dishes is not available yet.");
+      return;
+    }
+
+    setIsSaving(true);
+    setValidationErrors([]);
+    setSubmitError(null);
+
+    try {
+      const name = formName.trim();
+      const cuisine = formCuisine.trim();
+      const instructions = formInstructions.trim();
+      const payload = {
+        name,
+        cuisine: cuisine ? cuisine : null,
+        prepMinutes: parseNumber(formPrepMinutes),
+        cookMinutes: parseNumber(formCookMinutes),
+        serves: parseNumber(formServes),
+        instructions: instructions ? instructions : null,
+        ingredients: draftIngredients.map((ingredient) => ({
+          id: ingredient.id,
+          name: ingredient.label,
+          amount: parseNumber(ingredient.amount ?? ""),
+        })),
+      };
+
+      const created = await apiClient.createDish(payload);
+      appendDish(created);
+      closeModal();
+    } catch (error) {
+      if (error instanceof ApiError && [400, 409].includes(error.status)) {
+        const payload = parseValidationErrors(error.body);
+        if (payload) {
+          setValidationErrors(payload.errors);
+          setSubmitError(payload.message ?? null);
+          return;
+        }
+      }
+
+      if (error instanceof Error) {
+        setSubmitError(error.message);
+      } else {
+        setSubmitError("Failed to create dish.");
+      }
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleImport = async () => {
@@ -407,26 +521,57 @@ export default function DishesPage() {
             <button
               type="button"
               onClick={closeModal}
-              className="inline-flex items-center justify-center rounded-xl border border-[#dfe6da] bg-white px-4 py-2 text-sm font-semibold text-[#3f4b43] transition hover:bg-[#f3f6ef]"
+              disabled={isSaving}
+              className="inline-flex items-center justify-center rounded-xl border border-[#dfe6da] bg-white px-4 py-2 text-sm font-semibold text-[#3f4b43] transition hover:bg-[#f3f6ef] disabled:cursor-not-allowed disabled:opacity-70"
             >
               Cancel
             </button>
             <button
               type="button"
-              className="inline-flex items-center justify-center rounded-xl bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_22px_-18px_rgba(30,68,48,0.8)] transition hover:bg-[#2a5c46]"
+              onClick={() => {
+                void handleSave();
+              }}
+              disabled={isSaving}
+              className="inline-flex items-center justify-center rounded-xl bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_22px_-18px_rgba(30,68,48,0.8)] transition hover:bg-[#2a5c46] disabled:cursor-not-allowed disabled:opacity-70"
             >
-              {isEditMode ? "Update Dish" : "Create Dish"}
+              {isSaving
+                ? isEditMode
+                  ? "Updating..."
+                  : "Creating..."
+                : isEditMode
+                  ? "Update Dish"
+                  : "Create Dish"}
             </button>
           </>
         }
       >
+        {isSaving ? (
+          <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-[#e1e7dd]">
+            <div className="h-full w-1/2 animate-pulse rounded-full bg-[#2f6b4f]" />
+          </div>
+        ) : null}
+        {submitError ? (
+          <div className="mt-4 rounded-2xl border border-[#f0dada] bg-[#fff6f6] px-4 py-3 text-sm text-[#b45151]">
+            {submitError}
+          </div>
+        ) : null}
+        {validationErrors.length > 0 ? (
+          <ul className="mt-4 grid gap-2 rounded-2xl border border-[#f0dada] bg-[#fff6f6] px-4 py-3 text-sm text-[#b45151]">
+            {validationErrors.map((error, index) => (
+              <li key={`${error.field}-${index}`}>
+                {error.field ? `${error.field}: ` : ""}{error.message}
+              </li>
+            ))}
+          </ul>
+        ) : null}
         <div className="mt-6 grid gap-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
               Dish Name
               <input
                 type="text"
-                defaultValue={activeDish.name}
+                value={formName}
+                onChange={(event) => setFormName(event.target.value)}
                 placeholder="Dish name"
                 className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
               />
@@ -435,7 +580,8 @@ export default function DishesPage() {
               Category
               <input
                 type="text"
-                defaultValue={activeDish.cuisine}
+                value={formCuisine}
+                onChange={(event) => setFormCuisine(event.target.value)}
                 placeholder="Cuisine type"
                 className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
               />
@@ -447,7 +593,8 @@ export default function DishesPage() {
               Prep Time (min)
               <input
                 type="number"
-                defaultValue={isEditMode ? activeDish.prepMinutes : ""}
+                value={formPrepMinutes}
+                onChange={(event) => setFormPrepMinutes(event.target.value)}
                 placeholder="0"
                 className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
               />
@@ -456,7 +603,8 @@ export default function DishesPage() {
               Cook Time (min)
               <input
                 type="number"
-                defaultValue={isEditMode ? activeDish.cookMinutes : ""}
+                value={formCookMinutes}
+                onChange={(event) => setFormCookMinutes(event.target.value)}
                 placeholder="0"
                 className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
               />
@@ -465,7 +613,8 @@ export default function DishesPage() {
               Servings
               <input
                 type="number"
-                defaultValue={isEditMode ? activeDish.serves : ""}
+                value={formServes}
+                onChange={(event) => setFormServes(event.target.value)}
                 placeholder="0"
                 className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
               />
@@ -475,7 +624,8 @@ export default function DishesPage() {
           <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
             Instructions (optional)
             <textarea
-              defaultValue={activeDish.instructions}
+              value={formInstructions}
+              onChange={(event) => setFormInstructions(event.target.value)}
               placeholder="Write the steps to cook the dish..."
               rows={4}
               className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"

@@ -1,4 +1,6 @@
 import type {
+  DishCreateRequest,
+  DishCreateResponse,
   DishesImportRequest,
   DishesImportResponse,
   DishesOverviewResponse,
@@ -72,6 +74,10 @@ export type ApiClient = {
     payload: DishesImportRequest,
     init?: RequestInit,
   ) => Promise<DishesImportResponse>;
+  createDish: (
+    payload: DishCreateRequest,
+    init?: RequestInit,
+  ) => Promise<DishCreateResponse>;
   getDishes: (init?: RequestInit) => Promise<DishesOverviewResponse>;
   getIngredients: (init?: RequestInit) => Promise<IngredientsOverviewResponse>;
   createIngredient: (
@@ -92,6 +98,12 @@ export type ApiClient = {
 export const apiClient: ApiClient = {
   importDishes: (payload, init) =>
     request<DishesImportResponse>("/api/dishes/import", {
+      method: "POST",
+      body: JSON.stringify(payload),
+      ...init,
+    }),
+  createDish: (payload, init) =>
+    request<DishCreateResponse>("/api/dishes", {
       method: "POST",
       body: JSON.stringify(payload),
       ...init,

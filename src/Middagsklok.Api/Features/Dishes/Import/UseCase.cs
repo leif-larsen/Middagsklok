@@ -86,6 +86,7 @@ internal sealed class UseCase(AppDbContext dbContext)
                 validation.Candidate.PrepTimeMinutes,
                 validation.Candidate.CookTimeMinutes,
                 validation.Candidate.Servings,
+                null,
                 ingredients);
 
             dishesToAdd.Add(dishEntity);
