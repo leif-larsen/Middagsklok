@@ -72,6 +72,9 @@ export default function DishesPage() {
   >([]);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<Dish | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [draftIngredients, setDraftIngredients] = useState<DraftIngredient[]>([]);
   const [selectedIngredientId, setSelectedIngredientId] = useState("");
   const [ingredientAmount, setIngredientAmount] = useState("");
@@ -174,6 +177,14 @@ export default function DishesPage() {
     setIngredientAmount("");
   }, [activeDish, isEditMode, isModalOpen]);
 
+  useEffect(() => {
+    if (!deleteTarget) {
+      return;
+    }
+
+    setDeleteError(null);
+  }, [deleteTarget]);
+
   const closeModal = () => {
     setIsCreateOpen(false);
     setSelectedDish(null);
@@ -184,6 +195,15 @@ export default function DishesPage() {
     setImportFile(null);
     setImportError(null);
     setImportResult(null);
+  };
+
+  const closeDeleteModal = () => {
+    if (isDeleting) {
+      return;
+    }
+
+    setDeleteTarget(null);
+    setDeleteError(null);
   };
 
   const appendDish = (dish: Dish) => {
@@ -292,6 +312,30 @@ export default function DishesPage() {
       }
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!deleteTarget || isDeleting) {
+      return;
+    }
+
+    setIsDeleting(true);
+    setDeleteError(null);
+
+    try {
+      await apiClient.deleteDish(deleteTarget.id);
+      setDishes((current) =>
+        current.filter((dish) => dish.id !== deleteTarget.id));
+      setDeleteTarget(null);
+    } catch (error) {
+      if (error instanceof Error) {
+        setDeleteError(error.message);
+      } else {
+        setDeleteError("Failed to delete dish.");
+      }
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -468,6 +512,7 @@ export default function DishesPage() {
                       <button
                         type="button"
                         aria-label={`Delete ${dish.name}`}
+                        onClick={() => setDeleteTarget(dish)}
                         className="grid h-9 w-9 place-items-center rounded-full border border-[#f0dada] text-[#d76b6b] transition hover:bg-[#fbeeee]"
                       >
                         <TrashIcon className="h-4 w-4" />
@@ -725,6 +770,46 @@ export default function DishesPage() {
             </ul>
           </div>
         </div>
+      </Modal>
+
+      <Modal
+        isOpen={deleteTarget !== null}
+        onClose={closeDeleteModal}
+        title="Delete Dish"
+        description={
+          deleteTarget
+            ? `Are you sure you want to delete ${deleteTarget.name}?`
+            : ""
+        }
+        maxWidthClassName="max-w-lg"
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={closeDeleteModal}
+              disabled={isDeleting}
+              className="inline-flex items-center justify-center rounded-xl border border-[#dfe6da] bg-white px-4 py-2 text-sm font-semibold text-[#3f4b43] transition hover:bg-[#f3f6ef] disabled:cursor-not-allowed disabled:opacity-70"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                void handleDelete();
+              }}
+              disabled={isDeleting}
+              className="inline-flex items-center justify-center rounded-xl bg-[#d76b6b] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_22px_-18px_rgba(180,80,80,0.8)] transition hover:bg-[#c85f5f] disabled:cursor-not-allowed disabled:opacity-70"
+            >
+              {isDeleting ? "Deleting..." : "Yes"}
+            </button>
+          </>
+        }
+      >
+        {deleteError ? (
+          <div className="mt-4 rounded-2xl border border-[#f0dada] bg-[#fff6f6] px-4 py-3 text-sm text-[#b45151]">
+            {deleteError}
+          </div>
+        ) : null}
       </Modal>
 
       <Modal

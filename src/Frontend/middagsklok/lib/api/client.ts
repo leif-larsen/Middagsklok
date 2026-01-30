@@ -85,6 +85,7 @@ export type ApiClient = {
     payload: DishUpdateRequest,
     init?: RequestInit,
   ) => Promise<DishUpdateResponse>;
+  deleteDish: (id: string, init?: RequestInit) => Promise<void>;
   getDishes: (init?: RequestInit) => Promise<DishesOverviewResponse>;
   getIngredients: (init?: RequestInit) => Promise<IngredientsOverviewResponse>;
   createIngredient: (
@@ -119,6 +120,11 @@ export const apiClient: ApiClient = {
     request<DishUpdateResponse>(`/api/dishes/${id}`, {
       method: "PUT",
       body: JSON.stringify(payload),
+      ...init,
+    }),
+  deleteDish: (id, init) =>
+    request<void>(`/api/dishes/${id}`, {
+      method: "DELETE",
       ...init,
     }),
   getDishes: (init) =>

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Middagsklok.Api.Database;
 using Middagsklok.Api.Features.Dishes.Create;
+using Middagsklok.Api.Features.Dishes.Delete;
 using Middagsklok.Api.Features.Dishes.Import;
 using Middagsklok.Api.Features.Dishes.Overview;
 using Middagsklok.Api.Features.Dishes.Update;
@@ -10,6 +11,7 @@ using Middagsklok.Api.Features.Ingredients.Metadata;
 using Middagsklok.Api.Features.Ingredients.Overview;
 using Middagsklok.Api.Features.Ingredients.Update;
 using DishesCreateUseCase = Middagsklok.Api.Features.Dishes.Create.UseCase;
+using DishesDeleteUseCase = Middagsklok.Api.Features.Dishes.Delete.UseCase;
 using DishesImportUseCase = Middagsklok.Api.Features.Dishes.Import.UseCase;
 using DishesOverviewUseCase = Middagsklok.Api.Features.Dishes.Overview.UseCase;
 using DishesUpdateUseCase = Middagsklok.Api.Features.Dishes.Update.UseCase;
@@ -25,6 +27,7 @@ builder.AddNpgsqlDbContext<AppDbContext>("middagsklok");
 
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<DishesCreateUseCase>();
+builder.Services.AddScoped<DishesDeleteUseCase>();
 builder.Services.AddScoped<DishesImportUseCase>();
 builder.Services.AddScoped<DishesOverviewUseCase>();
 builder.Services.AddScoped<DishesUpdateUseCase>();
@@ -66,6 +69,7 @@ if (!app.Environment.IsDevelopment())
 app.UseCors("DevFrontend");
 
 DishesCreateEndpoint.Map(app);
+DishesDeleteEndpoint.Map(app);
 DishesImportEndpoint.Map(app);
 DishesOverviewEndpoint.Map(app);
 DishesUpdateEndpoint.Map(app);
