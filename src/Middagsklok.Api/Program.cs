@@ -17,6 +17,7 @@ using Middagsklok.Api.Features.ShoppingList.ByStartDate;
 using Middagsklok.Api.Features.WeeklyPlans.Available;
 using Middagsklok.Api.Features.WeeklyPlans.ByStartDate;
 using Middagsklok.Api.Features.WeeklyPlans.Generate;
+using Middagsklok.Api.Features.WeeklyPlans.MarkEaten;
 using Middagsklok.Api.Features.WeeklyPlans.Upsert;
 using DishesCreateUseCase = Middagsklok.Api.Features.Dishes.Create.UseCase;
 using DishesDeleteUseCase = Middagsklok.Api.Features.Dishes.Delete.UseCase;
@@ -35,6 +36,7 @@ using ShoppingListByStartDateUseCase = Middagsklok.Api.Features.ShoppingList.ByS
 using WeeklyPlansAvailableUseCase = Middagsklok.Api.Features.WeeklyPlans.Available.UseCase;
 using WeeklyPlansByStartDateUseCase = Middagsklok.Api.Features.WeeklyPlans.ByStartDate.UseCase;
 using WeeklyPlansGenerateUseCase = Middagsklok.Api.Features.WeeklyPlans.Generate.UseCase;
+using WeeklyPlansMarkEatenUseCase = Middagsklok.Api.Features.WeeklyPlans.MarkEaten.UseCase;
 using WeeklyPlansUpsertUseCase = Middagsklok.Api.Features.WeeklyPlans.Upsert.UseCase;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -59,6 +61,7 @@ builder.Services.AddScoped<ShoppingListByStartDateUseCase>();
 builder.Services.AddScoped<WeeklyPlansAvailableUseCase>();
 builder.Services.AddScoped<WeeklyPlansByStartDateUseCase>();
 builder.Services.AddScoped<WeeklyPlansGenerateUseCase>();
+builder.Services.AddScoped<WeeklyPlansMarkEatenUseCase>();
 builder.Services.AddScoped<WeeklyPlansUpsertUseCase>();
 builder.Services.AddCors(options =>
 {
@@ -109,6 +112,7 @@ ShoppingListByStartDateEndpoint.Map(app);
 WeeklyPlansAvailableEndpoint.Map(app);
 WeeklyPlansByStartDateEndpoint.Map(app);
 WeeklyPlansGenerateEndpoint.Map(app);
+WeeklyPlansMarkEatenEndpoint.Map(app);
 WeeklyPlansUpsertEndpoint.Map(app);
 
 app.Run();

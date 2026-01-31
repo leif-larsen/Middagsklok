@@ -93,6 +93,7 @@ export default function WeeklyPlannerPage() {
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const [isSavingPlan, setIsSavingPlan] = useState(false);
   const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
+  const [isMarkingEaten, setIsMarkingEaten] = useState(false);
   const [isLoadingPlan, setIsLoadingPlan] = useState(false);
 
   useEffect(() => {
@@ -347,6 +348,44 @@ export default function WeeklyPlannerPage() {
     }
   };
 
+  const handleMarkEaten = async () => {
+    handleCloseMenus();
+    setSaveError(null);
+    setSaveMessage(null);
+    setIsMarkingEaten(true);
+
+    const startDate = weekDays[0]?.key ?? "";
+    if (!startDate) {
+      setSaveError("Start date is missing.");
+      setIsMarkingEaten(false);
+      return;
+    }
+
+    try {
+      await apiClient.markWeeklyPlanEaten(startDate);
+      setSaveMessage("Weekly plan marked as eaten.");
+    } catch (error) {
+      if (error instanceof ApiError) {
+        if (error.status === 409) {
+          setSaveError("Weekly plan already marked as eaten.");
+          return;
+        }
+        if (error.status === 404) {
+          setSaveError("Weekly plan not found.");
+          return;
+        }
+        console.error("Failed to mark weekly plan as eaten:", error.body ?? error.message);
+      } else if (error instanceof Error) {
+        console.error("Failed to mark weekly plan as eaten:", error.message);
+      } else {
+        console.error("Failed to mark weekly plan as eaten.");
+      }
+      setSaveError("Unable to mark weekly plan as eaten.");
+    } finally {
+      setIsMarkingEaten(false);
+    }
+  };
+
   useEffect(() => {
     let isActive = true;
 
@@ -416,7 +455,9 @@ export default function WeeklyPlannerPage() {
               <button
                 type="button"
                 onClick={handleGeneratePlan}
-                disabled={isGeneratingPlan || isLoadingPlan || isSavingPlan}
+                disabled={
+                  isGeneratingPlan || isLoadingPlan || isSavingPlan || isMarkingEaten
+                }
                 className="inline-flex items-center gap-2 rounded-full border border-[#d6e0d2] bg-white px-4 py-2 text-sm font-semibold text-[#3b4c42] transition hover:bg-[#f3f6ef]"
               >
                 <RefreshIcon className="h-4 w-4" />
@@ -425,11 +466,20 @@ export default function WeeklyPlannerPage() {
               <button
                 type="button"
                 onClick={handleSavePlan}
-                disabled={isSavingPlan || isLoadingPlan}
+                disabled={isSavingPlan || isLoadingPlan || isMarkingEaten}
                 className="inline-flex items-center gap-2 rounded-full bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_24px_-18px_rgba(32,78,54,0.9)] transition hover:bg-[#2a5c46]"
               >
                 <SaveIcon className="h-4 w-4" />
                 {isSavingPlan ? "Saving..." : "Save Plan"}
+              </button>
+              <button
+                type="button"
+                onClick={handleMarkEaten}
+                disabled={isMarkingEaten || isLoadingPlan || isSavingPlan}
+                className="inline-flex items-center gap-2 rounded-full border border-[#f1d7b5] bg-[#fff3e6] px-4 py-2 text-sm font-semibold text-[#6a4b2f] transition hover:bg-[#ffe8cf]"
+              >
+                <CheckCircleIcon className="h-4 w-4" />
+                {isMarkingEaten ? "Marking..." : "Mark as eaten"}
               </button>
               {saveMessage ? (
                 <span className="text-xs font-semibold text-[#2f6b4f]">
@@ -724,6 +774,24 @@ function CheckIcon({ className }: IconProps) {
       className={className}
     >
       <path d="M6 12l4 4 8-8" />
+    </svg>
+  );
+}
+
+function CheckCircleIcon({ className }: IconProps) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <circle cx="12" cy="12" r="9" />
+      <path d="M8.5 12.5 11 15l4.5-5" />
     </svg>
   );
 }

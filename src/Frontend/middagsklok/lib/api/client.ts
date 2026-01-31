@@ -129,6 +129,7 @@ export type ApiClient = {
     init?: RequestInit,
   ) => Promise<WeeklyPlanResponse>;
   getWeeklyPlans: (init?: RequestInit) => Promise<WeeklyPlansResponse>;
+  markWeeklyPlanEaten: (startDate: string, init?: RequestInit) => Promise<void>;
   getPlanningSettings: (init?: RequestInit) => Promise<PlanningSettingsResponse>;
   upsertPlanningSettings: (
     payload: PlanningSettingsRequest,
@@ -220,6 +221,11 @@ export const apiClient: ApiClient = {
   getWeeklyPlans: (init) =>
     request<WeeklyPlansResponse>("/api/weekly-plans", {
       method: "GET",
+      ...init,
+    }),
+  markWeeklyPlanEaten: (startDate, init) =>
+    request<void>(`/api/weekly-plans/${startDate}/mark-eaten`, {
+      method: "POST",
       ...init,
     }),
   getPlanningSettings: (init) =>
