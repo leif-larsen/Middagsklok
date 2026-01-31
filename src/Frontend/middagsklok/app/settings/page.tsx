@@ -74,8 +74,6 @@ function ToggleRow({
 }
 
 export default function SettingsPage() {
-  const [maxDishes, setMaxDishes] = useState(7);
-  const [minDishes, setMinDishes] = useState(5);
   const [allowRepeats, setAllowRepeats] = useState(false);
   const [includeWeekends, setIncludeWeekends] = useState(true);
   const [autoGeneratePlans, setAutoGeneratePlans] = useState(true);
@@ -83,6 +81,7 @@ export default function SettingsPage() {
   const [maxPrepMinutes, setMaxPrepMinutes] = useState(60);
   const [defaultServings, setDefaultServings] = useState(4);
   const [weekStartsOn, setWeekStartsOn] = useState("Monday");
+  const [seafoodPerWeek, setSeafoodPerWeek] = useState(2);
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
   const [settingsLoadError, setSettingsLoadError] = useState<string | null>(null);
   const [isSavingSettings, setIsSavingSettings] = useState(false);
@@ -97,16 +96,6 @@ export default function SettingsPage() {
     "Shellfish",
     "Peanuts",
   ]);
-
-  const handleMaxDishesChange = (value: number) => {
-    setMaxDishes(value);
-    setMinDishes((current) => Math.min(current, value));
-  };
-
-  const handleMinDishesChange = (value: number) => {
-    setMinDishes(value);
-    setMaxDishes((current) => Math.max(current, value));
-  };
 
   const togglePreferredCategory = (category: string) => {
     setPreferredCategories((current) =>
@@ -140,11 +129,13 @@ export default function SettingsPage() {
               === response.weekStartsOn.trim().toLowerCase(),
           );
           setWeekStartsOn(matched?.value ?? "Monday");
+          setSeafoodPerWeek(response.seafoodPerWeek ?? 2);
         }
       } catch (error) {
         if (error instanceof ApiError && error.status === 404) {
           if (isActive) {
             setWeekStartsOn("Monday");
+            setSeafoodPerWeek(2);
           }
         } else {
           if (error instanceof ApiError) {
@@ -181,8 +172,10 @@ export default function SettingsPage() {
     try {
       const response = await apiClient.upsertPlanningSettings({
         weekStartsOn,
+        seafoodPerWeek,
       });
       setWeekStartsOn(response.weekStartsOn ?? weekStartsOn);
+      setSeafoodPerWeek(response.seafoodPerWeek ?? seafoodPerWeek);
       setSaveMessage("Settings saved.");
     } catch (error) {
       if (error instanceof ApiError) {
@@ -278,33 +271,16 @@ export default function SettingsPage() {
                   ) : null}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm font-semibold text-[#1f2a22]">
-                      <span>Maximum Dishes per Week</span>
-                      <span className="text-[#2f6b4f]">{maxDishes}</span>
+                      <span>Seafood per Week</span>
+                      <span className="text-[#2f6b4f]">{seafoodPerWeek}</span>
                     </div>
                     <input
                       type="range"
-                      min={minDishes}
-                      max={12}
-                      value={maxDishes}
+                      min={0}
+                      max={7}
+                      value={seafoodPerWeek}
                       onChange={(event) =>
-                        handleMaxDishesChange(Number(event.target.value))
-                      }
-                      className="h-2 w-full cursor-pointer appearance-none rounded-full bg-[#e2e8dc] accent-[#2f6b4f]"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm font-semibold text-[#1f2a22]">
-                      <span>Minimum Dishes per Week</span>
-                      <span className="text-[#2f6b4f]">{minDishes}</span>
-                    </div>
-                    <input
-                      type="range"
-                      min={2}
-                      max={maxDishes}
-                      value={minDishes}
-                      onChange={(event) =>
-                        handleMinDishesChange(Number(event.target.value))
+                        setSeafoodPerWeek(Number(event.target.value))
                       }
                       className="h-2 w-full cursor-pointer appearance-none rounded-full bg-[#e2e8dc] accent-[#2f6b4f]"
                     />

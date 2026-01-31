@@ -22,6 +22,11 @@ public class PlanningSettingsConfiguration : IEntityTypeConfiguration<PlanningSe
             .HasMaxLength(20)
             .IsRequired();
 
+        builder.Property(settings => settings.SeafoodPerWeek)
+            .HasColumnName("seafood_per_week")
+            .HasDefaultValue(2)
+            .IsRequired();
+
         builder.Property(settings => settings.CreatedAt)
             .HasColumnName("created_at")
             .IsRequired();

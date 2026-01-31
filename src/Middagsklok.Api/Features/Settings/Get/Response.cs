@@ -2,7 +2,8 @@ namespace Middagsklok.Api.Features.Settings.Get;
 
 public sealed record Response(
     string Id,
-    string WeekStartsOn);
+    string WeekStartsOn,
+    int SeafoodPerWeek);
 
 public sealed record ErrorResponse(
     string Message,

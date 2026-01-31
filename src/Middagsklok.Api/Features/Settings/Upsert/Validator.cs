@@ -20,12 +20,27 @@ internal sealed class Validator
                 "Week start day is invalid."));
         }
 
+        var seafoodPerWeek = request.SeafoodPerWeek.GetValueOrDefault();
+
+        if (request.SeafoodPerWeek is null)
+        {
+            failures.Add(new ValidationError(
+                ToFieldName(nameof(Request.SeafoodPerWeek)),
+                "Seafood per week is required."));
+        }
+        else if (seafoodPerWeek < 0 || seafoodPerWeek > 7)
+        {
+            failures.Add(new ValidationError(
+                ToFieldName(nameof(Request.SeafoodPerWeek)),
+                "Seafood per week must be between 0 and 7."));
+        }
+
         if (failures.Count > 0)
         {
             return new ValidationResult(false, null, failures);
         }
 
-        var candidate = new PlanningSettingsCandidate(weekStartsOn);
+        var candidate = new PlanningSettingsCandidate(weekStartsOn, seafoodPerWeek);
         return new ValidationResult(true, candidate, Array.Empty<ValidationError>());
     }
 
@@ -65,4 +80,4 @@ internal sealed record ValidationResult(
     PlanningSettingsCandidate? Candidate,
     IReadOnlyList<ValidationError> Errors);
 
-internal sealed record PlanningSettingsCandidate(DayOfWeek WeekStartsOn);
+internal sealed record PlanningSettingsCandidate(DayOfWeek WeekStartsOn, int SeafoodPerWeek);

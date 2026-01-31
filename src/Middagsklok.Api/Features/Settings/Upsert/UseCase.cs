@@ -25,12 +25,16 @@ internal sealed class UseCase(AppDbContext dbContext)
 
         if (settings is null)
         {
-            settings = new PlanningSettings(validation.Candidate.WeekStartsOn);
+            settings = new PlanningSettings(
+                validation.Candidate.WeekStartsOn,
+                validation.Candidate.SeafoodPerWeek);
             _dbContext.PlanningSettings.Add(settings);
         }
         else
         {
-            settings.Update(validation.Candidate.WeekStartsOn);
+            settings.Update(
+                validation.Candidate.WeekStartsOn,
+                validation.Candidate.SeafoodPerWeek);
         }
 
         await _dbContext.SaveChangesAsync(cancellationToken);
@@ -43,7 +47,10 @@ internal sealed class UseCase(AppDbContext dbContext)
 
     // Maps the planning settings entity to the response.
     private static Response MapSettings(PlanningSettings settings) =>
-        new(settings.Id.ToString("D"), settings.WeekStartsOn.ToString());
+        new(
+            settings.Id.ToString("D"),
+            settings.WeekStartsOn.ToString(),
+            settings.SeafoodPerWeek);
 }
 
 internal enum UpsertOutcome

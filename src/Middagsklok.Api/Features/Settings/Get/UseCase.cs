@@ -32,7 +32,10 @@ internal sealed class UseCase(AppDbContext dbContext)
 
     // Maps the planning settings entity to the response.
     private static Response MapSettings(PlanningSettings settings) =>
-        new(settings.Id.ToString("D"), settings.WeekStartsOn.ToString());
+        new(
+            settings.Id.ToString("D"),
+            settings.WeekStartsOn.ToString(),
+            settings.SeafoodPerWeek);
 }
 
 internal enum FetchOutcome

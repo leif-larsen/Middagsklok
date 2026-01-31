@@ -15,7 +15,7 @@ internal static class PlanningSettingsUpsertEndpoint
         UseCase useCase,
         CancellationToken cancellationToken)
     {
-        var safeRequest = request ?? new Request(null);
+        var safeRequest = request ?? new Request(null, null);
         var result = await useCase.Execute(safeRequest, cancellationToken);
 
         return result.Outcome switch
