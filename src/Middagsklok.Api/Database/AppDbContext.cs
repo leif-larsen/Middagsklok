@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Middagsklok.Api.Domain.Dish;
+using Middagsklok.Api.Domain.DishHistory;
 using Middagsklok.Api.Domain.Ingredient;
 using Middagsklok.Api.Domain.Settings;
 using Middagsklok.Api.Domain.WeeklyPlan;
@@ -10,6 +11,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 {
     public DbSet<Ingredient> Ingredients => Set<Ingredient>();
     public DbSet<Dish> Dishes => Set<Dish>();
+    public DbSet<DishConsumptionEvent> DishConsumptionEvents => Set<DishConsumptionEvent>();
     public DbSet<PlanningSettings> PlanningSettings => Set<PlanningSettings>();
     public DbSet<WeeklyPlan> WeeklyPlans => Set<WeeklyPlan>();
 

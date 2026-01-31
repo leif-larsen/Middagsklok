@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, type CSSProperties } from "react";
+import { JSX, useEffect, useState, type CSSProperties } from "react";
 
 type IconProps = {
   className?: string;
