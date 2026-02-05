@@ -86,6 +86,7 @@ internal sealed class UseCase(AppDbContext dbContext)
             validation.Candidate.CookTimeMinutes,
             validation.Candidate.Servings,
             validation.Candidate.Instructions,
+            validation.Candidate.IsSeafood,
             dishIngredients);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
@@ -231,6 +232,7 @@ internal sealed class UseCase(AppDbContext dbContext)
             dish.CookTimeMinutes,
             dish.Servings,
             dish.Instructions,
+            dish.IsSeafood,
             ingredients);
 
         return response;

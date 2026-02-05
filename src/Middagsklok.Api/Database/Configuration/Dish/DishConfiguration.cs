@@ -44,6 +44,11 @@ public class DishConfiguration : IEntityTypeConfiguration<DishEntity>
             .HasColumnName("instructions")
             .HasMaxLength(5000);
 
+        builder.Property(d => d.IsSeafood)
+            .HasColumnName("is_seafood")
+            .HasDefaultValue(false)
+            .IsRequired();
+
         builder.Property(d => d.CreatedAt)
             .HasColumnName("created_at")
             .IsRequired();

@@ -74,6 +74,7 @@ internal sealed class UseCase(AppDbContext dbContext)
             validation.Candidate.CookTimeMinutes,
             validation.Candidate.Servings,
             validation.Candidate.Instructions,
+            validation.Candidate.IsSeafood,
             dishIngredients);
 
         _dbContext.Dishes.Add(dishEntity);
@@ -220,6 +221,7 @@ internal sealed class UseCase(AppDbContext dbContext)
             dish.CookTimeMinutes,
             dish.Servings,
             dish.Instructions,
+            dish.IsSeafood,
             ingredients);
 
         return response;

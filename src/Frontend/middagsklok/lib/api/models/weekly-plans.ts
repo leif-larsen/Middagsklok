@@ -29,7 +29,9 @@ export type WeeklyPlanUpsertResponse = {
 };
 
 export type WeeklyPlanResponse = WeeklyPlanUpsertResponse;
-export type WeeklyPlanGenerateResponse = WeeklyPlanUpsertResponse;
+export type WeeklyPlanGenerateResponse = WeeklyPlanUpsertResponse & {
+  notes?: string[];
+};
 
 export type WeeklyPlanSummary = {
   startDate: string;

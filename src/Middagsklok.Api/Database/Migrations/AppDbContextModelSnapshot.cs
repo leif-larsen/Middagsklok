@@ -48,6 +48,12 @@ namespace Middagsklok.Api.Database.Migrations
                         .HasColumnType("character varying(5000)")
                         .HasColumnName("instructions");
 
+                    b.Property<bool>("IsSeafood")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_seafood");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)

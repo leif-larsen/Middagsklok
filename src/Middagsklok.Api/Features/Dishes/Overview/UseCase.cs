@@ -95,6 +95,7 @@ internal sealed class UseCase(AppDbContext dbContext)
             dish.CookTimeMinutes,
             dish.Servings,
             dish.Instructions,
+            dish.IsSeafood,
             ingredients);
 
         return overview;

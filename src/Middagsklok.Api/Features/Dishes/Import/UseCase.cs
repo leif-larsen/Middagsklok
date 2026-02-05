@@ -87,6 +87,7 @@ internal sealed class UseCase(AppDbContext dbContext)
                 validation.Candidate.CookTimeMinutes,
                 validation.Candidate.Servings,
                 null,
+                IsSeafoodDish(validation.Candidate),
                 ingredients);
 
             dishesToAdd.Add(dishEntity);
@@ -169,4 +170,8 @@ internal sealed class UseCase(AppDbContext dbContext)
 
     // Normalizes names for case-insensitive comparisons.
     private static string NormalizeName(string? value) => value?.Trim().ToUpperInvariant() ?? string.Empty;
+
+    // Determines if an imported dish should be marked as seafood.
+    private static bool IsSeafoodDish(DishCandidate candidate) =>
+        candidate.Ingredients.Any(ingredient => ingredient.Category == IngredientCategory.Seafood);
 }

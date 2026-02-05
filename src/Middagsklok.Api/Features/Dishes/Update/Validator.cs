@@ -125,6 +125,7 @@ internal sealed class Validator
             request.CookMinutes,
             request.Serves,
             NormalizeInstructions(request.Instructions),
+            request.IsSeafood,
             candidates);
 
         return new ValidationResult(true, candidateDish, Array.Empty<ValidationError>());
@@ -204,6 +205,7 @@ internal sealed record DishCandidate(
     int CookTimeMinutes,
     int Servings,
     string? Instructions,
+    bool IsSeafood,
     IReadOnlyList<IngredientCandidate> Ingredients);
 
 internal sealed record IngredientCandidate(

@@ -333,7 +333,9 @@ export default function WeeklyPlannerPage() {
     try {
       const response = await apiClient.generateWeeklyPlan(startDate);
       setPlan(mapResponseToPlan(response));
-      setSaveMessage("Weekly plan generated.");
+      const notes = response.notes?.filter((note) => note.trim().length > 0) ?? [];
+      const noteSuffix = notes.length > 0 ? ` ${notes.join(" ")}` : "";
+      setSaveMessage(`Weekly plan generated.${noteSuffix}`);
     } catch (error) {
       if (error instanceof ApiError) {
         console.error("Failed to generate weekly plan:", error.body ?? error.message);

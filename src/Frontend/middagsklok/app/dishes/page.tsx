@@ -34,6 +34,7 @@ type Dish = {
   cookMinutes: number;
   serves: number;
   instructions?: string | null;
+  isSeafood: boolean;
   ingredients: Ingredient[];
 };
 
@@ -45,6 +46,7 @@ const emptyDish: Dish = {
   cookMinutes: 0,
   serves: 0,
   instructions: "",
+  isSeafood: false,
   ingredients: [],
 };
 
@@ -72,6 +74,7 @@ export default function DishesPage() {
   const [formCookMinutes, setFormCookMinutes] = useState("");
   const [formServes, setFormServes] = useState("");
   const [formInstructions, setFormInstructions] = useState("");
+  const [formIsSeafood, setFormIsSeafood] = useState(false);
   const [validationErrors, setValidationErrors] = useState<
     DishCreateValidationError[] | DishUpdateValidationError[]
   >([]);
@@ -169,6 +172,7 @@ export default function DishesPage() {
       isEditMode ? String(activeDish.serves ?? 0) : "",
     );
     setFormInstructions(activeDish.instructions ?? "");
+    setFormIsSeafood(activeDish.isSeafood ?? false);
     setValidationErrors([]);
     setSubmitError(null);
     setIsSaving(false);
@@ -277,6 +281,7 @@ export default function DishesPage() {
         cookMinutes: parseNumber(formCookMinutes),
         serves: parseNumber(formServes),
         instructions: instructions ? instructions : null,
+        isSeafood: formIsSeafood,
         ingredients: draftIngredients.map((ingredient) => ({
           id: ingredient.ingredientId,
           name: ingredient.label,
@@ -504,6 +509,11 @@ export default function DishesPage() {
                       <span className="mt-2 inline-flex rounded-full bg-[#edf1ea] px-3 py-1 text-xs font-semibold text-[#4f5f55]">
                         {dish.cuisine}
                       </span>
+                      {dish.isSeafood ? (
+                        <span className="mt-2 ml-2 inline-flex rounded-full bg-[#e6f5ff] px-3 py-1 text-xs font-semibold text-[#1d5b7a]">
+                          Seafood
+                        </span>
+                      ) : null}
                     </div>
                     <div className="flex items-center gap-2">
                       <button
@@ -652,6 +662,15 @@ export default function DishesPage() {
               />
             </label>
           </div>
+          <label className="inline-flex items-center gap-3 rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm font-semibold text-[#3f4b43]">
+            <input
+              type="checkbox"
+              checked={formIsSeafood}
+              onChange={(event) => setFormIsSeafood(event.target.checked)}
+              className="h-4 w-4 rounded border-[#b9c8bd] text-[#2f6b4f] focus:ring-[#2f6b4f]/30"
+            />
+            Seafood dish
+          </label>
 
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">

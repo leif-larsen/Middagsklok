@@ -10,6 +10,7 @@ public sealed record DishOverview(
     int CookMinutes,
     int Serves,
     string? Instructions,
+    bool IsSeafood,
     IEnumerable<DishIngredientOverview> Ingredients);
 
 public sealed record DishIngredientOverview(

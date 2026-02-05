@@ -33,6 +33,7 @@ export type DishOverview = {
   cookMinutes: number;
   serves: number;
   instructions?: string | null;
+  isSeafood: boolean;
   ingredients: DishOverviewIngredient[];
 };
 
@@ -63,6 +64,7 @@ export type DishCreateRequest = {
   cookMinutes: number;
   serves: number;
   instructions?: string | null;
+  isSeafood: boolean;
   ingredients?: DishCreateIngredientInput[] | null;
 };
 

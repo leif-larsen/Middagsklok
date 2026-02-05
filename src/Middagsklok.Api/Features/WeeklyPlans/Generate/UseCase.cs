@@ -1,12 +1,15 @@
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Middagsklok.Api.Database;
+using Middagsklok.Api.Domain.Settings;
 using Middagsklok.Api.Domain.WeeklyPlan;
 
 namespace Middagsklok.Api.Features.WeeklyPlans.Generate;
 
 internal sealed class UseCase(AppDbContext dbContext)
 {
+    private const int DaysPerWeek = 7;
+
     private readonly AppDbContext _dbContext = dbContext;
 
     // Executes the weekly plan generation workflow.
@@ -21,8 +24,8 @@ internal sealed class UseCase(AppDbContext dbContext)
             return invalidResult;
         }
 
-        var dishIds = await LoadDishIds(cancellationToken);
-        if (dishIds.Count == 0)
+        var dishes = await LoadDishes(cancellationToken);
+        if (dishes.Count == 0)
         {
             var errors = new[]
             {
@@ -33,7 +36,9 @@ internal sealed class UseCase(AppDbContext dbContext)
             return invalidResult;
         }
 
-        var days = BuildDays(validation.StartDate, dishIds);
+        var settings = await LoadSettings(cancellationToken);
+        var seafoodPerWeek = settings?.SeafoodPerWeek ?? 2;
+        var generation = BuildDays(validation.StartDate, dishes, seafoodPerWeek);
 
         var plan = await _dbContext.WeeklyPlans
             .Include(existing => existing.Days)
@@ -43,43 +48,150 @@ internal sealed class UseCase(AppDbContext dbContext)
 
         if (plan is null)
         {
-            plan = new WeeklyPlan(validation.StartDate, days);
+            plan = new WeeklyPlan(validation.StartDate, generation.Days);
             _dbContext.WeeklyPlans.Add(plan);
         }
         else
         {
-            plan.Update(validation.StartDate, days);
+            plan.Update(validation.StartDate, generation.Days);
         }
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        var response = MapPlan(plan);
+        var response = MapPlan(plan, generation.Notes);
         var result = new UseCaseResult(GenerateOutcome.Success, response, Array.Empty<ValidationError>());
 
         return result;
     }
 
-    // Loads the available dish identifiers for selection.
-    private async Task<IReadOnlyList<Guid>> LoadDishIds(CancellationToken cancellationToken)
+    // Loads the available dishes for selection.
+    private async Task<IReadOnlyList<DishCandidate>> LoadDishes(CancellationToken cancellationToken)
     {
-        var dishIds = await _dbContext.Dishes
+        var dishes = await _dbContext.Dishes
             .AsNoTracking()
-            .Select(dish => dish.Id)
+            .Select(dish => new DishCandidate(dish.Id, dish.IsSeafood))
             .ToListAsync(cancellationToken);
 
-        return dishIds;
+        return dishes;
     }
 
-    // Builds the planned days for the requested week.
-    private static IReadOnlyList<PlannedDay> BuildDays(DateOnly startDate, IReadOnlyList<Guid> dishIds)
+    // Loads planning settings when they exist.
+    private async Task<PlanningSettings?> LoadSettings(CancellationToken cancellationToken)
     {
-        var days = Enumerable.Range(0, 7)
-            .Select(offset => new PlannedDay(
-                startDate.AddDays(offset),
-                new DishSelection(DishSelectionType.Dish, PickDishId(dishIds))))
-            .ToArray();
+        var settings = await _dbContext.PlanningSettings
+            .AsNoTracking()
+            .FirstOrDefaultAsync(cancellationToken);
 
-        return days;
+        return settings;
+    }
+
+    // Builds the planned days while applying the seafood target rule.
+    private static GenerationResult BuildDays(
+        DateOnly startDate,
+        IReadOnlyList<DishCandidate> dishes,
+        int seafoodPerWeek)
+    {
+        var requestedSeafoodCount = Math.Clamp(seafoodPerWeek, 0, DaysPerWeek);
+        var seafoodDishIds = dishes
+            .Where(dish => dish.IsSeafood)
+            .Select(dish => dish.Id)
+            .ToArray();
+        var nonSeafoodDishIds = dishes
+            .Where(dish => !dish.IsSeafood)
+            .Select(dish => dish.Id)
+            .ToArray();
+        var allDishIds = dishes.Select(dish => dish.Id).ToArray();
+        var seafoodLookup = dishes.ToDictionary(dish => dish.Id, dish => dish.IsSeafood);
+        var seafoodRequirements = BuildSeafoodRequirements(requestedSeafoodCount);
+        var notes = new List<string>();
+        var days = new PlannedDay[DaysPerWeek];
+        var usedSeafoodFallback = false;
+        var usedNonSeafoodFallback = false;
+        var actualSeafoodCount = 0;
+
+        for (var offset = 0; offset < DaysPerWeek; offset++)
+        {
+            var requiresSeafood = seafoodRequirements[offset];
+            var pick = requiresSeafood
+                ? PickDishIdWithFallback(seafoodDishIds, allDishIds)
+                : PickDishIdWithFallback(nonSeafoodDishIds, allDishIds);
+
+            if (requiresSeafood && pick.UsedFallback)
+            {
+                usedSeafoodFallback = true;
+            }
+
+            if (!requiresSeafood && pick.UsedFallback)
+            {
+                usedNonSeafoodFallback = true;
+            }
+
+            if (seafoodLookup[pick.DishId])
+            {
+                actualSeafoodCount++;
+            }
+
+            days[offset] = new PlannedDay(
+                startDate.AddDays(offset),
+                new DishSelection(DishSelectionType.Dish, pick.DishId));
+        }
+
+        if (usedSeafoodFallback)
+        {
+            notes.Add("Seafood target was relaxed because no seafood dishes are available.");
+        }
+
+        if (usedNonSeafoodFallback)
+        {
+            notes.Add("Seafood target was relaxed because no non-seafood dishes are available.");
+        }
+
+        if (actualSeafoodCount != requestedSeafoodCount)
+        {
+            notes.Add(
+                $"Requested {requestedSeafoodCount} seafood dish(es), generated {actualSeafoodCount}.");
+        }
+
+        return new GenerationResult(days, notes.AsReadOnly());
+    }
+
+    // Builds and shuffles the seafood requirements for each day.
+    private static bool[] BuildSeafoodRequirements(int requestedSeafoodCount)
+    {
+        var requirements = new bool[DaysPerWeek];
+        for (var index = 0; index < requestedSeafoodCount; index++)
+        {
+            requirements[index] = true;
+        }
+
+        Shuffle(requirements);
+
+        return requirements;
+    }
+
+    // Shuffles an array in-place using Fisher-Yates.
+    private static void Shuffle(bool[] values)
+    {
+        for (var index = values.Length - 1; index > 0; index--)
+        {
+            var swapIndex = Random.Shared.Next(index + 1);
+            (values[index], values[swapIndex]) = (values[swapIndex], values[index]);
+        }
+    }
+
+    // Picks a dish from a preferred pool and falls back to all dishes when needed.
+    private static DishPick PickDishIdWithFallback(
+        IReadOnlyList<Guid> preferredDishIds,
+        IReadOnlyList<Guid> fallbackDishIds)
+    {
+        if (preferredDishIds.Count > 0)
+        {
+            var preferredId = PickDishId(preferredDishIds);
+            return new DishPick(preferredId, false);
+        }
+
+        var fallbackId = PickDishId(fallbackDishIds);
+        return new DishPick(fallbackId, true);
     }
 
     // Picks a random dish identifier from the available list.
@@ -87,7 +199,7 @@ internal sealed class UseCase(AppDbContext dbContext)
         dishIds[Random.Shared.Next(dishIds.Count)];
 
     // Maps a weekly plan entity to the response.
-    private static Response MapPlan(WeeklyPlan plan)
+    private static Response MapPlan(WeeklyPlan plan, IReadOnlyList<string> notes)
     {
         var days = plan.Days
             .OrderBy(day => day.Date)
@@ -97,7 +209,8 @@ internal sealed class UseCase(AppDbContext dbContext)
         var response = new Response(
             plan.Id.ToString("D"),
             FormatDate(plan.StartDate),
-            days);
+            days,
+            notes);
 
         return response;
     }
@@ -118,6 +231,14 @@ internal sealed class UseCase(AppDbContext dbContext)
     private static string FormatDate(DateOnly date) =>
         date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 }
+
+internal sealed record DishCandidate(Guid Id, bool IsSeafood);
+
+internal sealed record DishPick(Guid DishId, bool UsedFallback);
+
+internal sealed record GenerationResult(
+    IReadOnlyList<PlannedDay> Days,
+    IReadOnlyList<string> Notes);
 
 internal enum GenerateOutcome
 {

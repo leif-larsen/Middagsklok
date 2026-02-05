@@ -3,7 +3,8 @@ namespace Middagsklok.Api.Features.WeeklyPlans.Generate;
 public sealed record Response(
     string Id,
     string StartDate,
-    IEnumerable<PlannedDayResponse> Days);
+    IEnumerable<PlannedDayResponse> Days,
+    IReadOnlyList<string> Notes);
 
 public sealed record PlannedDayResponse(
     string Date,

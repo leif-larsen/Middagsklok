@@ -8,6 +8,7 @@ public sealed record Response(
     int CookMinutes,
     int Serves,
     string? Instructions,
+    bool IsSeafood,
     IEnumerable<DishIngredientResponse> Ingredients);
 
 public sealed record DishIngredientResponse(

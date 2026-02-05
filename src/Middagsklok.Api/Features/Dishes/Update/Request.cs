@@ -9,6 +9,7 @@ public sealed record Request(
     [property: JsonPropertyName("cookMinutes")] int CookMinutes,
     [property: JsonPropertyName("serves")] int Serves,
     [property: JsonPropertyName("instructions")] string? Instructions,
+    [property: JsonPropertyName("isSeafood")] bool IsSeafood,
     [property: JsonPropertyName("ingredients")] IReadOnlyList<IngredientInput>? Ingredients);
 
 public sealed record IngredientInput(
