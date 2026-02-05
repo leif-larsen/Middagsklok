@@ -105,31 +105,40 @@ internal sealed class UseCase(AppDbContext dbContext)
         var seafoodRequirements = BuildSeafoodRequirements(requestedSeafoodCount);
         var notes = new List<string>();
         var days = new PlannedDay[DaysPerWeek];
+        var usedDishIds = new HashSet<Guid>();
         var usedSeafoodFallback = false;
         var usedNonSeafoodFallback = false;
+        var usedUniquenessRelaxation = false;
         var actualSeafoodCount = 0;
 
         for (var offset = 0; offset < DaysPerWeek; offset++)
         {
             var requiresSeafood = seafoodRequirements[offset];
             var pick = requiresSeafood
-                ? PickDishIdWithFallback(seafoodDishIds, allDishIds)
-                : PickDishIdWithFallback(nonSeafoodDishIds, allDishIds);
+                ? PickDishIdWithFallback(seafoodDishIds, allDishIds, usedDishIds)
+                : PickDishIdWithFallback(nonSeafoodDishIds, allDishIds, usedDishIds);
 
-            if (requiresSeafood && pick.UsedFallback)
+            if (requiresSeafood && pick.UsedFallbackCategory)
             {
                 usedSeafoodFallback = true;
             }
 
-            if (!requiresSeafood && pick.UsedFallback)
+            if (!requiresSeafood && pick.UsedFallbackCategory)
             {
                 usedNonSeafoodFallback = true;
+            }
+
+            if (pick.UsedDuplicate)
+            {
+                usedUniquenessRelaxation = true;
             }
 
             if (seafoodLookup[pick.DishId])
             {
                 actualSeafoodCount++;
             }
+
+            usedDishIds.Add(pick.DishId);
 
             days[offset] = new PlannedDay(
                 startDate.AddDays(offset),
@@ -144,6 +153,12 @@ internal sealed class UseCase(AppDbContext dbContext)
         if (usedNonSeafoodFallback)
         {
             notes.Add("Seafood target was relaxed because no non-seafood dishes are available.");
+        }
+
+        if (usedUniquenessRelaxation)
+        {
+            notes.Add(
+                $"Dish uniqueness was relaxed because only {allDishIds.Length} unique dish(es) are available for {DaysPerWeek} day(s).");
         }
 
         if (actualSeafoodCount != requestedSeafoodCount)
@@ -182,16 +197,35 @@ internal sealed class UseCase(AppDbContext dbContext)
     // Picks a dish from a preferred pool and falls back to all dishes when needed.
     private static DishPick PickDishIdWithFallback(
         IReadOnlyList<Guid> preferredDishIds,
-        IReadOnlyList<Guid> fallbackDishIds)
+        IReadOnlyList<Guid> fallbackDishIds,
+        IReadOnlySet<Guid> usedDishIds)
     {
-        if (preferredDishIds.Count > 0)
+        var preferredUnusedDishIds = preferredDishIds
+            .Where(dishId => !usedDishIds.Contains(dishId))
+            .ToArray();
+        if (preferredUnusedDishIds.Length > 0)
         {
-            var preferredId = PickDishId(preferredDishIds);
-            return new DishPick(preferredId, false);
+            var preferredId = PickDishId(preferredUnusedDishIds);
+            return new DishPick(preferredId, false, false);
         }
 
-        var fallbackId = PickDishId(fallbackDishIds);
-        return new DishPick(fallbackId, true);
+        var fallbackUnusedDishIds = fallbackDishIds
+            .Where(dishId => !usedDishIds.Contains(dishId))
+            .ToArray();
+        if (fallbackUnusedDishIds.Length > 0)
+        {
+            var fallbackUnusedId = PickDishId(fallbackUnusedDishIds);
+            return new DishPick(fallbackUnusedId, true, false);
+        }
+
+        if (preferredDishIds.Count > 0)
+        {
+            var preferredDuplicateId = PickDishId(preferredDishIds);
+            return new DishPick(preferredDuplicateId, false, true);
+        }
+
+        var fallbackDuplicateId = PickDishId(fallbackDishIds);
+        return new DishPick(fallbackDuplicateId, true, true);
     }
 
     // Picks a random dish identifier from the available list.
@@ -234,7 +268,7 @@ internal sealed class UseCase(AppDbContext dbContext)
 
 internal sealed record DishCandidate(Guid Id, bool IsSeafood);
 
-internal sealed record DishPick(Guid DishId, bool UsedFallback);
+internal sealed record DishPick(Guid DishId, bool UsedFallbackCategory, bool UsedDuplicate);
 
 internal sealed record GenerationResult(
     IReadOnlyList<PlannedDay> Days,

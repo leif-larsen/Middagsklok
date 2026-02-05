@@ -40,6 +40,14 @@ public sealed class UseCaseTests
             && seafoodByDishId.TryGetValue(day.Selection.DishId, out var isSeafood)
             && isSeafood);
 
+    // Counts unique dish selections in a generated plan.
+    private static int CountUniqueDishes(Response plan) =>
+        plan.Days
+            .Select(day => day.Selection.DishId)
+            .Where(dishId => dishId is not null)
+            .Distinct(StringComparer.Ordinal)
+            .Count();
+
     // Verifies that generation picks the exact configured seafood count when both pools exist.
     [Test]
     public async Task GeneratesExactSeafoodCountWhenPoolsAreAvailable()
@@ -48,9 +56,14 @@ public sealed class UseCaseTests
         await using var context = CreateContext(databaseName);
 
         context.PlanningSettings.Add(new PlanningSettings(DayOfWeek.Monday, 2));
-        var seafoodDish = CreateDish("Baked Salmon", true);
-        var nonSeafoodDish = CreateDish("Pasta Arrabbiata", false);
-        context.Dishes.AddRange(seafoodDish, nonSeafoodDish);
+        context.Dishes.AddRange(
+            CreateDish("Baked Salmon", true),
+            CreateDish("Shrimp Rice", true),
+            CreateDish("Pasta Arrabbiata", false),
+            CreateDish("Tomato Soup", false),
+            CreateDish("Chicken Curry", false),
+            CreateDish("Veggie Tacos", false),
+            CreateDish("Mushroom Risotto", false));
         await context.SaveChangesAsync(CancellationToken.None);
 
         var useCase = new UseCase(context);
@@ -64,8 +77,10 @@ public sealed class UseCaseTests
             .AsNoTracking()
             .ToDictionary(dish => dish.Id.ToString("D"), dish => dish.IsSeafood);
         var seafoodCount = CountSeafoodDays(plan, seafoodByDishId);
+        var uniqueDishCount = CountUniqueDishes(plan);
 
         await Assert.That(seafoodCount).IsEqualTo(2);
+        await Assert.That(uniqueDishCount).IsEqualTo(7);
         await Assert.That(plan.Notes.Count).IsEqualTo(0);
     }
 
@@ -99,5 +114,33 @@ public sealed class UseCaseTests
         await Assert.That(seafoodCount).IsEqualTo(0);
         await Assert.That(hasRelaxedNote).IsTrue();
         await Assert.That(hasCountMismatchNote).IsTrue();
+    }
+
+    // Verifies that generation relaxes uniqueness and reports notes when too few unique dishes are available.
+    [Test]
+    public async Task RelaxesUniquenessWhenTooFewDishesAreAvailable()
+    {
+        var databaseName = Guid.NewGuid().ToString("N");
+        await using var context = CreateContext(databaseName);
+
+        context.PlanningSettings.Add(new PlanningSettings(DayOfWeek.Monday, 0));
+        context.Dishes.AddRange(
+            CreateDish("Pasta Arrabbiata", false),
+            CreateDish("Tomato Soup", false));
+        await context.SaveChangesAsync(CancellationToken.None);
+
+        var useCase = new UseCase(context);
+        var result = await useCase.Execute("2026-02-02", CancellationToken.None);
+
+        await Assert.That(result.Outcome).IsEqualTo(GenerateOutcome.Success);
+        await Assert.That(result.Plan).IsNotNull();
+
+        var plan = result.Plan!;
+        var uniqueDishCount = CountUniqueDishes(plan);
+        var hasUniquenessNote = plan.Notes.Any(note =>
+            note.Contains("Dish uniqueness was relaxed because only 2 unique dish(es) are available for 7 day(s).", StringComparison.Ordinal));
+
+        await Assert.That(uniqueDishCount).IsEqualTo(2);
+        await Assert.That(hasUniquenessNote).IsTrue();
     }
 }
