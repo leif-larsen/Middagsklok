@@ -27,14 +27,16 @@ internal sealed class UseCase(AppDbContext dbContext)
         {
             settings = new PlanningSettings(
                 validation.Candidate.WeekStartsOn,
-                validation.Candidate.SeafoodPerWeek);
+                validation.Candidate.SeafoodPerWeek,
+                validation.Candidate.DaysBetween);
             _dbContext.PlanningSettings.Add(settings);
         }
         else
         {
             settings.Update(
                 validation.Candidate.WeekStartsOn,
-                validation.Candidate.SeafoodPerWeek);
+                validation.Candidate.SeafoodPerWeek,
+                validation.Candidate.DaysBetween);
         }
 
         await _dbContext.SaveChangesAsync(cancellationToken);
@@ -50,7 +52,8 @@ internal sealed class UseCase(AppDbContext dbContext)
         new(
             settings.Id.ToString("D"),
             settings.WeekStartsOn.ToString(),
-            settings.SeafoodPerWeek);
+            settings.SeafoodPerWeek,
+            settings.DaysBetween);
 }
 
 internal enum UpsertOutcome

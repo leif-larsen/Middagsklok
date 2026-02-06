@@ -21,6 +21,7 @@ internal sealed class Validator
         }
 
         var seafoodPerWeek = request.SeafoodPerWeek.GetValueOrDefault();
+        var daysBetween = request.DaysBetween.GetValueOrDefault();
 
         if (request.SeafoodPerWeek is null)
         {
@@ -35,12 +36,25 @@ internal sealed class Validator
                 "Seafood per week must be between 0 and 7."));
         }
 
+        if (request.DaysBetween is null)
+        {
+            failures.Add(new ValidationError(
+                ToFieldName(nameof(Request.DaysBetween)),
+                "Days between is required."));
+        }
+        else if (daysBetween < 0 || daysBetween > 30)
+        {
+            failures.Add(new ValidationError(
+                ToFieldName(nameof(Request.DaysBetween)),
+                "Days between must be between 0 and 30."));
+        }
+
         if (failures.Count > 0)
         {
             return new ValidationResult(false, null, failures);
         }
 
-        var candidate = new PlanningSettingsCandidate(weekStartsOn, seafoodPerWeek);
+        var candidate = new PlanningSettingsCandidate(weekStartsOn, seafoodPerWeek, daysBetween);
         return new ValidationResult(true, candidate, Array.Empty<ValidationError>());
     }
 
@@ -80,4 +94,7 @@ internal sealed record ValidationResult(
     PlanningSettingsCandidate? Candidate,
     IReadOnlyList<ValidationError> Errors);
 
-internal sealed record PlanningSettingsCandidate(DayOfWeek WeekStartsOn, int SeafoodPerWeek);
+internal sealed record PlanningSettingsCandidate(
+    DayOfWeek WeekStartsOn,
+    int SeafoodPerWeek,
+    int DaysBetween);

@@ -38,7 +38,9 @@ internal sealed class UseCase(AppDbContext dbContext)
 
         var settings = await LoadSettings(cancellationToken);
         var seafoodPerWeek = settings?.SeafoodPerWeek ?? 2;
-        var generation = BuildDays(validation.StartDate, dishes, seafoodPerWeek);
+        var daysBetween = settings?.DaysBetween ?? 14;
+        var lastEatenDates = await LoadLastEatenDates(dishes, cancellationToken);
+        var generation = BuildDays(validation.StartDate, dishes, seafoodPerWeek, daysBetween, lastEatenDates);
 
         var plan = await _dbContext.WeeklyPlans
             .Include(existing => existing.Days)
@@ -85,11 +87,44 @@ internal sealed class UseCase(AppDbContext dbContext)
         return settings;
     }
 
+    // Loads the most recent consumption date for each dish.
+    private async Task<IReadOnlyDictionary<Guid, DateOnly>> LoadLastEatenDates(
+        IReadOnlyList<DishCandidate> dishes,
+        CancellationToken cancellationToken)
+    {
+        if (dishes.Count == 0)
+        {
+            return new Dictionary<Guid, DateOnly>();
+        }
+
+        var dishIds = dishes
+            .Select(dish => dish.Id)
+            .Distinct()
+            .ToArray();
+
+        var lastEaten = await _dbContext.DishConsumptionEvents
+            .AsNoTracking()
+            .Where(evt => dishIds.Contains(evt.DishId))
+            .GroupBy(evt => evt.DishId)
+            .Select(group => new
+            {
+                DishId = group.Key,
+                LastEaten = group.Max(evt => evt.EatenOn)
+            })
+            .ToListAsync(cancellationToken);
+
+        var lookup = lastEaten.ToDictionary(entry => entry.DishId, entry => entry.LastEaten);
+
+        return lookup;
+    }
+
     // Builds the planned days while applying the seafood target rule.
     private static GenerationResult BuildDays(
         DateOnly startDate,
         IReadOnlyList<DishCandidate> dishes,
-        int seafoodPerWeek)
+        int seafoodPerWeek,
+        int daysBetween,
+        IReadOnlyDictionary<Guid, DateOnly> lastEatenDates)
     {
         var requestedSeafoodCount = Math.Clamp(seafoodPerWeek, 0, DaysPerWeek);
         var seafoodDishIds = dishes
@@ -113,10 +148,23 @@ internal sealed class UseCase(AppDbContext dbContext)
 
         for (var offset = 0; offset < DaysPerWeek; offset++)
         {
+            var dayDate = startDate.AddDays(offset);
             var requiresSeafood = seafoodRequirements[offset];
             var pick = requiresSeafood
-                ? PickDishIdWithFallback(seafoodDishIds, allDishIds, usedDishIds)
-                : PickDishIdWithFallback(nonSeafoodDishIds, allDishIds, usedDishIds);
+                ? PickDishIdWithFallback(
+                    seafoodDishIds,
+                    allDishIds,
+                    usedDishIds,
+                    dayDate,
+                    daysBetween,
+                    lastEatenDates)
+                : PickDishIdWithFallback(
+                    nonSeafoodDishIds,
+                    allDishIds,
+                    usedDishIds,
+                    dayDate,
+                    daysBetween,
+                    lastEatenDates);
 
             if (requiresSeafood && pick.UsedFallbackCategory)
             {
@@ -141,7 +189,7 @@ internal sealed class UseCase(AppDbContext dbContext)
             usedDishIds.Add(pick.DishId);
 
             days[offset] = new PlannedDay(
-                startDate.AddDays(offset),
+                dayDate,
                 new DishSelection(DishSelectionType.Dish, pick.DishId));
         }
 
@@ -198,14 +246,17 @@ internal sealed class UseCase(AppDbContext dbContext)
     private static DishPick PickDishIdWithFallback(
         IReadOnlyList<Guid> preferredDishIds,
         IReadOnlyList<Guid> fallbackDishIds,
-        IReadOnlySet<Guid> usedDishIds)
+        IReadOnlySet<Guid> usedDishIds,
+        DateOnly dayDate,
+        int daysBetween,
+        IReadOnlyDictionary<Guid, DateOnly> lastEatenDates)
     {
         var preferredUnusedDishIds = preferredDishIds
             .Where(dishId => !usedDishIds.Contains(dishId))
             .ToArray();
         if (preferredUnusedDishIds.Length > 0)
         {
-            var preferredId = PickDishId(preferredUnusedDishIds);
+            var preferredId = PickDishId(preferredUnusedDishIds, dayDate, daysBetween, lastEatenDates);
             return new DishPick(preferredId, false, false);
         }
 
@@ -214,23 +265,93 @@ internal sealed class UseCase(AppDbContext dbContext)
             .ToArray();
         if (fallbackUnusedDishIds.Length > 0)
         {
-            var fallbackUnusedId = PickDishId(fallbackUnusedDishIds);
+            var fallbackUnusedId = PickDishId(fallbackUnusedDishIds, dayDate, daysBetween, lastEatenDates);
             return new DishPick(fallbackUnusedId, true, false);
         }
 
         if (preferredDishIds.Count > 0)
         {
-            var preferredDuplicateId = PickDishId(preferredDishIds);
+            var preferredDuplicateId = PickDishId(preferredDishIds, dayDate, daysBetween, lastEatenDates);
             return new DishPick(preferredDuplicateId, false, true);
         }
 
-        var fallbackDuplicateId = PickDishId(fallbackDishIds);
+        var fallbackDuplicateId = PickDishId(fallbackDishIds, dayDate, daysBetween, lastEatenDates);
         return new DishPick(fallbackDuplicateId, true, true);
     }
 
-    // Picks a random dish identifier from the available list.
-    private static Guid PickDishId(IReadOnlyList<Guid> dishIds) =>
-        dishIds[Random.Shared.Next(dishIds.Count)];
+    // Picks a dish identifier based on recency scoring.
+    private static Guid PickDishId(
+        IReadOnlyList<Guid> dishIds,
+        DateOnly dayDate,
+        int daysBetween,
+        IReadOnlyDictionary<Guid, DateOnly> lastEatenDates)
+    {
+        if (dishIds.Count == 1)
+        {
+            return dishIds[0];
+        }
+
+        var totalScore = 0;
+        var scores = new int[dishIds.Count];
+
+        for (var index = 0; index < dishIds.Count; index++)
+        {
+            var dishId = dishIds[index];
+            var score = CalculateRecencyScore(dishId, dayDate, daysBetween, lastEatenDates);
+            scores[index] = score;
+            totalScore += score;
+        }
+
+        if (totalScore <= 0)
+        {
+            return dishIds[Random.Shared.Next(dishIds.Count)];
+        }
+
+        var roll = Random.Shared.Next(totalScore);
+        var cumulative = 0;
+
+        for (var index = 0; index < scores.Length; index++)
+        {
+            cumulative += scores[index];
+            if (roll < cumulative)
+            {
+                return dishIds[index];
+            }
+        }
+
+        return dishIds[^1];
+    }
+
+    // Calculates a recency score for weighted selection.
+    private static int CalculateRecencyScore(
+        Guid dishId,
+        DateOnly dayDate,
+        int daysBetween,
+        IReadOnlyDictionary<Guid, DateOnly> lastEatenDates)
+    {
+        if (daysBetween <= 0)
+        {
+            return 1;
+        }
+
+        if (!lastEatenDates.TryGetValue(dishId, out var lastEaten))
+        {
+            return daysBetween + 1;
+        }
+
+        var daysSince = dayDate.DayNumber - lastEaten.DayNumber;
+        if (daysSince <= 0)
+        {
+            return 1;
+        }
+
+        if (daysSince <= daysBetween)
+        {
+            return daysSince;
+        }
+
+        return daysBetween + 1;
+    }
 
     // Maps a weekly plan entity to the response.
     private static Response MapPlan(WeeklyPlan plan, IReadOnlyList<string> notes)

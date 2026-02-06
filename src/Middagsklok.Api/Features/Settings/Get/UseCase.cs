@@ -35,7 +35,8 @@ internal sealed class UseCase(AppDbContext dbContext)
         new(
             settings.Id.ToString("D"),
             settings.WeekStartsOn.ToString(),
-            settings.SeafoodPerWeek);
+            settings.SeafoodPerWeek,
+            settings.DaysBetween);
 }
 
 internal enum FetchOutcome

@@ -82,6 +82,7 @@ export default function SettingsPage() {
   const [defaultServings, setDefaultServings] = useState(4);
   const [weekStartsOn, setWeekStartsOn] = useState("Monday");
   const [seafoodPerWeek, setSeafoodPerWeek] = useState(2);
+  const [daysBetween, setDaysBetween] = useState(14);
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
   const [settingsLoadError, setSettingsLoadError] = useState<string | null>(null);
   const [isSavingSettings, setIsSavingSettings] = useState(false);
@@ -130,12 +131,14 @@ export default function SettingsPage() {
           );
           setWeekStartsOn(matched?.value ?? "Monday");
           setSeafoodPerWeek(response.seafoodPerWeek ?? 2);
+          setDaysBetween(response.daysBetween ?? 14);
         }
       } catch (error) {
         if (error instanceof ApiError && error.status === 404) {
           if (isActive) {
             setWeekStartsOn("Monday");
             setSeafoodPerWeek(2);
+            setDaysBetween(14);
           }
         } else {
           if (error instanceof ApiError) {
@@ -173,9 +176,11 @@ export default function SettingsPage() {
       const response = await apiClient.upsertPlanningSettings({
         weekStartsOn,
         seafoodPerWeek,
+        daysBetween,
       });
       setWeekStartsOn(response.weekStartsOn ?? weekStartsOn);
       setSeafoodPerWeek(response.seafoodPerWeek ?? seafoodPerWeek);
+      setDaysBetween(response.daysBetween ?? daysBetween);
       setSaveMessage("Settings saved.");
     } catch (error) {
       if (error instanceof ApiError) {
@@ -284,6 +289,25 @@ export default function SettingsPage() {
                       }
                       className="h-2 w-full cursor-pointer appearance-none rounded-full bg-[#e2e8dc] accent-[#2f6b4f]"
                     />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm font-semibold text-[#1f2a22]">
+                      <span>Days Between</span>
+                      <span className="text-[#2f6b4f]">{daysBetween}</span>
+                    </div>
+                    <input
+                      type="range"
+                      min={0}
+                      max={30}
+                      value={daysBetween}
+                      onChange={(event) =>
+                        setDaysBetween(Number(event.target.value))
+                      }
+                      className="h-2 w-full cursor-pointer appearance-none rounded-full bg-[#e2e8dc] accent-[#2f6b4f]"
+                    />
+                    <p className="text-xs text-[#7b8a7f]">
+                      Lower scores are applied to dishes eaten within this many days, but they can still be selected.
+                    </p>
                   </div>
 
                   <div className="space-y-4 border-t border-[#e1e8dc] pt-4">

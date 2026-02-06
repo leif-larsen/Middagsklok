@@ -185,6 +185,12 @@ namespace Middagsklok.Api.Database.Migrations
                         .HasDefaultValue(2)
                         .HasColumnName("seafood_per_week");
 
+                    b.Property<int>("DaysBetween")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(14)
+                        .HasColumnName("days_between");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");

@@ -27,6 +27,11 @@ public class PlanningSettingsConfiguration : IEntityTypeConfiguration<PlanningSe
             .HasDefaultValue(2)
             .IsRequired();
 
+        builder.Property(settings => settings.DaysBetween)
+            .HasColumnName("days_between")
+            .HasDefaultValue(14)
+            .IsRequired();
+
         builder.Property(settings => settings.CreatedAt)
             .HasColumnName("created_at")
             .IsRequired();
