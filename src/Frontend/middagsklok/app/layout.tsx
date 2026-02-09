@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist_Mono, Sora } from "next/font/google";
+import DishesMetadataProvider from "./components/DishesMetadataProvider";
 import IngredientsMetadataProvider from "./components/IngredientsMetadataProvider";
 import IngredientsProvider from "./components/IngredientsProvider";
 import "./globals.css";
@@ -28,9 +29,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${sora.variable} ${geistMono.variable} antialiased`}>
         <IngredientsProvider>
-          <IngredientsMetadataProvider>
-            {children}
-          </IngredientsMetadataProvider>
+          <DishesMetadataProvider>
+            <IngredientsMetadataProvider>
+              {children}
+            </IngredientsMetadataProvider>
+          </DishesMetadataProvider>
         </IngredientsProvider>
       </body>
     </html>

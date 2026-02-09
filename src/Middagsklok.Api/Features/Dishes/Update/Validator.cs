@@ -37,6 +37,14 @@ internal sealed class Validator
             failures.Add(new ValidationError(ToFieldName(nameof(Request.Serves)), "Servings must be >= 0."));
         }
 
+        var cuisineResult = MapCuisine(request.Cuisine);
+        if (!cuisineResult.IsValid)
+        {
+            failures.Add(new ValidationError(
+                ToFieldName(nameof(Request.Cuisine)),
+                cuisineResult.ErrorMessage));
+        }
+
         var ingredientsInput = request.Ingredients ?? Array.Empty<IngredientInput>();
         if (ingredientsInput.Count == 0)
         {
@@ -120,7 +128,7 @@ internal sealed class Validator
         var candidateDish = new DishCandidate(
             dishId,
             name!,
-            MapCuisine(request.Cuisine),
+            cuisineResult.Value,
             request.PrepMinutes,
             request.CookMinutes,
             request.Serves,
@@ -146,10 +154,23 @@ internal sealed class Validator
     }
 
     // Maps a raw cuisine string to the domain cuisine type.
-    private static CuisineType MapCuisine(string? rawCuisine)
+    private static CuisineParseResult MapCuisine(string? rawCuisine)
     {
         var trimmed = rawCuisine?.Trim();
-        return string.IsNullOrWhiteSpace(trimmed) ? CuisineType.Other : CuisineType.Other;
+        if (string.IsNullOrWhiteSpace(trimmed))
+        {
+            return CuisineParseResult.Valid(CuisineType.Other);
+        }
+
+        if (!Enum.TryParse<CuisineType>(trimmed, true, out var parsed)
+            || !Enum.IsDefined(typeof(CuisineType), parsed))
+        {
+            var allowed = string.Join(", ", Enum.GetNames<CuisineType>().Where(value => value != nameof(CuisineType.None)));
+            return CuisineParseResult.Invalid($"Cuisine must be one of: {allowed}.");
+        }
+
+        var normalized = parsed is CuisineType.None ? CuisineType.Other : parsed;
+        return CuisineParseResult.Valid(normalized);
     }
 
     // Normalizes free-form instructions input.
@@ -218,3 +239,13 @@ internal sealed record IngredientCandidate(
     double Amount,
     int SortOrder,
     int Index);
+
+internal sealed record CuisineParseResult(
+    bool IsValid,
+    CuisineType Value,
+    string ErrorMessage)
+{
+    public static CuisineParseResult Valid(CuisineType value) => new(true, value, string.Empty);
+
+    public static CuisineParseResult Invalid(string message) => new(false, default, message);
+}

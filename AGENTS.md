@@ -11,6 +11,51 @@ This file defines how AI agents should work in this repo. If instructions confli
 - Ensure code compiles without warnings and tests pass.
 - Follow existing project conventions and .editorconfig.
 
+## GitHub workflow policy
+- For each coding task, create a dedicated branch before making code changes.
+- Branch naming format: `codex/<type>/<short-kebab-slug>`.
+- Allowed `<type>` values: `feature`, `fix`, `chore`, `docs`, `refactor`, `test`.
+- Keep branch names concise and deterministic from the task description.
+- Commit messages should use Conventional Commits (for example: `fix(api): handle empty recipe result`).
+- Push the task branch to `origin` when work is complete.
+- Open a pull request targeting `main` after push.
+- If GitHub MCP is available, prefer it for branch/PR/issue operations; otherwise use `git` and `gh`.
+
+## Pull request policy
+- Every task branch must produce one PR unless explicitly told otherwise.
+- PR title format: `<type>(<scope>): <short summary>`.
+- PR body must include these sections:
+  - `## Summary`
+  - `## Changes`
+  - `## Verification`
+  - `## Risks`
+  - `## Follow-ups`
+- `## Verification` must include exact commands executed and their outcomes.
+- If tests were not run, state why in `## Verification`.
+- Link related issues using `Closes #<number>` or `Related to #<number>` when applicable.
+
+## Issue creation policy
+- Create GitHub issues for follow-up work that should not be completed in the current task.
+- Create an issue when one of these applies:
+  - A bug is discovered but out of current scope.
+  - Missing tests are identified and deferred.
+  - Technical debt is introduced intentionally for delivery speed.
+  - A TODO/FIXME is required to unblock current work.
+- Do not create issues for trivial edits that can be completed immediately.
+- Issue title format: `<area>: <concise problem statement>`.
+- Issue body must include:
+  - `## Problem`
+  - `## Impact`
+  - `## Proposed solution`
+  - `## Acceptance criteria`
+  - `## Notes`
+
+## Approval policy override for git and GitHub
+- Repo-specific override: prior approval is not required for non-destructive `git`, `gh`, or GitHub MCP operations used to complete the workflow above.
+- Pre-approved examples include: `git switch -c`, `git add`, `git commit`, `git push`, `gh pr create`, `gh issue create`, and equivalent MCP actions.
+- Always ask for approval before destructive or history-rewriting commands (for example: `git reset --hard`, `git rebase -i`, `git push --force`, branch deletion, or remote deletion).
+- Always ask for approval before operations outside this repository or involving secrets/permission changes.
+
 ## C# formatting and style
 - Prefer file-scoped namespaces and single-line using directives.
 - Insert a new line before the opening `{` of any code block.
@@ -112,4 +157,3 @@ This file defines how AI agents should work in this repo. If instructions confli
   - May project directly to read models (DTOs)
   - Should avoid loading full aggregates
 - Do not force commands and queries into the same abstraction.
-
