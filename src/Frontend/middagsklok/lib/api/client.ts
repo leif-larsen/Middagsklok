@@ -1,6 +1,7 @@
 import type {
   DishCreateRequest,
   DishCreateResponse,
+  DishesMetadataResponse,
   DishUpdateRequest,
   DishUpdateResponse,
   DishesImportRequest,
@@ -101,6 +102,7 @@ export type ApiClient = {
   deleteDish: (id: string, init?: RequestInit) => Promise<void>;
   getDishes: (init?: RequestInit) => Promise<DishesOverviewResponse>;
   getDishesLookup: (init?: RequestInit) => Promise<DishesLookupResponse>;
+  getDishesMetadata: (init?: RequestInit) => Promise<DishesMetadataResponse>;
   getIngredients: (init?: RequestInit) => Promise<IngredientsOverviewResponse>;
   createIngredient: (
     payload: IngredientCreateRequest,
@@ -172,6 +174,11 @@ export const apiClient: ApiClient = {
     }),
   getDishesLookup: (init) =>
     request<DishesLookupResponse>("/api/dishes/lookup", {
+      method: "GET",
+      ...init,
+    }),
+  getDishesMetadata: (init) =>
+    request<DishesMetadataResponse>("/api/dishes/metadata", {
       method: "GET",
       ...init,
     }),

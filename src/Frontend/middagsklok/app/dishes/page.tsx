@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 import Modal from "../components/Modal";
 import { apiClient, ApiError } from "../../lib/api/client";
 import { useEffect, useMemo, useState } from "react";
+import { useDishesMetadata } from "../components/DishesMetadataProvider";
 import { useIngredientsCatalog } from "../components/IngredientsProvider";
 import type {
   DishCreateErrorResponse,
@@ -93,6 +94,11 @@ export default function DishesPage() {
   const [selectedIngredientId, setSelectedIngredientId] = useState("");
   const [ingredientAmount, setIngredientAmount] = useState("");
   const {
+    cuisines: cuisineMetadata,
+    isLoading: cuisinesLoading,
+    error: cuisinesError,
+  } = useDishesMetadata();
+  const {
     ingredients: availableIngredients,
     isLoading: ingredientsLoading,
     error: ingredientsError,
@@ -149,6 +155,54 @@ export default function DishesPage() {
     || !!ingredientsError
     || ingredientOptions.length === 0;
 
+  const cuisineOptions = useMemo(
+    () =>
+      cuisineMetadata
+        .filter((cuisine) => cuisine.isSelectable)
+        .sort((left, right) => left.order - right.order || left.label.localeCompare(right.label)),
+    [cuisineMetadata],
+  );
+
+  const cuisineLabelMap = useMemo(
+    () =>
+      new Map(
+        cuisineMetadata.map((cuisine) => [cuisine.value, cuisine.label]),
+      ),
+    [cuisineMetadata],
+  );
+
+  const defaultCuisine = useMemo(() => {
+    const other = cuisineOptions.find((cuisine) => cuisine.value === "Other");
+    if (other) {
+      return other.value;
+    }
+
+    const first = cuisineOptions[0];
+    return first ? first.value : "Other";
+  }, [cuisineOptions]);
+
+  const formCuisineOptions = useMemo(() => {
+    if (!formCuisine || cuisineOptions.some((cuisine) => cuisine.value === formCuisine)) {
+      return cuisineOptions;
+    }
+
+    return [
+      {
+        value: formCuisine,
+        label: formCuisine,
+        order: Number.MIN_SAFE_INTEGER,
+        isSelectable: true,
+      },
+      ...cuisineOptions,
+    ];
+  }, [cuisineOptions, formCuisine]);
+
+  const cuisineSelectMessage = cuisinesLoading
+    ? "Loading cuisines..."
+    : formCuisineOptions.length === 0
+      ? "No cuisines available"
+      : "Select cuisine";
+
   const visibleDishes = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
     if (!query) {
@@ -167,7 +221,13 @@ export default function DishesPage() {
     }
 
     setFormName(activeDish.name ?? "");
-    setFormCuisine(activeDish.cuisine ?? "");
+    const normalizedCuisine =
+      isEditMode
+        ? (!activeDish.cuisine || activeDish.cuisine === "None"
+            ? defaultCuisine
+            : activeDish.cuisine)
+        : defaultCuisine;
+    setFormCuisine(normalizedCuisine);
     setFormPrepMinutes(
       isEditMode ? String(activeDish.prepMinutes ?? 0) : "",
     );
@@ -194,7 +254,7 @@ export default function DishesPage() {
     );
     setSelectedIngredientId("");
     setIngredientAmount("");
-  }, [activeDish, isEditMode, isModalOpen]);
+  }, [activeDish, defaultCuisine, isEditMode, isModalOpen]);
 
   useEffect(() => {
     if (!deleteTarget) {
@@ -284,7 +344,7 @@ export default function DishesPage() {
       const instructions = formInstructions.trim();
       const payload = {
         name,
-        cuisine: cuisine ? cuisine : null,
+        cuisine: cuisine ? cuisine : defaultCuisine,
         prepMinutes: parseNumber(formPrepMinutes),
         cookMinutes: parseNumber(formCookMinutes),
         serves: parseNumber(formServes),
@@ -517,7 +577,7 @@ export default function DishesPage() {
                         {dish.name}
                       </h2>
                       <span className="mt-2 inline-flex rounded-full bg-[#edf1ea] px-3 py-1 text-xs font-semibold text-[#4f5f55]">
-                        {dish.cuisine}
+                        {cuisineLabelMap.get(dish.cuisine) ?? dish.cuisine}
                       </span>
                       {dish.isSeafood ? (
                         <span className="mt-2 ml-2 inline-flex rounded-full bg-[#e6f5ff] px-3 py-1 text-xs font-semibold text-[#1d5b7a]">
@@ -672,14 +732,29 @@ export default function DishesPage() {
               />
             </label>
             <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
-              Category
-              <input
-                type="text"
+              Cuisine
+              <select
                 value={formCuisine}
                 onChange={(event) => setFormCuisine(event.target.value)}
-                placeholder="Cuisine type"
-                className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
-              />
+                className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30 disabled:cursor-not-allowed disabled:bg-[#f6f8f4] disabled:text-[#9aa69f]"
+                disabled={cuisinesLoading || formCuisineOptions.length === 0}
+              >
+                {formCuisineOptions.length === 0 ? (
+                  <option value="">
+                    {cuisineSelectMessage}
+                  </option>
+                ) : null}
+                {formCuisineOptions.map((cuisine) => (
+                  <option key={cuisine.value} value={cuisine.value}>
+                    {cuisine.label}
+                  </option>
+                ))}
+              </select>
+              {cuisinesError ? (
+                <span className="text-xs font-normal text-[#b14a4a]">
+                  {cuisinesError}
+                </span>
+              ) : null}
             </label>
           </div>
           <div className="grid gap-3 sm:grid-cols-3">

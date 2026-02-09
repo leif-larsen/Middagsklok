@@ -53,6 +53,17 @@ export type DishesLookupResponse = {
   dishes: DishLookup[];
 };
 
+export type DishCuisineMetadata = {
+  value: string;
+  label: string;
+  order: number;
+  isSelectable: boolean;
+};
+
+export type DishesMetadataResponse = {
+  cuisines: DishCuisineMetadata[];
+};
+
 export type DishCreateIngredientInput = {
   id?: string | null;
   name?: string | null;
