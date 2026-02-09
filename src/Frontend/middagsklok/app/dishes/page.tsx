@@ -166,9 +166,9 @@ export default function DishesPage() {
   const cuisineLabelMap = useMemo(
     () =>
       new Map(
-        cuisineOptions.map((cuisine) => [cuisine.value, cuisine.label]),
+        cuisineMetadata.map((cuisine) => [cuisine.value, cuisine.label]),
       ),
-    [cuisineOptions],
+    [cuisineMetadata],
   );
 
   const defaultCuisine = useMemo(() => {
