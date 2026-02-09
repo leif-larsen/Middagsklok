@@ -221,9 +221,13 @@ export default function DishesPage() {
     }
 
     setFormName(activeDish.name ?? "");
-    setFormCuisine(isEditMode
-      ? activeDish.cuisine ?? defaultCuisine
-      : defaultCuisine);
+    const normalizedCuisine =
+      isEditMode
+        ? (!activeDish.cuisine || activeDish.cuisine === "None"
+            ? defaultCuisine
+            : activeDish.cuisine)
+        : defaultCuisine;
+    setFormCuisine(normalizedCuisine);
     setFormPrepMinutes(
       isEditMode ? String(activeDish.prepMinutes ?? 0) : "",
     );
