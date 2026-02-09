@@ -9,6 +9,8 @@ public sealed record Response(
     int Serves,
     string? Instructions,
     bool IsSeafood,
+    bool IsVegetarian,
+    bool IsVegan,
     IEnumerable<DishIngredientResponse> Ingredients);
 
 public sealed record DishIngredientResponse(

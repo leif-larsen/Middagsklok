@@ -24,6 +24,25 @@ internal sealed class UseCase(AppDbContext dbContext)
             return invalidResult;
         }
 
+        var plan = await _dbContext.WeeklyPlans
+            .Include(existing => existing.Days)
+            .FirstOrDefaultAsync(
+                existing => existing.StartDate == validation.StartDate,
+                cancellationToken);
+
+        if (plan is not null)
+        {
+            var isMarkedAsEaten = await IsPlanMarkedAsEaten(plan.Id, cancellationToken);
+            if (isMarkedAsEaten)
+            {
+                var conflictResult = new UseCaseResult(
+                    GenerateOutcome.Conflict,
+                    null,
+                    Array.Empty<ValidationError>());
+                return conflictResult;
+            }
+        }
+
         var dishes = await LoadDishes(cancellationToken);
         if (dishes.Count == 0)
         {
@@ -41,12 +60,6 @@ internal sealed class UseCase(AppDbContext dbContext)
         var daysBetween = settings?.DaysBetween ?? 14;
         var lastEatenDates = await LoadLastEatenDates(dishes, cancellationToken);
         var generation = BuildDays(validation.StartDate, dishes, seafoodPerWeek, daysBetween, lastEatenDates);
-
-        var plan = await _dbContext.WeeklyPlans
-            .Include(existing => existing.Days)
-            .FirstOrDefaultAsync(
-                existing => existing.StartDate == validation.StartDate,
-                cancellationToken);
 
         if (plan is null)
         {
@@ -116,6 +129,16 @@ internal sealed class UseCase(AppDbContext dbContext)
         var lookup = lastEaten.ToDictionary(entry => entry.DishId, entry => entry.LastEaten);
 
         return lookup;
+    }
+
+    // Checks whether a weekly plan has already been marked as eaten.
+    private async Task<bool> IsPlanMarkedAsEaten(Guid planId, CancellationToken cancellationToken)
+    {
+        var isMarkedAsEaten = await _dbContext.DishConsumptionEvents
+            .AsNoTracking()
+            .AnyAsync(evt => evt.WeeklyPlanId == planId, cancellationToken);
+
+        return isMarkedAsEaten;
     }
 
     // Builds the planned days while applying the seafood target rule.
@@ -398,7 +421,8 @@ internal sealed record GenerationResult(
 internal enum GenerateOutcome
 {
     Success,
-    Invalid
+    Invalid,
+    Conflict
 }
 
 internal sealed record UseCaseResult(

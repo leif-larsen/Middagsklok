@@ -23,6 +23,8 @@ internal static class WeeklyPlansUpsertEndpoint
         {
             UpsertOutcome.Success when result.Plan is not null =>
                 Results.Ok(result.Plan),
+            UpsertOutcome.Conflict =>
+                Results.Conflict(new ErrorResponse("Weekly plan already marked as eaten.", result.Errors)),
             _ =>
                 Results.BadRequest(new ErrorResponse("Validation failed.", result.Errors))
         };

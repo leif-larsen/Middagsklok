@@ -105,6 +105,8 @@ public sealed class UseCaseTests
             4,
             null,
             false,
+            false,
+            false,
             new List<DishIngredient>
             {
                 new(ingredient.Id, 1, Unit.Pcs, null, 1)

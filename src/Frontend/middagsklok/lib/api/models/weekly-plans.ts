@@ -28,7 +28,9 @@ export type WeeklyPlanUpsertResponse = {
   days: WeeklyPlanDay[];
 };
 
-export type WeeklyPlanResponse = WeeklyPlanUpsertResponse;
+export type WeeklyPlanResponse = WeeklyPlanUpsertResponse & {
+  isMarkedAsEaten: boolean;
+};
 export type WeeklyPlanGenerateResponse = WeeklyPlanUpsertResponse & {
   notes?: string[];
 };

@@ -35,6 +35,8 @@ type Dish = {
   serves: number;
   instructions?: string | null;
   isSeafood: boolean;
+  isVegetarian: boolean;
+  isVegan: boolean;
   ingredients: Ingredient[];
 };
 
@@ -47,6 +49,8 @@ const emptyDish: Dish = {
   serves: 0,
   instructions: "",
   isSeafood: false,
+  isVegetarian: false,
+  isVegan: false,
   ingredients: [],
 };
 
@@ -75,6 +79,8 @@ export default function DishesPage() {
   const [formServes, setFormServes] = useState("");
   const [formInstructions, setFormInstructions] = useState("");
   const [formIsSeafood, setFormIsSeafood] = useState(false);
+  const [formIsVegetarian, setFormIsVegetarian] = useState(false);
+  const [formIsVegan, setFormIsVegan] = useState(false);
   const [validationErrors, setValidationErrors] = useState<
     DishCreateValidationError[] | DishUpdateValidationError[]
   >([]);
@@ -173,6 +179,8 @@ export default function DishesPage() {
     );
     setFormInstructions(activeDish.instructions ?? "");
     setFormIsSeafood(activeDish.isSeafood ?? false);
+    setFormIsVegetarian(activeDish.isVegetarian ?? false);
+    setFormIsVegan(activeDish.isVegan ?? false);
     setValidationErrors([]);
     setSubmitError(null);
     setIsSaving(false);
@@ -282,6 +290,8 @@ export default function DishesPage() {
         serves: parseNumber(formServes),
         instructions: instructions ? instructions : null,
         isSeafood: formIsSeafood,
+        isVegetarian: formIsVegetarian,
+        isVegan: formIsVegan,
         ingredients: draftIngredients.map((ingredient) => ({
           id: ingredient.ingredientId,
           name: ingredient.label,
@@ -514,6 +524,16 @@ export default function DishesPage() {
                           Seafood
                         </span>
                       ) : null}
+                      {dish.isVegetarian ? (
+                        <span className="mt-2 ml-2 inline-flex rounded-full bg-[#eaf6e4] px-3 py-1 text-xs font-semibold text-[#2d6a3e]">
+                          Vegetarian
+                        </span>
+                      ) : null}
+                      {dish.isVegan ? (
+                        <span className="mt-2 ml-2 inline-flex rounded-full bg-[#e2f5e9] px-3 py-1 text-xs font-semibold text-[#21573a]">
+                          Vegan
+                        </span>
+                      ) : null}
                     </div>
                     <div className="flex items-center gap-2">
                       <button
@@ -662,15 +682,35 @@ export default function DishesPage() {
               />
             </label>
           </div>
-          <label className="inline-flex items-center gap-3 rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm font-semibold text-[#3f4b43]">
-            <input
-              type="checkbox"
-              checked={formIsSeafood}
-              onChange={(event) => setFormIsSeafood(event.target.checked)}
-              className="h-4 w-4 rounded border-[#b9c8bd] text-[#2f6b4f] focus:ring-[#2f6b4f]/30"
-            />
-            Seafood dish
-          </label>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <label className="inline-flex items-center gap-3 rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm font-semibold text-[#3f4b43]">
+              <input
+                type="checkbox"
+                checked={formIsSeafood}
+                onChange={(event) => setFormIsSeafood(event.target.checked)}
+                className="h-4 w-4 rounded border-[#b9c8bd] text-[#2f6b4f] focus:ring-[#2f6b4f]/30"
+              />
+              Seafood dish
+            </label>
+            <label className="inline-flex items-center gap-3 rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm font-semibold text-[#3f4b43]">
+              <input
+                type="checkbox"
+                checked={formIsVegetarian}
+                onChange={(event) => setFormIsVegetarian(event.target.checked)}
+                className="h-4 w-4 rounded border-[#b9c8bd] text-[#2f6b4f] focus:ring-[#2f6b4f]/30"
+              />
+              Vegetarian dish
+            </label>
+            <label className="inline-flex items-center gap-3 rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm font-semibold text-[#3f4b43]">
+              <input
+                type="checkbox"
+                checked={formIsVegan}
+                onChange={(event) => setFormIsVegan(event.target.checked)}
+                className="h-4 w-4 rounded border-[#b9c8bd] text-[#2f6b4f] focus:ring-[#2f6b4f]/30"
+              />
+              Vegan dish
+            </label>
+          </div>
 
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">

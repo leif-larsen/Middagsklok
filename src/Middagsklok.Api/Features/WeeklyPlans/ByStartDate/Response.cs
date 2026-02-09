@@ -3,7 +3,8 @@ namespace Middagsklok.Api.Features.WeeklyPlans.ByStartDate;
 public sealed record Response(
     string Id,
     string StartDate,
-    IEnumerable<PlannedDayResponse> Days);
+    IEnumerable<PlannedDayResponse> Days,
+    bool IsMarkedAsEaten);
 
 public sealed record PlannedDayResponse(
     string Date,

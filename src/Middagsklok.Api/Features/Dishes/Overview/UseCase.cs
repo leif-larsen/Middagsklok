@@ -96,6 +96,8 @@ internal sealed class UseCase(AppDbContext dbContext)
             dish.Servings,
             dish.Instructions,
             dish.IsSeafood,
+            dish.IsVegetarian,
+            dish.IsVegan,
             ingredients);
 
         return overview;

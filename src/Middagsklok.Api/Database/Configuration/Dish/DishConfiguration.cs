@@ -49,6 +49,16 @@ public class DishConfiguration : IEntityTypeConfiguration<DishEntity>
             .HasDefaultValue(false)
             .IsRequired();
 
+        builder.Property(d => d.IsVegetarian)
+            .HasColumnName("is_vegetarian")
+            .HasDefaultValue(false)
+            .IsRequired();
+
+        builder.Property(d => d.IsVegan)
+            .HasColumnName("is_vegan")
+            .HasDefaultValue(false)
+            .IsRequired();
+
         builder.Property(d => d.CreatedAt)
             .HasColumnName("created_at")
             .IsRequired();

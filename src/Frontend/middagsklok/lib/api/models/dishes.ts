@@ -34,6 +34,8 @@ export type DishOverview = {
   serves: number;
   instructions?: string | null;
   isSeafood: boolean;
+  isVegetarian: boolean;
+  isVegan: boolean;
   ingredients: DishOverviewIngredient[];
 };
 
@@ -65,6 +67,8 @@ export type DishCreateRequest = {
   serves: number;
   instructions?: string | null;
   isSeafood: boolean;
+  isVegetarian: boolean;
+  isVegan: boolean;
   ingredients?: DishCreateIngredientInput[] | null;
 };
 

@@ -5,7 +5,7 @@ import { ApiError, apiClient } from "../../lib/api/client";
 import type { DishLookup } from "../../lib/api/models/dishes";
 import type {
   WeeklyPlanUpsertRequest,
-  WeeklyPlanResponse,
+  WeeklyPlanUpsertResponse,
 } from "../../lib/api/models/weekly-plans";
 import Sidebar from "../components/Sidebar";
 
@@ -62,6 +62,19 @@ const buildPlan = (days: WeekDay[]) =>
     return accumulator;
   }, {});
 
+const formatSelectionType = (value: string) => value.trim().toUpperCase();
+
+const mapResponseToPlan = (response: WeeklyPlanUpsertResponse) => {
+  const nextPlan: Record<string, string | null> = {};
+
+  response.days.forEach((day) => {
+    const selectionType = formatSelectionType(day.selection.type);
+    nextPlan[day.date] = selectionType === "DISH" ? day.selection.dishId ?? null : null;
+  });
+
+  return nextPlan;
+};
+
 const monthFormatter = new Intl.DateTimeFormat("en-US", {
   month: "long",
   year: "numeric",
@@ -94,6 +107,7 @@ export default function WeeklyPlannerPage() {
   const [isSavingPlan, setIsSavingPlan] = useState(false);
   const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
   const [isMarkingEaten, setIsMarkingEaten] = useState(false);
+  const [isPlanMarkedAsEaten, setIsPlanMarkedAsEaten] = useState(false);
   const [isLoadingPlan, setIsLoadingPlan] = useState(false);
 
   useEffect(() => {
@@ -213,11 +227,19 @@ export default function WeeklyPlannerPage() {
   }, [weekDays]);
 
   const handleToggle = (dayKey: string) => {
+    if (isPlanMarkedAsEaten) {
+      return;
+    }
+
     setOpenDayKey((current) => (current === dayKey ? null : dayKey));
     setDishSearchQuery("");
   };
 
   const handleSelect = (dayKey: string, dishId: string | null) => {
+    if (isPlanMarkedAsEaten) {
+      return;
+    }
+
     setPlan((current) => ({
       ...current,
       [dayKey]: dishId,
@@ -266,19 +288,6 @@ export default function WeeklyPlannerPage() {
     });
   }, [dishOptions, dishSearchQuery]);
 
-  const formatSelectionType = (value: string) => value.trim().toUpperCase();
-
-  const mapResponseToPlan = (response: WeeklyPlanResponse) => {
-    const nextPlan: Record<string, string | null> = {};
-
-    response.days.forEach((day) => {
-      const selectionType = formatSelectionType(day.selection.type);
-      nextPlan[day.date] = selectionType === "DISH" ? day.selection.dishId ?? null : null;
-    });
-
-    return nextPlan;
-  };
-
   const buildUpsertRequest = (): WeeklyPlanUpsertRequest => ({
     days: weekDays.map((day) => {
       const dishId = plan[day.key] ?? null;
@@ -293,6 +302,12 @@ export default function WeeklyPlannerPage() {
   });
 
   const handleSavePlan = async () => {
+    if (isPlanMarkedAsEaten) {
+      setSaveError(null);
+      setSaveMessage("Weekly plan is marked as eaten. Editing actions are disabled.");
+      return;
+    }
+
     setSaveError(null);
     setSaveMessage(null);
     setIsSavingPlan(true);
@@ -305,6 +320,11 @@ export default function WeeklyPlannerPage() {
       setSaveMessage("Weekly plan saved.");
     } catch (error) {
       if (error instanceof ApiError) {
+        if (error.status === 409) {
+          setIsPlanMarkedAsEaten(true);
+          setSaveMessage("Weekly plan is already marked as eaten. Editing actions are disabled.");
+          return;
+        }
         console.error("Failed to save weekly plan:", error.body ?? error.message);
       } else if (error instanceof Error) {
         console.error("Failed to save weekly plan:", error.message);
@@ -318,6 +338,12 @@ export default function WeeklyPlannerPage() {
   };
 
   const handleGeneratePlan = async () => {
+    if (isPlanMarkedAsEaten) {
+      setSaveError(null);
+      setSaveMessage("Weekly plan is marked as eaten. Editing actions are disabled.");
+      return;
+    }
+
     handleCloseMenus();
     setSaveError(null);
     setSaveMessage(null);
@@ -338,6 +364,11 @@ export default function WeeklyPlannerPage() {
       setSaveMessage(`Weekly plan generated.${noteSuffix}`);
     } catch (error) {
       if (error instanceof ApiError) {
+        if (error.status === 409) {
+          setIsPlanMarkedAsEaten(true);
+          setSaveMessage("Weekly plan is already marked as eaten. Editing actions are disabled.");
+          return;
+        }
         console.error("Failed to generate weekly plan:", error.body ?? error.message);
       } else if (error instanceof Error) {
         console.error("Failed to generate weekly plan:", error.message);
@@ -351,6 +382,12 @@ export default function WeeklyPlannerPage() {
   };
 
   const handleMarkEaten = async () => {
+    if (isPlanMarkedAsEaten) {
+      setSaveError(null);
+      setSaveMessage("Weekly plan is already marked as eaten.");
+      return;
+    }
+
     handleCloseMenus();
     setSaveError(null);
     setSaveMessage(null);
@@ -365,11 +402,13 @@ export default function WeeklyPlannerPage() {
 
     try {
       await apiClient.markWeeklyPlanEaten(startDate);
-      setSaveMessage("Weekly plan marked as eaten.");
+      setIsPlanMarkedAsEaten(true);
+      setSaveMessage("Weekly plan marked as eaten. Editing actions are disabled.");
     } catch (error) {
       if (error instanceof ApiError) {
         if (error.status === 409) {
-          setSaveError("Weekly plan already marked as eaten.");
+          setIsPlanMarkedAsEaten(true);
+          setSaveMessage("Weekly plan is already marked as eaten. Editing actions are disabled.");
           return;
         }
         if (error.status === 404) {
@@ -400,16 +439,19 @@ export default function WeeklyPlannerPage() {
       setIsLoadingPlan(true);
       setSaveError(null);
       setSaveMessage(null);
+      setIsPlanMarkedAsEaten(false);
 
       try {
         const response = await apiClient.getWeeklyPlan(startDate);
         if (isActive) {
           setPlan(mapResponseToPlan(response));
+          setIsPlanMarkedAsEaten(response.isMarkedAsEaten);
         }
       } catch (error) {
         if (error instanceof ApiError && error.status === 404) {
           if (isActive) {
             setPlan(buildPlan(weekDays));
+            setIsPlanMarkedAsEaten(false);
           }
         } else {
           if (error instanceof ApiError) {
@@ -458,9 +500,9 @@ export default function WeeklyPlannerPage() {
                 type="button"
                 onClick={handleGeneratePlan}
                 disabled={
-                  isGeneratingPlan || isLoadingPlan || isSavingPlan || isMarkingEaten
+                  isPlanMarkedAsEaten || isGeneratingPlan || isLoadingPlan || isSavingPlan || isMarkingEaten
                 }
-                className="inline-flex items-center gap-2 rounded-full border border-[#d6e0d2] bg-white px-4 py-2 text-sm font-semibold text-[#3b4c42] transition hover:bg-[#f3f6ef]"
+                className="inline-flex items-center gap-2 rounded-full border border-[#d6e0d2] bg-white px-4 py-2 text-sm font-semibold text-[#3b4c42] transition hover:bg-[#f3f6ef] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-white"
               >
                 <RefreshIcon className="h-4 w-4" />
                 {isGeneratingPlan ? "Generating..." : "Generate Plan"}
@@ -468,8 +510,8 @@ export default function WeeklyPlannerPage() {
               <button
                 type="button"
                 onClick={handleSavePlan}
-                disabled={isSavingPlan || isLoadingPlan || isMarkingEaten}
-                className="inline-flex items-center gap-2 rounded-full bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_24px_-18px_rgba(32,78,54,0.9)] transition hover:bg-[#2a5c46]"
+                disabled={isPlanMarkedAsEaten || isSavingPlan || isLoadingPlan || isMarkingEaten}
+                className="inline-flex items-center gap-2 rounded-full bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_24px_-18px_rgba(32,78,54,0.9)] transition hover:bg-[#2a5c46] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-[#2f6b4f]"
               >
                 <SaveIcon className="h-4 w-4" />
                 {isSavingPlan ? "Saving..." : "Save Plan"}
@@ -477,12 +519,25 @@ export default function WeeklyPlannerPage() {
               <button
                 type="button"
                 onClick={handleMarkEaten}
-                disabled={isMarkingEaten || isLoadingPlan || isSavingPlan}
-                className="inline-flex items-center gap-2 rounded-full border border-[#f1d7b5] bg-[#fff3e6] px-4 py-2 text-sm font-semibold text-[#6a4b2f] transition hover:bg-[#ffe8cf]"
+                disabled={isPlanMarkedAsEaten || isMarkingEaten || isLoadingPlan || isSavingPlan}
+                className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${
+                  isPlanMarkedAsEaten
+                    ? "border-[#cce0d2] bg-[#ebf7ef] text-[#2f6b4f] hover:bg-[#dff1e5] disabled:hover:bg-[#ebf7ef]"
+                    : "border-[#f1d7b5] bg-[#fff3e6] text-[#6a4b2f] hover:bg-[#ffe8cf] disabled:hover:bg-[#fff3e6]"
+                }`}
               >
                 <CheckCircleIcon className="h-4 w-4" />
-                {isMarkingEaten ? "Marking..." : "Mark as eaten"}
+                {isMarkingEaten
+                  ? "Marking..."
+                  : isPlanMarkedAsEaten
+                    ? "Marked as eaten"
+                    : "Mark as eaten"}
               </button>
+              {isPlanMarkedAsEaten ? (
+                <span className="inline-flex items-center rounded-full bg-[#ebf7ef] px-3 py-1 text-xs font-semibold text-[#2f6b4f]">
+                  Plan marked as eaten. Editing actions are disabled.
+                </span>
+              ) : null}
               {saveMessage ? (
                 <span className="text-xs font-semibold text-[#2f6b4f]">
                   {saveMessage}
@@ -546,7 +601,8 @@ export default function WeeklyPlannerPage() {
                           aria-haspopup="listbox"
                           aria-expanded={isOpen}
                           onClick={() => handleToggle(day.key)}
-                          className="flex w-full items-center justify-between gap-3 rounded-2xl border border-[#dfe7d7] bg-white/90 px-4 py-2.5 text-left text-sm font-semibold text-[#2a3a2f] shadow-[0_12px_22px_-18px_rgba(28,60,40,0.4)] transition hover:bg-white"
+                          disabled={isPlanMarkedAsEaten}
+                          className="flex w-full items-center justify-between gap-3 rounded-2xl border border-[#dfe7d7] bg-white/90 px-4 py-2.5 text-left text-sm font-semibold text-[#2a3a2f] shadow-[0_12px_22px_-18px_rgba(28,60,40,0.4)] transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-white/90"
                         >
                           <span
                             className={`truncate ${day.dish ? "" : "text-[#92a097]"}`}

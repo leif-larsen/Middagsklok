@@ -66,6 +66,10 @@ internal sealed class UseCase(AppDbContext dbContext)
             normalizedDishName = NormalizeName(validation.Candidate.Name);
             seenDishNames.Add(normalizedDishName);
 
+            var isSeafood = IsSeafoodDish(validation.Candidate);
+            var isVegetarian = IsVegetarianDish(validation.Candidate);
+            var isVegan = IsVeganDish(validation.Candidate);
+
             var ingredients = new List<DishIngredient>();
             foreach (var ingredientCandidate in validation.Candidate.Ingredients)
             {
@@ -87,7 +91,9 @@ internal sealed class UseCase(AppDbContext dbContext)
                 validation.Candidate.CookTimeMinutes,
                 validation.Candidate.Servings,
                 null,
-                IsSeafoodDish(validation.Candidate),
+                isSeafood,
+                isVegetarian,
+                isVegan,
                 ingredients);
 
             dishesToAdd.Add(dishEntity);
@@ -174,4 +180,21 @@ internal sealed class UseCase(AppDbContext dbContext)
     // Determines if an imported dish should be marked as seafood.
     private static bool IsSeafoodDish(DishCandidate candidate) =>
         candidate.Ingredients.Any(ingredient => ingredient.Category == IngredientCategory.Seafood);
+
+    // Determines if an imported dish should be marked as vegetarian.
+    private static bool IsVegetarianDish(DishCandidate candidate) =>
+        candidate.Ingredients.All(ingredient =>
+            ingredient.Category is not (
+                IngredientCategory.Meat
+                or IngredientCategory.Poultry
+                or IngredientCategory.Seafood));
+
+    // Determines if an imported dish should be marked as vegan.
+    private static bool IsVeganDish(DishCandidate candidate) =>
+        candidate.Ingredients.All(ingredient =>
+            ingredient.Category is not (
+                IngredientCategory.Meat
+                or IngredientCategory.Poultry
+                or IngredientCategory.Seafood
+                or IngredientCategory.DairyAndEggs));
 }

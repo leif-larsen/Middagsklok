@@ -11,6 +11,8 @@ public sealed record DishOverview(
     int Serves,
     string? Instructions,
     bool IsSeafood,
+    bool IsVegetarian,
+    bool IsVegan,
     IEnumerable<DishIngredientOverview> Ingredients);
 
 public sealed record DishIngredientOverview(

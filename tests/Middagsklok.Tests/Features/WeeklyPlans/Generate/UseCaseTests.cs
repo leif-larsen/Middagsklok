@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Middagsklok.Api.Database;
 using Middagsklok.Api.Domain.Dish;
+using Middagsklok.Api.Domain.DishHistory;
 using Middagsklok.Api.Domain.Settings;
+using Middagsklok.Api.Domain.WeeklyPlan;
 using Middagsklok.Api.Features.WeeklyPlans.Generate;
 using TUnit.Assertions;
 using TUnit.Core;
@@ -31,6 +33,8 @@ public sealed class UseCaseTests
             4,
             null,
             isSeafood,
+            false,
+            false,
             Array.Empty<DishIngredient>());
 
     // Counts seafood selections in a generated plan.
@@ -142,5 +146,39 @@ public sealed class UseCaseTests
 
         await Assert.That(uniqueDishCount).IsEqualTo(2);
         await Assert.That(hasUniquenessNote).IsTrue();
+    }
+
+    // Verifies that generation is blocked when the weekly plan is already marked as eaten.
+    [Test]
+    public async Task ReturnsConflictWhenExistingPlanIsMarkedAsEaten()
+    {
+        var databaseName = Guid.NewGuid().ToString("N");
+        await using var context = CreateContext(databaseName);
+
+        var startDate = new DateOnly(2026, 2, 2);
+        var dish = CreateDish("Baked Salmon", true);
+        var days = Enumerable.Range(0, 7)
+            .Select(offset => new PlannedDay(
+                startDate.AddDays(offset),
+                new DishSelection(DishSelectionType.Empty, null)))
+            .ToArray();
+        var plan = new WeeklyPlan(startDate, days);
+
+        context.Dishes.Add(dish);
+        context.WeeklyPlans.Add(plan);
+        await context.SaveChangesAsync(CancellationToken.None);
+
+        context.DishConsumptionEvents.Add(new DishConsumptionEvent(
+            dish.Id,
+            startDate,
+            DishHistorySource.WeeklyPlan,
+            plan.Id));
+        await context.SaveChangesAsync(CancellationToken.None);
+
+        var useCase = new UseCase(context);
+        var result = await useCase.Execute("2026-02-02", CancellationToken.None);
+
+        await Assert.That(result.Outcome).IsEqualTo(GenerateOutcome.Conflict);
+        await Assert.That(result.Plan).IsNull();
     }
 }

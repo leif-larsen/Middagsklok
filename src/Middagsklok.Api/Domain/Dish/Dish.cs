@@ -10,6 +10,8 @@ public class Dish(
     int servings,
     string? instructions,
     bool isSeafood,
+    bool isVegetarian,
+    bool isVegan,
     IEnumerable<DishIngredient> ingredients) : BaseEntity
 {
     private readonly List<DishIngredient> _ingredients = ingredients.ToList();
@@ -22,7 +24,7 @@ public class Dish(
         int cookTimeMinutes,
         int servings,
         string? instructions)
-        : this(name, cuisine, prepTimeMinutes, cookTimeMinutes, servings, instructions, false, Array.Empty<DishIngredient>())
+        : this(name, cuisine, prepTimeMinutes, cookTimeMinutes, servings, instructions, false, false, false, Array.Empty<DishIngredient>())
     {
     }
 
@@ -33,6 +35,8 @@ public class Dish(
     public int Servings { get; private set; } = servings;
     public string? Instructions { get; private set; } = NormalizeInstructions(instructions);
     public bool IsSeafood { get; private set; } = isSeafood;
+    public bool IsVegetarian { get; private set; } = isVegetarian;
+    public bool IsVegan { get; private set; } = isVegan;
     public IReadOnlyList<DishIngredient> Ingredients => _ingredients;
 
     public int TotalTimeMinutes => PrepTimeMinutes + CookTimeMinutes;
@@ -46,6 +50,8 @@ public class Dish(
         int servings,
         string? instructions,
         bool isSeafood,
+        bool isVegetarian,
+        bool isVegan,
         IEnumerable<DishIngredient> ingredients)
     {
         Name = name.Trim();
@@ -55,6 +61,8 @@ public class Dish(
         Servings = servings;
         Instructions = NormalizeInstructions(instructions);
         IsSeafood = isSeafood;
+        IsVegetarian = isVegetarian;
+        IsVegan = isVegan;
 
         _ingredients.Clear();
         _ingredients.AddRange(ingredients);

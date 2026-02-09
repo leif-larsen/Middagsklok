@@ -37,14 +37,18 @@ internal sealed class UseCase(AppDbContext dbContext)
             return notFoundResult;
         }
 
-        var response = MapPlan(plan);
+        var isMarkedAsEaten = await _dbContext.DishConsumptionEvents
+            .AsNoTracking()
+            .AnyAsync(evt => evt.WeeklyPlanId == plan.Id, cancellationToken);
+
+        var response = MapPlan(plan, isMarkedAsEaten);
         var result = new UseCaseResult(FetchOutcome.Success, response, Array.Empty<ValidationError>());
 
         return result;
     }
 
     // Maps a weekly plan entity to the response.
-    private static Response MapPlan(WeeklyPlan plan)
+    private static Response MapPlan(WeeklyPlan plan, bool isMarkedAsEaten)
     {
         var days = plan.Days
             .OrderBy(day => day.Date)
@@ -54,7 +58,8 @@ internal sealed class UseCase(AppDbContext dbContext)
         var response = new Response(
             plan.Id.ToString("D"),
             FormatDate(plan.StartDate),
-            days);
+            days,
+            isMarkedAsEaten);
 
         return response;
     }

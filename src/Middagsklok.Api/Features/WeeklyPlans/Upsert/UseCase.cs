@@ -24,6 +24,25 @@ internal sealed class UseCase(AppDbContext dbContext)
             return invalidResult;
         }
 
+        var plan = await _dbContext.WeeklyPlans
+            .Include(existing => existing.Days)
+            .FirstOrDefaultAsync(
+                existing => existing.StartDate == validation.Candidate.StartDate,
+                cancellationToken);
+
+        if (plan is not null)
+        {
+            var isMarkedAsEaten = await IsPlanMarkedAsEaten(plan.Id, cancellationToken);
+            if (isMarkedAsEaten)
+            {
+                var conflictResult = new UseCaseResult(
+                    UpsertOutcome.Conflict,
+                    null,
+                    Array.Empty<ValidationError>());
+                return conflictResult;
+            }
+        }
+
         var missingDishErrors = await ValidateDishIds(validation.Candidate.Days, cancellationToken);
         if (missingDishErrors.Count > 0)
         {
@@ -37,12 +56,6 @@ internal sealed class UseCase(AppDbContext dbContext)
                 day.Date,
                 new DishSelection(day.SelectionType, day.DishId)))
             .ToArray();
-
-        var plan = await _dbContext.WeeklyPlans
-            .Include(existing => existing.Days)
-            .FirstOrDefaultAsync(
-                existing => existing.StartDate == validation.Candidate.StartDate,
-                cancellationToken);
 
         if (plan is null)
         {
@@ -103,6 +116,16 @@ internal sealed class UseCase(AppDbContext dbContext)
         return errors;
     }
 
+    // Checks whether a weekly plan has already been marked as eaten.
+    private async Task<bool> IsPlanMarkedAsEaten(Guid planId, CancellationToken cancellationToken)
+    {
+        var isMarkedAsEaten = await _dbContext.DishConsumptionEvents
+            .AsNoTracking()
+            .AnyAsync(evt => evt.WeeklyPlanId == planId, cancellationToken);
+
+        return isMarkedAsEaten;
+    }
+
     // Maps a weekly plan entity to the response.
     private static Response MapPlan(WeeklyPlan plan)
     {
@@ -139,7 +162,8 @@ internal sealed class UseCase(AppDbContext dbContext)
 internal enum UpsertOutcome
 {
     Success,
-    Invalid
+    Invalid,
+    Conflict
 }
 
 internal sealed record UseCaseResult(
