@@ -49,11 +49,14 @@ public static class DishTaxonomy
         new("FamilyFriendly", "Family friendly", 140, 1.1, 1.05)
     ];
 
+    private static readonly IReadOnlyList<DishTypeMetadata> ReadOnlyTypeMetadata = Array.AsReadOnly(TypeMetadata);
+    private static readonly IReadOnlyList<VibeTagMetadata> ReadOnlyVibeMetadata = Array.AsReadOnly(VibeMetadata);
+
     // Returns planner-facing dish type metadata.
-    public static IReadOnlyList<DishTypeMetadata> GetDishTypes() => TypeMetadata;
+    public static IReadOnlyList<DishTypeMetadata> GetDishTypes() => ReadOnlyTypeMetadata;
 
     // Returns planner-facing vibe tags with weekday/weekend multipliers.
-    public static IReadOnlyList<VibeTagMetadata> GetVibeTags() => VibeMetadata;
+    public static IReadOnlyList<VibeTagMetadata> GetVibeTags() => ReadOnlyVibeMetadata;
 
     // Maps legacy cuisine values to planner-facing dish types.
     public static CuisineType NormalizeType(CuisineType value)

@@ -158,6 +158,12 @@ internal sealed class Validator
             return CuisineParseResult.Invalid($"Cuisine must be one of: {allowed}.");
         }
 
+        if (!DishTaxonomy.GetDishTypes().Any(type => type.Value == parsed))
+        {
+            var allowed = string.Join(", ", DishTaxonomy.GetDishTypes().Select(type => type.Value.ToString()));
+            return CuisineParseResult.Invalid($"Cuisine must be one of: {allowed}.");
+        }
+
         var normalized = DishTaxonomy.NormalizeType(parsed);
         return CuisineParseResult.Valid(normalized);
     }

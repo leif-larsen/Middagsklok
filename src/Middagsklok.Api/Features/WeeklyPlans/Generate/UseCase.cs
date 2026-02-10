@@ -7,11 +7,12 @@ using Middagsklok.Api.Domain.WeeklyPlan;
 
 namespace Middagsklok.Api.Features.WeeklyPlans.Generate;
 
-internal sealed class UseCase(AppDbContext dbContext)
+internal sealed class UseCase(AppDbContext dbContext, IRandomSource? randomSource = null)
 {
     private const int DaysPerWeek = 7;
 
     private readonly AppDbContext _dbContext = dbContext;
+    private readonly IRandomSource _randomSource = randomSource ?? SharedRandomSource.Instance;
 
     // Executes the weekly plan generation workflow.
     public async Task<UseCaseResult> Execute(string? startDateValue, CancellationToken cancellationToken)
@@ -60,7 +61,7 @@ internal sealed class UseCase(AppDbContext dbContext)
         var seafoodPerWeek = settings?.SeafoodPerWeek ?? 2;
         var daysBetween = settings?.DaysBetween ?? 14;
         var lastEatenDates = await LoadLastEatenDates(dishes, cancellationToken);
-        var generation = BuildDays(validation.StartDate, dishes, seafoodPerWeek, daysBetween, lastEatenDates);
+        var generation = BuildDays(validation.StartDate, dishes, seafoodPerWeek, daysBetween, lastEatenDates, _randomSource);
 
         if (plan is null)
         {
@@ -85,6 +86,7 @@ internal sealed class UseCase(AppDbContext dbContext)
     {
         var dishes = await _dbContext.Dishes
             .AsNoTracking()
+            .OrderBy(dish => dish.Name)
             .Select(dish => new DishCandidate(dish.Id, dish.IsSeafood, dish.Cuisine))
             .ToListAsync(cancellationToken);
 
@@ -148,7 +150,8 @@ internal sealed class UseCase(AppDbContext dbContext)
         IReadOnlyList<DishCandidate> dishes,
         int seafoodPerWeek,
         int daysBetween,
-        IReadOnlyDictionary<Guid, DateOnly> lastEatenDates)
+        IReadOnlyDictionary<Guid, DateOnly> lastEatenDates,
+        IRandomSource randomSource)
     {
         var requestedSeafoodCount = Math.Clamp(seafoodPerWeek, 0, DaysPerWeek);
         var seafoodDishIds = dishes
@@ -162,7 +165,7 @@ internal sealed class UseCase(AppDbContext dbContext)
         var allDishIds = dishes.Select(dish => dish.Id).ToArray();
         var seafoodLookup = dishes.ToDictionary(dish => dish.Id, dish => dish.IsSeafood);
         var typeLookup = dishes.ToDictionary(dish => dish.Id, dish => dish.Cuisine);
-        var seafoodRequirements = BuildSeafoodRequirements(requestedSeafoodCount);
+        var seafoodRequirements = BuildSeafoodRequirements(requestedSeafoodCount, randomSource);
         var notes = new List<string>();
         var days = new PlannedDay[DaysPerWeek];
         var usedDishIds = new HashSet<Guid>();
@@ -183,7 +186,8 @@ internal sealed class UseCase(AppDbContext dbContext)
                     dayDate,
                     daysBetween,
                     lastEatenDates,
-                    typeLookup)
+                    typeLookup,
+                    randomSource)
                 : PickDishIdWithFallback(
                     nonSeafoodDishIds,
                     allDishIds,
@@ -191,7 +195,8 @@ internal sealed class UseCase(AppDbContext dbContext)
                     dayDate,
                     daysBetween,
                     lastEatenDates,
-                    typeLookup);
+                    typeLookup,
+                    randomSource);
 
             if (requiresSeafood && pick.UsedFallbackCategory)
             {
@@ -246,7 +251,7 @@ internal sealed class UseCase(AppDbContext dbContext)
     }
 
     // Builds and shuffles the seafood requirements for each day.
-    private static bool[] BuildSeafoodRequirements(int requestedSeafoodCount)
+    private static bool[] BuildSeafoodRequirements(int requestedSeafoodCount, IRandomSource randomSource)
     {
         var requirements = new bool[DaysPerWeek];
         for (var index = 0; index < requestedSeafoodCount; index++)
@@ -254,17 +259,17 @@ internal sealed class UseCase(AppDbContext dbContext)
             requirements[index] = true;
         }
 
-        Shuffle(requirements);
+        Shuffle(requirements, randomSource);
 
         return requirements;
     }
 
     // Shuffles an array in-place using Fisher-Yates.
-    private static void Shuffle(bool[] values)
+    private static void Shuffle(bool[] values, IRandomSource randomSource)
     {
         for (var index = values.Length - 1; index > 0; index--)
         {
-            var swapIndex = Random.Shared.Next(index + 1);
+            var swapIndex = randomSource.Next(index + 1);
             (values[index], values[swapIndex]) = (values[swapIndex], values[index]);
         }
     }
@@ -277,14 +282,15 @@ internal sealed class UseCase(AppDbContext dbContext)
         DateOnly dayDate,
         int daysBetween,
         IReadOnlyDictionary<Guid, DateOnly> lastEatenDates,
-        IReadOnlyDictionary<Guid, CuisineType> typeLookup)
+        IReadOnlyDictionary<Guid, CuisineType> typeLookup,
+        IRandomSource randomSource)
     {
         var preferredUnusedDishIds = preferredDishIds
             .Where(dishId => !usedDishIds.Contains(dishId))
             .ToArray();
         if (preferredUnusedDishIds.Length > 0)
         {
-            var preferredId = PickDishId(preferredUnusedDishIds, dayDate, daysBetween, lastEatenDates, typeLookup);
+            var preferredId = PickDishId(preferredUnusedDishIds, dayDate, daysBetween, lastEatenDates, typeLookup, randomSource);
             return new DishPick(preferredId, false, false);
         }
 
@@ -293,17 +299,17 @@ internal sealed class UseCase(AppDbContext dbContext)
             .ToArray();
         if (fallbackUnusedDishIds.Length > 0)
         {
-            var fallbackUnusedId = PickDishId(fallbackUnusedDishIds, dayDate, daysBetween, lastEatenDates, typeLookup);
+            var fallbackUnusedId = PickDishId(fallbackUnusedDishIds, dayDate, daysBetween, lastEatenDates, typeLookup, randomSource);
             return new DishPick(fallbackUnusedId, true, false);
         }
 
         if (preferredDishIds.Count > 0)
         {
-            var preferredDuplicateId = PickDishId(preferredDishIds, dayDate, daysBetween, lastEatenDates, typeLookup);
+            var preferredDuplicateId = PickDishId(preferredDishIds, dayDate, daysBetween, lastEatenDates, typeLookup, randomSource);
             return new DishPick(preferredDuplicateId, false, true);
         }
 
-        var fallbackDuplicateId = PickDishId(fallbackDishIds, dayDate, daysBetween, lastEatenDates, typeLookup);
+        var fallbackDuplicateId = PickDishId(fallbackDishIds, dayDate, daysBetween, lastEatenDates, typeLookup, randomSource);
         return new DishPick(fallbackDuplicateId, true, true);
     }
 
@@ -313,7 +319,8 @@ internal sealed class UseCase(AppDbContext dbContext)
         DateOnly dayDate,
         int daysBetween,
         IReadOnlyDictionary<Guid, DateOnly> lastEatenDates,
-        IReadOnlyDictionary<Guid, CuisineType> typeLookup)
+        IReadOnlyDictionary<Guid, CuisineType> typeLookup,
+        IRandomSource randomSource)
     {
         if (dishIds.Count == 1)
         {
@@ -335,10 +342,10 @@ internal sealed class UseCase(AppDbContext dbContext)
 
         if (totalScore <= 0)
         {
-            return dishIds[Random.Shared.Next(dishIds.Count)];
+            return dishIds[randomSource.Next(dishIds.Count)];
         }
 
-        var roll = Random.Shared.NextDouble() * totalScore;
+        var roll = randomSource.NextDouble() * totalScore;
         var cumulative = 0.0;
 
         for (var index = 0; index < scores.Length; index++)
@@ -452,3 +459,28 @@ internal sealed record UseCaseResult(
     GenerateOutcome Outcome,
     Response? Plan,
     IReadOnlyList<ValidationError> Errors);
+
+internal interface IRandomSource
+{
+    // Returns a non-negative random integer less than the specified maximum.
+    int Next(int maxValue);
+
+    // Returns a random floating-point value in [0.0, 1.0).
+    double NextDouble();
+}
+
+internal sealed class SharedRandomSource : IRandomSource
+{
+    public static SharedRandomSource Instance { get; } = new();
+
+    // Prevents additional instances.
+    private SharedRandomSource()
+    {
+    }
+
+    // Returns a non-negative random integer less than maxValue.
+    public int Next(int maxValue) => Random.Shared.Next(maxValue);
+
+    // Returns a random floating-point value in [0.0, 1.0).
+    public double NextDouble() => Random.Shared.NextDouble();
+}
