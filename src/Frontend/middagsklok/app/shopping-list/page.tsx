@@ -6,6 +6,16 @@ import type { ShoppingListResponse } from "../../lib/api/models/shopping-list";
 import type { WeeklyPlanSummary } from "../../lib/api/models/weekly-plans";
 import Sidebar from "../components/Sidebar";
 
+const weekStartLookup = new Map<string, number>([
+  ["sunday", 0],
+  ["monday", 1],
+  ["tuesday", 2],
+  ["wednesday", 3],
+  ["thursday", 4],
+  ["friday", 5],
+  ["saturday", 6],
+]);
+
 const rangeFormatter = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric",
@@ -29,6 +39,77 @@ const formatCategoryLabel = (value: string) => {
 };
 
 const parseDate = (value: string) => new Date(`${value}T00:00:00`);
+
+const parseWeekStartsOn = (value: string | null | undefined) => {
+  const normalized = value?.trim().toLowerCase() ?? "";
+  return weekStartLookup.get(normalized) ?? 1;
+};
+
+const formatDayKey = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
+
+const addDays = (date: Date, amount: number) => {
+  const next = new Date(date);
+  next.setDate(date.getDate() + amount);
+
+  return next;
+};
+
+const startOfWeek = (date: Date, weekStartsOn: number) => {
+  const dayIndex = date.getDay();
+  const diff = (dayIndex - weekStartsOn + 7) % 7;
+
+  return addDays(date, -diff);
+};
+
+const pickClosestPlanStartDate = (
+  plans: WeeklyPlanSummary[],
+  targetDate: Date,
+) => {
+  if (plans.length === 0) {
+    return "";
+  }
+
+  const targetTime = targetDate.getTime();
+  let bestPlan = plans[0]!;
+  let bestDistance = Math.abs(parseDate(bestPlan.startDate).getTime() - targetTime);
+
+  for (let index = 1; index < plans.length; index += 1) {
+    const candidate = plans[index]!;
+    const candidateTime = parseDate(candidate.startDate).getTime();
+    const candidateDistance = Math.abs(candidateTime - targetTime);
+    if (candidateDistance < bestDistance) {
+      bestPlan = candidate;
+      bestDistance = candidateDistance;
+      continue;
+    }
+
+    if (candidateDistance !== bestDistance) {
+      continue;
+    }
+
+    const bestTime = parseDate(bestPlan.startDate).getTime();
+    const candidateIsFuture = candidateTime >= targetTime;
+    const bestIsFuture = bestTime >= targetTime;
+    if (candidateIsFuture && !bestIsFuture) {
+      bestPlan = candidate;
+      bestDistance = candidateDistance;
+      continue;
+    }
+
+    if (candidateIsFuture === bestIsFuture && candidateTime < bestTime) {
+      bestPlan = candidate;
+      bestDistance = candidateDistance;
+    }
+  }
+
+  return bestPlan.startDate;
+};
 
 const formatRangeLabel = (startDate: string, endDate: string) => {
   const start = parseDate(startDate);
@@ -70,6 +151,7 @@ const formatAmount = (amount: number, unit: string) =>
   `${formatQuantity(amount)} ${formatUnit(unit)}`.trim();
 
 export default function ShoppingListPage() {
+  const [today] = useState(() => new Date());
   const [planOptions, setPlanOptions] = useState<WeeklyPlanSummary[]>([]);
   const [selectedPlanStartDate, setSelectedPlanStartDate] = useState("");
   const [shoppingList, setShoppingList] = useState<ShoppingListResponse | null>(
@@ -123,12 +205,29 @@ export default function ShoppingListPage() {
       setPlanLoadError(null);
 
       try {
+        let weekStartsOn = 1;
+        try {
+          const settings = await apiClient.getPlanningSettings();
+          weekStartsOn = parseWeekStartsOn(settings.weekStartsOn);
+        } catch (error) {
+          if (!(error instanceof ApiError && error.status === 404)) {
+            if (error instanceof ApiError) {
+              console.error("Failed to load planning settings:", error.body ?? error.message);
+            } else if (error instanceof Error) {
+              console.error("Failed to load planning settings:", error.message);
+            } else {
+              console.error("Failed to load planning settings.");
+            }
+          }
+        }
+
         const response = await apiClient.getWeeklyPlans();
         if (!isActive) {
           return;
         }
 
         const plans = response.plans ?? [];
+        const targetStartDate = formatDayKey(addDays(startOfWeek(today, weekStartsOn), 7));
 
         setPlanOptions(plans);
         setSelectedPlanStartDate((current) => {
@@ -141,7 +240,12 @@ export default function ShoppingListPage() {
             return current;
           }
 
-          return plans[0]?.startDate ?? "";
+          const exactMatch = plans.find((plan) => plan.startDate === targetStartDate);
+          if (exactMatch) {
+            return exactMatch.startDate;
+          }
+
+          return pickClosestPlanStartDate(plans, parseDate(targetStartDate));
         });
       } catch (error) {
         if (error instanceof ApiError) {
@@ -170,7 +274,7 @@ export default function ShoppingListPage() {
     return () => {
       isActive = false;
     };
-  }, []);
+  }, [today]);
 
   useEffect(() => {
     if (!selectedPlanStartDate) {
