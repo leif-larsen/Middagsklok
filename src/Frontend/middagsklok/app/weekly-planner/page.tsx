@@ -51,11 +51,6 @@ const startOfWeek = (date: Date, weekStartsOn: number) => {
   return addDays(date, -diff);
 };
 
-const offsetFromMonday = (dayIndex: number) => (dayIndex + 6) % 7;
-
-const anchorDate = new Date(2026, 0, 30);
-const baseWeekStart = startOfWeek(anchorDate, 1);
-
 const buildPlan = (days: WeekDay[]) =>
   days.reduce<Record<string, string | null>>((accumulator, day) => {
     accumulator[day.key] = null;
@@ -109,6 +104,7 @@ export default function WeeklyPlannerPage() {
   const [isMarkingEaten, setIsMarkingEaten] = useState(false);
   const [isPlanMarkedAsEaten, setIsPlanMarkedAsEaten] = useState(false);
   const [isLoadingPlan, setIsLoadingPlan] = useState(false);
+  const [today] = useState(() => new Date());
 
   useEffect(() => {
     let isActive = true;
@@ -185,8 +181,8 @@ export default function WeeklyPlannerPage() {
   );
 
   const weekDays = useMemo(() => {
-    const weekStart = addDays(baseWeekStart, weekOffset * 7);
-    const startDate = addDays(weekStart, offsetFromMonday(startDay));
+    const currentWeekStart = startOfWeek(today, startDay);
+    const startDate = addDays(currentWeekStart, weekOffset * 7);
 
     return Array.from({ length: 7 }, (_, index) => {
       const date = addDays(startDate, index);
@@ -196,7 +192,7 @@ export default function WeeklyPlannerPage() {
         date,
       };
     });
-  }, [startDay, weekOffset]);
+  }, [startDay, today, weekOffset]);
 
   const defaultPlan = useMemo(() => buildPlan(weekDays), [weekDays]);
   const [plan, setPlan] = useState<Record<string, string | null>>(
@@ -213,7 +209,7 @@ export default function WeeklyPlannerPage() {
     const endDate = weekDays[6]?.date;
 
     if (!startDate || !endDate) {
-      return monthFormatter.format(weekDays[0]?.date ?? anchorDate);
+      return monthFormatter.format(weekDays[0]?.date ?? today);
     }
 
     const startYear = yearFormatter.format(startDate);
@@ -224,7 +220,7 @@ export default function WeeklyPlannerPage() {
     }
 
     return `${rangeFormatter.format(startDate)} ${startYear} – ${rangeFormatter.format(endDate)} ${endYear}`;
-  }, [weekDays]);
+  }, [today, weekDays]);
 
   const handleToggle = (dayKey: string) => {
     if (isPlanMarkedAsEaten) {
