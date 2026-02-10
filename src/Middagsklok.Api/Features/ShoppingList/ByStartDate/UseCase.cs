@@ -39,6 +39,16 @@ internal sealed class UseCase(AppDbContext dbContext)
             return notFoundResult;
         }
 
+        var isMarkedAsEaten = await IsPlanMarkedAsEaten(plan.Id, cancellationToken);
+        if (isMarkedAsEaten)
+        {
+            var notFoundResult = new UseCaseResult(
+                FetchOutcome.NotFound,
+                null,
+                Array.Empty<ValidationError>());
+            return notFoundResult;
+        }
+
         var dishIds = plan.PlannedDishes
             .Select(day => day.Selection.DishId)
             .Where(dishId => dishId is not null)
@@ -88,6 +98,16 @@ internal sealed class UseCase(AppDbContext dbContext)
             .ToListAsync(cancellationToken);
 
         return dishes;
+    }
+
+    // Checks whether the weekly plan has already been marked as eaten.
+    private async Task<bool> IsPlanMarkedAsEaten(Guid planId, CancellationToken cancellationToken)
+    {
+        var isMarkedAsEaten = await _dbContext.DishConsumptionEvents
+            .AsNoTracking()
+            .AnyAsync(evt => evt.WeeklyPlanId == planId, cancellationToken);
+
+        return isMarkedAsEaten;
     }
 
     // Loads ingredient entities for the planned dishes.

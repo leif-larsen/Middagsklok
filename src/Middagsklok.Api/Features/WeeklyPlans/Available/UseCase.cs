@@ -13,6 +13,7 @@ internal sealed class UseCase(AppDbContext dbContext)
     {
         var plans = await _dbContext.WeeklyPlans
             .AsNoTracking()
+            .Where(plan => !_dbContext.DishConsumptionEvents.Any(evt => evt.WeeklyPlanId == plan.Id))
             .OrderBy(plan => plan.StartDate)
             .ToListAsync(cancellationToken);
 
