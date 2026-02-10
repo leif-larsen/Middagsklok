@@ -198,10 +198,10 @@ export default function DishesPage() {
   }, [cuisineOptions, formCuisine]);
 
   const cuisineSelectMessage = cuisinesLoading
-    ? "Loading cuisines..."
+    ? "Loading dish types..."
     : formCuisineOptions.length === 0
-      ? "No cuisines available"
-      : "Select cuisine";
+      ? "No dish types available"
+      : "Select dish type";
 
   const visibleDishes = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -732,7 +732,7 @@ export default function DishesPage() {
               />
             </label>
             <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
-              Cuisine
+              Dish type
               <select
                 value={formCuisine}
                 onChange={(event) => setFormCuisine(event.target.value)}

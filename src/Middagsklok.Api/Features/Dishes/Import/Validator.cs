@@ -85,7 +85,7 @@ internal sealed class Validator
             dish.ActiveMinutes,
             dish.TotalMinutes,
             4,
-            CuisineType.None,
+            CuisineType.Other,
             candidates);
 
         return new ValidationResult(true, candidate, Array.Empty<Failure>());

@@ -165,11 +165,11 @@ internal sealed class Validator
         if (!Enum.TryParse<CuisineType>(trimmed, true, out var parsed)
             || !Enum.IsDefined(typeof(CuisineType), parsed))
         {
-            var allowed = string.Join(", ", Enum.GetNames<CuisineType>().Where(value => value != nameof(CuisineType.None)));
+            var allowed = string.Join(", ", DishTaxonomy.GetDishTypes().Select(type => type.Value.ToString()));
             return CuisineParseResult.Invalid($"Cuisine must be one of: {allowed}.");
         }
 
-        var normalized = parsed is CuisineType.None ? CuisineType.Other : parsed;
+        var normalized = DishTaxonomy.NormalizeType(parsed);
         return CuisineParseResult.Valid(normalized);
     }
 
