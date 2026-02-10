@@ -58,10 +58,22 @@ export type DishCuisineMetadata = {
   label: string;
   order: number;
   isSelectable: boolean;
+  defaultWeightWeekday: number;
+  defaultWeightWeekend: number;
+  isFallback: boolean;
+};
+
+export type DishVibeTagMetadata = {
+  value: string;
+  label: string;
+  order: number;
+  weightMultiplierWeekday: number;
+  weightMultiplierWeekend: number;
 };
 
 export type DishesMetadataResponse = {
   cuisines: DishCuisineMetadata[];
+  vibeTags: DishVibeTagMetadata[];
 };
 
 export type DishCreateIngredientInput = {

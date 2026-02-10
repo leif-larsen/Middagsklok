@@ -88,18 +88,32 @@ public record DishIngredient(
 public enum CuisineType
 {
     None,
+    Pasta,
+    RiceBowl,
+    Noodles,
+    SoupStew,
+    Salad,
+    WrapTaco,
+    PizzaPie,
+    CasseroleBake,
+    SandwichBurger,
+    ProteinVegPlate,
+    BreakfastDinner,
+    SnackBoard,
+    Other,
+
+    // Legacy values kept for backwards compatibility with persisted dish data.
     Italian,
     Asian,
+    Japanese,
+    Thai,
+    Chinese,
     Mediterranean,
     Mexican,
     Indian,
     American,
     French,
     MiddleEastern,
-    Japanese,
-    Thai,
-    Chinese,
     Vegetarian,
-    Vegan,
-    Other
+    Vegan
 }

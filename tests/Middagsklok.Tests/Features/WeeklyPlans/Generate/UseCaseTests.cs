@@ -24,10 +24,10 @@ public sealed class UseCaseTests
     }
 
     // Creates a dish with a seafood classification.
-    private static Dish CreateDish(string name, bool isSeafood) =>
+    private static Dish CreateDish(string name, bool isSeafood, CuisineType cuisine = CuisineType.Other) =>
         new(
             name,
-            CuisineType.Other,
+            cuisine,
             10,
             20,
             4,
@@ -181,4 +181,69 @@ public sealed class UseCaseTests
         await Assert.That(result.Outcome).IsEqualTo(GenerateOutcome.Conflict);
         await Assert.That(result.Plan).IsNull();
     }
+
+    // Verifies that type weights can change the first-day pick between weekday and weekend.
+    [Test]
+    public async Task AppliesDifferentTypeWeightsForWeekdayAndWeekend()
+    {
+        var weekdayDatabaseName = Guid.NewGuid().ToString("N");
+        await using var weekdayContext = CreateContext(weekdayDatabaseName);
+
+        weekdayContext.PlanningSettings.Add(new PlanningSettings(DayOfWeek.Monday, 0));
+        weekdayContext.Dishes.AddRange(
+            CreateDish("Alpha Pizza", false, CuisineType.PizzaPie),
+            CreateDish("Beta Salad", false, CuisineType.Salad));
+        await weekdayContext.SaveChangesAsync(CancellationToken.None);
+
+        var deterministicRandom = new DeterministicRandomSource(0.55);
+        var weekdayUseCase = new UseCase(weekdayContext, deterministicRandom);
+        var weekdayResult = await weekdayUseCase.Execute("2026-02-02", CancellationToken.None);
+
+        await Assert.That(weekdayResult.Outcome).IsEqualTo(GenerateOutcome.Success);
+        await Assert.That(weekdayResult.Plan).IsNotNull();
+
+        var weekdayDishNamesById = weekdayContext.Dishes
+            .AsNoTracking()
+            .ToDictionary(dish => dish.Id.ToString("D"), dish => dish.Name);
+        var weekdayFirstDishId = weekdayResult.Plan!.Days.First().Selection.DishId;
+        await Assert.That(weekdayFirstDishId).IsNotNull();
+
+        var weekdayFirstDishName = weekdayDishNamesById[weekdayFirstDishId!];
+        await Assert.That(weekdayFirstDishName).IsEqualTo("Beta Salad");
+
+        var weekendDatabaseName = Guid.NewGuid().ToString("N");
+        await using var weekendContext = CreateContext(weekendDatabaseName);
+
+        weekendContext.PlanningSettings.Add(new PlanningSettings(DayOfWeek.Monday, 0));
+        weekendContext.Dishes.AddRange(
+            CreateDish("Alpha Pizza", false, CuisineType.PizzaPie),
+            CreateDish("Beta Salad", false, CuisineType.Salad));
+        await weekendContext.SaveChangesAsync(CancellationToken.None);
+
+        var weekendUseCase = new UseCase(weekendContext, deterministicRandom);
+        var weekendResult = await weekendUseCase.Execute("2026-02-07", CancellationToken.None);
+
+        await Assert.That(weekendResult.Outcome).IsEqualTo(GenerateOutcome.Success);
+        await Assert.That(weekendResult.Plan).IsNotNull();
+
+        var weekendDishNamesById = weekendContext.Dishes
+            .AsNoTracking()
+            .ToDictionary(dish => dish.Id.ToString("D"), dish => dish.Name);
+        var weekendFirstDishId = weekendResult.Plan!.Days.First().Selection.DishId;
+        await Assert.That(weekendFirstDishId).IsNotNull();
+
+        var weekendFirstDishName = weekendDishNamesById[weekendFirstDishId!];
+        await Assert.That(weekendFirstDishName).IsEqualTo("Alpha Pizza");
+    }
+}
+
+internal sealed class DeterministicRandomSource(double nextDoubleValue) : IRandomSource
+{
+    private readonly double _nextDoubleValue = nextDoubleValue;
+
+    // Returns zero so shuffle becomes deterministic.
+    public int Next(int maxValue) => 0;
+
+    // Returns a fixed random value for deterministic weighted picks.
+    public double NextDouble() => _nextDoubleValue;
 }

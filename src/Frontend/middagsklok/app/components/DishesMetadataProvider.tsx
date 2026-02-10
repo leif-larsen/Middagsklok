@@ -11,11 +11,13 @@ import {
 import { ApiError, apiClient } from "../../lib/api/client";
 import type {
   DishCuisineMetadata,
+  DishVibeTagMetadata,
   DishesMetadataResponse,
 } from "../../lib/api/models/dishes";
 
 type DishesMetadataState = {
   cuisines: DishCuisineMetadata[];
+  vibeTags: DishVibeTagMetadata[];
   isLoading: boolean;
   error: string | null;
 };
@@ -83,6 +85,7 @@ export default function DishesMetadataProvider({
     if (!stored) {
       return {
         cuisines: [],
+        vibeTags: [],
         isLoading: true,
         error: null,
       };
@@ -91,6 +94,7 @@ export default function DishesMetadataProvider({
     cachedMetadata = stored;
     return {
       cuisines: stored.cuisines ?? [],
+      vibeTags: stored.vibeTags ?? [],
       isLoading: false,
       error: null,
     };
@@ -100,6 +104,7 @@ export default function DishesMetadataProvider({
     if (cachedMetadata) {
       setState({
         cuisines: cachedMetadata.cuisines ?? [],
+        vibeTags: cachedMetadata.vibeTags ?? [],
         isLoading: false,
         error: null,
       });
@@ -117,6 +122,7 @@ export default function DishesMetadataProvider({
 
         setState({
           cuisines: response.cuisines ?? [],
+          vibeTags: response.vibeTags ?? [],
           isLoading: false,
           error: null,
         });
