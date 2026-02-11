@@ -24,7 +24,11 @@ public sealed class UseCaseTests
     }
 
     // Creates a dish with a seafood classification.
-    private static Dish CreateDish(string name, bool isSeafood, CuisineType cuisine = CuisineType.Other) =>
+    private static Dish CreateDish(
+        string name,
+        bool isSeafood,
+        CuisineType cuisine = CuisineType.Other,
+        IReadOnlyList<string>? vibeTags = null) =>
         new(
             name,
             cuisine,
@@ -35,7 +39,8 @@ public sealed class UseCaseTests
             isSeafood,
             false,
             false,
-            Array.Empty<DishIngredient>());
+            Array.Empty<DishIngredient>(),
+            vibeTags);
 
     // Counts seafood selections in a generated plan.
     private static int CountSeafoodDays(Response plan, IReadOnlyDictionary<string, bool> seafoodByDishId) =>
@@ -234,6 +239,60 @@ public sealed class UseCaseTests
 
         var weekendFirstDishName = weekendDishNamesById[weekendFirstDishId!];
         await Assert.That(weekendFirstDishName).IsEqualTo("Alpha Pizza");
+    }
+
+    // Verifies that vibe multipliers can change the first-day pick between weekday and weekend.
+    [Test]
+    public async Task AppliesDifferentVibeWeightsForWeekdayAndWeekend()
+    {
+        var weekdayDatabaseName = Guid.NewGuid().ToString("N");
+        await using var weekdayContext = CreateContext(weekdayDatabaseName);
+
+        weekdayContext.PlanningSettings.Add(new PlanningSettings(DayOfWeek.Monday, 0));
+        weekdayContext.Dishes.AddRange(
+            CreateDish("Comfort Pasta", false, CuisineType.Pasta, ["ComfortFood"]),
+            CreateDish("Quick Pasta", false, CuisineType.Pasta, ["QuickWeeknight"]));
+        await weekdayContext.SaveChangesAsync(CancellationToken.None);
+
+        var deterministicRandom = new DeterministicRandomSource(0.55);
+        var weekdayUseCase = new UseCase(weekdayContext, deterministicRandom);
+        var weekdayResult = await weekdayUseCase.Execute("2026-02-02", CancellationToken.None);
+
+        await Assert.That(weekdayResult.Outcome).IsEqualTo(GenerateOutcome.Success);
+        await Assert.That(weekdayResult.Plan).IsNotNull();
+
+        var weekdayDishNamesById = weekdayContext.Dishes
+            .AsNoTracking()
+            .ToDictionary(dish => dish.Id.ToString("D"), dish => dish.Name);
+        var weekdayFirstDishId = weekdayResult.Plan!.Days.First().Selection.DishId;
+        await Assert.That(weekdayFirstDishId).IsNotNull();
+
+        var weekdayFirstDishName = weekdayDishNamesById[weekdayFirstDishId!];
+        await Assert.That(weekdayFirstDishName).IsEqualTo("Quick Pasta");
+
+        var weekendDatabaseName = Guid.NewGuid().ToString("N");
+        await using var weekendContext = CreateContext(weekendDatabaseName);
+
+        weekendContext.PlanningSettings.Add(new PlanningSettings(DayOfWeek.Monday, 0));
+        weekendContext.Dishes.AddRange(
+            CreateDish("Comfort Pasta", false, CuisineType.Pasta, ["ComfortFood"]),
+            CreateDish("Quick Pasta", false, CuisineType.Pasta, ["QuickWeeknight"]));
+        await weekendContext.SaveChangesAsync(CancellationToken.None);
+
+        var weekendUseCase = new UseCase(weekendContext, deterministicRandom);
+        var weekendResult = await weekendUseCase.Execute("2026-02-07", CancellationToken.None);
+
+        await Assert.That(weekendResult.Outcome).IsEqualTo(GenerateOutcome.Success);
+        await Assert.That(weekendResult.Plan).IsNotNull();
+
+        var weekendDishNamesById = weekendContext.Dishes
+            .AsNoTracking()
+            .ToDictionary(dish => dish.Id.ToString("D"), dish => dish.Name);
+        var weekendFirstDishId = weekendResult.Plan!.Days.First().Selection.DishId;
+        await Assert.That(weekendFirstDishId).IsNotNull();
+
+        var weekendFirstDishName = weekendDishNamesById[weekendFirstDishId!];
+        await Assert.That(weekendFirstDishName).IsEqualTo("Comfort Pasta");
     }
 }
 

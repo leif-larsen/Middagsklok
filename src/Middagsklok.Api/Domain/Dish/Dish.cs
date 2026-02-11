@@ -12,9 +12,11 @@ public class Dish(
     bool isSeafood,
     bool isVegetarian,
     bool isVegan,
-    IEnumerable<DishIngredient> ingredients) : BaseEntity
+    IEnumerable<DishIngredient> ingredients,
+    IEnumerable<string>? vibeTags = null) : BaseEntity
 {
     private readonly List<DishIngredient> _ingredients = ingredients.ToList();
+    private readonly List<string> _vibeTags = NormalizeVibeTags(vibeTags);
 
     // Required by EF Core.
     private Dish(
@@ -24,7 +26,7 @@ public class Dish(
         int cookTimeMinutes,
         int servings,
         string? instructions)
-        : this(name, cuisine, prepTimeMinutes, cookTimeMinutes, servings, instructions, false, false, false, Array.Empty<DishIngredient>())
+        : this(name, cuisine, prepTimeMinutes, cookTimeMinutes, servings, instructions, false, false, false, Array.Empty<DishIngredient>(), null)
     {
     }
 
@@ -38,6 +40,7 @@ public class Dish(
     public bool IsVegetarian { get; private set; } = isVegetarian;
     public bool IsVegan { get; private set; } = isVegan;
     public IReadOnlyList<DishIngredient> Ingredients => _ingredients;
+    public IReadOnlyList<string> VibeTags => _vibeTags;
 
     public int TotalTimeMinutes => PrepTimeMinutes + CookTimeMinutes;
 
@@ -52,7 +55,8 @@ public class Dish(
         bool isSeafood,
         bool isVegetarian,
         bool isVegan,
-        IEnumerable<DishIngredient> ingredients)
+        IEnumerable<DishIngredient> ingredients,
+        IEnumerable<string>? vibeTags)
     {
         Name = name.Trim();
         Cuisine = cuisine;
@@ -66,6 +70,8 @@ public class Dish(
 
         _ingredients.Clear();
         _ingredients.AddRange(ingredients);
+        _vibeTags.Clear();
+        _vibeTags.AddRange(NormalizeVibeTags(vibeTags));
 
         Touch();
     }
@@ -75,6 +81,23 @@ public class Dish(
     {
         var trimmed = value?.Trim();
         return string.IsNullOrWhiteSpace(trimmed) ? null : trimmed;
+    }
+
+    // Normalizes vibe tags for persistence.
+    private static List<string> NormalizeVibeTags(IEnumerable<string>? tags)
+    {
+        if (tags is null)
+        {
+            return [];
+        }
+
+        var normalized = tags
+            .Where(tag => !string.IsNullOrWhiteSpace(tag))
+            .Select(tag => tag.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        return normalized;
     }
 }
 

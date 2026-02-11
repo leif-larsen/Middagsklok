@@ -11,6 +11,7 @@ public sealed record Response(
     bool IsSeafood,
     bool IsVegetarian,
     bool IsVegan,
+    IReadOnlyList<string> VibeTags,
     IEnumerable<DishIngredientResponse> Ingredients);
 
 public sealed record DishIngredientResponse(

@@ -45,6 +45,9 @@ internal sealed class Validator
                 cuisineResult.ErrorMessage));
         }
 
+        var vibeTagResult = ParseVibeTags(request.VibeTags);
+        failures.AddRange(vibeTagResult.Errors);
+
         var ingredientsInput = request.Ingredients ?? Array.Empty<IngredientInput>();
         if (ingredientsInput.Count == 0)
         {
@@ -136,6 +139,7 @@ internal sealed class Validator
             request.IsSeafood,
             request.IsVegetarian,
             request.IsVegan,
+            vibeTagResult.Values,
             candidates);
 
         return new ValidationResult(true, candidateDish, Array.Empty<ValidationError>());
@@ -179,6 +183,42 @@ internal sealed class Validator
         return CuisineParseResult.Valid(normalized);
     }
 
+    // Validates and normalizes planner vibe tags.
+    private static VibeTagParseResult ParseVibeTags(IReadOnlyList<string>? rawVibeTags)
+    {
+        var values = rawVibeTags ?? Array.Empty<string>();
+        if (values.Count == 0)
+        {
+            return new VibeTagParseResult(Array.Empty<string>(), Array.Empty<ValidationError>());
+        }
+
+        var normalizedValues = new List<string>();
+        var failures = new List<ValidationError>();
+        var seenValues = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var allowed = string.Join(", ", DishTaxonomy.GetVibeTags().Select(tag => tag.Value));
+
+        for (var index = 0; index < values.Count; index++)
+        {
+            var rawValue = values[index];
+            if (!DishTaxonomy.TryNormalizeVibeTag(rawValue, out var normalizedValue))
+            {
+                failures.Add(new ValidationError(
+                    BuildVibeTagField(index),
+                    $"Vibe tag must be one of: {allowed}."));
+                continue;
+            }
+
+            if (!seenValues.Add(normalizedValue))
+            {
+                continue;
+            }
+
+            normalizedValues.Add(normalizedValue);
+        }
+
+        return new VibeTagParseResult(normalizedValues, failures);
+    }
+
     // Normalizes free-form instructions input.
     private static string? NormalizeInstructions(string? value)
     {
@@ -198,6 +238,10 @@ internal sealed class Validator
 
         return $"{prefix}.{ToFieldName(property)}";
     }
+
+    // Builds the field name for a vibe tag value.
+    private static string BuildVibeTagField(int index) =>
+        $"{ToFieldName(nameof(Request.VibeTags))}[{index}]";
 
     // Normalizes names for case-insensitive comparisons.
     private static string NormalizeName(string value) => value.Trim().ToUpperInvariant();
@@ -237,6 +281,7 @@ internal sealed record DishCandidate(
     bool IsSeafood,
     bool IsVegetarian,
     bool IsVegan,
+    IReadOnlyList<string> VibeTags,
     IReadOnlyList<IngredientCandidate> Ingredients);
 
 internal sealed record IngredientCandidate(
@@ -255,3 +300,7 @@ internal sealed record CuisineParseResult(
 
     public static CuisineParseResult Invalid(string message) => new(false, default, message);
 }
+
+internal sealed record VibeTagParseResult(
+    IReadOnlyList<string> Values,
+    IReadOnlyList<ValidationError> Errors);

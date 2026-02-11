@@ -84,11 +84,14 @@ internal sealed class UseCase(AppDbContext dbContext, IRandomSource? randomSourc
     // Loads the available dishes for selection.
     private async Task<IReadOnlyList<DishCandidate>> LoadDishes(CancellationToken cancellationToken)
     {
-        var dishes = await _dbContext.Dishes
+        var dishEntities = await _dbContext.Dishes
             .AsNoTracking()
             .OrderBy(dish => dish.Name)
-            .Select(dish => new DishCandidate(dish.Id, dish.IsSeafood, dish.Cuisine))
             .ToListAsync(cancellationToken);
+
+        var dishes = dishEntities
+            .Select(dish => new DishCandidate(dish.Id, dish.IsSeafood, dish.Cuisine, dish.VibeTags.ToArray()))
+            .ToArray();
 
         return dishes;
     }
@@ -165,6 +168,7 @@ internal sealed class UseCase(AppDbContext dbContext, IRandomSource? randomSourc
         var allDishIds = dishes.Select(dish => dish.Id).ToArray();
         var seafoodLookup = dishes.ToDictionary(dish => dish.Id, dish => dish.IsSeafood);
         var typeLookup = dishes.ToDictionary(dish => dish.Id, dish => dish.Cuisine);
+        var vibeTagLookup = dishes.ToDictionary(dish => dish.Id, dish => dish.VibeTags);
         var seafoodRequirements = BuildSeafoodRequirements(requestedSeafoodCount, randomSource);
         var notes = new List<string>();
         var days = new PlannedDay[DaysPerWeek];
@@ -187,6 +191,7 @@ internal sealed class UseCase(AppDbContext dbContext, IRandomSource? randomSourc
                     daysBetween,
                     lastEatenDates,
                     typeLookup,
+                    vibeTagLookup,
                     randomSource)
                 : PickDishIdWithFallback(
                     nonSeafoodDishIds,
@@ -196,6 +201,7 @@ internal sealed class UseCase(AppDbContext dbContext, IRandomSource? randomSourc
                     daysBetween,
                     lastEatenDates,
                     typeLookup,
+                    vibeTagLookup,
                     randomSource);
 
             if (requiresSeafood && pick.UsedFallbackCategory)
@@ -283,6 +289,7 @@ internal sealed class UseCase(AppDbContext dbContext, IRandomSource? randomSourc
         int daysBetween,
         IReadOnlyDictionary<Guid, DateOnly> lastEatenDates,
         IReadOnlyDictionary<Guid, CuisineType> typeLookup,
+        IReadOnlyDictionary<Guid, IReadOnlyList<string>> vibeTagLookup,
         IRandomSource randomSource)
     {
         var preferredUnusedDishIds = preferredDishIds
@@ -290,7 +297,7 @@ internal sealed class UseCase(AppDbContext dbContext, IRandomSource? randomSourc
             .ToArray();
         if (preferredUnusedDishIds.Length > 0)
         {
-            var preferredId = PickDishId(preferredUnusedDishIds, dayDate, daysBetween, lastEatenDates, typeLookup, randomSource);
+            var preferredId = PickDishId(preferredUnusedDishIds, dayDate, daysBetween, lastEatenDates, typeLookup, vibeTagLookup, randomSource);
             return new DishPick(preferredId, false, false);
         }
 
@@ -299,17 +306,17 @@ internal sealed class UseCase(AppDbContext dbContext, IRandomSource? randomSourc
             .ToArray();
         if (fallbackUnusedDishIds.Length > 0)
         {
-            var fallbackUnusedId = PickDishId(fallbackUnusedDishIds, dayDate, daysBetween, lastEatenDates, typeLookup, randomSource);
+            var fallbackUnusedId = PickDishId(fallbackUnusedDishIds, dayDate, daysBetween, lastEatenDates, typeLookup, vibeTagLookup, randomSource);
             return new DishPick(fallbackUnusedId, true, false);
         }
 
         if (preferredDishIds.Count > 0)
         {
-            var preferredDuplicateId = PickDishId(preferredDishIds, dayDate, daysBetween, lastEatenDates, typeLookup, randomSource);
+            var preferredDuplicateId = PickDishId(preferredDishIds, dayDate, daysBetween, lastEatenDates, typeLookup, vibeTagLookup, randomSource);
             return new DishPick(preferredDuplicateId, false, true);
         }
 
-        var fallbackDuplicateId = PickDishId(fallbackDishIds, dayDate, daysBetween, lastEatenDates, typeLookup, randomSource);
+        var fallbackDuplicateId = PickDishId(fallbackDishIds, dayDate, daysBetween, lastEatenDates, typeLookup, vibeTagLookup, randomSource);
         return new DishPick(fallbackDuplicateId, true, true);
     }
 
@@ -320,6 +327,7 @@ internal sealed class UseCase(AppDbContext dbContext, IRandomSource? randomSourc
         int daysBetween,
         IReadOnlyDictionary<Guid, DateOnly> lastEatenDates,
         IReadOnlyDictionary<Guid, CuisineType> typeLookup,
+        IReadOnlyDictionary<Guid, IReadOnlyList<string>> vibeTagLookup,
         IRandomSource randomSource)
     {
         if (dishIds.Count == 1)
@@ -335,7 +343,8 @@ internal sealed class UseCase(AppDbContext dbContext, IRandomSource? randomSourc
             var dishId = dishIds[index];
             var score = CalculateRecencyScore(dishId, dayDate, daysBetween, lastEatenDates);
             var typeWeight = CalculateTypeWeight(dishId, dayDate, typeLookup);
-            var weightedScore = score * typeWeight;
+            var vibeWeight = CalculateVibeWeight(dishId, dayDate, vibeTagLookup);
+            var weightedScore = score * typeWeight * vibeWeight;
             scores[index] = weightedScore;
             totalScore += weightedScore;
         }
@@ -372,6 +381,27 @@ internal sealed class UseCase(AppDbContext dbContext, IRandomSource? randomSourc
         }
 
         var weight = DishTaxonomy.GetDefaultWeight(dishType, dayDate.DayOfWeek);
+        return weight <= 0 ? 0.1 : weight;
+    }
+
+    // Calculates the combined planner multiplier for all selected dish vibe tags.
+    private static double CalculateVibeWeight(
+        Guid dishId,
+        DateOnly dayDate,
+        IReadOnlyDictionary<Guid, IReadOnlyList<string>> vibeTagLookup)
+    {
+        if (!vibeTagLookup.TryGetValue(dishId, out var vibeTags) || vibeTags.Count == 0)
+        {
+            return 1.0;
+        }
+
+        var weight = 1.0;
+        for (var index = 0; index < vibeTags.Count; index++)
+        {
+            var multiplier = DishTaxonomy.GetVibeWeightMultiplier(vibeTags[index], dayDate.DayOfWeek);
+            weight *= multiplier;
+        }
+
         return weight <= 0 ? 0.1 : weight;
     }
 
@@ -440,7 +470,7 @@ internal sealed class UseCase(AppDbContext dbContext, IRandomSource? randomSourc
         date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 }
 
-internal sealed record DishCandidate(Guid Id, bool IsSeafood, CuisineType Cuisine);
+internal sealed record DishCandidate(Guid Id, bool IsSeafood, CuisineType Cuisine, IReadOnlyList<string> VibeTags);
 
 internal sealed record DishPick(Guid DishId, bool UsedFallbackCategory, bool UsedDuplicate);
 

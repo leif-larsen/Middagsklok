@@ -5,4 +5,5 @@ public sealed record Response(IEnumerable<DishLookup> Dishes);
 public sealed record DishLookup(
     string Id,
     string Name,
-    string Cuisine);
+    string Cuisine,
+    IReadOnlyList<string> VibeTags);

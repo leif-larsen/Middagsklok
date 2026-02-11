@@ -98,6 +98,7 @@ internal sealed class UseCase(AppDbContext dbContext)
             dish.IsSeafood,
             dish.IsVegetarian,
             dish.IsVegan,
+            dish.VibeTags.ToArray(),
             ingredients);
 
         return overview;

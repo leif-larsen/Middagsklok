@@ -24,4 +24,24 @@ public sealed class DishTaxonomyTests
 
         await Assert.That(weekendWeight).IsGreaterThan(weekdayWeight);
     }
+
+    // Verifies that vibe tags normalize to canonical taxonomy values.
+    [Test]
+    public async Task NormalizesKnownVibeTag()
+    {
+        var isKnown = DishTaxonomy.TryNormalizeVibeTag("comfortfood", out var normalizedTag);
+
+        await Assert.That(isKnown).IsTrue();
+        await Assert.That(normalizedTag).IsEqualTo("ComfortFood");
+    }
+
+    // Verifies that vibe multipliers vary between weekday and weekend.
+    [Test]
+    public async Task ReturnsWeekendAwareVibeMultiplier()
+    {
+        var weekdayMultiplier = DishTaxonomy.GetVibeWeightMultiplier("ComfortFood", DayOfWeek.Wednesday);
+        var weekendMultiplier = DishTaxonomy.GetVibeWeightMultiplier("ComfortFood", DayOfWeek.Saturday);
+
+        await Assert.That(weekendMultiplier).IsGreaterThan(weekdayMultiplier);
+    }
 }
