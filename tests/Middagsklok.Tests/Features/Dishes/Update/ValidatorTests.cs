@@ -21,11 +21,36 @@ public sealed class ValidatorTests
             false,
             false,
             false,
+            Array.Empty<string>(),
             [new IngredientInput(null, "Salt", 1)]);
 
         var result = validator.Validate(Guid.NewGuid().ToString("D"), request);
 
         await Assert.That(result.IsValid).IsFalse();
         await Assert.That(result.Errors.Any(error => error.Field == "cuisine")).IsTrue();
+    }
+
+    // Verifies that unknown vibe tags are rejected in update requests.
+    [Test]
+    public async Task RejectsUnknownVibeTag()
+    {
+        var validator = new Validator();
+        var request = new Request(
+            "Test Dish",
+            "Pasta",
+            10,
+            20,
+            4,
+            null,
+            false,
+            false,
+            false,
+            ["CozyNight"],
+            [new IngredientInput(null, "Salt", 1)]);
+
+        var result = validator.Validate(Guid.NewGuid().ToString("D"), request);
+
+        await Assert.That(result.IsValid).IsFalse();
+        await Assert.That(result.Errors.Any(error => error.Field == "vibeTags[0]")).IsTrue();
     }
 }

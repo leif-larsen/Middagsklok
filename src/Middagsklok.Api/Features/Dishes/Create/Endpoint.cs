@@ -15,7 +15,7 @@ internal static class DishesCreateEndpoint
         UseCase useCase,
         CancellationToken cancellationToken)
     {
-        var safeRequest = request ?? new Request(null, null, 0, 0, 0, null, false, false, false, Array.Empty<IngredientInput>());
+        var safeRequest = request ?? new Request(null, null, 0, 0, 0, null, false, false, false, Array.Empty<string>(), Array.Empty<IngredientInput>());
         var result = await useCase.Execute(safeRequest, cancellationToken);
 
         return result.Outcome switch

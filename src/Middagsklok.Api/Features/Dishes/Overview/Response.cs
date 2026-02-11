@@ -13,6 +13,7 @@ public sealed record DishOverview(
     bool IsSeafood,
     bool IsVegetarian,
     bool IsVegan,
+    IReadOnlyList<string> VibeTags,
     IEnumerable<DishIngredientOverview> Ingredients);
 
 public sealed record DishIngredientOverview(

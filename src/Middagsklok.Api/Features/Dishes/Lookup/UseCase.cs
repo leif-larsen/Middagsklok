@@ -13,12 +13,6 @@ internal sealed class UseCase(AppDbContext dbContext)
         var dishes = await _dbContext.Dishes
             .AsNoTracking()
             .OrderBy(dish => dish.Name)
-            .Select(dish => new
-            {
-                dish.Id,
-                dish.Name,
-                dish.Cuisine
-            })
             .ToListAsync(cancellationToken);
 
         if (dishes.Count == 0)
@@ -31,7 +25,8 @@ internal sealed class UseCase(AppDbContext dbContext)
             .Select(dish => new DishLookup(
                 dish.Id.ToString("D"),
                 dish.Name,
-                dish.Cuisine.ToString()))
+                dish.Cuisine.ToString(),
+                dish.VibeTags.ToArray()))
             .ToArray();
 
         var response = new Response(lookup);

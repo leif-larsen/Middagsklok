@@ -77,7 +77,8 @@ internal sealed class UseCase(AppDbContext dbContext)
             validation.Candidate.IsSeafood,
             validation.Candidate.IsVegetarian,
             validation.Candidate.IsVegan,
-            dishIngredients);
+            dishIngredients,
+            validation.Candidate.VibeTags);
 
         _dbContext.Dishes.Add(dishEntity);
         await _dbContext.SaveChangesAsync(cancellationToken);
@@ -226,6 +227,7 @@ internal sealed class UseCase(AppDbContext dbContext)
             dish.IsSeafood,
             dish.IsVegetarian,
             dish.IsVegan,
+            dish.VibeTags.ToArray(),
             ingredients);
 
         return response;

@@ -36,6 +36,7 @@ export type DishOverview = {
   isSeafood: boolean;
   isVegetarian: boolean;
   isVegan: boolean;
+  vibeTags: string[];
   ingredients: DishOverviewIngredient[];
 };
 
@@ -47,6 +48,7 @@ export type DishLookup = {
   id: string;
   name: string;
   cuisine: string;
+  vibeTags: string[];
 };
 
 export type DishesLookupResponse = {
@@ -92,6 +94,7 @@ export type DishCreateRequest = {
   isSeafood: boolean;
   isVegetarian: boolean;
   isVegan: boolean;
+  vibeTags?: string[] | null;
   ingredients?: DishCreateIngredientInput[] | null;
 };
 

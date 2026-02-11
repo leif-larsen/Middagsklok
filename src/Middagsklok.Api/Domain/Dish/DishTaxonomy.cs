@@ -48,6 +48,8 @@ public static class DishTaxonomy
         new("LightFresh", "Light & fresh", 130, 1.05, 0.95),
         new("FamilyFriendly", "Family friendly", 140, 1.1, 1.05)
     ];
+    private static readonly Dictionary<string, VibeTagMetadata> MetadataByVibeTag = VibeMetadata
+        .ToDictionary(metadata => metadata.Value, StringComparer.OrdinalIgnoreCase);
 
     private static readonly IReadOnlyList<DishTypeMetadata> ReadOnlyTypeMetadata = Array.AsReadOnly(TypeMetadata);
     private static readonly IReadOnlyList<VibeTagMetadata> ReadOnlyVibeMetadata = Array.AsReadOnly(VibeMetadata);
@@ -57,6 +59,26 @@ public static class DishTaxonomy
 
     // Returns planner-facing vibe tags with weekday/weekend multipliers.
     public static IReadOnlyList<VibeTagMetadata> GetVibeTags() => ReadOnlyVibeMetadata;
+
+    // Tries to normalize a vibe tag value to its canonical form.
+    public static bool TryNormalizeVibeTag(string? value, out string normalizedValue)
+    {
+        normalizedValue = string.Empty;
+
+        var trimmed = value?.Trim();
+        if (string.IsNullOrWhiteSpace(trimmed))
+        {
+            return false;
+        }
+
+        if (!MetadataByVibeTag.TryGetValue(trimmed, out var metadata))
+        {
+            return false;
+        }
+
+        normalizedValue = metadata.Value;
+        return true;
+    }
 
     // Maps legacy cuisine values to planner-facing dish types.
     public static CuisineType NormalizeType(CuisineType value)
@@ -86,6 +108,24 @@ public static class DishTaxonomy
         return IsWeekend(dayOfWeek)
             ? metadata.DefaultWeightWeekend
             : metadata.DefaultWeightWeekday;
+    }
+
+    // Gets the planner multiplier for a vibe tag and day category.
+    public static double GetVibeWeightMultiplier(string value, DayOfWeek dayOfWeek)
+    {
+        if (!TryNormalizeVibeTag(value, out var normalizedValue))
+        {
+            return 1.0;
+        }
+
+        if (!MetadataByVibeTag.TryGetValue(normalizedValue, out var metadata))
+        {
+            return 1.0;
+        }
+
+        return IsWeekend(dayOfWeek)
+            ? metadata.WeightMultiplierWeekend
+            : metadata.WeightMultiplierWeekday;
     }
 
     // Indicates whether a day should use weekend multipliers.
