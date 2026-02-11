@@ -73,12 +73,6 @@ namespace Middagsklok.Api.Database.Migrations
                         .HasColumnType("character varying(200)")
                         .HasColumnName("name");
 
-                    b.Property<List<string>>("_vibeTags")
-                        .IsRequired()
-                        .HasColumnType("text[]")
-                        .HasDefaultValueSql("'{}'::text[]")
-                        .HasColumnName("vibe_tags");
-
                     b.Property<int>("PrepTimeMinutes")
                         .HasColumnType("integer")
                         .HasColumnName("prep_time_minutes");
@@ -90,6 +84,13 @@ namespace Middagsklok.Api.Database.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
+
+                    b.PrimitiveCollection<List<string>>("_vibeTags")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text[]")
+                        .HasColumnName("vibe_tags")
+                        .HasDefaultValueSql("'{}'::text[]");
 
                     b.HasKey("Id");
 
