@@ -12,7 +12,7 @@ This file defines how AI agents should work in this repo. If instructions confli
 - Follow existing project conventions and .editorconfig.
 
 ## GitHub workflow policy
-- For each coding task, create a dedicated branch before making code changes.
+- For each coding task, create a dedicated branch and dedicated git worktree before making code changes.
 - Branch naming format: `codex/<type>/<short-kebab-slug>`.
 - Allowed `<type>` values: `feature`, `fix`, `chore`, `docs`, `refactor`, `test`.
 - Keep branch names concise and deterministic from the task description.
@@ -20,6 +20,21 @@ This file defines how AI agents should work in this repo. If instructions confli
 - Push the task branch to `origin` when work is complete.
 - Open a pull request targeting `main` after push.
 - If GitHub MCP is available, prefer it for branch/PR/issue operations; otherwise use `git` and `gh`.
+
+## Git worktree policy
+- Git worktrees are required for feature/fix/chore/docs/refactor/test task execution.
+- Never implement task changes directly in the repository root worktree.
+- Create one worktree per task and one task branch per worktree.
+- Use `origin/main` as the default starting point for task branches unless explicitly instructed otherwise.
+- Create the worktree and branch together before editing files. Example:
+  - `git worktree add ../middagsklok-<slug> -b codex/<type>/<short-kebab-slug> origin/main`
+- Run edits, build, format, test, commit, and push commands from the task worktree directory.
+- Do not remove the task worktree before the branch is pushed and the PR is created.
+- Keep the task worktree while PR feedback is active.
+- After PR merge or explicit PR closure, remove local task artifacts:
+  - `git worktree remove ../middagsklok-<slug>`
+  - `git branch -d codex/<type>/<short-kebab-slug>`
+- Delete remote task branches only after merge, and only when explicitly requested.
 
 ## Pull request policy
 - Every task branch must produce one PR unless explicitly told otherwise.
