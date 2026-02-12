@@ -30,7 +30,7 @@ type DraftIngredient = {
 type Dish = {
   id: string;
   name: string;
-  cuisine: string;
+  dishType: string;
   prepMinutes: number;
   cookMinutes: number;
   serves: number;
@@ -44,7 +44,7 @@ type Dish = {
 const emptyDish: Dish = {
   id: "new-dish",
   name: "",
-  cuisine: "",
+  dishType: "",
   prepMinutes: 0,
   cookMinutes: 0,
   serves: 0,
@@ -74,7 +74,7 @@ export default function DishesPage() {
     failures: { dishName?: string | null; reason: string; ingredientName?: string | null }[];
   } | null>(null);
   const [formName, setFormName] = useState("");
-  const [formCuisine, setFormCuisine] = useState("");
+  const [formDishType, setFormDishType] = useState("");
   const [formPrepMinutes, setFormPrepMinutes] = useState("");
   const [formCookMinutes, setFormCookMinutes] = useState("");
   const [formServes, setFormServes] = useState("");
@@ -94,9 +94,9 @@ export default function DishesPage() {
   const [selectedIngredientId, setSelectedIngredientId] = useState("");
   const [ingredientAmount, setIngredientAmount] = useState("");
   const {
-    cuisines: cuisineMetadata,
-    isLoading: cuisinesLoading,
-    error: cuisinesError,
+    dishTypes: dishTypeMetadata,
+    isLoading: dishTypesLoading,
+    error: dishTypesError,
   } = useDishesMetadata();
   const {
     ingredients: availableIngredients,
@@ -155,51 +155,51 @@ export default function DishesPage() {
     || !!ingredientsError
     || ingredientOptions.length === 0;
 
-  const cuisineOptions = useMemo(
+  const dishTypeOptions = useMemo(
     () =>
-      cuisineMetadata
-        .filter((cuisine) => cuisine.isSelectable)
+      dishTypeMetadata
+        .filter((dishType) => dishType.isSelectable)
         .sort((left, right) => left.order - right.order || left.label.localeCompare(right.label)),
-    [cuisineMetadata],
+    [dishTypeMetadata],
   );
 
-  const cuisineLabelMap = useMemo(
+  const dishTypeLabelMap = useMemo(
     () =>
       new Map(
-        cuisineMetadata.map((cuisine) => [cuisine.value, cuisine.label]),
+        dishTypeMetadata.map((dishType) => [dishType.value, dishType.label]),
       ),
-    [cuisineMetadata],
+    [dishTypeMetadata],
   );
 
-  const defaultCuisine = useMemo(() => {
-    const other = cuisineOptions.find((cuisine) => cuisine.value === "Other");
+  const defaultDishType = useMemo(() => {
+    const other = dishTypeOptions.find((dishType) => dishType.value === "Other");
     if (other) {
       return other.value;
     }
 
-    const first = cuisineOptions[0];
+    const first = dishTypeOptions[0];
     return first ? first.value : "Other";
-  }, [cuisineOptions]);
+  }, [dishTypeOptions]);
 
-  const formCuisineOptions = useMemo(() => {
-    if (!formCuisine || cuisineOptions.some((cuisine) => cuisine.value === formCuisine)) {
-      return cuisineOptions;
+  const formDishTypeOptions = useMemo(() => {
+    if (!formDishType || dishTypeOptions.some((dishType) => dishType.value === formDishType)) {
+      return dishTypeOptions;
     }
 
     return [
       {
-        value: formCuisine,
-        label: formCuisine,
+        value: formDishType,
+        label: formDishType,
         order: Number.MIN_SAFE_INTEGER,
         isSelectable: true,
       },
-      ...cuisineOptions,
+      ...dishTypeOptions,
     ];
-  }, [cuisineOptions, formCuisine]);
+  }, [dishTypeOptions, formDishType]);
 
-  const cuisineSelectMessage = cuisinesLoading
+  const dishTypeSelectMessage = dishTypesLoading
     ? "Loading dish types..."
-    : formCuisineOptions.length === 0
+    : formDishTypeOptions.length === 0
       ? "No dish types available"
       : "Select dish type";
 
@@ -221,13 +221,13 @@ export default function DishesPage() {
     }
 
     setFormName(activeDish.name ?? "");
-    const normalizedCuisine =
+    const normalizedDishType =
       isEditMode
-        ? (!activeDish.cuisine || activeDish.cuisine === "None"
-            ? defaultCuisine
-            : activeDish.cuisine)
-        : defaultCuisine;
-    setFormCuisine(normalizedCuisine);
+        ? (!activeDish.dishType || activeDish.dishType === "None"
+            ? defaultDishType
+            : activeDish.dishType)
+        : defaultDishType;
+    setFormDishType(normalizedDishType);
     setFormPrepMinutes(
       isEditMode ? String(activeDish.prepMinutes ?? 0) : "",
     );
@@ -254,7 +254,7 @@ export default function DishesPage() {
     );
     setSelectedIngredientId("");
     setIngredientAmount("");
-  }, [activeDish, defaultCuisine, isEditMode, isModalOpen]);
+  }, [activeDish, defaultDishType, isEditMode, isModalOpen]);
 
   useEffect(() => {
     if (!deleteTarget) {
@@ -340,11 +340,11 @@ export default function DishesPage() {
 
     try {
       const name = formName.trim();
-      const cuisine = formCuisine.trim();
+      const dishType = formDishType.trim();
       const instructions = formInstructions.trim();
       const payload = {
         name,
-        cuisine: cuisine ? cuisine : defaultCuisine,
+        dishType: dishType ? dishType : defaultDishType,
         prepMinutes: parseNumber(formPrepMinutes),
         cookMinutes: parseNumber(formCookMinutes),
         serves: parseNumber(formServes),
@@ -577,7 +577,7 @@ export default function DishesPage() {
                         {dish.name}
                       </h2>
                       <span className="mt-2 inline-flex rounded-full bg-[#edf1ea] px-3 py-1 text-xs font-semibold text-[#4f5f55]">
-                        {cuisineLabelMap.get(dish.cuisine) ?? dish.cuisine}
+                        {dishTypeLabelMap.get(dish.dishType) ?? dish.dishType}
                       </span>
                       {dish.isSeafood ? (
                         <span className="mt-2 ml-2 inline-flex rounded-full bg-[#e6f5ff] px-3 py-1 text-xs font-semibold text-[#1d5b7a]">
@@ -734,25 +734,25 @@ export default function DishesPage() {
             <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
               Dish type
               <select
-                value={formCuisine}
-                onChange={(event) => setFormCuisine(event.target.value)}
+                value={formDishType}
+                onChange={(event) => setFormDishType(event.target.value)}
                 className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30 disabled:cursor-not-allowed disabled:bg-[#f6f8f4] disabled:text-[#9aa69f]"
-                disabled={cuisinesLoading || formCuisineOptions.length === 0}
+                disabled={dishTypesLoading || formDishTypeOptions.length === 0}
               >
-                {formCuisineOptions.length === 0 ? (
+                {formDishTypeOptions.length === 0 ? (
                   <option value="">
-                    {cuisineSelectMessage}
+                    {dishTypeSelectMessage}
                   </option>
                 ) : null}
-                {formCuisineOptions.map((cuisine) => (
-                  <option key={cuisine.value} value={cuisine.value}>
-                    {cuisine.label}
+                {formDishTypeOptions.map((dishType) => (
+                  <option key={dishType.value} value={dishType.value}>
+                    {dishType.label}
                   </option>
                 ))}
               </select>
-              {cuisinesError ? (
+              {dishTypesError ? (
                 <span className="text-xs font-normal text-[#b14a4a]">
-                  {cuisinesError}
+                  {dishTypesError}
                 </span>
               ) : null}
             </label>

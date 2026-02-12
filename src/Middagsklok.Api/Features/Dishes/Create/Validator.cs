@@ -36,12 +36,12 @@ internal sealed class Validator
             failures.Add(new ValidationError(ToFieldName(nameof(Request.Serves)), "Servings must be >= 0."));
         }
 
-        var cuisineResult = MapCuisine(request.Cuisine);
-        if (!cuisineResult.IsValid)
+        var dishTypeResult = MapDishType(request.DishType);
+        if (!dishTypeResult.IsValid)
         {
             failures.Add(new ValidationError(
-                ToFieldName(nameof(Request.Cuisine)),
-                cuisineResult.ErrorMessage));
+                ToFieldName(nameof(Request.DishType)),
+                dishTypeResult.ErrorMessage));
         }
 
         var vibeTagResult = ParseVibeTags(request.VibeTags);
@@ -132,7 +132,7 @@ internal sealed class Validator
 
         var candidateDish = new DishCandidate(
             name!,
-            cuisineResult.Value,
+            dishTypeResult.Value,
             request.PrepMinutes,
             request.CookMinutes,
             request.Serves,
@@ -146,30 +146,30 @@ internal sealed class Validator
         return new ValidationResult(true, candidateDish, Array.Empty<ValidationError>());
     }
 
-    // Maps a raw cuisine string to the domain cuisine type.
-    private static CuisineParseResult MapCuisine(string? rawCuisine)
+    // Maps a raw dish type string to the domain dish type.
+    private static DishTypeParseResult MapDishType(string? rawDishType)
     {
-        var trimmed = rawCuisine?.Trim();
+        var trimmed = rawDishType?.Trim();
         if (string.IsNullOrWhiteSpace(trimmed))
         {
-            return CuisineParseResult.Valid(CuisineType.Other);
+            return DishTypeParseResult.Valid(DishType.Other);
         }
 
-        if (!Enum.TryParse<CuisineType>(trimmed, true, out var parsed)
-            || !Enum.IsDefined(typeof(CuisineType), parsed))
+        if (!Enum.TryParse<DishType>(trimmed, true, out var parsed)
+            || !Enum.IsDefined(typeof(DishType), parsed))
         {
             var allowed = string.Join(", ", DishTaxonomy.GetDishTypes().Select(type => type.Value.ToString()));
-            return CuisineParseResult.Invalid($"Cuisine must be one of: {allowed}.");
+            return DishTypeParseResult.Invalid($"Dish type must be one of: {allowed}.");
         }
 
         if (!DishTaxonomy.GetDishTypes().Any(type => type.Value == parsed))
         {
             var allowed = string.Join(", ", DishTaxonomy.GetDishTypes().Select(type => type.Value.ToString()));
-            return CuisineParseResult.Invalid($"Cuisine must be one of: {allowed}.");
+            return DishTypeParseResult.Invalid($"Dish type must be one of: {allowed}.");
         }
 
         var normalized = DishTaxonomy.NormalizeType(parsed);
-        return CuisineParseResult.Valid(normalized);
+        return DishTypeParseResult.Valid(normalized);
     }
 
     // Validates and normalizes planner vibe tags.
@@ -261,7 +261,7 @@ internal sealed record ValidationResult(
 
 internal sealed record DishCandidate(
     string Name,
-    CuisineType Cuisine,
+    DishType DishType,
     int PrepTimeMinutes,
     int CookTimeMinutes,
     int Servings,
@@ -279,14 +279,14 @@ internal sealed record IngredientCandidate(
     int SortOrder,
     int Index);
 
-internal sealed record CuisineParseResult(
+internal sealed record DishTypeParseResult(
     bool IsValid,
-    CuisineType Value,
+    DishType Value,
     string ErrorMessage)
 {
-    public static CuisineParseResult Valid(CuisineType value) => new(true, value, string.Empty);
+    public static DishTypeParseResult Valid(DishType value) => new(true, value, string.Empty);
 
-    public static CuisineParseResult Invalid(string message) => new(false, default, message);
+    public static DishTypeParseResult Invalid(string message) => new(false, default, message);
 }
 
 internal sealed record VibeTagParseResult(

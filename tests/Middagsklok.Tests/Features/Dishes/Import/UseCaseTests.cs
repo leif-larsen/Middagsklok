@@ -99,7 +99,7 @@ public sealed class UseCaseTests
         context.Ingredients.Add(ingredient);
         var existingDish = new Dish(
             "Duplicate Dish",
-            CuisineType.None,
+            DishType.None,
             5,
             10,
             4,

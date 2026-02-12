@@ -27,7 +27,7 @@ public sealed class UseCaseTests
     private static Dish CreateDish(string name) =>
         new(
             name,
-            CuisineType.Other,
+            DishType.Other,
             10,
             20,
             4,

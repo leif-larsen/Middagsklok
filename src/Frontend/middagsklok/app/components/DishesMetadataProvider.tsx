@@ -10,13 +10,13 @@ import {
 } from "react";
 import { ApiError, apiClient } from "../../lib/api/client";
 import type {
-  DishCuisineMetadata,
+  DishTypeMetadata,
   DishVibeTagMetadata,
   DishesMetadataResponse,
 } from "../../lib/api/models/dishes";
 
 type DishesMetadataState = {
-  cuisines: DishCuisineMetadata[];
+  dishTypes: DishTypeMetadata[];
   vibeTags: DishVibeTagMetadata[];
   isLoading: boolean;
   error: string | null;
@@ -84,7 +84,7 @@ export default function DishesMetadataProvider({
     const stored = readStorage();
     if (!stored) {
       return {
-        cuisines: [],
+        dishTypes: [],
         vibeTags: [],
         isLoading: true,
         error: null,
@@ -93,7 +93,7 @@ export default function DishesMetadataProvider({
 
     cachedMetadata = stored;
     return {
-      cuisines: stored.cuisines ?? [],
+      dishTypes: stored.dishTypes ?? [],
       vibeTags: stored.vibeTags ?? [],
       isLoading: false,
       error: null,
@@ -103,7 +103,7 @@ export default function DishesMetadataProvider({
   useEffect(() => {
     if (cachedMetadata) {
       setState({
-        cuisines: cachedMetadata.cuisines ?? [],
+        dishTypes: cachedMetadata.dishTypes ?? [],
         vibeTags: cachedMetadata.vibeTags ?? [],
         isLoading: false,
         error: null,
@@ -121,7 +121,7 @@ export default function DishesMetadataProvider({
         }
 
         setState({
-          cuisines: response.cuisines ?? [],
+          dishTypes: response.dishTypes ?? [],
           vibeTags: response.vibeTags ?? [],
           isLoading: false,
           error: null,

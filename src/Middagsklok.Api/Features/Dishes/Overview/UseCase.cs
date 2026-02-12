@@ -90,7 +90,7 @@ internal sealed class UseCase(AppDbContext dbContext)
         var overview = new DishOverview(
             dish.Id.ToString("D"),
             dish.Name,
-            dish.Cuisine.ToString(),
+            dish.DishType.ToString(),
             dish.PrepTimeMinutes,
             dish.CookTimeMinutes,
             dish.Servings,

@@ -6,9 +6,9 @@ namespace Middagsklok.Tests.Features.Dishes.Create;
 
 public sealed class ValidatorTests
 {
-    // Verifies that legacy cuisine values are rejected in create requests.
+    // Verifies that legacy dishType values are rejected in create requests.
     [Test]
-    public async Task RejectsLegacyCuisineValue()
+    public async Task RejectsLegacyDishTypeValue()
     {
         var validator = new Validator();
         var request = new Request(
@@ -27,7 +27,7 @@ public sealed class ValidatorTests
         var result = validator.Validate(request);
 
         await Assert.That(result.IsValid).IsFalse();
-        await Assert.That(result.Errors.Any(error => error.Field == "cuisine")).IsTrue();
+        await Assert.That(result.Errors.Any(error => error.Field == "dishType")).IsTrue();
     }
 
     // Verifies that unknown vibe tags are rejected in create requests.

@@ -90,7 +90,7 @@ internal sealed class UseCase(AppDbContext dbContext, IRandomSource? randomSourc
             .ToListAsync(cancellationToken);
 
         var dishes = dishEntities
-            .Select(dish => new DishCandidate(dish.Id, dish.IsSeafood, dish.Cuisine, dish.VibeTags.ToArray()))
+            .Select(dish => new DishCandidate(dish.Id, dish.IsSeafood, dish.DishType, dish.VibeTags.ToArray()))
             .ToArray();
 
         return dishes;
@@ -167,7 +167,7 @@ internal sealed class UseCase(AppDbContext dbContext, IRandomSource? randomSourc
             .ToArray();
         var allDishIds = dishes.Select(dish => dish.Id).ToArray();
         var seafoodLookup = dishes.ToDictionary(dish => dish.Id, dish => dish.IsSeafood);
-        var typeLookup = dishes.ToDictionary(dish => dish.Id, dish => dish.Cuisine);
+        var typeLookup = dishes.ToDictionary(dish => dish.Id, dish => dish.DishType);
         var vibeTagLookup = dishes.ToDictionary(dish => dish.Id, dish => dish.VibeTags);
         var seafoodRequirements = BuildSeafoodRequirements(requestedSeafoodCount, randomSource);
         var notes = new List<string>();
@@ -288,7 +288,7 @@ internal sealed class UseCase(AppDbContext dbContext, IRandomSource? randomSourc
         DateOnly dayDate,
         int daysBetween,
         IReadOnlyDictionary<Guid, DateOnly> lastEatenDates,
-        IReadOnlyDictionary<Guid, CuisineType> typeLookup,
+        IReadOnlyDictionary<Guid, DishType> typeLookup,
         IReadOnlyDictionary<Guid, IReadOnlyList<string>> vibeTagLookup,
         IRandomSource randomSource)
     {
@@ -326,7 +326,7 @@ internal sealed class UseCase(AppDbContext dbContext, IRandomSource? randomSourc
         DateOnly dayDate,
         int daysBetween,
         IReadOnlyDictionary<Guid, DateOnly> lastEatenDates,
-        IReadOnlyDictionary<Guid, CuisineType> typeLookup,
+        IReadOnlyDictionary<Guid, DishType> typeLookup,
         IReadOnlyDictionary<Guid, IReadOnlyList<string>> vibeTagLookup,
         IRandomSource randomSource)
     {
@@ -373,7 +373,7 @@ internal sealed class UseCase(AppDbContext dbContext, IRandomSource? randomSourc
     private static double CalculateTypeWeight(
         Guid dishId,
         DateOnly dayDate,
-        IReadOnlyDictionary<Guid, CuisineType> typeLookup)
+        IReadOnlyDictionary<Guid, DishType> typeLookup)
     {
         if (!typeLookup.TryGetValue(dishId, out var dishType))
         {
@@ -470,7 +470,7 @@ internal sealed class UseCase(AppDbContext dbContext, IRandomSource? randomSourc
         date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 }
 
-internal sealed record DishCandidate(Guid Id, bool IsSeafood, CuisineType Cuisine, IReadOnlyList<string> VibeTags);
+internal sealed record DishCandidate(Guid Id, bool IsSeafood, DishType DishType, IReadOnlyList<string> VibeTags);
 
 internal sealed record DishPick(Guid DishId, bool UsedFallbackCategory, bool UsedDuplicate);
 

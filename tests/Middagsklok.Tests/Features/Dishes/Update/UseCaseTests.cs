@@ -31,7 +31,7 @@ public sealed class UseCaseTests
         var ingredient = new Ingredient("Salt", IngredientCategory.Other, Unit.Pcs);
         var dish = new Dish(
             "Tag Dish",
-            CuisineType.Pasta,
+            DishType.Pasta,
             10,
             20,
             4,

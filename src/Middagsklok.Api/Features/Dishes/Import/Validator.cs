@@ -85,7 +85,7 @@ internal sealed class Validator
             dish.ActiveMinutes,
             dish.TotalMinutes,
             4,
-            CuisineType.Other,
+            DishType.Other,
             candidates);
 
         return new ValidationResult(true, candidate, Array.Empty<Failure>());
@@ -177,7 +177,7 @@ internal sealed record DishCandidate(
     int PrepTimeMinutes,
     int CookTimeMinutes,
     int Servings,
-    CuisineType Cuisine,
+    DishType DishType,
     IReadOnlyList<IngredientCandidate> Ingredients);
 
 internal sealed record IngredientCandidate(

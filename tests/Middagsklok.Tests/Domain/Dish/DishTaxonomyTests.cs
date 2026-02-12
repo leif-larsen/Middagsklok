@@ -6,21 +6,21 @@ namespace Middagsklok.Tests.Domain.Dish;
 
 public sealed class DishTaxonomyTests
 {
-    // Verifies that legacy cuisine values map to planner-facing dish types.
+    // Verifies that legacy dishType values map to planner-facing dish types.
     [Test]
-    public async Task NormalizesLegacyCuisineToDishType()
+    public async Task NormalizesLegacyDishTypeValues()
     {
-        var normalized = DishTaxonomy.NormalizeType(CuisineType.Mexican);
+        var normalized = DishTaxonomy.NormalizeType(DishType.Mexican);
 
-        await Assert.That(normalized).IsEqualTo(CuisineType.WrapTaco);
+        await Assert.That(normalized).IsEqualTo(DishType.WrapTaco);
     }
 
     // Verifies that weekend and weekday default weights can differ for the same type.
     [Test]
     public async Task ReturnsWeekendAwareDefaultWeight()
     {
-        var weekdayWeight = DishTaxonomy.GetDefaultWeight(CuisineType.PizzaPie, DayOfWeek.Wednesday);
-        var weekendWeight = DishTaxonomy.GetDefaultWeight(CuisineType.PizzaPie, DayOfWeek.Saturday);
+        var weekdayWeight = DishTaxonomy.GetDefaultWeight(DishType.PizzaPie, DayOfWeek.Wednesday);
+        var weekendWeight = DishTaxonomy.GetDefaultWeight(DishType.PizzaPie, DayOfWeek.Saturday);
 
         await Assert.That(weekendWeight).IsGreaterThan(weekdayWeight);
     }

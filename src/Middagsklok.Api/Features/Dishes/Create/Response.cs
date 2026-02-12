@@ -3,7 +3,7 @@ namespace Middagsklok.Api.Features.Dishes.Create;
 public sealed record Response(
     string Id,
     string Name,
-    string Cuisine,
+    string DishType,
     int PrepMinutes,
     int CookMinutes,
     int Serves,

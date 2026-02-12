@@ -1,10 +1,10 @@
 namespace Middagsklok.Api.Features.Dishes.Metadata;
 
 public sealed record Response(
-    IEnumerable<CuisineMetadata> Cuisines,
+    IEnumerable<DishTypeMetadata> DishTypes,
     IEnumerable<VibeTagMetadata> VibeTags);
 
-public sealed record CuisineMetadata(
+public sealed record DishTypeMetadata(
     string Value,
     string Label,
     int Order,
