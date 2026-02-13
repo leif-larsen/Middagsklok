@@ -29,6 +29,34 @@ const storageKey = "dishes-metadata";
 let cachedMetadata: DishesMetadataResponse | null = null;
 let inFlightRequest: Promise<DishesMetadataResponse> | null = null;
 
+const normalizeStoredMetadata = (value: unknown): DishesMetadataResponse | null => {
+  if (!value || typeof value !== "object") {
+    return null;
+  }
+
+  const candidate = value as {
+    dishTypes?: DishTypeMetadata[];
+    cuisines?: DishTypeMetadata[];
+    vibeTags?: DishVibeTagMetadata[];
+  };
+
+  if (Array.isArray(candidate.dishTypes)) {
+    return {
+      dishTypes: candidate.dishTypes,
+      vibeTags: Array.isArray(candidate.vibeTags) ? candidate.vibeTags : [],
+    };
+  }
+
+  if (Array.isArray(candidate.cuisines)) {
+    return {
+      dishTypes: candidate.cuisines,
+      vibeTags: Array.isArray(candidate.vibeTags) ? candidate.vibeTags : [],
+    };
+  }
+
+  return null;
+};
+
 const readStorage = (): DishesMetadataResponse | null => {
   if (typeof window === "undefined") {
     return null;
@@ -40,7 +68,8 @@ const readStorage = (): DishesMetadataResponse | null => {
   }
 
   try {
-    return JSON.parse(raw) as DishesMetadataResponse;
+    const parsed = JSON.parse(raw) as unknown;
+    return normalizeStoredMetadata(parsed);
   } catch {
     return null;
   }
@@ -91,6 +120,7 @@ export default function DishesMetadataProvider({
       };
     }
 
+    writeStorage(stored);
     cachedMetadata = stored;
     return {
       dishTypes: stored.dishTypes ?? [],

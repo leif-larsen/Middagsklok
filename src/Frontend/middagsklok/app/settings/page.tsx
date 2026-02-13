@@ -5,13 +5,19 @@ import { ApiError, apiClient } from "../../lib/api/client";
 import Sidebar from "../components/Sidebar";
 
 const dishTypeOptions = [
-  "Italian",
-  "Asian",
-  "Mexican",
-  "Mediterranean",
-  "Indian",
-  "American",
-  "French",
+  "Pasta",
+  "Rice bowl",
+  "Noodles",
+  "Soup & stew",
+  "Salad",
+  "Wrap & taco",
+  "Pizza & pie",
+  "Casserole & bake",
+  "Sandwich & burger",
+  "Protein & veg plate",
+  "Breakfast for dinner",
+  "Snack board",
+  "Other",
 ];
 
 const restrictionOptions = [
@@ -89,9 +95,9 @@ export default function SettingsPage() {
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [preferredCategories, setPreferredCategories] = useState<string[]>([
-    "Italian",
-    "Asian",
-    "Mexican",
+    "Pasta",
+    "Rice bowl",
+    "Wrap & taco",
   ]);
   const [excludedIngredients, setExcludedIngredients] = useState<string[]>([
     "Shellfish",

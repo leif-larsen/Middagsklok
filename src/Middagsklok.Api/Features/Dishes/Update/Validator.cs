@@ -160,6 +160,9 @@ internal sealed class Validator
     // Maps a raw dish type string to the domain dish type.
     private static DishTypeParseResult MapDishType(string? rawDishType)
     {
+        var dishTypes = DishTaxonomy.GetDishTypes();
+        var allowed = string.Join(", ", dishTypes.Select(type => type.Value.ToString()));
+
         var trimmed = rawDishType?.Trim();
         if (string.IsNullOrWhiteSpace(trimmed))
         {
@@ -169,13 +172,11 @@ internal sealed class Validator
         if (!Enum.TryParse<DishType>(trimmed, true, out var parsed)
             || !Enum.IsDefined(typeof(DishType), parsed))
         {
-            var allowed = string.Join(", ", DishTaxonomy.GetDishTypes().Select(type => type.Value.ToString()));
             return DishTypeParseResult.Invalid($"Dish type must be one of: {allowed}.");
         }
 
-        if (!DishTaxonomy.GetDishTypes().Any(type => type.Value == parsed))
+        if (!dishTypes.Any(type => type.Value == parsed))
         {
-            var allowed = string.Join(", ", DishTaxonomy.GetDishTypes().Select(type => type.Value.ToString()));
             return DishTypeParseResult.Invalid($"Dish type must be one of: {allowed}.");
         }
 
