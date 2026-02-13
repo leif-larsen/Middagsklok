@@ -28,7 +28,7 @@ export type DishesImportResponse = {
 export type DishOverview = {
   id: string;
   name: string;
-  cuisine: string;
+  dishType: string;
   prepMinutes: number;
   cookMinutes: number;
   serves: number;
@@ -47,7 +47,7 @@ export type DishesOverviewResponse = {
 export type DishLookup = {
   id: string;
   name: string;
-  cuisine: string;
+  dishType: string;
   vibeTags: string[];
 };
 
@@ -55,7 +55,7 @@ export type DishesLookupResponse = {
   dishes: DishLookup[];
 };
 
-export type DishCuisineMetadata = {
+export type DishTypeMetadata = {
   value: string;
   label: string;
   order: number;
@@ -74,7 +74,7 @@ export type DishVibeTagMetadata = {
 };
 
 export type DishesMetadataResponse = {
-  cuisines: DishCuisineMetadata[];
+  dishTypes: DishTypeMetadata[];
   vibeTags: DishVibeTagMetadata[];
 };
 
@@ -86,7 +86,7 @@ export type DishCreateIngredientInput = {
 
 export type DishCreateRequest = {
   name?: string | null;
-  cuisine?: string | null;
+  dishType?: string | null;
   prepMinutes: number;
   cookMinutes: number;
   serves: number;

@@ -4,14 +4,20 @@ import { useEffect, useState } from "react";
 import { ApiError, apiClient } from "../../lib/api/client";
 import Sidebar from "../components/Sidebar";
 
-const cuisineOptions = [
-  "Italian",
-  "Asian",
-  "Mexican",
-  "Mediterranean",
-  "Indian",
-  "American",
-  "French",
+const dishTypeOptions = [
+  "Pasta",
+  "Rice bowl",
+  "Noodles",
+  "Soup & stew",
+  "Salad",
+  "Wrap & taco",
+  "Pizza & pie",
+  "Casserole & bake",
+  "Sandwich & burger",
+  "Protein & veg plate",
+  "Breakfast for dinner",
+  "Snack board",
+  "Other",
 ];
 
 const restrictionOptions = [
@@ -89,9 +95,9 @@ export default function SettingsPage() {
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [preferredCategories, setPreferredCategories] = useState<string[]>([
-    "Italian",
-    "Asian",
-    "Mexican",
+    "Pasta",
+    "Rice bowl",
+    "Wrap & taco",
   ]);
   const [excludedIngredients, setExcludedIngredients] = useState<string[]>([
     "Shellfish",
@@ -412,7 +418,7 @@ export default function SettingsPage() {
                       Preferred Categories
                     </div>
                     <div className="mt-3 flex flex-wrap gap-2">
-                      {cuisineOptions.map((category) => {
+                      {dishTypeOptions.map((category) => {
                         const isSelected =
                           preferredCategories.includes(category);
 
@@ -490,7 +496,7 @@ export default function SettingsPage() {
               </div>
               <p className="text-xs text-[#6c7a70]">
                 Adjust the diversity score to control how much variety you want
-                in your weekly plans. A higher score ensures different cuisines
+                in your weekly plans. A higher score ensures different dish types
                 and ingredients throughout the week.
               </p>
             </div>

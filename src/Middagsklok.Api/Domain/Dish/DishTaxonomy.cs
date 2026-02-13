@@ -4,40 +4,40 @@ public static class DishTaxonomy
 {
     private static readonly DishTypeMetadata[] TypeMetadata =
     [
-        new(CuisineType.Pasta, "Pasta", 100, 1.25, 1.1, false),
-        new(CuisineType.RiceBowl, "Rice bowl", 110, 1.0, 1.0, false),
-        new(CuisineType.Noodles, "Noodles", 120, 1.0, 1.0, false),
-        new(CuisineType.SoupStew, "Soup & stew", 130, 0.95, 1.05, false),
-        new(CuisineType.Salad, "Salad", 140, 0.9, 0.8, false),
-        new(CuisineType.WrapTaco, "Wrap & taco", 150, 1.0, 1.2, false),
-        new(CuisineType.PizzaPie, "Pizza & pie", 160, 0.8, 1.25, false),
-        new(CuisineType.CasseroleBake, "Casserole & bake", 170, 0.85, 1.2, false),
-        new(CuisineType.SandwichBurger, "Sandwich & burger", 180, 0.85, 1.2, false),
-        new(CuisineType.ProteinVegPlate, "Protein & veg plate", 190, 1.0, 1.0, false),
-        new(CuisineType.BreakfastDinner, "Breakfast for dinner", 200, 0.75, 1.1, false),
-        new(CuisineType.SnackBoard, "Snack board", 210, 0.65, 1.15, false),
-        new(CuisineType.Other, "Other", 900, 0.75, 0.75, true)
+        new(DishType.Pasta, "Pasta", 100, 1.25, 1.1, false),
+        new(DishType.RiceBowl, "Rice bowl", 110, 1.0, 1.0, false),
+        new(DishType.Noodles, "Noodles", 120, 1.0, 1.0, false),
+        new(DishType.SoupStew, "Soup & stew", 130, 0.95, 1.05, false),
+        new(DishType.Salad, "Salad", 140, 0.9, 0.8, false),
+        new(DishType.WrapTaco, "Wrap & taco", 150, 1.0, 1.2, false),
+        new(DishType.PizzaPie, "Pizza & pie", 160, 0.8, 1.25, false),
+        new(DishType.CasseroleBake, "Casserole & bake", 170, 0.85, 1.2, false),
+        new(DishType.SandwichBurger, "Sandwich & burger", 180, 0.85, 1.2, false),
+        new(DishType.ProteinVegPlate, "Protein & veg plate", 190, 1.0, 1.0, false),
+        new(DishType.BreakfastDinner, "Breakfast for dinner", 200, 0.75, 1.1, false),
+        new(DishType.SnackBoard, "Snack board", 210, 0.65, 1.15, false),
+        new(DishType.Other, "Other", 900, 0.75, 0.75, true)
     ];
 
-    private static readonly Dictionary<CuisineType, DishTypeMetadata> MetadataByType = TypeMetadata
+    private static readonly Dictionary<DishType, DishTypeMetadata> MetadataByType = TypeMetadata
         .ToDictionary(metadata => metadata.Value);
 
-    private static readonly Dictionary<CuisineType, CuisineType> LegacyMapping = new()
+    private static readonly Dictionary<DishType, DishType> LegacyMapping = new()
     {
-        [CuisineType.None] = CuisineType.Other,
-        [CuisineType.Italian] = CuisineType.Pasta,
-        [CuisineType.Asian] = CuisineType.RiceBowl,
-        [CuisineType.Japanese] = CuisineType.RiceBowl,
-        [CuisineType.Thai] = CuisineType.RiceBowl,
-        [CuisineType.Chinese] = CuisineType.RiceBowl,
-        [CuisineType.Mediterranean] = CuisineType.ProteinVegPlate,
-        [CuisineType.Mexican] = CuisineType.WrapTaco,
-        [CuisineType.Indian] = CuisineType.RiceBowl,
-        [CuisineType.American] = CuisineType.SandwichBurger,
-        [CuisineType.French] = CuisineType.ProteinVegPlate,
-        [CuisineType.MiddleEastern] = CuisineType.ProteinVegPlate,
-        [CuisineType.Vegetarian] = CuisineType.Other,
-        [CuisineType.Vegan] = CuisineType.Other
+        [DishType.None] = DishType.Other,
+        [DishType.Italian] = DishType.Pasta,
+        [DishType.Asian] = DishType.RiceBowl,
+        [DishType.Japanese] = DishType.RiceBowl,
+        [DishType.Thai] = DishType.RiceBowl,
+        [DishType.Chinese] = DishType.RiceBowl,
+        [DishType.Mediterranean] = DishType.ProteinVegPlate,
+        [DishType.Mexican] = DishType.WrapTaco,
+        [DishType.Indian] = DishType.RiceBowl,
+        [DishType.American] = DishType.SandwichBurger,
+        [DishType.French] = DishType.ProteinVegPlate,
+        [DishType.MiddleEastern] = DishType.ProteinVegPlate,
+        [DishType.Vegetarian] = DishType.Other,
+        [DishType.Vegan] = DishType.Other
     };
 
     private static readonly VibeTagMetadata[] VibeMetadata =
@@ -80,8 +80,8 @@ public static class DishTaxonomy
         return true;
     }
 
-    // Maps legacy cuisine values to planner-facing dish types.
-    public static CuisineType NormalizeType(CuisineType value)
+    // Maps legacy dishType values to planner-facing dish types.
+    public static DishType NormalizeType(DishType value)
     {
         if (MetadataByType.ContainsKey(value))
         {
@@ -93,11 +93,11 @@ public static class DishTaxonomy
             return mapped;
         }
 
-        return CuisineType.Other;
+        return DishType.Other;
     }
 
     // Gets the default planner weight for a type and day category.
-    public static double GetDefaultWeight(CuisineType value, DayOfWeek dayOfWeek)
+    public static double GetDefaultWeight(DishType value, DayOfWeek dayOfWeek)
     {
         var normalized = NormalizeType(value);
         if (!MetadataByType.TryGetValue(normalized, out var metadata))
@@ -134,7 +134,7 @@ public static class DishTaxonomy
 }
 
 public sealed record DishTypeMetadata(
-    CuisineType Value,
+    DishType Value,
     string Label,
     int DisplayOrder,
     double DefaultWeightWeekday,

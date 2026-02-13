@@ -5,7 +5,7 @@ public sealed record Response(IEnumerable<DishOverview> Dishes);
 public sealed record DishOverview(
     string Id,
     string Name,
-    string Cuisine,
+    string DishType,
     int PrepMinutes,
     int CookMinutes,
     int Serves,

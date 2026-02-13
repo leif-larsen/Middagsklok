@@ -25,7 +25,7 @@ internal sealed class UseCase(AppDbContext dbContext)
             .Select(dish => new DishLookup(
                 dish.Id.ToString("D"),
                 dish.Name,
-                dish.Cuisine.ToString(),
+                dish.DishType.ToString(),
                 dish.VibeTags.ToArray()))
             .ToArray();
 

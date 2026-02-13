@@ -81,7 +81,7 @@ internal sealed class UseCase(AppDbContext dbContext)
 
         dish.Update(
             validation.Candidate.Name,
-            validation.Candidate.Cuisine,
+            validation.Candidate.DishType,
             validation.Candidate.PrepTimeMinutes,
             validation.Candidate.CookTimeMinutes,
             validation.Candidate.Servings,
@@ -230,7 +230,7 @@ internal sealed class UseCase(AppDbContext dbContext)
         var response = new Response(
             dish.Id.ToString("D"),
             dish.Name,
-            dish.Cuisine.ToString(),
+            dish.DishType.ToString(),
             dish.PrepTimeMinutes,
             dish.CookTimeMinutes,
             dish.Servings,

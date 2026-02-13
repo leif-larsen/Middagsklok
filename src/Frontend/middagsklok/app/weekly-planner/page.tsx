@@ -278,9 +278,9 @@ export default function WeeklyPlannerPage() {
 
     return dishOptions.filter((dish) => {
       const nameMatch = dish.name.toLowerCase().includes(query);
-      const cuisineMatch = dish.cuisine.toLowerCase().includes(query);
+      const dishTypeMatch = dish.dishType.toLowerCase().includes(query);
 
-      return nameMatch || cuisineMatch;
+      return nameMatch || dishTypeMatch;
     });
   }, [dishOptions, dishSearchQuery]);
 
@@ -575,7 +575,7 @@ export default function WeeklyPlannerPage() {
                 {planEntries.map((day) => {
                   const isOpen = openDayKey === day.key;
                   const dishName = day.dish?.name ?? "Select dish";
-                  const cuisine = day.dish?.cuisine ?? "";
+                  const dishType = day.dish?.dishType ?? "";
 
                   return (
                     <article
@@ -682,13 +682,13 @@ export default function WeeklyPlannerPage() {
                       </div>
 
                       <div className="mt-auto">
-                        {cuisine ? (
+                        {dishType ? (
                           <span className="inline-flex rounded-full bg-[#e7f0e8] px-3 py-1 text-xs font-semibold text-[#3a5a44]">
-                            {cuisine}
+                            {dishType}
                           </span>
                         ) : (
                           <span className="text-xs font-semibold text-[#a0ada5]">
-                            No cuisine selected
+                            No dish type selected
                           </span>
                         )}
                       </div>

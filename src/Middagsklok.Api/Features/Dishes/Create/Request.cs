@@ -4,7 +4,7 @@ namespace Middagsklok.Api.Features.Dishes.Create;
 
 public sealed record Request(
     [property: JsonPropertyName("name")] string? Name,
-    [property: JsonPropertyName("cuisine")] string? Cuisine,
+    [property: JsonPropertyName("dishType")] string? DishType,
     [property: JsonPropertyName("prepMinutes")] int PrepMinutes,
     [property: JsonPropertyName("cookMinutes")] int CookMinutes,
     [property: JsonPropertyName("serves")] int Serves,

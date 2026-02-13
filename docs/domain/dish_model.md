@@ -18,7 +18,7 @@ A dish owns its ingredient lines and references shared `Ingredient` entities so 
 |---|---|---:|---|---|
 | `dishId` | UUID / string | ✅ | `"c13a7f..."` | Technical ID. |
 | `name` | string | ✅ | `"Spaghetti Carbonara"` | Primary display name. |
-| `cuisine` | `CuisineType` (enum) | ✅ | `ITALIAN` | Shown as a tag/pill. |
+| `dishType` | `DishType` (enum) | ✅ | `Pasta` | Shown as a tag/pill. |
 | `prepTimeMinutes` | integer | ✅ | `10` | `>= 0` |
 | `cookTimeMinutes` | integer | ✅ | `20` | `>= 0` |
 | `servings` | integer | ✅ | `4` | `> 0` |
@@ -48,24 +48,24 @@ Represents one ingredient line inside a dish. This is the real link between `Dis
 
 ## Enums / Value Sets
 
-### `CuisineType`
+### `DishType`
 | Enum name | Display name |
 |---|---|
-| `NONE` | None |
-| `ITALIAN` | Italian |
-| `ASIAN` | Asian |
-| `MEDITERRANEAN` | Mediterranean |
-| `MEXICAN` | Mexican |
-| `INDIAN` | Indian |
-| `AMERICAN` | American |
-| `FRENCH` | French |
-| `MIDDLE_EASTERN` | Middle Eastern |
-| `JAPANESE` | Japanese |
-| `THAI` | Thai |
-| `CHINESE` | Chinese |
-| `VEGETARIAN` | Vegetarian |
-| `VEGAN` | Vegan |
-| `OTHER` | Other |
+| `Pasta` | Pasta |
+| `RiceBowl` | Rice bowl |
+| `Noodles` | Noodles |
+| `SoupStew` | Soup & stew |
+| `Salad` | Salad |
+| `WrapTaco` | Wrap & taco |
+| `PizzaPie` | Pizza & pie |
+| `CasseroleBake` | Casserole & bake |
+| `SandwichBurger` | Sandwich & burger |
+| `ProteinVegPlate` | Protein & veg plate |
+| `BreakfastDinner` | Breakfast for dinner |
+| `SnackBoard` | Snack board |
+| `Other` | Other |
+
+Legacy values such as `Italian`, `Asian`, and `Mexican` are mapped to planner dish types during normalization.
 
 ### `Unit`
 Reuse the same `Unit` enum used by `Ingredient` (e.g. `G`, `PCS`, etc.).
@@ -99,7 +99,7 @@ Reuse the same `Unit` enum used by `Ingredient` (e.g. `G`, `PCS`, etc.).
 {
   "dishId": "c13a7f5b-9a2e-4f6a-9b21-1e73a8d4fabc",
   "name": "Spaghetti Carbonara",
-  "cuisine": "ITALIAN",
+  "dishType": "Pasta",
   "prepTimeMinutes": 10,
   "cookTimeMinutes": 20,
   "servings": 4,

@@ -38,11 +38,11 @@ namespace Middagsklok.Api.Database.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
-                    b.Property<string>("Cuisine")
+                    b.Property<string>("DishType")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("cuisine");
+                        .HasColumnName("dish_type");
 
                     b.Property<string>("Instructions")
                         .HasMaxLength(5000)
@@ -94,8 +94,8 @@ namespace Middagsklok.Api.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Cuisine")
-                        .HasDatabaseName("ix_dishes_cuisine");
+                    b.HasIndex("DishType")
+                        .HasDatabaseName("ix_dishes_dish_type");
 
                     b.HasIndex("Name")
                         .HasDatabaseName("ix_dishes_name");

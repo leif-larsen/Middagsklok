@@ -94,7 +94,7 @@ Expose a lookup endpoint that returns only the data needed for the picker.
 ```json
 {
   "dishes": [
-    { "id": "c13a7f...", "name": "Spaghetti Carbonara", "cuisine": "Italian" }
+    { "id": "c13a7f...", "name": "Spaghetti Carbonara", "dishType": "Pasta" }
   ]
 }
 ```

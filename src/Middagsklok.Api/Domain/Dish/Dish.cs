@@ -4,7 +4,7 @@ namespace Middagsklok.Api.Domain.Dish;
 
 public class Dish(
     string name,
-    CuisineType cuisine,
+    DishType dishType,
     int prepTimeMinutes,
     int cookTimeMinutes,
     int servings,
@@ -21,17 +21,17 @@ public class Dish(
     // Required by EF Core.
     private Dish(
         string name,
-        CuisineType cuisine,
+        DishType dishType,
         int prepTimeMinutes,
         int cookTimeMinutes,
         int servings,
         string? instructions)
-        : this(name, cuisine, prepTimeMinutes, cookTimeMinutes, servings, instructions, false, false, false, Array.Empty<DishIngredient>(), null)
+        : this(name, dishType, prepTimeMinutes, cookTimeMinutes, servings, instructions, false, false, false, Array.Empty<DishIngredient>(), null)
     {
     }
 
     public string Name { get; private set; } = name.Trim();
-    public CuisineType Cuisine { get; private set; } = cuisine;
+    public DishType DishType { get; private set; } = dishType;
     public int PrepTimeMinutes { get; private set; } = prepTimeMinutes;
     public int CookTimeMinutes { get; private set; } = cookTimeMinutes;
     public int Servings { get; private set; } = servings;
@@ -47,7 +47,7 @@ public class Dish(
     // Updates dish details and ingredients.
     public void Update(
         string name,
-        CuisineType cuisine,
+        DishType dishType,
         int prepTimeMinutes,
         int cookTimeMinutes,
         int servings,
@@ -59,7 +59,7 @@ public class Dish(
         IEnumerable<string>? vibeTags)
     {
         Name = name.Trim();
-        Cuisine = cuisine;
+        DishType = dishType;
         PrepTimeMinutes = prepTimeMinutes;
         CookTimeMinutes = cookTimeMinutes;
         Servings = servings;
@@ -108,7 +108,7 @@ public record DishIngredient(
     string? Note = null,
     int? SortOrder = null);
 
-public enum CuisineType
+public enum DishType
 {
     None,
     Pasta,

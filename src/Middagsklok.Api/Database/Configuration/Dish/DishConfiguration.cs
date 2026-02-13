@@ -22,8 +22,8 @@ public class DishConfiguration : IEntityTypeConfiguration<DishEntity>
             .HasMaxLength(200)
             .IsRequired();
 
-        builder.Property(d => d.Cuisine)
-            .HasColumnName("cuisine")
+        builder.Property(d => d.DishType)
+            .HasColumnName("dish_type")
             .HasConversion<string>()
             .HasMaxLength(50)
             .IsRequired();
@@ -122,7 +122,7 @@ public class DishConfiguration : IEntityTypeConfiguration<DishEntity>
         builder.HasIndex(d => d.Name)
             .HasDatabaseName("ix_dishes_name");
 
-        builder.HasIndex(d => d.Cuisine)
-            .HasDatabaseName("ix_dishes_cuisine");
+        builder.HasIndex(d => d.DishType)
+            .HasDatabaseName("ix_dishes_dish_type");
     }
 }

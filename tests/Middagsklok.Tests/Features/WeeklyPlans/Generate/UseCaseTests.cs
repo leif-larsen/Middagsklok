@@ -27,11 +27,11 @@ public sealed class UseCaseTests
     private static Dish CreateDish(
         string name,
         bool isSeafood,
-        CuisineType cuisine = CuisineType.Other,
+        DishType dishType = DishType.Other,
         IReadOnlyList<string>? vibeTags = null) =>
         new(
             name,
-            cuisine,
+            dishType,
             10,
             20,
             4,
@@ -196,8 +196,8 @@ public sealed class UseCaseTests
 
         weekdayContext.PlanningSettings.Add(new PlanningSettings(DayOfWeek.Monday, 0));
         weekdayContext.Dishes.AddRange(
-            CreateDish("Alpha Pizza", false, CuisineType.PizzaPie),
-            CreateDish("Beta Salad", false, CuisineType.Salad));
+            CreateDish("Alpha Pizza", false, DishType.PizzaPie),
+            CreateDish("Beta Salad", false, DishType.Salad));
         await weekdayContext.SaveChangesAsync(CancellationToken.None);
 
         var deterministicRandom = new DeterministicRandomSource(0.55);
@@ -221,8 +221,8 @@ public sealed class UseCaseTests
 
         weekendContext.PlanningSettings.Add(new PlanningSettings(DayOfWeek.Monday, 0));
         weekendContext.Dishes.AddRange(
-            CreateDish("Alpha Pizza", false, CuisineType.PizzaPie),
-            CreateDish("Beta Salad", false, CuisineType.Salad));
+            CreateDish("Alpha Pizza", false, DishType.PizzaPie),
+            CreateDish("Beta Salad", false, DishType.Salad));
         await weekendContext.SaveChangesAsync(CancellationToken.None);
 
         var weekendUseCase = new UseCase(weekendContext, deterministicRandom);
@@ -250,8 +250,8 @@ public sealed class UseCaseTests
 
         weekdayContext.PlanningSettings.Add(new PlanningSettings(DayOfWeek.Monday, 0));
         weekdayContext.Dishes.AddRange(
-            CreateDish("Comfort Pasta", false, CuisineType.Pasta, ["ComfortFood"]),
-            CreateDish("Quick Pasta", false, CuisineType.Pasta, ["QuickWeeknight"]));
+            CreateDish("Comfort Pasta", false, DishType.Pasta, ["ComfortFood"]),
+            CreateDish("Quick Pasta", false, DishType.Pasta, ["QuickWeeknight"]));
         await weekdayContext.SaveChangesAsync(CancellationToken.None);
 
         var deterministicRandom = new DeterministicRandomSource(0.55);
@@ -275,8 +275,8 @@ public sealed class UseCaseTests
 
         weekendContext.PlanningSettings.Add(new PlanningSettings(DayOfWeek.Monday, 0));
         weekendContext.Dishes.AddRange(
-            CreateDish("Comfort Pasta", false, CuisineType.Pasta, ["ComfortFood"]),
-            CreateDish("Quick Pasta", false, CuisineType.Pasta, ["QuickWeeknight"]));
+            CreateDish("Comfort Pasta", false, DishType.Pasta, ["ComfortFood"]),
+            CreateDish("Quick Pasta", false, DishType.Pasta, ["QuickWeeknight"]));
         await weekendContext.SaveChangesAsync(CancellationToken.None);
 
         var weekendUseCase = new UseCase(weekendContext, deterministicRandom);

@@ -86,7 +86,7 @@ internal sealed class UseCase(AppDbContext dbContext)
 
             var dishEntity = new Dish(
                 validation.Candidate.Name,
-                validation.Candidate.Cuisine,
+                validation.Candidate.DishType,
                 validation.Candidate.PrepTimeMinutes,
                 validation.Candidate.CookTimeMinutes,
                 validation.Candidate.Servings,

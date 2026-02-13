@@ -9,8 +9,8 @@ internal sealed class UseCase
     {
         _ = cancellationToken;
 
-        var cuisines = DishTaxonomy.GetDishTypes()
-            .Select(type => new CuisineMetadata(
+        var dishTypes = DishTaxonomy.GetDishTypes()
+            .Select(type => new DishTypeMetadata(
                 type.Value.ToString(),
                 type.Label,
                 type.DisplayOrder,
@@ -32,7 +32,7 @@ internal sealed class UseCase
             .ThenBy(tag => tag.Label)
             .ToArray();
 
-        var response = new Response(cuisines, vibeTags);
+        var response = new Response(dishTypes, vibeTags);
 
         return Task.FromResult(response);
     }
