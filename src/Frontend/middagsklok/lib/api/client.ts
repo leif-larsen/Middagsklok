@@ -10,6 +10,11 @@ import type {
   DishesOverviewResponse,
 } from "./models/dishes";
 import type {
+  RecipeSuggestionRequest,
+  RecipeSuggestionsResponse,
+  RecipeInstructionsResponse,
+} from "./models/recipes";
+import type {
   IngredientCreateRequest,
   IngredientCreateResponse,
   IngredientUpdateRequest,
@@ -103,6 +108,11 @@ export type ApiClient = {
   getDishes: (init?: RequestInit) => Promise<DishesOverviewResponse>;
   getDishesLookup: (init?: RequestInit) => Promise<DishesLookupResponse>;
   getDishesMetadata: (init?: RequestInit) => Promise<DishesMetadataResponse>;
+  getRecipeInstructions: (init?: RequestInit) => Promise<RecipeInstructionsResponse>;
+  getRecipeSuggestions: (
+    payload: RecipeSuggestionRequest,
+    init?: RequestInit,
+  ) => Promise<RecipeSuggestionsResponse>;
   getIngredients: (init?: RequestInit) => Promise<IngredientsOverviewResponse>;
   createIngredient: (
     payload: IngredientCreateRequest,
@@ -180,6 +190,17 @@ export const apiClient: ApiClient = {
   getDishesMetadata: (init) =>
     request<DishesMetadataResponse>("/api/dishes/metadata", {
       method: "GET",
+      ...init,
+    }),
+  getRecipeInstructions: (init) =>
+    request<RecipeInstructionsResponse>("/api/recipes/instructions", {
+      method: "GET",
+      ...init,
+    }),
+  getRecipeSuggestions: (payload, init) =>
+    request<RecipeSuggestionsResponse>("/api/recipes/suggestions", {
+      method: "POST",
+      body: JSON.stringify(payload),
       ...init,
     }),
   getIngredients: (init) =>
