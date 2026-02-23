@@ -12,6 +12,8 @@ using Middagsklok.Api.Features.Ingredients.Delete;
 using Middagsklok.Api.Features.Ingredients.Metadata;
 using Middagsklok.Api.Features.Ingredients.Overview;
 using Middagsklok.Api.Features.Ingredients.Update;
+using Middagsklok.Api.Features.Recipes.Instructions;
+using Middagsklok.Api.Features.Recipes.Suggestions;
 using Middagsklok.Api.Features.Settings.Get;
 using Middagsklok.Api.Features.Settings.Upsert;
 using Middagsklok.Api.Features.ShoppingList.ByStartDate;
@@ -34,6 +36,8 @@ using IngredientsOverviewUseCase = Middagsklok.Api.Features.Ingredients.Overview
 using IngredientsUpdateUseCase = Middagsklok.Api.Features.Ingredients.Update.UseCase;
 using PlanningSettingsGetUseCase = Middagsklok.Api.Features.Settings.Get.UseCase;
 using PlanningSettingsUpsertUseCase = Middagsklok.Api.Features.Settings.Upsert.UseCase;
+using RecipesInstructionsUseCase = Middagsklok.Api.Features.Recipes.Instructions.UseCase;
+using RecipesSuggestionsUseCase = Middagsklok.Api.Features.Recipes.Suggestions.UseCase;
 using ShoppingListByStartDateUseCase = Middagsklok.Api.Features.ShoppingList.ByStartDate.UseCase;
 using WeeklyPlansAvailableUseCase = Middagsklok.Api.Features.WeeklyPlans.Available.UseCase;
 using WeeklyPlansByStartDateUseCase = Middagsklok.Api.Features.WeeklyPlans.ByStartDate.UseCase;
@@ -58,6 +62,9 @@ builder.Services.AddScoped<IngredientsDeleteUseCase>();
 builder.Services.AddScoped<IngredientsMetadataUseCase>();
 builder.Services.AddScoped<IngredientsOverviewUseCase>();
 builder.Services.AddScoped<IngredientsUpdateUseCase>();
+builder.Services.AddScoped<IRecipeSuggestionClientSelector, RecipeSuggestionClientSelector>();
+builder.Services.AddScoped<RecipesInstructionsUseCase>();
+builder.Services.AddScoped<RecipesSuggestionsUseCase>();
 builder.Services.AddScoped<PlanningSettingsGetUseCase>();
 builder.Services.AddScoped<PlanningSettingsUpsertUseCase>();
 builder.Services.AddScoped<ShoppingListByStartDateUseCase>();
@@ -66,6 +73,8 @@ builder.Services.AddScoped<WeeklyPlansByStartDateUseCase>();
 builder.Services.AddScoped<WeeklyPlansGenerateUseCase>();
 builder.Services.AddScoped<WeeklyPlansMarkEatenUseCase>();
 builder.Services.AddScoped<WeeklyPlansUpsertUseCase>();
+builder.Services.AddHttpClient<OpenAiRecipeSuggestionClient>();
+builder.Services.Configure<RecipeAiOptions>(builder.Configuration.GetSection(RecipeAiOptions.SectionName));
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("DevFrontend", policy =>
@@ -110,6 +119,8 @@ IngredientsDeleteEndpoint.Map(app);
 IngredientsMetadataEndpoint.Map(app);
 IngredientsOverviewEndpoint.Map(app);
 IngredientsUpdateEndpoint.Map(app);
+RecipesInstructionsEndpoint.Map(app);
+RecipesSuggestionsEndpoint.Map(app);
 PlanningSettingsGetEndpoint.Map(app);
 PlanningSettingsUpsertEndpoint.Map(app);
 ShoppingListByStartDateEndpoint.Map(app);
