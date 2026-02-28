@@ -21,8 +21,10 @@ internal sealed class OpenAiOptions
 
 internal sealed class ClaudeOptions
 {
+    public string BaseUrl { get; init; } = "https://api.anthropic.com/v1";
     public string? ApiKey { get; init; }
-    public string Model { get; init; } = "claude-3-5-sonnet-latest";
+    public string Model { get; init; } = "claude-4-6-sonnet";
+    public int TimeoutSeconds { get; init; } = 30;
 }
 
 internal sealed class GitHubModelsOptions
