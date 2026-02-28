@@ -130,7 +130,7 @@ internal sealed class OpenAiRecipeSuggestionClient(
         RecipeSuggestionGenerationRequest request,
         string model)
     {
-        var systemMessage = "You are a meal-planning assistant. Return only valid JSON in this shape: { \"suggestions\": [{ \"title\": string, \"summary\": string, \"reason\": string|null, \"estimatedTotalMinutes\": number|null }] }. Keep suggestions practical and concise.";
+        var systemMessage = "You are a meal-planning assistant that suggests NEW recipes the user doesn't already have. You must suggest dishes that are DIFFERENT from the user's existing dishes. Use their existing dishes only to understand their cooking style and preferences, then suggest completely new recipes they haven't tried. Return only valid JSON in this shape: { \"suggestions\": [{ \"title\": string, \"summary\": string, \"reason\": string|null, \"estimatedTotalMinutes\": number|null }] }. Keep suggestions practical and concise.";
         var userMessage = BuildUserMessage(request);
 
         var payload = new OpenAiChatCompletionRequest(
@@ -155,10 +155,10 @@ internal sealed class OpenAiRecipeSuggestionClient(
             .ToArray();
 
         var dishesSection = dishesContext.Length == 0
-            ? "No existing dishes available."
+            ? "No existing dishes in database."
             : string.Join("\n", dishesContext);
 
-        var message = $"Prompt: {request.Prompt}\nDesired suggestions: {request.MaxSuggestions}\nKnown dishes for inspiration:\n{dishesSection}";
+        var message = $"Prompt: {request.Prompt}\nDesired suggestions: {request.MaxSuggestions}\n\nExisting dishes in my database (DO NOT suggest these or variations of these - suggest completely NEW dishes instead):\n{dishesSection}";
 
         return message;
     }

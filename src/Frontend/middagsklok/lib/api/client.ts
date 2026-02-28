@@ -13,6 +13,8 @@ import type {
   RecipeSuggestionRequest,
   RecipeSuggestionsResponse,
   RecipeInstructionsResponse,
+  SaveFromSuggestionRequest,
+  SaveFromSuggestionResponse,
 } from "./models/recipes";
 import type {
   IngredientCreateRequest,
@@ -113,6 +115,10 @@ export type ApiClient = {
     payload: RecipeSuggestionRequest,
     init?: RequestInit,
   ) => Promise<RecipeSuggestionsResponse>;
+  saveRecipeFromSuggestion: (
+    payload: SaveFromSuggestionRequest,
+    init?: RequestInit,
+  ) => Promise<SaveFromSuggestionResponse>;
   getIngredients: (init?: RequestInit) => Promise<IngredientsOverviewResponse>;
   createIngredient: (
     payload: IngredientCreateRequest,
@@ -199,6 +205,12 @@ export const apiClient: ApiClient = {
     }),
   getRecipeSuggestions: (payload, init) =>
     request<RecipeSuggestionsResponse>("/api/recipes/suggestions", {
+      method: "POST",
+      body: JSON.stringify(payload),
+      ...init,
+    }),
+  saveRecipeFromSuggestion: (payload, init) =>
+    request<SaveFromSuggestionResponse>("/api/recipes/save-from-suggestion", {
       method: "POST",
       body: JSON.stringify(payload),
       ...init,

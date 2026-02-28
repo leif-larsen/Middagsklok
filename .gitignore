@@ -250,3 +250,4 @@ Newtonsoft.Json.dll
 Microsoft.CodeAnalysis.*.config
 Microsoft.CodeAnalysis.*.exe
 Microsoft.CodeAnalysis.*.json
+appsettings.*.json
