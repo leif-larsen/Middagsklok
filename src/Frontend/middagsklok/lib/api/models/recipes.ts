@@ -33,3 +33,31 @@ export type RecipeSuggestion = {
 export type RecipeSuggestionsResponse = {
   suggestions: RecipeSuggestion[];
 };
+
+export type SaveFromSuggestionRequest = {
+  title: string;
+  summary: string;
+  estimatedTotalMinutes?: number | null;
+};
+
+export type SaveFromSuggestionIngredient = {
+  id: string;
+  ingredientId: string;
+  quantity: number;
+  label: string;
+};
+
+export type SaveFromSuggestionResponse = {
+  id: string;
+  name: string;
+  dishType: string;
+  prepTimeMinutes: number;
+  cookTimeMinutes: number;
+  servings: number;
+  instructions?: string | null;
+  isSeafood: boolean;
+  isVegetarian: boolean;
+  isVegan: boolean;
+  vibeTags: string[];
+  ingredients: SaveFromSuggestionIngredient[];
+};

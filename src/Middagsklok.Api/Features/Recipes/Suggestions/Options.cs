@@ -23,7 +23,7 @@ internal sealed class ClaudeOptions
 {
     public string BaseUrl { get; init; } = "https://api.anthropic.com/v1";
     public string? ApiKey { get; init; }
-    public string Model { get; init; } = "claude-4-6-sonnet";
+    public string Model { get; init; } = "claude-sonnet-4-6";
     public int TimeoutSeconds { get; init; } = 30;
 }
 
