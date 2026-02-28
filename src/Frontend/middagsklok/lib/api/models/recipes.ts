@@ -4,12 +4,21 @@ export type RecipeInstructionStep = {
   description: string;
 };
 
+export type RecipeIngredient = {
+  ingredientId: string;
+  name: string;
+  quantity: number;
+  unit: string;
+  note?: string | null;
+};
+
 export type RecipeInstruction = {
   dishId: string;
   dishName: string;
   summary?: string | null;
   totalMinutes?: number | null;
   servings?: number | null;
+  ingredients: RecipeIngredient[];
   steps: RecipeInstructionStep[];
 };
 

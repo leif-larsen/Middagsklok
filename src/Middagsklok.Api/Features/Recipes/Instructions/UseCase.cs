@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Middagsklok.Api.Database;
+using Middagsklok.Api.Domain.Ingredient;
+using DishEntity = Middagsklok.Api.Domain.Dish.Dish;
+using DishIngredientEntity = Middagsklok.Api.Domain.Dish.DishIngredient;
 
 namespace Middagsklok.Api.Features.Recipes.Instructions;
 
@@ -15,8 +18,19 @@ internal sealed class UseCase(AppDbContext dbContext)
             .OrderBy(dish => dish.Name)
             .ToListAsync(cancellationToken);
 
+        var ingredientIds = dishes
+            .SelectMany(dish => dish.Ingredients)
+            .Select(ingredient => ingredient.IngredientId)
+            .Distinct()
+            .ToList();
+
+        var ingredients = await _dbContext.Ingredients
+            .AsNoTracking()
+            .Where(ingredient => ingredientIds.Contains(ingredient.Id))
+            .ToDictionaryAsync(ingredient => ingredient.Id, cancellationToken);
+
         var recipes = dishes
-            .Select(MapRecipe)
+            .Select(dish => MapRecipe(dish, ingredients))
             .ToArray();
 
         var response = new Response(recipes);
@@ -25,10 +39,11 @@ internal sealed class UseCase(AppDbContext dbContext)
     }
 
     // Maps one dish entity into a recipe instruction response.
-    private static RecipeInstruction MapRecipe(Domain.Dish.Dish dish)
+    private static RecipeInstruction MapRecipe(DishEntity dish, Dictionary<Guid, Ingredient> ingredients)
     {
         var steps = BuildSteps(dish.Instructions);
         var summary = BuildSummary(dish.Instructions, steps);
+        var recipeIngredients = MapIngredients(dish.Ingredients, ingredients);
 
         var recipe = new RecipeInstruction(
             dish.Id.ToString("D"),
@@ -36,9 +51,36 @@ internal sealed class UseCase(AppDbContext dbContext)
             summary,
             dish.TotalTimeMinutes,
             dish.Servings,
+            recipeIngredients,
             steps);
 
         return recipe;
+    }
+
+    // Maps dish ingredients to recipe ingredients with resolved names.
+    private static IReadOnlyList<RecipeIngredient> MapIngredients(
+        IReadOnlyList<DishIngredientEntity> dishIngredients,
+        Dictionary<Guid, Ingredient> ingredients)
+    {
+        var recipeIngredients = dishIngredients
+            .OrderBy(ingredient => ingredient.SortOrder ?? int.MaxValue)
+            .ThenBy(ingredient => ingredients.TryGetValue(ingredient.IngredientId, out var ing) ? ing.Name : "")
+            .Select(dishIngredient =>
+            {
+                var name = ingredients.TryGetValue(dishIngredient.IngredientId, out var ingredient)
+                    ? ingredient.Name
+                    : "Unknown ingredient";
+
+                return new RecipeIngredient(
+                    dishIngredient.IngredientId.ToString("D"),
+                    name,
+                    dishIngredient.Quantity,
+                    dishIngredient.Unit.ToString(),
+                    dishIngredient.Note);
+            })
+            .ToArray();
+
+        return recipeIngredients;
     }
 
     // Builds normalized instruction steps from free-form instructions text.
