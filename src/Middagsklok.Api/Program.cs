@@ -77,6 +77,7 @@ builder.Services.AddScoped<WeeklyPlansMarkEatenUseCase>();
 builder.Services.AddScoped<PlannedDishByDateUseCase>();
 builder.Services.AddScoped<WeeklyPlansUpsertUseCase>();
 builder.Services.AddHttpClient<OpenAiRecipeSuggestionClient>();
+builder.Services.AddHttpClient<ClaudeRecipeSuggestionClient>();
 builder.Services.Configure<RecipeAiOptions>(builder.Configuration.GetSection(RecipeAiOptions.SectionName));
 builder.Services.AddCors(options =>
 {
