@@ -251,3 +251,7 @@ Microsoft.CodeAnalysis.*.config
 Microsoft.CodeAnalysis.*.exe
 Microsoft.CodeAnalysis.*.json
 appsettings.*.json
+
+scripts/start.sh
+scripts/add-instructions.sql
+scripts/translate-moussaka.sql
