@@ -18,7 +18,7 @@ var apiService = builder.AddProject<Projects.Middagsklok_Api>("api", launchProfi
 
 var frontend = builder.AddJavaScriptApp("frontend", "../frontend/middagsklok/")
     .WithReference(apiService)
-    .WithHttpEndpoint(env: "PORT")
+    .WithHttpEndpoint(port: 5900, env: "PORT")
     .WithExternalHttpEndpoints();
 
 apiService.WithEnvironment("Cors__AllowedOrigins__0", frontend.GetEndpoint("http"));
