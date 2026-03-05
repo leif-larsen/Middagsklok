@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 function getApiBaseUrl(): string | undefined {
   // Read at runtime, not at module load time
-  return process.env.services__api__http__0;
+  return process.env.API_URL ?? process.env.services__api__http__0;
 }
 
 async function proxyRequest(request: NextRequest) {
