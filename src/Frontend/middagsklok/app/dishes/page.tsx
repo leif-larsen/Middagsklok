@@ -9,6 +9,7 @@ import { useIngredientsCatalog } from "../components/IngredientsProvider";
 import type {
   DishCreateErrorResponse,
   DishCreateValidationError,
+  DishesImportRequest,
   DishUpdateErrorResponse,
   DishUpdateValidationError,
 } from "../../lib/api/models/dishes";
@@ -319,11 +320,11 @@ export default function DishesPage() {
     const parsed = JSON.parse(raw) as unknown;
 
     if (Array.isArray(parsed)) {
-      return { dishes: parsed };
+      return { dishes: parsed } as DishesImportRequest;
     }
 
     if (parsed && typeof parsed === "object" && "dishes" in parsed) {
-      return parsed as { dishes?: unknown };
+      return parsed as DishesImportRequest;
     }
 
     throw new Error("Invalid JSON format. Expected an array or an object with a dishes property.");
