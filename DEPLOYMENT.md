@@ -57,7 +57,7 @@ CLAUDE_API_KEY=sk-ant-api03-...
 docker ps | grep postgres
 
 # Dump the database
-docker exec <container-name> pg_dump -U postgres middagsklok > middagsklok_backup.sql
+docker exec <container-name> pg_dump -U postgres -W middagsklok > middagsklok_backup.sql
 ```
 
 ### Copy to the VM
