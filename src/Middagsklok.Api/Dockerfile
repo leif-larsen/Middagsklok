@@ -1,6 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
+COPY Directory.Build.props .
+COPY Directory.Packages.props .
 COPY src/Middagsklok.ServiceDefaults/ Middagsklok.ServiceDefaults/
 COPY src/Middagsklok.Api/ Middagsklok.Api/
 
