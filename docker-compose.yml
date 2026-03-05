@@ -1,0 +1,49 @@
+services:
+  postgres:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: middagsklok
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d middagsklok"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: src/Middagsklok.Api/Dockerfile
+    restart: always
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:5000
+      ConnectionStrings__middagsklok: Host=postgres;Port=5432;Database=middagsklok;Username=postgres;Password=${POSTGRES_PASSWORD}
+      Ai__Provider: ${AI_PROVIDER:-Claude}
+      Ai__Claude__ApiKey: ${CLAUDE_API_KEY}
+      Ai__Claude__BaseUrl: https://api.anthropic.com/v1
+      Ai__Claude__Model: ${CLAUDE_MODEL:-claude-sonnet-4-6}
+      Ai__Claude__TimeoutSeconds: 30
+    ports:
+      - "5116:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: src/Frontend/middagsklok
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      API_URL: http://api:5000
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
