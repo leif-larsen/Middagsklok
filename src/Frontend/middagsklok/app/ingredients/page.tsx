@@ -13,11 +13,11 @@ import { useIngredientsMetadata } from "../components/IngredientsMetadataProvide
 
 type Ingredient = IngredientOverview;
 
-const emptyIngredient: Ingredient = {
+const emptyIngredient = {
   id: "new-ingredient",
   name: "",
-  category: "",
-  defaultUnit: "",
+  category: "" as Ingredient["category"],
+  defaultUnit: "" as Ingredient["defaultUnit"],
   usedIn: 0,
 };
 
@@ -510,7 +510,7 @@ export default function IngredientsPage() {
               <div className="relative">
                 <select
                   value={formCategory}
-                  onChange={(event) => setFormCategory(event.target.value)}
+                  onChange={(event) => setFormCategory(event.target.value as Ingredient["category"])}
                   className="w-full appearance-none rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
                 >
                   <option value="" disabled>
@@ -531,7 +531,7 @@ export default function IngredientsPage() {
               <div className="relative">
                 <select
                   value={formDefaultUnit}
-                  onChange={(event) => setFormDefaultUnit(event.target.value)}
+                  onChange={(event) => setFormDefaultUnit(event.target.value as Ingredient["defaultUnit"])}
                   className="w-full appearance-none rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
                 >
                   <option value="" disabled>
