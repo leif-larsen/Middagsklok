@@ -255,3 +255,5 @@ appsettings.*.json
 scripts/start.sh
 scripts/add-instructions.sql
 scripts/translate-moussaka.sql
+
+potentialblogposts.md
