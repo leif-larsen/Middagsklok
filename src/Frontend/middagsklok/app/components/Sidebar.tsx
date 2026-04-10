@@ -145,33 +145,6 @@ export default function Sidebar() {
         </ul>
       </nav>
 
-      <div className="mt-auto px-3 pb-5">
-        <div
-          className={`rounded-2xl border border-[#dfe7d7] bg-[#e9f3e7] px-4 py-3 text-[#2d4a35] transition-all duration-300 ${
-            collapsed ? "flex items-center justify-center" : ""
-          }`}
-        >
-          <div
-            className={`flex items-center ${collapsed ? "gap-0" : "gap-3"}`}
-          >
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-white/70 text-[#2f6b4f]">
-              <SparkIcon className="h-4 w-4" />
-            </span>
-            <div
-              className={`overflow-hidden transition-all duration-300 ${
-                collapsed ? "max-w-0 opacity-0" : "max-w-[180px] opacity-100"
-              }`}
-            >
-              <div className="text-[11px] font-semibold uppercase tracking-[0.22em]">
-                Quick Stats
-              </div>
-              <div className="text-sm font-medium text-[#3a5a44]">
-                24 dishes, 7 planned meals
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </aside>
   );
 }
@@ -340,19 +313,3 @@ function PanIcon({ className }: IconProps) {
   );
 }
 
-function SparkIcon({ className }: IconProps) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="m12 4 1.7 4.3L18 10l-4.3 1.7L12 16l-1.7-4.3L6 10l4.3-1.7L12 4Z" />
-    </svg>
-  );
-}
