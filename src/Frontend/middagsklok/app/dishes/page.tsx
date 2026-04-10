@@ -40,6 +40,7 @@ type Dish = {
   isVegetarian: boolean;
   isVegan: boolean;
   ingredients: Ingredient[];
+  lastEatenOn?: string | null;
 };
 
 const emptyDish: Dish = {
@@ -60,6 +61,7 @@ const formatMinutes = (value: number) => `${value}m`;
 
 export default function DishesPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<"name" | "lastEaten">("name");
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -206,12 +208,21 @@ export default function DishesPage() {
 
   const visibleDishes = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
-    if (!query) {
-      return dishes;
+    const filtered = query
+      ? dishes.filter((dish) => dish.name.toLowerCase().includes(query))
+      : dishes;
+
+    if (sortBy === "lastEaten") {
+      return [...filtered].sort((a, b) => {
+        if (!a.lastEatenOn && !b.lastEatenOn) return a.name.localeCompare(b.name);
+        if (!a.lastEatenOn) return 1;
+        if (!b.lastEatenOn) return -1;
+        return b.lastEatenOn.localeCompare(a.lastEatenOn);
+      });
     }
 
-    return dishes.filter((dish) => dish.name.toLowerCase().includes(query));
-  }, [dishes, searchQuery]);
+    return filtered;
+  }, [dishes, searchQuery, sortBy]);
 
   const isModalOpen = isCreateOpen || selectedDish !== null;
   const isEditMode = selectedDish !== null;
@@ -550,16 +561,27 @@ export default function DishesPage() {
             </div>
           </header>
 
-          <div className="flex items-center gap-3 rounded-2xl border border-[#e1e8dc] bg-white/80 px-4 py-3 shadow-[0_10px_30px_-26px_rgba(30,60,40,0.4)]">
-            <SearchIcon className="h-4 w-4 text-[#7a887f]" />
-            <input
-              type="text"
-              aria-label="Search dishes"
-              placeholder="Search dishes by name..."
-              value={searchQuery}
-              onChange={(event) => setSearchQuery(event.target.value)}
-              className="w-full bg-transparent text-sm text-[#2e3b33] placeholder:text-[#9aa69f] focus:outline-none"
-            />
+          <div className="flex gap-3">
+            <div className="flex flex-1 items-center gap-3 rounded-2xl border border-[#e1e8dc] bg-white/80 px-4 py-3 shadow-[0_10px_30px_-26px_rgba(30,60,40,0.4)]">
+              <SearchIcon className="h-4 w-4 text-[#7a887f]" />
+              <input
+                type="text"
+                aria-label="Search dishes"
+                placeholder="Search dishes by name..."
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                className="w-full bg-transparent text-sm text-[#2e3b33] placeholder:text-[#9aa69f] focus:outline-none"
+              />
+            </div>
+            <select
+              aria-label="Sort dishes by"
+              value={sortBy}
+              onChange={(event) => setSortBy(event.target.value as "name" | "lastEaten")}
+              className="rounded-2xl border border-[#e1e8dc] bg-white/80 px-4 py-3 text-sm font-semibold text-[#3d4c43] shadow-[0_10px_30px_-26px_rgba(30,60,40,0.4)] focus:outline-none"
+            >
+              <option value="name">Sort: Name</option>
+              <option value="lastEaten">Sort: Last eaten</option>
+            </select>
           </div>
 
           <section className="grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
@@ -631,6 +653,12 @@ export default function DishesPage() {
                     <span className="flex items-center gap-2">
                       <PeopleIcon className="h-4 w-4 text-[#2f6b4f]" />
                       Serves: {dish.serves}
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <CalendarIcon className="h-4 w-4 text-[#2f6b4f]" />
+                      {dish.lastEatenOn
+                        ? `Last eaten: ${dish.lastEatenOn}`
+                        : "Never eaten"}
                     </span>
                   </div>
 
@@ -1232,6 +1260,26 @@ function ChevronDownIcon({ className }: { className?: string }) {
       className={className}
     >
       <path d="M6 9l6 6 6-6" />
+    </svg>
+  );
+}
+
+function CalendarIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+      <line x1="16" y1="2" x2="16" y2="6" />
+      <line x1="8" y1="2" x2="8" y2="6" />
+      <line x1="3" y1="10" x2="21" y2="10" />
     </svg>
   );
 }

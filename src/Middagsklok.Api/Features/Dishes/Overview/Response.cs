@@ -14,7 +14,8 @@ public sealed record DishOverview(
     bool IsVegetarian,
     bool IsVegan,
     IReadOnlyList<string> VibeTags,
-    IEnumerable<DishIngredientOverview> Ingredients);
+    IEnumerable<DishIngredientOverview> Ingredients,
+    DateOnly? LastEatenOn);
 
 public sealed record DishIngredientOverview(
     string Id,

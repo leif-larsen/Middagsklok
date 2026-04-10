@@ -32,9 +32,10 @@ internal sealed class UseCase(AppDbContext dbContext)
             .ToArray();
 
         var ingredientLookup = await LoadIngredients(ingredientIds, cancellationToken);
+        var lastEatenLookup = await LoadLastEatenDates(cancellationToken);
 
         var dishOverviews = dishes
-            .Select(dish => MapDish(dish, ingredientLookup))
+            .Select(dish => MapDish(dish, ingredientLookup, lastEatenLookup))
             .ToArray();
 
         var response = new Response(dishOverviews);
@@ -62,10 +63,23 @@ internal sealed class UseCase(AppDbContext dbContext)
         return lookup;
     }
 
+    // Loads the most recent eaten date for each dish.
+    private async Task<IReadOnlyDictionary<Guid, DateOnly>> LoadLastEatenDates(CancellationToken cancellationToken)
+    {
+        var lastEatenDates = await _dbContext.DishConsumptionEvents
+            .AsNoTracking()
+            .GroupBy(evt => evt.DishId)
+            .Select(group => new { DishId = group.Key, LastEatenOn = group.Max(evt => evt.EatenOn) })
+            .ToListAsync(cancellationToken);
+
+        return lastEatenDates.ToDictionary(x => x.DishId, x => x.LastEatenOn);
+    }
+
     // Maps a dish entity to the overview response.
     private static DishOverview MapDish(
         Dish dish,
-        IReadOnlyDictionary<Guid, Ingredient> ingredientLookup)
+        IReadOnlyDictionary<Guid, Ingredient> ingredientLookup,
+        IReadOnlyDictionary<Guid, DateOnly> lastEatenLookup)
     {
         var ingredients = dish.Ingredients
             .OrderBy(i => i.SortOrder ?? int.MaxValue)
@@ -87,6 +101,8 @@ internal sealed class UseCase(AppDbContext dbContext)
             })
             .ToArray();
 
+        DateOnly? lastEatenOn = lastEatenLookup.TryGetValue(dish.Id, out var date) ? date : null;
+
         var overview = new DishOverview(
             dish.Id.ToString("D"),
             dish.Name,
@@ -99,7 +115,8 @@ internal sealed class UseCase(AppDbContext dbContext)
             dish.IsVegetarian,
             dish.IsVegan,
             dish.VibeTags.ToArray(),
-            ingredients);
+            ingredients,
+            lastEatenOn);
 
         return overview;
     }
