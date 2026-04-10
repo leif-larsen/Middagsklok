@@ -38,6 +38,7 @@ export type DishOverview = {
   isVegan: boolean;
   vibeTags: string[];
   ingredients: DishOverviewIngredient[];
+  lastEatenOn?: string | null;
 };
 
 export type DishesOverviewResponse = {
