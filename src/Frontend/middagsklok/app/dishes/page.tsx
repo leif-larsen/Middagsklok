@@ -61,7 +61,7 @@ const formatMinutes = (value: number) => `${value}m`;
 
 export default function DishesPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortBy, setSortBy] = useState<"name" | "lastEaten">("name");
+  const [sortBy, setSortBy] = useState<"name" | "lastEatenDesc" | "lastEatenAsc">("name");
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -212,12 +212,13 @@ export default function DishesPage() {
       ? dishes.filter((dish) => dish.name.toLowerCase().includes(query))
       : dishes;
 
-    if (sortBy === "lastEaten") {
+    if (sortBy === "lastEatenDesc" || sortBy === "lastEatenAsc") {
+      const dir = sortBy === "lastEatenDesc" ? -1 : 1;
       return [...filtered].sort((a, b) => {
         if (!a.lastEatenOn && !b.lastEatenOn) return a.name.localeCompare(b.name);
         if (!a.lastEatenOn) return 1;
         if (!b.lastEatenOn) return -1;
-        return b.lastEatenOn.localeCompare(a.lastEatenOn);
+        return dir * b.lastEatenOn.localeCompare(a.lastEatenOn);
       });
     }
 
@@ -576,11 +577,12 @@ export default function DishesPage() {
             <select
               aria-label="Sort dishes by"
               value={sortBy}
-              onChange={(event) => setSortBy(event.target.value as "name" | "lastEaten")}
+              onChange={(event) => setSortBy(event.target.value as "name" | "lastEatenDesc" | "lastEatenAsc")}
               className="rounded-2xl border border-[#e1e8dc] bg-white/80 px-4 py-3 text-sm font-semibold text-[#3d4c43] shadow-[0_10px_30px_-26px_rgba(30,60,40,0.4)] focus:outline-none"
             >
               <option value="name">Sort: Name</option>
-              <option value="lastEaten">Sort: Last eaten</option>
+              <option value="lastEatenDesc">Sort: Last eaten (newest first)</option>
+              <option value="lastEatenAsc">Sort: Last eaten (oldest first)</option>
             </select>
           </div>
 
