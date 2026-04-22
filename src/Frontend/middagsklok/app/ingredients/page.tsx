@@ -10,6 +10,7 @@ import type {
   IngredientValidationError,
 } from "../../lib/api/models/ingredients";
 import { useIngredientsMetadata } from "../components/IngredientsMetadataProvider";
+import { useIngredientsCatalog } from "../components/IngredientsProvider";
 
 type Ingredient = IngredientOverview;
 
@@ -49,6 +50,11 @@ export default function IngredientsPage() {
   );
   const [isDeleting, setIsDeleting] = useState(false);
   const { categories, units } = useIngredientsMetadata();
+  const {
+    appendIngredient: catalogAppend,
+    replaceIngredient: catalogReplace,
+    removeIngredient: catalogRemove,
+  } = useIngredientsCatalog();
 
   useEffect(() => {
     let isActive = true;
@@ -217,6 +223,7 @@ export default function IngredientsPage() {
       await apiClient.deleteIngredient(deleteTarget.id);
       setIngredients((current) =>
         current.filter((item) => item.id !== deleteTarget.id));
+      catalogRemove(deleteTarget.id);
       setDeleteTarget(null);
     } catch (error) {
       if (error instanceof ApiError && [400, 404].includes(error.status)) {
@@ -268,12 +275,14 @@ export default function IngredientsPage() {
           current
             .map((item) => (item.id === updated.id ? updated : item))
             .sort((left, right) => left.name.localeCompare(right.name)));
+        catalogReplace(updated);
         closeModal();
         return;
       }
 
       const created = await apiClient.createIngredient(payload);
       appendIngredient(created);
+      catalogAppend(created);
       closeModal();
     } catch (error) {
       if (error instanceof ApiError && [400, 404, 409].includes(error.status)) {
