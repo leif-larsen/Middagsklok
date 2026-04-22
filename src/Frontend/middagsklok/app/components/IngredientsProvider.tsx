@@ -18,6 +18,9 @@ type IngredientsState = {
   ingredients: IngredientOverview[];
   isLoading: boolean;
   error: string | null;
+  appendIngredient: (ingredient: IngredientOverview) => void;
+  replaceIngredient: (ingredient: IngredientOverview) => void;
+  removeIngredient: (id: string) => void;
 };
 
 const IngredientsContext = createContext<IngredientsState | null>(null);
@@ -73,12 +76,24 @@ const loadIngredients = async (): Promise<IngredientsOverviewResponse> => {
   return inFlightRequest;
 };
 
+type IngredientsData = {
+  ingredients: IngredientOverview[];
+  isLoading: boolean;
+  error: string | null;
+};
+
+const syncCache = (ingredients: IngredientOverview[]) => {
+  const updated: IngredientsOverviewResponse = { ingredients };
+  cachedIngredients = updated;
+  writeStorage(updated);
+};
+
 export default function IngredientsProvider({
   children,
 }: {
   children: ReactNode;
 }) {
-  const [state, setState] = useState<IngredientsState>(() => {
+  const [data, setData] = useState<IngredientsData>(() => {
     const stored = readStorage();
     if (!stored) {
       return {
@@ -98,7 +113,7 @@ export default function IngredientsProvider({
 
   useEffect(() => {
     if (cachedIngredients) {
-      setState({
+      setData({
         ingredients: cachedIngredients.ingredients ?? [],
         isLoading: false,
         error: null,
@@ -115,7 +130,7 @@ export default function IngredientsProvider({
           return;
         }
 
-        setState({
+        setData({
           ingredients: response.ingredients ?? [],
           isLoading: false,
           error: null,
@@ -126,19 +141,19 @@ export default function IngredientsProvider({
         }
 
         if (error instanceof ApiError) {
-          setState((current) => ({
+          setData((current) => ({
             ...current,
             isLoading: false,
             error: error.message,
           }));
         } else if (error instanceof Error) {
-          setState((current) => ({
+          setData((current) => ({
             ...current,
             isLoading: false,
             error: error.message,
           }));
         } else {
-          setState((current) => ({
+          setData((current) => ({
             ...current,
             isLoading: false,
             error: "Failed to load ingredients.",
@@ -154,7 +169,50 @@ export default function IngredientsProvider({
     };
   }, []);
 
-  const value = useMemo(() => state, [state]);
+  const appendIngredient = useMemo(
+    () => (ingredient: IngredientOverview) => {
+      setData((current) => {
+        if (current.ingredients.some((item) => item.id === ingredient.id)) {
+          return current;
+        }
+        const updated = [...current.ingredients, ingredient].sort((a, b) =>
+          a.name.localeCompare(b.name),
+        );
+        syncCache(updated);
+        return { ...current, ingredients: updated };
+      });
+    },
+    [],
+  );
+
+  const replaceIngredient = useMemo(
+    () => (ingredient: IngredientOverview) => {
+      setData((current) => {
+        const updated = current.ingredients
+          .map((item) => (item.id === ingredient.id ? ingredient : item))
+          .sort((a, b) => a.name.localeCompare(b.name));
+        syncCache(updated);
+        return { ...current, ingredients: updated };
+      });
+    },
+    [],
+  );
+
+  const removeIngredient = useMemo(
+    () => (id: string) => {
+      setData((current) => {
+        const updated = current.ingredients.filter((item) => item.id !== id);
+        syncCache(updated);
+        return { ...current, ingredients: updated };
+      });
+    },
+    [],
+  );
+
+  const value = useMemo(
+    () => ({ ...data, appendIngredient, replaceIngredient, removeIngredient }),
+    [data, appendIngredient, replaceIngredient, removeIngredient],
+  );
 
   return (
     <IngredientsContext.Provider value={value}>
