@@ -15,7 +15,6 @@ type MenuItem = {
 };
 
 const menuItems: MenuItem[] = [
-  { label: "Dashboard", href: "/", icon: HomeIcon },
   { label: "Dishes", href: "/dishes", icon: DishIcon },
   { label: "Weekly Planner", href: "/weekly-planner", icon: CalendarIcon },
   { label: "Shopping List", href: "/shopping-list", icon: CartIcon },
@@ -161,24 +160,6 @@ function HamburgerIcon({ className }: IconProps) {
       className={className}
     >
       <path d="M4 7h16M4 12h16M4 17h16" />
-    </svg>
-  );
-}
-
-function HomeIcon({ className }: IconProps) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="m4.5 11.5 7.5-6 7.5 6" />
-      <path d="M7.5 10.5v8h9v-8" />
     </svg>
   );
 }
