@@ -22,12 +22,22 @@ const rangeFormatter = new Intl.DateTimeFormat("en-US", {
 });
 
 const categoryLabels: Record<string, string> = {
-  DairyAndEggs: "Dairy & Eggs",
-  PastaAndGrains: "Pasta & Grains",
-  SpicesAndHerbs: "Spices & Herbs",
-  OilsAndVinegars: "Oils & Vinegars",
-  FrozenFoods: "Frozen Foods",
-  CannedGoods: "Canned Goods",
+  Produce: "Frukt og grønt",
+  Meat: "Kjøtt",
+  Poultry: "Fjærkre",
+  Seafood: "Sjømat",
+  DairyAndEggs: "Meieri og egg",
+  PastaAndGrains: "Pasta og korn",
+  Bakery: "Bakervarer",
+  CannedGoods: "Hermetikk",
+  FrozenFoods: "Frossenmat",
+  Condiments: "Sauser og dressinger",
+  SpicesAndHerbs: "Krydder og urter",
+  Baking: "Baking",
+  OilsAndVinegars: "Oljer og eddik",
+  Beverages: "Drikke",
+  Snacks: "Snacks",
+  Other: "Annet",
 };
 
 const formatCategoryLabel = (value: string) => {

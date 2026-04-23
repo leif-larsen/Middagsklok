@@ -30,23 +30,23 @@ internal sealed class UseCase
     private static string FormatCategoryLabel(IngredientCategory category) =>
         category switch
         {
-            IngredientCategory.Produce => "Produce",
-            IngredientCategory.Meat => "Meat",
-            IngredientCategory.Poultry => "Poultry",
-            IngredientCategory.Seafood => "Seafood",
-            IngredientCategory.DairyAndEggs => "Dairy & Eggs",
-            IngredientCategory.PastaAndGrains => "Pasta & Grains",
-            IngredientCategory.Bakery => "Bakery",
-            IngredientCategory.CannedGoods => "Canned Goods",
-            IngredientCategory.FrozenFoods => "Frozen Foods",
-            IngredientCategory.Condiments => "Condiments",
-            IngredientCategory.SpicesAndHerbs => "Spices & Herbs",
+            IngredientCategory.Produce => "Frukt og grønt",
+            IngredientCategory.Meat => "Kjøtt",
+            IngredientCategory.Poultry => "Fjærkre",
+            IngredientCategory.Seafood => "Sjømat",
+            IngredientCategory.DairyAndEggs => "Meieri og egg",
+            IngredientCategory.PastaAndGrains => "Pasta og korn",
+            IngredientCategory.Bakery => "Bakervarer",
+            IngredientCategory.CannedGoods => "Hermetikk",
+            IngredientCategory.FrozenFoods => "Frossenmat",
+            IngredientCategory.Condiments => "Sauser og dressinger",
+            IngredientCategory.SpicesAndHerbs => "Krydder og urter",
             IngredientCategory.Baking => "Baking",
-            IngredientCategory.OilsAndVinegars => "Oils & Vinegars",
-            IngredientCategory.Beverages => "Beverages",
+            IngredientCategory.OilsAndVinegars => "Oljer og eddik",
+            IngredientCategory.Beverages => "Drikke",
             IngredientCategory.Snacks => "Snacks",
-            IngredientCategory.Other => "Other",
-            _ => "Other"
+            IngredientCategory.Other => "Annet",
+            _ => "Annet"
         };
 
     // Formats unit values into display labels.
