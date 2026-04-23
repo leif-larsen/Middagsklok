@@ -6,39 +6,39 @@ import Sidebar from "../components/Sidebar";
 
 const dishTypeOptions = [
   "Pasta",
-  "Rice bowl",
-  "Noodles",
-  "Soup & stew",
-  "Salad",
-  "Wrap & taco",
-  "Pizza & pie",
-  "Casserole & bake",
-  "Sandwich & burger",
-  "Protein & veg plate",
-  "Breakfast for dinner",
-  "Snack board",
-  "Other",
+  "Risbolle",
+  "Nudler",
+  "Suppe og gryte",
+  "Salat",
+  "Wrap og taco",
+  "Pizza og pai",
+  "Gryte og form",
+  "Sandwich og burger",
+  "Protein og grønt",
+  "Frokost til middag",
+  "Snackbrett",
+  "Annet",
 ];
 
 const restrictionOptions = [
-  "Shellfish",
-  "Peanuts",
-  "Tree Nuts",
-  "Dairy",
-  "Eggs",
-  "Soy",
-  "Wheat",
-  "Fish",
+  "Skalldyr",
+  "Peanøtter",
+  "Trenøtter",
+  "Meieri",
+  "Egg",
+  "Soya",
+  "Hvete",
+  "Fisk",
 ];
 
 const weekStartOptions = [
-  { value: "Monday", label: "Monday", dayIndex: 1 },
-  { value: "Tuesday", label: "Tuesday", dayIndex: 2 },
-  { value: "Wednesday", label: "Wednesday", dayIndex: 3 },
-  { value: "Thursday", label: "Thursday", dayIndex: 4 },
-  { value: "Friday", label: "Friday", dayIndex: 5 },
-  { value: "Saturday", label: "Saturday", dayIndex: 6 },
-  { value: "Sunday", label: "Sunday", dayIndex: 0 },
+  { value: "Monday", label: "Mandag", dayIndex: 1 },
+  { value: "Tuesday", label: "Tirsdag", dayIndex: 2 },
+  { value: "Wednesday", label: "Onsdag", dayIndex: 3 },
+  { value: "Thursday", label: "Torsdag", dayIndex: 4 },
+  { value: "Friday", label: "Fredag", dayIndex: 5 },
+  { value: "Saturday", label: "Lørdag", dayIndex: 6 },
+  { value: "Sunday", label: "Søndag", dayIndex: 0 },
 ];
 
 type ToggleRowProps = {
@@ -96,12 +96,12 @@ export default function SettingsPage() {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [preferredCategories, setPreferredCategories] = useState<string[]>([
     "Pasta",
-    "Rice bowl",
-    "Wrap & taco",
+    "Risbolle",
+    "Wrap og taco",
   ]);
   const [excludedIngredients, setExcludedIngredients] = useState<string[]>([
-    "Shellfish",
-    "Peanuts",
+    "Skalldyr",
+    "Peanøtter",
   ]);
 
   const togglePreferredCategory = (category: string) => {
@@ -156,7 +156,7 @@ export default function SettingsPage() {
           }
 
           if (isActive) {
-            setSettingsLoadError("Unable to load planning settings.");
+            setSettingsLoadError("Kunne ikke laste planleggingsinnstillinger.");
           }
         }
       } finally {
@@ -187,7 +187,7 @@ export default function SettingsPage() {
       setWeekStartsOn(response.weekStartsOn ?? weekStartsOn);
       setSeafoodPerWeek(response.seafoodPerWeek ?? seafoodPerWeek);
       setDaysBetween(response.daysBetween ?? daysBetween);
-      setSaveMessage("Settings saved.");
+      setSaveMessage("Innstillinger lagret.");
     } catch (error) {
       if (error instanceof ApiError) {
         console.error("Failed to save planning settings:", error.body ?? error.message);
@@ -197,7 +197,7 @@ export default function SettingsPage() {
         console.error("Failed to save planning settings.");
       }
 
-      setSaveError("Unable to save settings.");
+      setSaveError("Kunne ikke lagre innstillinger.");
     } finally {
       setIsSavingSettings(false);
     }
@@ -215,10 +215,10 @@ export default function SettingsPage() {
               </span>
               <div>
                 <h1 className="text-2xl font-semibold text-[#1f2a22]">
-                  Admin Settings
+                  Innstillinger
                 </h1>
                 <p className="text-sm text-[#6c7a70]">
-                  Configure planning rules and preferences
+                  Konfigurer planleggingsregler og preferanser
                 </p>
               </div>
             </div>
@@ -229,7 +229,7 @@ export default function SettingsPage() {
               className="inline-flex items-center gap-2 rounded-full bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_24px_-18px_rgba(32,78,54,0.9)] transition hover:bg-[#2a5c46]"
             >
               <SaveIcon className="h-4 w-4" />
-              {isSavingSettings ? "Saving..." : "Save Settings"}
+              {isSavingSettings ? "Lagrer..." : "Lagre innstillinger"}
             </button>
             {saveMessage ? (
               <span className="text-xs font-semibold text-[#2f6b4f]">
@@ -248,19 +248,19 @@ export default function SettingsPage() {
               <section className="rounded-[28px] border border-[#e1e8dc] bg-white/80 p-6 shadow-[0_20px_48px_-36px_rgba(30,60,40,0.4)]">
                 <div className="space-y-1">
                   <h2 className="text-lg font-semibold text-[#1f2a22]">
-                    Weekly Planning Rules
+                    Ukentlige planleggingsregler
                   </h2>
                   <p className="text-sm text-[#7b8a7f]">
-                    Set rules for automatic meal plan generation
+                    Angi regler for automatisk ukesmenyoppsett
                   </p>
                 </div>
 
                 <div className="mt-5 space-y-5">
                   <label className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#e1e8dc] bg-white/70 px-4 py-3 text-sm font-semibold text-[#1f2a22] shadow-[0_12px_24px_-20px_rgba(32,70,48,0.35)]">
-                    <span>Week Starts On</span>
+                    <span>Uke starter på</span>
                     <span className="relative">
                       <select
-                        aria-label="Week starts on"
+                        aria-label="Uke starter på"
                         value={weekStartsOn}
                         onChange={(event) => setWeekStartsOn(event.target.value)}
                         disabled={isLoadingSettings}
@@ -282,7 +282,7 @@ export default function SettingsPage() {
                   ) : null}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm font-semibold text-[#1f2a22]">
-                      <span>Seafood per Week</span>
+                      <span>Sjømat per uke</span>
                       <span className="text-[#2f6b4f]">{seafoodPerWeek}</span>
                     </div>
                     <input
@@ -298,7 +298,7 @@ export default function SettingsPage() {
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm font-semibold text-[#1f2a22]">
-                      <span>Days Between</span>
+                      <span>Dager mellom</span>
                       <span className="text-[#2f6b4f]">{daysBetween}</span>
                     </div>
                     <input
@@ -312,26 +312,26 @@ export default function SettingsPage() {
                       className="h-2 w-full cursor-pointer appearance-none rounded-full bg-[#e2e8dc] accent-[#2f6b4f]"
                     />
                     <p className="text-xs text-[#7b8a7f]">
-                      Lower scores are applied to dishes eaten within this many days, but they can still be selected.
+                      Lavere score gis til retter spist innen dette antall dager, men de kan fortsatt velges.
                     </p>
                   </div>
 
                   <div className="space-y-4 border-t border-[#e1e8dc] pt-4">
                     <ToggleRow
-                      label="Allow Repeat Dishes"
-                      description="Same dish can appear multiple times in a week"
+                      label="Tillat gjentagende retter"
+                      description="Samme rett kan forekomme flere ganger i løpet av en uke"
                       checked={allowRepeats}
                       onToggle={() => setAllowRepeats((current) => !current)}
                     />
                     <ToggleRow
-                      label="Include Weekends"
-                      description="Generate plans for Saturday and Sunday"
+                      label="Inkluder helger"
+                      description="Generer planer for lørdag og søndag"
                       checked={includeWeekends}
                       onToggle={() => setIncludeWeekends((current) => !current)}
                     />
                     <ToggleRow
-                      label="Auto-generate Plans"
-                      description="Automatically create new weekly plans"
+                      label="Autogenerer planer"
+                      description="Lag nye ukesplaner automatisk"
                       checked={autoGeneratePlans}
                       onToggle={() => setAutoGeneratePlans((current) => !current)}
                     />
@@ -342,16 +342,16 @@ export default function SettingsPage() {
               <section className="rounded-[28px] border border-[#e1e8dc] bg-white/80 p-6 shadow-[0_20px_48px_-36px_rgba(30,60,40,0.4)]">
                 <div className="space-y-1">
                   <h2 className="text-lg font-semibold text-[#1f2a22]">
-                    Cooking Constraints
+                    Matlagingsbegrensninger
                   </h2>
                   <p className="text-sm text-[#7b8a7f]">
-                    Set time and serving preferences
+                    Angi tids- og porsjonspreferanser
                   </p>
                 </div>
 
                 <div className="mt-5 space-y-4">
                   <label className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#e1e8dc] bg-white/70 px-4 py-3 text-sm font-semibold text-[#1f2a22] shadow-[0_12px_24px_-20px_rgba(32,70,48,0.35)]">
-                    <span>Maximum Prep Time (minutes)</span>
+                    <span>Maks forberedelsestid (minutter)</span>
                     <input
                       type="number"
                       min={10}
@@ -365,7 +365,7 @@ export default function SettingsPage() {
                   </label>
 
                   <label className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#e1e8dc] bg-white/70 px-4 py-3 text-sm font-semibold text-[#1f2a22] shadow-[0_12px_24px_-20px_rgba(32,70,48,0.35)]">
-                    <span>Default Servings</span>
+                    <span>Standard porsjoner</span>
                     <input
                       type="number"
                       min={1}
@@ -385,21 +385,21 @@ export default function SettingsPage() {
               <section className="rounded-[28px] border border-[#e1e8dc] bg-white/80 p-6 shadow-[0_20px_48px_-36px_rgba(30,60,40,0.4)]">
                 <div className="space-y-1">
                   <h2 className="text-lg font-semibold text-[#1f2a22]">
-                    Diversity & Preferences
+                    Variasjon og preferanser
                   </h2>
                   <p className="text-sm text-[#7b8a7f]">
-                    Control variety and category distribution
+                    Styr variasjon og kategoriefordeling
                   </p>
                 </div>
 
                 <div className="mt-5 space-y-5">
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm font-semibold text-[#1f2a22]">
-                      <span>Diversity Score</span>
+                      <span>Variasjonspoeng</span>
                       <span className="text-[#2f6b4f]">{diversityScore}%</span>
                     </div>
                     <p className="text-xs text-[#7b8a7f]">
-                      Higher values prioritize variety in weekly plans
+                      Høyere verdier prioriterer variasjon i ukesplaner
                     </p>
                     <input
                       type="range"
@@ -415,7 +415,7 @@ export default function SettingsPage() {
 
                   <div>
                     <div className="text-sm font-semibold text-[#1f2a22]">
-                      Preferred Categories
+                      Foretrukne kategorier
                     </div>
                     <div className="mt-3 flex flex-wrap gap-2">
                       {dishTypeOptions.map((category) => {
@@ -445,16 +445,16 @@ export default function SettingsPage() {
               <section className="rounded-[28px] border border-[#e1e8dc] bg-white/80 p-6 shadow-[0_20px_48px_-36px_rgba(30,60,40,0.4)]">
                 <div className="space-y-1">
                   <h2 className="text-lg font-semibold text-[#1f2a22]">
-                    Dietary Restrictions
+                    Kostholdsrestriksjoner
                   </h2>
                   <p className="text-sm text-[#7b8a7f]">
-                    Exclude ingredients from meal planning
+                    Ekskluder ingredienser fra menyplanlegging
                   </p>
                 </div>
 
                 <div className="mt-4">
                   <div className="text-sm font-semibold text-[#1f2a22]">
-                    Excluded Ingredients
+                    Ekskluderte ingredienser
                   </div>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {restrictionOptions.map((ingredient) => {
@@ -478,8 +478,8 @@ export default function SettingsPage() {
                     })}
                   </div>
                   <p className="mt-3 text-xs text-[#7b8a7f]">
-                    Click to toggle ingredients. Red badges are excluded from
-                    meal planning.
+                    Klikk for å slå av/på ingredienser. Røde merker er ekskludert
+                    fra menyplanlegging.
                   </p>
                 </div>
               </section>
@@ -492,12 +492,12 @@ export default function SettingsPage() {
             </span>
             <div>
               <div className="text-sm font-semibold text-[#1f2a22]">
-                Pro Tip
+                Tips
               </div>
               <p className="text-xs text-[#6c7a70]">
-                Adjust the diversity score to control how much variety you want
-                in your weekly plans. A higher score ensures different dish types
-                and ingredients throughout the week.
+                Juster variasjonspoengene for å styre hvor mye variasjon du vil
+                ha i ukesplanene dine. Høyere poeng sikrer ulike retttyper
+                og ingredienser gjennom uken.
               </p>
             </div>
           </section>

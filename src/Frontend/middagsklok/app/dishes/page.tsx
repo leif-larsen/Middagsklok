@@ -147,12 +147,12 @@ export default function DishesPage() {
   );
 
   const ingredientSelectMessage = ingredientsLoading
-    ? "Loading ingredients..."
+    ? "Laster ingredienser..."
     : ingredientsError
-      ? "Unable to load ingredients"
+      ? "Kunne ikke laste ingredienser"
       : ingredientOptions.length === 0
-        ? "No ingredients available"
-        : "Select an ingredient";
+        ? "Ingen ingredienser tilgjengelig"
+        : "Velg en ingrediens";
 
   const isIngredientSelectDisabled = ingredientsLoading
     || !!ingredientsError
@@ -201,10 +201,10 @@ export default function DishesPage() {
   }, [dishTypeOptions, formDishType]);
 
   const dishTypeSelectMessage = dishTypesLoading
-    ? "Loading dish types..."
+    ? "Laster retttyper..."
     : formDishTypeOptions.length === 0
-      ? "No dish types available"
-      : "Select dish type";
+      ? "Ingen retttyper tilgjengelig"
+      : "Velg retttype";
 
   const visibleDishes = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -339,7 +339,7 @@ export default function DishesPage() {
       return parsed as DishesImportRequest;
     }
 
-    throw new Error("Invalid JSON format. Expected an array or an object with a dishes property.");
+    throw new Error("Ugyldig JSON-format. Forventet et array eller et objekt med en dishes-egenskap.");
   };
 
   const handleSave = async () => {
@@ -374,7 +374,7 @@ export default function DishesPage() {
 
       if (isEditMode) {
         if (!selectedDish) {
-          setSubmitError("Dish is required for updates.");
+          setSubmitError("Rett er påkrevd for oppdateringer.");
           return;
         }
 
@@ -403,7 +403,7 @@ export default function DishesPage() {
       if (error instanceof Error) {
         setSubmitError(error.message);
       } else {
-        setSubmitError("Failed to create dish.");
+        setSubmitError("Kunne ikke opprette rett.");
       }
     } finally {
       setIsSaving(false);
@@ -427,7 +427,7 @@ export default function DishesPage() {
       if (error instanceof Error) {
         setDeleteError(error.message);
       } else {
-        setDeleteError("Failed to delete dish.");
+        setDeleteError("Kunne ikke slette rett.");
       }
     } finally {
       setIsDeleting(false);
@@ -471,7 +471,7 @@ export default function DishesPage() {
       } else if (error instanceof Error) {
         setImportError(error.message);
       } else {
-        setImportError("Unexpected error while importing dishes.");
+        setImportError("Uventet feil ved import av retter.");
       }
     } finally {
       setIsImporting(false);
@@ -529,10 +529,10 @@ export default function DishesPage() {
               </span>
               <div>
                 <h1 className="text-2xl font-semibold text-[#1f2a22]">
-                  Dishes
+                  Retter
                 </h1>
                 <p className="text-sm text-[#6c7a70]">
-                  Manage your recipe collection
+                  Administrer oppskriftssamlingen din
                 </p>
               </div>
             </div>
@@ -546,7 +546,7 @@ export default function DishesPage() {
                 className="inline-flex items-center gap-2 rounded-full border border-[#d6e0d2] bg-white px-4 py-2 text-sm font-semibold text-[#3b4c42] transition hover:bg-[#f3f6ef]"
               >
                 <ImportIcon className="h-4 w-4" />
-                Import dishes
+                Importer retter
               </button>
               <button
                 type="button"
@@ -557,7 +557,7 @@ export default function DishesPage() {
                 className="inline-flex items-center gap-2 rounded-full bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_24px_-18px_rgba(32,78,54,0.9)] transition hover:bg-[#2a5c46]"
               >
                 <PlusIcon className="h-4 w-4" />
-                Add dish
+                Legg til rett
               </button>
             </div>
           </header>
@@ -568,7 +568,7 @@ export default function DishesPage() {
               <input
                 type="text"
                 aria-label="Search dishes"
-                placeholder="Search dishes by name..."
+                placeholder="Søk etter retter etter navn..."
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
                 className="w-full bg-transparent text-sm text-[#2e3b33] placeholder:text-[#9aa69f] focus:outline-none"
@@ -580,9 +580,9 @@ export default function DishesPage() {
               onChange={(event) => setSortBy(event.target.value as "name" | "lastEatenDesc" | "lastEatenAsc")}
               className="rounded-2xl border border-[#e1e8dc] bg-white/80 px-4 py-3 text-sm font-semibold text-[#3d4c43] shadow-[0_10px_30px_-26px_rgba(30,60,40,0.4)] focus:outline-none"
             >
-              <option value="name">Sort: Name</option>
-              <option value="lastEatenDesc">Sort: Last eaten (newest first)</option>
-              <option value="lastEatenAsc">Sort: Last eaten (oldest first)</option>
+              <option value="name">Sorter: Navn</option>
+              <option value="lastEatenDesc">Sorter: Sist spist (nyeste først)</option>
+              <option value="lastEatenAsc">Sorter: Sist spist (eldste først)</option>
             </select>
           </div>
 
@@ -606,17 +606,17 @@ export default function DishesPage() {
                       </span>
                       {dish.isSeafood ? (
                         <span className="mt-2 ml-2 inline-flex rounded-full bg-[#e6f5ff] px-3 py-1 text-xs font-semibold text-[#1d5b7a]">
-                          Seafood
+                          Sjømat
                         </span>
                       ) : null}
                       {dish.isVegetarian ? (
                         <span className="mt-2 ml-2 inline-flex rounded-full bg-[#eaf6e4] px-3 py-1 text-xs font-semibold text-[#2d6a3e]">
-                          Vegetarian
+                          Vegetar
                         </span>
                       ) : null}
                       {dish.isVegan ? (
                         <span className="mt-2 ml-2 inline-flex rounded-full bg-[#e2f5e9] px-3 py-1 text-xs font-semibold text-[#21573a]">
-                          Vegan
+                          Vegansk
                         </span>
                       ) : null}
                     </div>
@@ -646,27 +646,27 @@ export default function DishesPage() {
                   <div className="mt-4 flex flex-wrap items-center gap-3 text-xs font-semibold text-[#6c7a70]">
                     <span className="flex items-center gap-2">
                       <TimerIcon className="h-4 w-4 text-[#2f6b4f]" />
-                      Prep: {formatMinutes(dish.prepMinutes)}
+                      Forb.: {formatMinutes(dish.prepMinutes)}
                     </span>
                     <span className="flex items-center gap-2">
                       <PanSmallIcon className="h-4 w-4 text-[#2f6b4f]" />
-                      Cook: {formatMinutes(dish.cookMinutes)}
+                      Koketid: {formatMinutes(dish.cookMinutes)}
                     </span>
                     <span className="flex items-center gap-2">
                       <PeopleIcon className="h-4 w-4 text-[#2f6b4f]" />
-                      Serves: {dish.serves}
+                      Porsjoner: {dish.serves}
                     </span>
                     <span className="flex items-center gap-2">
                       <CalendarIcon className="h-4 w-4 text-[#2f6b4f]" />
                       {dish.lastEatenOn
-                        ? `Last eaten: ${dish.lastEatenOn}`
-                        : "Never eaten"}
+                        ? `Sist spist: ${dish.lastEatenOn}`
+                        : "Aldri spist"}
                     </span>
                   </div>
 
                   <div className="mt-4">
                     <div className="text-xs font-semibold uppercase tracking-[0.18em] text-[#7a887f]">
-                      Ingredients
+                      Ingredienser
                     </div>
                     <ul className="mt-3 space-y-2 text-sm text-[#3d4c43]">
                       {previewIngredients.map((ingredient) => (
@@ -680,7 +680,7 @@ export default function DishesPage() {
                       ))}
                       {remainingCount > 0 ? (
                         <li className="text-xs font-semibold text-[#6d7b72]">
-                          + {remainingCount} more...
+                          + {remainingCount} til...
                         </li>
                       ) : null}
                     </ul>
@@ -695,11 +695,11 @@ export default function DishesPage() {
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
-        title={isEditMode ? "Edit Dish" : "Add Dish"}
+        title={isEditMode ? "Rediger rett" : "Legg til rett"}
         description={
           isEditMode
-            ? "Update the dish details below"
-            : "Add the dish details below"
+            ? "Oppdater rettsdetaljene nedenfor"
+            : "Fyll inn rettsdetaljene nedenfor"
         }
         maxWidthClassName="max-w-2xl"
         footer={
@@ -710,7 +710,7 @@ export default function DishesPage() {
               disabled={isSaving}
               className="inline-flex items-center justify-center rounded-xl border border-[#dfe6da] bg-white px-4 py-2 text-sm font-semibold text-[#3f4b43] transition hover:bg-[#f3f6ef] disabled:cursor-not-allowed disabled:opacity-70"
             >
-              Cancel
+              Avbryt
             </button>
             <button
               type="button"
@@ -722,11 +722,11 @@ export default function DishesPage() {
             >
               {isSaving
                 ? isEditMode
-                  ? "Updating..."
-                  : "Creating..."
+                  ? "Oppdaterer..."
+                  : "Oppretter..."
                 : isEditMode
-                  ? "Update Dish"
-                  : "Create Dish"}
+                  ? "Oppdater rett"
+                  : "Opprett rett"}
             </button>
           </>
         }
@@ -753,17 +753,17 @@ export default function DishesPage() {
         <div className="mt-6 grid gap-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
-              Dish Name
+              Navn på rett
               <input
                 type="text"
                 value={formName}
                 onChange={(event) => setFormName(event.target.value)}
-                placeholder="Dish name"
+                placeholder="Navn på rett"
                 className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
               />
             </label>
             <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
-              Dish type
+              Retttype
               <select
                 value={formDishType}
                 onChange={(event) => setFormDishType(event.target.value)}
@@ -796,7 +796,7 @@ export default function DishesPage() {
                 onChange={(event) => setFormIsSeafood(event.target.checked)}
                 className="h-4 w-4 rounded border-[#b9c8bd] text-[#2f6b4f] focus:ring-[#2f6b4f]/30"
               />
-              Seafood dish
+              Sjømatrett
             </label>
             <label className="inline-flex items-center gap-3 rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm font-semibold text-[#3f4b43]">
               <input
@@ -805,7 +805,7 @@ export default function DishesPage() {
                 onChange={(event) => setFormIsVegetarian(event.target.checked)}
                 className="h-4 w-4 rounded border-[#b9c8bd] text-[#2f6b4f] focus:ring-[#2f6b4f]/30"
               />
-              Vegetarian dish
+              Vegetarrett
             </label>
             <label className="inline-flex items-center gap-3 rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm font-semibold text-[#3f4b43]">
               <input
@@ -814,13 +814,13 @@ export default function DishesPage() {
                 onChange={(event) => setFormIsVegan(event.target.checked)}
                 className="h-4 w-4 rounded border-[#b9c8bd] text-[#2f6b4f] focus:ring-[#2f6b4f]/30"
               />
-              Vegan dish
+              Vegansk rett
             </label>
           </div>
 
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
-              Prep Time (min)
+              Forberedelsestid (min)
               <input
                 type="number"
                 value={formPrepMinutes}
@@ -830,7 +830,7 @@ export default function DishesPage() {
               />
             </label>
             <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
-              Cook Time (min)
+              Koketid (min)
               <input
                 type="number"
                 value={formCookMinutes}
@@ -840,7 +840,7 @@ export default function DishesPage() {
               />
             </label>
             <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
-              Servings
+              Porsjoner
               <input
                 type="number"
                 value={formServes}
@@ -852,11 +852,11 @@ export default function DishesPage() {
           </div>
 
           <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
-            Instructions (optional)
+            Fremgangsmåte (valgfritt)
             <textarea
               value={formInstructions}
               onChange={(event) => setFormInstructions(event.target.value)}
-              placeholder="Write the steps to cook the dish..."
+              placeholder="Skriv fremgangsmåten for å lage retten..."
               rows={4}
               className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
             />
@@ -864,7 +864,7 @@ export default function DishesPage() {
 
           <div>
             <div className="text-sm font-semibold text-[#3f4b43]">
-              Ingredients
+              Ingredienser
             </div>
             <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_140px_auto]">
               <div className="relative">
@@ -889,7 +889,7 @@ export default function DishesPage() {
               </div>
               <input
                 type="text"
-                placeholder="Amount"
+                placeholder="Mengde"
                 value={ingredientAmount}
                 onChange={(event) => setIngredientAmount(event.target.value)}
                 className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
@@ -900,7 +900,7 @@ export default function DishesPage() {
                 disabled={isIngredientSelectDisabled || !selectedIngredientId}
                 className="inline-flex items-center justify-center rounded-xl border border-[#dfe6da] bg-white px-4 py-2 text-sm font-semibold text-[#3f4b43] transition hover:bg-[#f3f6ef] disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Add
+                Legg til
               </button>
             </div>
             {ingredientsError ? (
@@ -937,7 +937,7 @@ export default function DishesPage() {
                 ))
               ) : (
                 <li className="text-sm text-[#8a968f]">
-                  No ingredients added yet.
+                  Ingen ingredienser lagt til ennå.
                 </li>
               )}
             </ul>
@@ -948,10 +948,10 @@ export default function DishesPage() {
       <Modal
         isOpen={deleteTarget !== null}
         onClose={closeDeleteModal}
-        title="Delete Dish"
+        title="Slett rett"
         description={
           deleteTarget
-            ? `Are you sure you want to delete ${deleteTarget.name}?`
+            ? `Er du sikker på at du vil slette ${deleteTarget.name}?`
             : ""
         }
         maxWidthClassName="max-w-lg"
@@ -963,7 +963,7 @@ export default function DishesPage() {
               disabled={isDeleting}
               className="inline-flex items-center justify-center rounded-xl border border-[#dfe6da] bg-white px-4 py-2 text-sm font-semibold text-[#3f4b43] transition hover:bg-[#f3f6ef] disabled:cursor-not-allowed disabled:opacity-70"
             >
-              Cancel
+              Avbryt
             </button>
             <button
               type="button"
@@ -973,7 +973,7 @@ export default function DishesPage() {
               disabled={isDeleting}
               className="inline-flex items-center justify-center rounded-xl bg-[#d76b6b] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_22px_-18px_rgba(180,80,80,0.8)] transition hover:bg-[#c85f5f] disabled:cursor-not-allowed disabled:opacity-70"
             >
-              {isDeleting ? "Deleting..." : "Yes"}
+              {isDeleting ? "Sletter..." : "Ja"}
             </button>
           </>
         }
@@ -988,8 +988,8 @@ export default function DishesPage() {
       <Modal
         isOpen={isImportOpen}
         onClose={closeImportModal}
-        title="Import dishes"
-        description="Upload a JSON file to import dishes and ingredients."
+        title="Importer retter"
+        description="Last opp en JSON-fil for å importere retter og ingredienser."
         maxWidthClassName="max-w-xl"
         footer={
           <>
@@ -998,7 +998,7 @@ export default function DishesPage() {
               onClick={closeImportModal}
               className="inline-flex items-center justify-center rounded-xl border border-[#dfe6da] bg-white px-4 py-2 text-sm font-semibold text-[#3f4b43] transition hover:bg-[#f3f6ef]"
             >
-              Cancel
+              Avbryt
             </button>
             <button
               type="button"
@@ -1006,14 +1006,14 @@ export default function DishesPage() {
               disabled={!importFile || isImporting}
               className="inline-flex items-center justify-center rounded-xl bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_22px_-18px_rgba(30,68,48,0.8)] transition hover:bg-[#2a5c46] disabled:cursor-not-allowed disabled:bg-[#98b6a6]"
             >
-              {isImporting ? "Importing..." : "Import dishes"}
+              {isImporting ? "Importerer..." : "Importer retter"}
             </button>
           </>
         }
       >
         <div className="mt-6 grid gap-4">
           <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
-            JSON file
+            JSON-fil
             <input
               type="file"
               accept="application/json,.json"
@@ -1029,7 +1029,7 @@ export default function DishesPage() {
 
           {importFile ? (
             <div className="text-xs font-semibold text-[#5a675e]">
-              Selected: {importFile.name}
+              Valgt: {importFile.name}
             </div>
           ) : null}
 
@@ -1042,24 +1042,24 @@ export default function DishesPage() {
           {importResult ? (
             <div className="rounded-2xl border border-[#e3eadf] bg-[#f6faf5] px-4 py-4 text-sm text-[#2e3b33]">
               <div className="grid gap-1 text-sm font-semibold text-[#2f6b4f]">
-                Import summary
+                Importsammendrag
               </div>
               <div className="mt-2 grid gap-2 text-xs font-semibold text-[#5a675e] sm:grid-cols-2">
-                <div>Attempted: {importResult.attempted}</div>
-                <div>Imported: {importResult.imported}</div>
-                <div>Skipped: {importResult.skipped}</div>
-                <div>Failed: {importResult.failed}</div>
+                <div>Forsøkt: {importResult.attempted}</div>
+                <div>Importert: {importResult.imported}</div>
+                <div>Hoppet over: {importResult.skipped}</div>
+                <div>Mislyktes: {importResult.failed}</div>
               </div>
               {importResult.failures.length > 0 ? (
                 <div className="mt-4">
                   <div className="text-xs font-semibold uppercase tracking-[0.18em] text-[#7a887f]">
-                    Failures
+                    Feil
                   </div>
                   <ul className="mt-3 space-y-2 text-sm text-[#a04242]">
                     {importResult.failures.map((failure, index) => (
                       <li key={`${failure.dishName ?? "dish"}-${index}`}>
                         <span className="font-semibold">
-                          {failure.dishName ?? "Unknown dish"}
+                          {failure.dishName ?? "Ukjent rett"}
                         </span>
                         {failure.ingredientName ? (
                           <span className="text-[#7c3c3c]">

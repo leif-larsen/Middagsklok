@@ -70,21 +70,21 @@ const mapResponseToPlan = (response: WeeklyPlanUpsertResponse) => {
   return nextPlan;
 };
 
-const monthFormatter = new Intl.DateTimeFormat("en-US", {
+const monthFormatter = new Intl.DateTimeFormat("nb-NO", {
   month: "long",
   year: "numeric",
 });
-const rangeFormatter = new Intl.DateTimeFormat("en-US", {
+const rangeFormatter = new Intl.DateTimeFormat("nb-NO", {
   month: "short",
   day: "numeric",
 });
-const yearFormatter = new Intl.DateTimeFormat("en-US", {
+const yearFormatter = new Intl.DateTimeFormat("nb-NO", {
   year: "numeric",
 });
-const weekdayFormatter = new Intl.DateTimeFormat("en-US", {
+const weekdayFormatter = new Intl.DateTimeFormat("nb-NO", {
   weekday: "long",
 });
-const dayFormatter = new Intl.DateTimeFormat("en-US", {
+const dayFormatter = new Intl.DateTimeFormat("nb-NO", {
   month: "short",
   day: "numeric",
 });
@@ -128,7 +128,7 @@ export default function WeeklyPlannerPage() {
         }
 
         if (isActive) {
-          setDishLoadError("Unable to load dishes.");
+          setDishLoadError("Kunne ikke laste retter.");
         }
       } finally {
         if (isActive) {
@@ -300,7 +300,7 @@ export default function WeeklyPlannerPage() {
   const handleSavePlan = async () => {
     if (isPlanMarkedAsEaten) {
       setSaveError(null);
-      setSaveMessage("Weekly plan is marked as eaten. Editing actions are disabled.");
+      setSaveMessage("Ukentlig plan er merket som spist. Redigeringshandlinger er deaktivert.");
       return;
     }
 
@@ -313,12 +313,12 @@ export default function WeeklyPlannerPage() {
       const payload = buildUpsertRequest();
       const response = await apiClient.upsertWeeklyPlan(startDate, payload);
       setPlan(mapResponseToPlan(response));
-      setSaveMessage("Weekly plan saved.");
+      setSaveMessage("Ukentlig plan lagret.");
     } catch (error) {
       if (error instanceof ApiError) {
         if (error.status === 409) {
           setIsPlanMarkedAsEaten(true);
-          setSaveMessage("Weekly plan is already marked as eaten. Editing actions are disabled.");
+          setSaveMessage("Ukentlig plan er allerede merket som spist. Redigeringshandlinger er deaktivert.");
           return;
         }
         console.error("Failed to save weekly plan:", error.body ?? error.message);
@@ -327,7 +327,7 @@ export default function WeeklyPlannerPage() {
       } else {
         console.error("Failed to save weekly plan.");
       }
-      setSaveError("Unable to save weekly plan.");
+      setSaveError("Kunne ikke lagre ukentlig plan.");
     } finally {
       setIsSavingPlan(false);
     }
@@ -336,7 +336,7 @@ export default function WeeklyPlannerPage() {
   const handleGeneratePlan = async () => {
     if (isPlanMarkedAsEaten) {
       setSaveError(null);
-      setSaveMessage("Weekly plan is marked as eaten. Editing actions are disabled.");
+      setSaveMessage("Ukentlig plan er merket som spist. Redigeringshandlinger er deaktivert.");
       return;
     }
 
@@ -347,7 +347,7 @@ export default function WeeklyPlannerPage() {
 
     const startDate = weekDays[0]?.key ?? "";
     if (!startDate) {
-      setSaveError("Start date is missing.");
+      setSaveError("Startdato mangler.");
       setIsGeneratingPlan(false);
       return;
     }
@@ -357,12 +357,12 @@ export default function WeeklyPlannerPage() {
       setPlan(mapResponseToPlan(response));
       const notes = response.notes?.filter((note) => note.trim().length > 0) ?? [];
       const noteSuffix = notes.length > 0 ? ` ${notes.join(" ")}` : "";
-      setSaveMessage(`Weekly plan generated.${noteSuffix}`);
+      setSaveMessage(`Ukentlig plan generert.${noteSuffix}`);
     } catch (error) {
       if (error instanceof ApiError) {
         if (error.status === 409) {
           setIsPlanMarkedAsEaten(true);
-          setSaveMessage("Weekly plan is already marked as eaten. Editing actions are disabled.");
+          setSaveMessage("Ukentlig plan er allerede merket som spist. Redigeringshandlinger er deaktivert.");
           return;
         }
         console.error("Failed to generate weekly plan:", error.body ?? error.message);
@@ -371,7 +371,7 @@ export default function WeeklyPlannerPage() {
       } else {
         console.error("Failed to generate weekly plan.");
       }
-      setSaveError("Unable to generate weekly plan.");
+      setSaveError("Kunne ikke generere ukentlig plan.");
     } finally {
       setIsGeneratingPlan(false);
     }
@@ -380,7 +380,7 @@ export default function WeeklyPlannerPage() {
   const handleMarkEaten = async () => {
     if (isPlanMarkedAsEaten) {
       setSaveError(null);
-      setSaveMessage("Weekly plan is already marked as eaten.");
+      setSaveMessage("Ukentlig plan er allerede merket som spist.");
       return;
     }
 
@@ -391,7 +391,7 @@ export default function WeeklyPlannerPage() {
 
     const startDate = weekDays[0]?.key ?? "";
     if (!startDate) {
-      setSaveError("Start date is missing.");
+      setSaveError("Startdato mangler.");
       setIsMarkingEaten(false);
       return;
     }
@@ -399,16 +399,16 @@ export default function WeeklyPlannerPage() {
     try {
       await apiClient.markWeeklyPlanEaten(startDate);
       setIsPlanMarkedAsEaten(true);
-      setSaveMessage("Weekly plan marked as eaten. Editing actions are disabled.");
+      setSaveMessage("Ukentlig plan merket som spist. Redigeringshandlinger er deaktivert.");
     } catch (error) {
       if (error instanceof ApiError) {
         if (error.status === 409) {
           setIsPlanMarkedAsEaten(true);
-          setSaveMessage("Weekly plan is already marked as eaten. Editing actions are disabled.");
+          setSaveMessage("Ukentlig plan er allerede merket som spist. Redigeringshandlinger er deaktivert.");
           return;
         }
         if (error.status === 404) {
-          setSaveError("Weekly plan not found.");
+          setSaveError("Ukentlig plan ikke funnet.");
           return;
         }
         console.error("Failed to mark weekly plan as eaten:", error.body ?? error.message);
@@ -417,7 +417,7 @@ export default function WeeklyPlannerPage() {
       } else {
         console.error("Failed to mark weekly plan as eaten.");
       }
-      setSaveError("Unable to mark weekly plan as eaten.");
+      setSaveError("Kunne ikke merke ukentlig plan som spist.");
     } finally {
       setIsMarkingEaten(false);
     }
@@ -484,10 +484,10 @@ export default function WeeklyPlannerPage() {
               </span>
               <div>
                 <h1 className="text-2xl font-semibold text-[#1f2a22]">
-                  Weekly Meal Planner
+                  Ukentlig måltidsplanlegger
                 </h1>
                 <p className="text-sm text-[#6c7a70]">
-                  Plan your meals for the week ahead
+                  Planlegg måltidene dine for uken fremover
                 </p>
               </div>
             </div>
@@ -501,7 +501,7 @@ export default function WeeklyPlannerPage() {
                 className="inline-flex items-center gap-2 rounded-full border border-[#d6e0d2] bg-white px-4 py-2 text-sm font-semibold text-[#3b4c42] transition hover:bg-[#f3f6ef] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-white"
               >
                 <RefreshIcon className="h-4 w-4" />
-                {isGeneratingPlan ? "Generating..." : "Generate Plan"}
+                {isGeneratingPlan ? "Genererer..." : "Generer plan"}
               </button>
               <button
                 type="button"
@@ -510,7 +510,7 @@ export default function WeeklyPlannerPage() {
                 className="inline-flex items-center gap-2 rounded-full bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_24px_-18px_rgba(32,78,54,0.9)] transition hover:bg-[#2a5c46] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-[#2f6b4f]"
               >
                 <SaveIcon className="h-4 w-4" />
-                {isSavingPlan ? "Saving..." : "Save Plan"}
+                {isSavingPlan ? "Lagrer..." : "Lagre plan"}
               </button>
               <button
                 type="button"
@@ -524,14 +524,14 @@ export default function WeeklyPlannerPage() {
               >
                 <CheckCircleIcon className="h-4 w-4" />
                 {isMarkingEaten
-                  ? "Marking..."
+                  ? "Markerer..."
                   : isPlanMarkedAsEaten
-                    ? "Marked as eaten"
-                    : "Mark as eaten"}
+                    ? "Merket som spist"
+                    : "Merk som spist"}
               </button>
               {isPlanMarkedAsEaten ? (
                 <span className="inline-flex items-center rounded-full bg-[#ebf7ef] px-3 py-1 text-xs font-semibold text-[#2f6b4f]">
-                  Plan marked as eaten. Editing actions are disabled.
+                  Plan merket som spist. Redigeringshandlinger er deaktivert.
                 </span>
               ) : null}
               {saveMessage ? (
@@ -552,7 +552,7 @@ export default function WeeklyPlannerPage() {
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <button
                   type="button"
-                  aria-label="Previous week"
+                  aria-label="Forrige uke"
                   onClick={handlePreviousWeek}
                   className="grid h-10 w-10 place-items-center rounded-full border border-[#dfe7d7] bg-white text-[#5c6b60] transition hover:bg-[#f5f7f3]"
                 >
@@ -563,7 +563,7 @@ export default function WeeklyPlannerPage() {
                 </div>
                 <button
                   type="button"
-                  aria-label="Next week"
+                  aria-label="Neste uke"
                   onClick={handleNextWeek}
                   className="grid h-10 w-10 place-items-center rounded-full border border-[#dfe7d7] bg-white text-[#5c6b60] transition hover:bg-[#f5f7f3]"
                 >
@@ -574,7 +574,7 @@ export default function WeeklyPlannerPage() {
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {planEntries.map((day) => {
                   const isOpen = openDayKey === day.key;
-                  const dishName = day.dish?.name ?? "Select dish";
+                  const dishName = day.dish?.name ?? "Velg rett";
                   const dishType = day.dish?.dishType ?? "";
 
                   return (
@@ -622,7 +622,7 @@ export default function WeeklyPlannerPage() {
                                 type="text"
                                 value={dishSearchQuery}
                                 onChange={(event) => setDishSearchQuery(event.target.value)}
-                                placeholder="Search dishes..."
+                                placeholder="Søk etter retter..."
                                 className="w-full rounded-xl border border-[#dfe7d7] bg-white px-3 py-2 text-xs font-semibold text-[#2a3a2f] shadow-[0_8px_16px_-14px_rgba(28,60,40,0.4)] focus:outline-none"
                               />
                             </div>
@@ -636,12 +636,12 @@ export default function WeeklyPlannerPage() {
                                   !day.dishId ? "bg-[#e9f3ea] text-[#2f6b4f]" : ""
                                 }`}
                               >
-                                <span>No dish</span>
+                                <span>Ingen rett</span>
                                 {!day.dishId ? <CheckIcon className="h-4 w-4" /> : null}
                               </button>
                               {isLoadingDishes ? (
                                 <div className="px-4 py-2.5 text-xs font-semibold text-[#7b8a7f]">
-                                  Loading dishes...
+                                  Laster retter...
                                 </div>
                               ) : dishLoadError ? (
                                 <div className="px-4 py-2.5 text-xs font-semibold text-[#9f4c4c]">

@@ -15,12 +15,12 @@ type MenuItem = {
 };
 
 const menuItems: MenuItem[] = [
-  { label: "Dishes", href: "/dishes", icon: DishIcon },
-  { label: "Weekly Planner", href: "/weekly-planner", icon: CalendarIcon },
-  { label: "Shopping List", href: "/shopping-list", icon: CartIcon },
-  { label: "Recipes", href: "/recipes", icon: BookIcon },
-  { label: "Settings", href: "/settings", icon: SettingsIcon },
-  { label: "Ingredients", href: "/ingredients", icon: LeafIcon },
+  { label: "Retter", href: "/dishes", icon: DishIcon },
+  { label: "Ukesplan", href: "/weekly-planner", icon: CalendarIcon },
+  { label: "Handleliste", href: "/shopping-list", icon: CartIcon },
+  { label: "Oppskrifter", href: "/recipes", icon: BookIcon },
+  { label: "Innstillinger", href: "/settings", icon: SettingsIcon },
+  { label: "Ingredienser", href: "/ingredients", icon: LeafIcon },
 ];
 
 const isItemActive = (href: string, pathname: string) =>
@@ -84,7 +84,7 @@ export default function Sidebar() {
           <div className="flex justify-center pt-5">
             <button
               type="button"
-              aria-label="Expand menu"
+              aria-label="Utvid meny"
               aria-expanded={false}
               aria-controls="primary-navigation"
               onClick={() => setCollapsed(false)}
@@ -101,16 +101,16 @@ export default function Sidebar() {
               </div>
               <div>
                 <div className="text-base font-semibold text-[#1c2b22]">
-                  Meal Planner
+                  Middagsklok
                 </div>
                 <div className="text-[11px] font-semibold uppercase tracking-[0.26em] text-[#7b8a7f]">
-                  Plan & Cook
+                  Planlegg & lag mat
                 </div>
               </div>
             </div>
             <button
               type="button"
-              aria-label="Collapse menu"
+              aria-label="Skjul meny"
               aria-expanded={true}
               aria-controls="primary-navigation"
               onClick={() => setCollapsed(true)}
