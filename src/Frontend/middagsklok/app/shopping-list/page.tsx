@@ -16,7 +16,7 @@ const weekStartLookup = new Map<string, number>([
   ["saturday", 6],
 ]);
 
-const rangeFormatter = new Intl.DateTimeFormat("en-US", {
+const rangeFormatter = new Intl.DateTimeFormat("nb-NO", {
   month: "short",
   day: "numeric",
 });
@@ -267,7 +267,7 @@ export default function ShoppingListPage() {
         }
 
         if (isActive) {
-          setPlanLoadError("Unable to load plans.");
+          setPlanLoadError("Kunne ikke laste planer.");
           setPlanOptions([]);
           setSelectedPlanStartDate("");
           setShoppingList(null);
@@ -309,7 +309,7 @@ export default function ShoppingListPage() {
               startDate: selectedPlanStartDate,
               categories: [],
             });
-            setLoadError("No shopping list found for this plan.");
+            setLoadError("Ingen handleliste funnet for denne planen.");
           }
         } else {
           if (error instanceof ApiError) {
@@ -321,7 +321,7 @@ export default function ShoppingListPage() {
           }
 
           if (isActive) {
-            setLoadError("Unable to load shopping list.");
+            setLoadError("Kunne ikke laste handleliste.");
           }
         }
       } finally {
@@ -339,21 +339,21 @@ export default function ShoppingListPage() {
   }, [selectedPlanStartDate]);
 
   const summaryLabel = isLoading
-    ? "Loading shopping list..."
-    : `${totalItems} items across ${totalCategories} categories`;
+    ? "Laster handleliste..."
+    : `${totalItems} varer fordelt på ${totalCategories} kategorier`;
   const planHelperLabel = isLoadingPlans
-    ? "Loading plans..."
+    ? "Laster planer..."
     : planLoadError
       ? planLoadError
       : planOptions.length === 0
-        ? "No plans available"
-        : "Select a plan to view items";
+        ? "Ingen planer tilgjengelig"
+        : "Velg en plan for å se varer";
   const activePlanLabel = activePlan
     ? formatRangeLabel(activePlan.startDate, activePlan.endDate)
-    : "Select plan";
+    : "Velg plan";
   const itemsHeading = activePlan
-    ? `Items for ${activePlanLabel}`
-    : "Items for this plan";
+    ? `Varer for ${activePlanLabel}`
+    : "Varer for denne planen";
 
   return (
     <div className="min-h-screen w-full p-6 sm:p-8">
@@ -367,7 +367,7 @@ export default function ShoppingListPage() {
               </span>
               <div>
                 <h1 className="text-2xl font-semibold text-[#1f2a22]">
-                  Shopping List
+                  Handleliste
                 </h1>
                 <p className="text-sm text-[#6c7a70]">
                   {summaryLabel}
@@ -377,7 +377,7 @@ export default function ShoppingListPage() {
             <div className="flex flex-wrap items-center gap-3">
               <div className="flex flex-col gap-1 rounded-2xl border border-[#e1e8dc] bg-white/80 px-4 py-3 shadow-[0_12px_24px_-20px_rgba(32,70,48,0.35)]">
                 <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#7b8a7f]">
-                  Plan selection
+                  Planvalg
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-semibold text-[#1f2a22]">
@@ -416,7 +416,7 @@ export default function ShoppingListPage() {
                   {itemsHeading}
                 </h2>
                 <p className="text-sm text-[#7b8a7f]">
-                  Generated from the dishes in the selected plan
+                  Generert fra rettene i den valgte planen
                 </p>
               </div>
             </div>
@@ -428,12 +428,12 @@ export default function ShoppingListPage() {
             ) : null}
             {isLoading ? (
               <div className="rounded-2xl border border-[#e1e8dc] bg-white/70 px-4 py-3 text-sm font-semibold text-[#6c7a70]">
-                Loading shopping list...
+                Laster handleliste...
               </div>
             ) : null}
             {!isLoading && !loadError && activeSections.length === 0 ? (
               <div className="rounded-2xl border border-[#e1e8dc] bg-white/70 px-4 py-3 text-sm font-semibold text-[#6c7a70]">
-                No items found for this plan.
+                Ingen varer funnet for denne planen.
               </div>
             ) : null}
             {!isLoading && !loadError && activeSections.length > 0 ? (
@@ -446,7 +446,7 @@ export default function ShoppingListPage() {
                       </span>
                       <span className="h-px flex-1 bg-[#e1e8dc]" />
                       <span className="text-xs font-semibold text-[#7b8a7f]">
-                        {section.items.length} items
+                        {section.items.length} varer
                       </span>
                     </div>
                     <ul className="space-y-3">

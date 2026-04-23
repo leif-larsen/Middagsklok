@@ -38,9 +38,9 @@ export default function RecipesPage() {
       } catch (err) {
         if (err instanceof ApiError) {
           const body = err.body as { message?: string } | undefined;
-          setRecipesError(body?.message ?? `Failed to load recipes: ${err.message}`);
+          setRecipesError(body?.message ?? `Kunne ikke laste oppskrifter: ${err.message}`);
         } else {
-          setRecipesError("An unexpected error occurred while loading recipes.");
+          setRecipesError("En uventet feil oppstod under lasting av oppskrifter.");
         }
       } finally {
         setRecipesLoading(false);
@@ -75,9 +75,9 @@ export default function RecipesPage() {
     } catch (err) {
       if (err instanceof ApiError) {
         const body = err.body as { message?: string } | undefined;
-        setError(body?.message ?? `Failed to get suggestions: ${err.message}`);
+        setError(body?.message ?? `Kunne ikke hente forslag: ${err.message}`);
       } else {
-        setError("An unexpected error occurred while fetching suggestions.");
+        setError("En uventet feil oppstod under henting av forslag.");
       }
     } finally {
       setIsLoading(false);
@@ -98,9 +98,9 @@ export default function RecipesPage() {
     } catch (err) {
       if (err instanceof ApiError) {
         const body = err.body as { message?: string } | undefined;
-        setSaveError(body?.message ?? `Failed to save dish: ${err.message}`);
+        setSaveError(body?.message ?? `Kunne ikke lagre rett: ${err.message}`);
       } else {
-        setSaveError("An unexpected error occurred while saving the dish.");
+        setSaveError("En uventet feil oppstod under lagring av retten.");
       }
     } finally {
       setSavingId(null);
@@ -119,10 +119,10 @@ export default function RecipesPage() {
               </span>
               <div>
                 <h1 className="text-2xl font-semibold text-[#1f2a22]">
-                  Recipes &amp; Instructions
+                  Oppskrifter og fremgangsmåter
                 </h1>
                 <p className="text-sm text-[#6c7a70]">
-                  View detailed cooking instructions and get AI-powered suggestions
+                  Se detaljerte matlagingsinstruksjoner og få AI-drevne forslag
                 </p>
               </div>
             </div>
@@ -137,7 +137,7 @@ export default function RecipesPage() {
                     : "text-[#4f5f55]"
                 }`}
               >
-                Instructions
+                Fremgangsmåte
               </button>
               <button
                 type="button"
@@ -148,7 +148,7 @@ export default function RecipesPage() {
                     : "border-transparent text-[#4f5f55]"
                 }`}
               >
-                AI Suggestions
+                AI-forslag
               </button>
             </div>
           </header>
@@ -159,17 +159,17 @@ export default function RecipesPage() {
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 text-xl font-semibold text-[#1f2a22]">
                     <BookIcon className="h-5 w-5 text-[#2f6b4f]" />
-                    Cooking Instructions
+                    Matlagingsinstruksjoner
                   </div>
                   <p className="text-sm text-[#6c7a70]">
-                    Select a dish to view step-by-step cooking instructions
+                    Velg en rett for å se steg-for-steg matlagingsinstruksjoner
                   </p>
                 </div>
 
                 {recipesLoading ? (
                   <div className="flex min-h-[420px] flex-col items-center justify-center gap-4 text-center text-[#7a857d]">
                     <LoadingIcon className="h-10 w-10 animate-spin text-[#2f6b4f]" />
-                    <p className="text-sm font-medium">Loading recipes...</p>
+                    <p className="text-sm font-medium">Laster oppskrifter...</p>
                   </div>
                 ) : recipesError ? (
                   <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -183,7 +183,7 @@ export default function RecipesPage() {
                         onChange={(event) => setSelectedDishId(event.target.value || null)}
                         className="w-full appearance-none rounded-2xl border border-[#dfe7d7] bg-white px-4 py-3 pr-10 text-sm text-[#1f2a22] shadow-[0_10px_20px_-18px_rgba(30,60,40,0.4)] outline-none focus:border-[#7fc3a5]"
                       >
-                        <option value="">Select a dish...</option>
+                        <option value="">Velg en rett...</option>
                         {recipes.map((recipe) => (
                           <option key={recipe.dishId} value={recipe.dishId}>
                             {recipe.dishName}
@@ -198,7 +198,7 @@ export default function RecipesPage() {
                         <div className="flex min-h-[320px] flex-col items-center justify-center gap-4 text-center text-[#7a857d]">
                           <BookIcon className="h-12 w-12 text-[#b3bab3]" />
                           <p className="text-sm font-medium">
-                            Select a dish above to view its cooking instructions
+                            Velg en rett ovenfor for å se matlagingsinstruksjonene
                           </p>
                         </div>
                       ) : (
@@ -220,14 +220,14 @@ export default function RecipesPage() {
                               {selectedRecipe.servings && (
                                 <span className="inline-flex items-center gap-1">
                                   <ServingsIcon className="h-3.5 w-3.5" />
-                                  {selectedRecipe.servings} servings
+                                  {selectedRecipe.servings} porsjoner
                                 </span>
                               )}
                             </div>
                           </div>
 
                           <div className="space-y-3">
-                            <h4 className="text-sm font-semibold text-[#1f2a22]">Ingredients</h4>
+                            <h4 className="text-sm font-semibold text-[#1f2a22]">Ingredienser</h4>
                             {selectedRecipe.ingredients.length > 0 ? (
                               <ul className="space-y-2">
                                 {selectedRecipe.ingredients.map((ingredient) => (
@@ -255,12 +255,12 @@ export default function RecipesPage() {
                                 ))}
                               </ul>
                             ) : (
-                              <p className="text-sm text-[#6c7a70]">No ingredients listed.</p>
+                              <p className="text-sm text-[#6c7a70]">Ingen ingredienser oppført.</p>
                             )}
                           </div>
 
                           <div className="space-y-3">
-                            <h4 className="text-sm font-semibold text-[#1f2a22]">Steps</h4>
+                            <h4 className="text-sm font-semibold text-[#1f2a22]">Steg</h4>
                             <ol className="space-y-3">
                               {selectedRecipe.steps.map((step) => (
                                 <li
@@ -295,10 +295,10 @@ export default function RecipesPage() {
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 text-xl font-semibold text-[#1f2a22]">
                     <SparkleIcon className="h-5 w-5 text-[#2f6b4f]" />
-                    AI Recipe Suggestions
+                    AI-oppskriftsforslag
                   </div>
                   <p className="text-sm text-[#6c7a70]">
-                    Describe what you&apos;re looking for and get personalized recipe ideas
+                    Beskriv hva du ser etter og få personlige oppskriftsideer
                   </p>
                 </div>
 
@@ -306,7 +306,7 @@ export default function RecipesPage() {
                   value={prompt}
                   onChange={(event) => setPrompt(event.target.value)}
                   rows={5}
-                  placeholder="E.g., I want a healthy vegetarian dinner that takes less than 30 minutes..."
+                  placeholder="F.eks., Jeg vil ha en sunn vegetarmiddag som tar mindre enn 30 minutter..."
                   className="w-full resize-none rounded-2xl border border-[#dfe7d7] bg-white px-4 py-3 text-sm text-[#1f2a22] shadow-[0_10px_20px_-18px_rgba(30,60,40,0.4)] outline-none placeholder:text-[#8a968d] focus:border-[#7fc3a5]"
                 />
 
@@ -319,12 +319,12 @@ export default function RecipesPage() {
                   {isLoading ? (
                     <>
                       <LoadingIcon className="h-4 w-4 animate-spin" />
-                      Getting suggestions...
+                      Henter forslag...
                     </>
                   ) : (
                     <>
                       <SparkleIcon className="h-4 w-4" />
-                      Get AI Suggestions
+                      Få AI-forslag
                     </>
                   )}
                 </button>
@@ -346,13 +346,13 @@ export default function RecipesPage() {
                     <div className="flex min-h-[320px] flex-col items-center justify-center gap-4 text-center text-[#7a857d]">
                       <SparkleIcon className="h-12 w-12 text-[#b3bab3]" />
                       <p className="text-sm font-medium">
-                        Enter a prompt above to get AI-powered recipe suggestions
+                        Skriv inn en beskrivelse ovenfor for å få AI-drevne oppskriftsforslag
                       </p>
                     </div>
                   ) : isLoading ? (
                     <div className="flex min-h-[320px] flex-col items-center justify-center gap-4 text-center text-[#7a857d]">
                       <LoadingIcon className="h-10 w-10 animate-spin text-[#2f6b4f]" />
-                      <p className="text-sm font-medium">Generating suggestions...</p>
+                      <p className="text-sm font-medium">Genererer forslag...</p>
                     </div>
                   ) : suggestions.length > 0 ? (
                     <div className="space-y-4">
@@ -396,15 +396,15 @@ export default function RecipesPage() {
                                 {isSaving ? (
                                   <span className="inline-flex items-center gap-2">
                                     <LoadingIcon className="h-4 w-4 animate-spin" />
-                                    Saving...
+                                    Lagrer...
                                   </span>
                                 ) : isSaved ? (
                                   <span className="inline-flex items-center gap-1">
                                     <CheckIcon className="h-4 w-4" />
-                                    Saved
+                                    Lagret
                                   </span>
                                 ) : (
-                                  "Save Dish"
+                                  "Lagre rett"
                                 )}
                               </button>
                             </div>
@@ -416,7 +416,7 @@ export default function RecipesPage() {
                     <div className="flex min-h-[320px] flex-col items-center justify-center gap-4 text-center text-[#7a857d]">
                       <SparkleIcon className="h-12 w-12 text-[#b3bab3]" />
                       <p className="text-sm font-medium">
-                        No suggestions found. Try a different prompt.
+                        Ingen forslag funnet. Prøv en annen beskrivelse.
                       </p>
                     </div>
                   )}

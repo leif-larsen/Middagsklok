@@ -22,7 +22,7 @@ const emptyIngredient = {
   usedIn: 0,
 };
 
-const formatUsage = (count: number) => `${count} dish(es)`;
+const formatUsage = (count: number) => `${count} rett(er)`;
 
 export default function IngredientsPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -238,7 +238,7 @@ export default function IngredientsPage() {
       if (error instanceof Error) {
         setDeleteError(error.message);
       } else {
-        setDeleteError("Failed to delete ingredient.");
+        setDeleteError("Kunne ikke slette ingrediens.");
       }
     } finally {
       setIsDeleting(false);
@@ -263,7 +263,7 @@ export default function IngredientsPage() {
 
       if (isEditMode) {
         if (!selectedIngredient) {
-          setSubmitError("Ingredient is required for updates.");
+          setSubmitError("Ingrediens er påkrevd for oppdateringer.");
           return;
         }
 
@@ -297,7 +297,7 @@ export default function IngredientsPage() {
       if (error instanceof Error) {
         setSubmitError(error.message);
       } else {
-        setSubmitError("Failed to create ingredient.");
+        setSubmitError("Kunne ikke opprette ingrediens.");
       }
     } finally {
       setIsSaving(false);
@@ -316,11 +316,11 @@ export default function IngredientsPage() {
               </span>
               <div>
                 <h1 className="text-2xl font-semibold text-[#1f2a22]">
-                  Ingredients
+                  Ingredienser
                 </h1>
                 <p className="text-sm text-[#6c7a70]">
-                  Manage your ingredient library ({usedIngredients} of{" "}
-                  {totalIngredients} in use)
+                  Administrer ingrediensbiblioteket ({usedIngredients} av{" "}
+                  {totalIngredients} i bruk)
                 </p>
               </div>
             </div>
@@ -333,7 +333,7 @@ export default function IngredientsPage() {
               className="inline-flex items-center gap-2 rounded-full bg-[#2f6b4f] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_24px_-18px_rgba(32,78,54,0.9)] transition hover:bg-[#2a5c46]"
             >
               <PlusIcon className="h-4 w-4" />
-              Add Ingredient
+              Legg til ingrediens
             </button>
           </header>
 
@@ -343,7 +343,7 @@ export default function IngredientsPage() {
               <input
                 type="text"
                 aria-label="Search ingredients"
-                placeholder="Search ingredients..."
+                placeholder="Søk etter ingredienser..."
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
                 className="w-full bg-transparent text-sm text-[#2e3b33] placeholder:text-[#9aa69f] focus:outline-none"
@@ -370,11 +370,11 @@ export default function IngredientsPage() {
               <table className="min-w-full text-sm">
                 <thead className="bg-[#f6f8f3] text-left text-xs font-semibold uppercase tracking-[0.14em] text-[#7a887f]">
                   <tr>
-                    <th className="px-5 py-4">Name</th>
+                    <th className="px-5 py-4">Navn</th>
                     <th className="px-5 py-4">Kategori</th>
-                    <th className="px-5 py-4">Default Unit</th>
-                    <th className="px-5 py-4">Used In</th>
-                    <th className="px-5 py-4 text-right">Actions</th>
+                    <th className="px-5 py-4">Standardenhet</th>
+                    <th className="px-5 py-4">Brukt i</th>
+                    <th className="px-5 py-4 text-right">Handlinger</th>
                   </tr>
                 </thead>
                 <tbody className="text-[#2f3a33]">
@@ -430,7 +430,7 @@ export default function IngredientsPage() {
             </div>
             {visibleIngredients.length === 0 ? (
               <div className="border-t border-[#edf1ea] px-6 py-6 text-sm text-[#6c7a70]">
-                No ingredients match your search.
+                Ingen ingredienser matcher søket ditt.
               </div>
             ) : null}
           </section>
@@ -446,11 +446,11 @@ export default function IngredientsPage() {
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
-        title={isEditMode ? "Edit Ingredient" : "Add Ingredient"}
+        title={isEditMode ? "Rediger ingrediens" : "Legg til ingrediens"}
         description={
           isEditMode
-            ? "Update the ingredient details below"
-            : "Add the ingredient details below"
+            ? "Oppdater ingrediensdetaljene nedenfor"
+            : "Fyll inn ingrediensdetaljene nedenfor"
         }
         maxWidthClassName="max-w-xl"
         footer={
@@ -461,7 +461,7 @@ export default function IngredientsPage() {
               disabled={isSaving}
               className="inline-flex items-center justify-center rounded-xl border border-[#dfe6da] bg-white px-4 py-2 text-sm font-semibold text-[#3f4b43] transition hover:bg-[#f3f6ef]"
             >
-              Cancel
+              Avbryt
             </button>
             <button
               type="button"
@@ -473,11 +473,11 @@ export default function IngredientsPage() {
             >
               {isSaving
                 ? isEditMode
-                  ? "Updating..."
-                  : "Creating..."
+                  ? "Oppdaterer..."
+                  : "Oppretter..."
                 : isEditMode
-                  ? "Update Ingredient"
-                  : "Create Ingredient"}
+                  ? "Oppdater ingrediens"
+                  : "Opprett ingrediens"}
             </button>
           </>
         }
@@ -503,12 +503,12 @@ export default function IngredientsPage() {
         ) : null}
         <div className="mt-6 grid gap-4">
           <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
-            Ingredient Name
+            Ingrediensnavn
             <input
               type="text"
               value={formName}
               onChange={(event) => setFormName(event.target.value)}
-              placeholder="Ingredient name"
+              placeholder="Ingrediensnavn"
               className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
             />
           </label>
@@ -536,7 +536,7 @@ export default function IngredientsPage() {
             </label>
 
             <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
-              Default Unit
+              Standardenhet
               <div className="relative">
                 <select
                   value={formDefaultUnit}
@@ -544,7 +544,7 @@ export default function IngredientsPage() {
                   className="w-full appearance-none rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
                 >
                   <option value="" disabled>
-                    Select unit
+                    Velg enhet
                   </option>
                   {unitOptions.map((unit) => (
                     <option key={unit.value} value={unit.value}>
@@ -562,10 +562,10 @@ export default function IngredientsPage() {
       <Modal
         isOpen={deleteTarget !== null}
         onClose={closeDeleteModal}
-        title="Delete Ingredient"
+        title="Slett ingrediens"
         description={
           deleteTarget
-            ? `Are you sure you want to delete ${deleteTarget.name}?`
+            ? `Er du sikker på at du vil slette ${deleteTarget.name}?`
             : ""
         }
         maxWidthClassName="max-w-lg"
@@ -577,7 +577,7 @@ export default function IngredientsPage() {
               disabled={isDeleting}
               className="inline-flex items-center justify-center rounded-xl border border-[#dfe6da] bg-white px-4 py-2 text-sm font-semibold text-[#3f4b43] transition hover:bg-[#f3f6ef]"
             >
-              Cancel
+              Avbryt
             </button>
             <button
               type="button"
@@ -587,7 +587,7 @@ export default function IngredientsPage() {
               disabled={isDeleting}
               className="inline-flex items-center justify-center rounded-xl bg-[#d76b6b] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_22px_-18px_rgba(180,80,80,0.8)] transition hover:bg-[#c85f5f] disabled:cursor-not-allowed disabled:opacity-70"
             >
-              {isDeleting ? "Deleting..." : "Yes"}
+              {isDeleting ? "Sletter..." : "Ja"}
             </button>
           </>
         }

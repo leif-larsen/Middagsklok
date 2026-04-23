@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Meal Planner",
-  description: "Plan & cook with confidence.",
+  title: "Middagsklok",
+  description: "Planlegg og lag mat med selvtillit.",
 };
 
 export default function RootLayout({
@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="nb">
       <body className={`${sora.variable} ${geistMono.variable} antialiased`}>
         <IngredientsProvider>
           <DishesMetadataProvider>

@@ -77,7 +77,7 @@ export default function Modal({
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close"
+            aria-label="Lukk"
             className="grid h-9 w-9 place-items-center rounded-full border border-[#e4e9e0] text-[#6d7b72] transition hover:bg-[#f5f7f3]"
           >
             <CloseIcon className="h-4 w-4" />
