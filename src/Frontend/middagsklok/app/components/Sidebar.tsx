@@ -10,7 +10,7 @@ type IconProps = {
 
 type MenuItem = {
   label: string;
-  href?: string;
+  href: string;
   icon: (props: IconProps) => JSX.Element;
 };
 
@@ -22,6 +22,9 @@ const menuItems: MenuItem[] = [
   { label: "Settings", href: "/settings", icon: SettingsIcon },
   { label: "Ingredients", href: "/ingredients", icon: LeafIcon },
 ];
+
+const isItemActive = (href: string, pathname: string) =>
+  href === "/" ? pathname === "/" : pathname.startsWith(href);
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -43,89 +46,121 @@ export default function Sidebar() {
   }, []);
 
   return (
-    <aside
-      className={`menu-shell flex min-h-[calc(100vh-3rem)] shrink-0 flex-col rounded-[28px] border border-[#e2e8dc] bg-[#fbfcf7]/90 shadow-[0_18px_40px_-28px_rgba(20,45,28,0.35)] backdrop-blur transition-[width] duration-300 ${
-        collapsed ? "w-20" : "w-72"
-      }`}
-    >
-      <div className="flex items-center justify-between gap-3 px-4 pt-5">
-        <div className="flex items-center gap-3">
-          <div className="grid h-11 w-11 place-items-center rounded-2xl bg-[#2f6b4f] text-white shadow-[0_8px_18px_-10px_rgba(32,78,54,0.7)]">
-            <PanIcon className="h-5 w-5" />
-          </div>
-          <div
-            className={`overflow-hidden transition-all duration-300 ${
-              collapsed ? "max-w-0 opacity-0" : "max-w-[180px] opacity-100"
-            }`}
-          >
-            <div className="text-base font-semibold text-[#1c2b22]">
-              Meal Planner
-            </div>
-            <div className="text-[11px] font-semibold uppercase tracking-[0.26em] text-[#7b8a7f]">
-              Plan & Cook
-            </div>
-          </div>
-        </div>
-        <button
-          type="button"
-          aria-label="Toggle menu"
-          aria-expanded={!collapsed}
-          aria-controls="primary-navigation"
-          onClick={() => setCollapsed((current) => !current)}
-          className="grid h-10 w-10 place-items-center rounded-full border border-[#e2e8dc] bg-white/70 text-[#2f6b4f] transition hover:bg-white"
-        >
-          <HamburgerIcon className="h-5 w-5" />
-        </button>
-      </div>
-
+    <>
+      {/* Mobile: compact horizontal icon bar */}
       <nav
-        id="primary-navigation"
+        className="flex w-full items-center justify-around rounded-[28px] border border-[#e2e8dc] bg-[#fbfcf7]/90 px-2 py-3 shadow-[0_18px_40px_-28px_rgba(20,45,28,0.35)] sm:hidden"
         aria-label="Primary"
-        className="mt-6 flex-1 px-3"
       >
-        <ul className="space-y-1">
-          {menuItems.map((item, index) => {
-            const isActive = item.href
-              ? item.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(item.href)
-              : false;
-            const Icon = item.icon;
-            const itemStyle = {
-              "--delay": `${index * 70}ms`,
-            } as CSSProperties;
-            const content = (
-              <>
-                <span
-                  className={`grid h-9 w-9 place-items-center rounded-xl transition ${
-                    isActive
-                      ? "bg-white/15 text-white"
-                      : "bg-[#f3f6ef] text-[#2f6b4f] group-hover:bg-white"
-                  }`}
-                >
-                  <Icon className="h-4 w-4" />
-                </span>
-                <span
-                  className={`overflow-hidden whitespace-nowrap transition-all duration-300 ${
-                    collapsed ? "max-w-0 opacity-0" : "max-w-[180px] opacity-100"
-                  }`}
-                >
-                  {item.label}
-                </span>
-              </>
-            );
+        {menuItems.map((item) => {
+          const isActive = isItemActive(item.href, pathname);
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.label}
+              href={item.href}
+              aria-label={item.label}
+              aria-current={isActive ? "page" : undefined}
+              className={`grid h-10 w-10 place-items-center rounded-xl transition ${
+                isActive
+                  ? "bg-[#2f6b4f] text-white shadow-[0_8px_16px_-10px_rgba(25,68,45,0.8)]"
+                  : "bg-[#f3f6ef] text-[#2f6b4f] hover:bg-[#e4ede6]"
+              }`}
+            >
+              <Icon className="h-4 w-4" />
+            </Link>
+          );
+        })}
+      </nav>
 
-            const baseClasses = `group flex w-full items-center rounded-2xl px-3 py-2.5 text-sm font-semibold transition ${
-              collapsed ? "justify-center gap-0 px-2" : "justify-start gap-3"
-            } ${
-              isActive
-                ? "bg-[#2f6b4f] text-white shadow-[0_12px_22px_-18px_rgba(25,68,45,0.8)]"
-                : "text-[#3f4f45] hover:bg-[#eef3ea]"
-            }`;
+      {/* Desktop: collapsible vertical sidebar */}
+      <aside
+        className={`menu-shell hidden shrink-0 flex-col rounded-[28px] border border-[#e2e8dc] bg-[#fbfcf7]/90 shadow-[0_18px_40px_-28px_rgba(20,45,28,0.35)] backdrop-blur transition-[width] duration-300 sm:flex ${
+          collapsed ? "w-20" : "w-72"
+        }`}
+        style={{ minHeight: "calc(100vh - 3rem)" }}
+      >
+        {collapsed ? (
+          <div className="flex justify-center pt-5">
+            <button
+              type="button"
+              aria-label="Expand menu"
+              aria-expanded={false}
+              aria-controls="primary-navigation"
+              onClick={() => setCollapsed(false)}
+              className="grid h-10 w-10 place-items-center rounded-full border border-[#e2e8dc] bg-white/70 text-[#2f6b4f] transition hover:bg-white"
+            >
+              <HamburgerIcon className="h-5 w-5" />
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center justify-between gap-3 px-4 pt-5">
+            <div className="flex items-center gap-3">
+              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[#2f6b4f] text-white shadow-[0_8px_18px_-10px_rgba(32,78,54,0.7)]">
+                <PanIcon className="h-5 w-5" />
+              </div>
+              <div>
+                <div className="text-base font-semibold text-[#1c2b22]">
+                  Meal Planner
+                </div>
+                <div className="text-[11px] font-semibold uppercase tracking-[0.26em] text-[#7b8a7f]">
+                  Plan & Cook
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              aria-label="Collapse menu"
+              aria-expanded={true}
+              aria-controls="primary-navigation"
+              onClick={() => setCollapsed(true)}
+              className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#e2e8dc] bg-white/70 text-[#2f6b4f] transition hover:bg-white"
+            >
+              <HamburgerIcon className="h-5 w-5" />
+            </button>
+          </div>
+        )}
 
-            return (
-              <li key={item.label} className="menu-item" style={itemStyle}>
-                {item.href ? (
+        <nav
+          id="primary-navigation"
+          aria-label="Primary"
+          className="mt-6 flex-1 px-3"
+        >
+          <ul className="space-y-1">
+            {menuItems.map((item, index) => {
+              const isActive = isItemActive(item.href, pathname);
+              const Icon = item.icon;
+              const itemStyle = {
+                "--delay": `${index * 70}ms`,
+              } as CSSProperties;
+
+              const content = (
+                <>
+                  <span
+                    className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl transition ${
+                      isActive
+                        ? "bg-white/15 text-white"
+                        : "bg-[#f3f6ef] text-[#2f6b4f] group-hover:bg-white"
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </span>
+                  {!collapsed && (
+                    <span className="whitespace-nowrap">{item.label}</span>
+                  )}
+                </>
+              );
+
+              const baseClasses = `group flex w-full items-center rounded-2xl py-2.5 text-sm font-semibold transition ${
+                collapsed ? "justify-center px-2" : "justify-start gap-3 px-3"
+              } ${
+                isActive
+                  ? "bg-[#2f6b4f] text-white shadow-[0_12px_22px_-18px_rgba(25,68,45,0.8)]"
+                  : "text-[#3f4f45] hover:bg-[#eef3ea]"
+              }`;
+
+              return (
+                <li key={item.label} className="menu-item" style={itemStyle}>
                   <Link
                     href={item.href}
                     aria-current={isActive ? "page" : undefined}
@@ -133,18 +168,13 @@ export default function Sidebar() {
                   >
                     {content}
                   </Link>
-                ) : (
-                  <button type="button" className={baseClasses}>
-                    {content}
-                  </button>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-
-    </aside>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      </aside>
+    </>
   );
 }
 
@@ -293,4 +323,3 @@ function PanIcon({ className }: IconProps) {
     </svg>
   );
 }
-
