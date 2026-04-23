@@ -571,7 +571,7 @@ export default function WeeklyPlannerPage() {
                 </button>
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {planEntries.map((day) => {
                   const isOpen = openDayKey === day.key;
                   const dishName = day.dish?.name ?? "Select dish";
