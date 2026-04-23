@@ -108,7 +108,7 @@ export default function IngredientsPage() {
     const categoryItems = categories.length > 0 ? categories : fallback;
 
     return [
-      { value: "all", label: "All Categories" },
+      { value: "all", label: "Alle kategorier" },
       ...categoryItems,
     ];
   }, [categories, ingredients]);
@@ -371,7 +371,7 @@ export default function IngredientsPage() {
                 <thead className="bg-[#f6f8f3] text-left text-xs font-semibold uppercase tracking-[0.14em] text-[#7a887f]">
                   <tr>
                     <th className="px-5 py-4">Name</th>
-                    <th className="px-5 py-4">Category</th>
+                    <th className="px-5 py-4">Kategori</th>
                     <th className="px-5 py-4">Default Unit</th>
                     <th className="px-5 py-4">Used In</th>
                     <th className="px-5 py-4 text-right">Actions</th>
@@ -515,7 +515,7 @@ export default function IngredientsPage() {
 
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="grid gap-2 text-sm font-semibold text-[#3f4b43]">
-              Category
+              Kategori
               <div className="relative">
                 <select
                   value={formCategory}
@@ -523,7 +523,7 @@ export default function IngredientsPage() {
                   className="w-full appearance-none rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
                 >
                   <option value="" disabled>
-                    Select category
+                    Velg kategori
                   </option>
                   {modalCategoryOptions.map((category) => (
                     <option key={category.value} value={category.value}>
