@@ -165,6 +165,7 @@ internal sealed class UseCase(AppDbContext dbContext)
                 }
 
                 aggregate.AddAmount(dishIngredient.Quantity);
+                aggregate.AddDish(dish.Name);
             }
         }
 
@@ -180,7 +181,8 @@ internal sealed class UseCase(AppDbContext dbContext)
                         item.IngredientId.ToString("D"),
                         item.Name,
                         item.Amount,
-                        item.Unit.ToString()))
+                        item.Unit.ToString(),
+                        item.Dishes))
                     .ToArray()))
             .ToArray();
 
@@ -212,15 +214,27 @@ internal sealed class ShoppingAggregate(
     IngredientCategory category,
     Unit unit)
 {
+    private readonly List<string> _dishes = new();
+
     public Guid IngredientId { get; } = ingredientId;
     public string Name { get; } = name;
     public IngredientCategory Category { get; } = category;
     public Unit Unit { get; } = unit;
     public double Amount { get; private set; }
+    public IReadOnlyList<string> Dishes => _dishes;
 
     // Adds ingredient quantities for aggregation.
     public void AddAmount(double amount)
     {
         Amount += amount;
+    }
+
+    // Records a dish that contributes to this ingredient, skipping duplicates.
+    public void AddDish(string dishName)
+    {
+        if (!_dishes.Contains(dishName))
+        {
+            _dishes.Add(dishName);
+        }
     }
 }

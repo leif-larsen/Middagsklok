@@ -3,6 +3,7 @@ export type ShoppingListItem = {
   name: string;
   amount: number;
   unit: string;
+  dishes: string[];
 };
 
 export type ShoppingListCategory = {

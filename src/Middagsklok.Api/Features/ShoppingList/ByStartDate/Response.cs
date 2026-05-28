@@ -12,7 +12,8 @@ public sealed record ShoppingItem(
     string IngredientId,
     string Name,
     double Amount,
-    string Unit);
+    string Unit,
+    IReadOnlyList<string> Dishes);
 
 public sealed record ErrorResponse(
     string Message,
