@@ -202,6 +202,7 @@ export default function ShoppingListPage() {
           id: `${item.ingredientId}-${item.unit}`,
           name: item.name,
           amount: formatAmount(item.amount, item.unit),
+          dishes: item.dishes ?? [],
         })),
       })),
     [activeCategories],
@@ -463,6 +464,11 @@ export default function ShoppingListPage() {
                                   {item.amount}
                                 </span>
                               </div>
+                              {item.dishes.length > 0 ? (
+                                <div className="text-xs text-[#7b8a7f]">
+                                  Til: {item.dishes.join(", ")}
+                                </div>
+                              ) : null}
                             </div>
                           </div>
                         </li>
