@@ -13,7 +13,8 @@ public sealed record ShoppingItem(
     string Name,
     double Amount,
     string Unit,
-    IReadOnlyList<string> Dishes);
+    IReadOnlyList<string> Dishes,
+    bool IsPantryStaple);
 
 public sealed record ErrorResponse(
     string Message,

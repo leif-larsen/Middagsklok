@@ -106,7 +106,34 @@ public record DishIngredient(
     double Quantity,
     Unit Unit,
     string? Note = null,
-    int? SortOrder = null);
+    int? SortOrder = null,
+    IngredientScaling Scaling = IngredientScaling.PerDish,
+    int? PersonCount = null)
+{
+    // Resolves the amount actually needed when the dish is cooked for the given number of servings.
+    public double AmountFor(int servings) =>
+        Scaling switch
+        {
+            IngredientScaling.PerServing => Quantity * servings,
+            IngredientScaling.PerPerson => Quantity * (PersonCount ?? 1),
+            _ => Quantity
+        };
+}
+
+// Determines how a dish ingredient's stored quantity responds to the number of servings.
+public enum IngredientScaling
+{
+    // The stored quantity is the whole-dish amount and never scales.
+    // This is the default so that pre-scaling data keeps its original meaning.
+    PerDish,
+
+    // The stored quantity is per serving and is multiplied by the servings cooked.
+    PerServing,
+
+    // The stored quantity is per eater, for ingredients only some of the table eat.
+    // Deliberately does not grow when guests are added.
+    PerPerson
+}
 
 public enum DishType
 {

@@ -54,7 +54,8 @@ internal sealed class UseCase(AppDbContext dbContext)
             .OrderBy(day => day.Date)
             .Select(day => new PlannedDay(
                 day.Date,
-                new DishSelection(day.SelectionType, day.DishId)))
+                new DishSelection(day.SelectionType, day.DishId),
+                day.Servings))
             .ToArray();
 
         if (plan is null)
@@ -148,7 +149,8 @@ internal sealed class UseCase(AppDbContext dbContext)
             FormatDate(day.Date),
             new DishSelectionResponse(
                 FormatSelectionType(day.Selection.Type),
-                day.Selection.DishId?.ToString("D")));
+                day.Selection.DishId?.ToString("D")),
+            day.Servings);
 
     // Formats selection types for the API response.
     private static string FormatSelectionType(DishSelectionType type) =>

@@ -64,17 +64,38 @@ internal sealed class UseCase(AppDbContext dbContext)
         var ingredientLookup = new Dictionary<Guid, Ingredient>();
         var dishIngredients = new List<DishIngredient>();
 
+        // Clients that predate portion scaling send ingredients without unit or scaling.
+        // Those fields must survive such an update rather than resetting to the defaults.
+        var storedByIngredientId = dish.Ingredients
+            .GroupBy(stored => stored.IngredientId)
+            .ToDictionary(group => group.Key, group => group.First());
+
         foreach (var ingredientCandidate in validation.Candidate.Ingredients)
         {
             var ingredient = ResolveIngredient(ingredientCandidate, ingredientsById, ingredientsByName);
             ingredientLookup[ingredient.Id] = ingredient;
 
+            var stored = storedByIngredientId.GetValueOrDefault(ingredient.Id);
+
+            var unit = ingredientCandidate.Unit
+                ?? stored?.Unit
+                ?? ingredient.DefaultUnit;
+
+            var scaling = ingredientCandidate.Scaling
+                ?? stored?.Scaling
+                ?? IngredientScaling.PerDish;
+
+            var personCount = ingredientCandidate.PersonCount
+                ?? (ingredientCandidate.Scaling is null ? stored?.PersonCount : null);
+
             var dishIngredient = new DishIngredient(
                 ingredient.Id,
                 ingredientCandidate.Amount,
-                ingredient.DefaultUnit,
+                unit,
                 null,
-                ingredientCandidate.SortOrder);
+                ingredientCandidate.SortOrder,
+                scaling,
+                scaling is IngredientScaling.PerPerson ? personCount : null);
 
             dishIngredients.Add(dishIngredient);
         }
@@ -223,7 +244,10 @@ internal sealed class UseCase(AppDbContext dbContext)
                     id,
                     ingredientId.ToString("D"),
                     ingredient.Quantity,
-                    label);
+                    label,
+                    ingredient.Unit.ToString(),
+                    ingredient.Scaling.ToString(),
+                    ingredient.PersonCount);
             })
             .ToArray();
 
@@ -275,16 +299,7 @@ internal sealed class UseCase(AppDbContext dbContext)
     }
 
     // Formats unit values for labels.
-    private static string FormatUnit(Unit unit) =>
-        unit switch
-        {
-            Unit.G => "g",
-            Unit.Kg => "kg",
-            Unit.Ml => "ml",
-            Unit.L => "l",
-            Unit.Pcs => "pcs",
-            _ => string.Empty
-        };
+    private static string FormatUnit(Unit unit) => PortionTaxonomy.FormatUnit(unit);
 
     // Normalizes names for case-insensitive comparisons.
     private static string NormalizeName(string value) => value.Trim().ToUpperInvariant();

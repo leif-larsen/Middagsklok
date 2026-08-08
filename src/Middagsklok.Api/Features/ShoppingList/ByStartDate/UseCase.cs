@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Middagsklok.Api.Database;
 using Middagsklok.Api.Domain.Dish;
 using Middagsklok.Api.Domain.Ingredient;
+using Middagsklok.Api.Domain.Settings;
 using Middagsklok.Api.Domain.WeeklyPlan;
 
 namespace Middagsklok.Api.Features.ShoppingList.ByStartDate;
@@ -49,38 +50,41 @@ internal sealed class UseCase(AppDbContext dbContext)
             return notFoundResult;
         }
 
-        var dishIds = plan.PlannedDishes
-            .Select(day => day.Selection.DishId)
-            .Where(dishId => dishId is not null)
-            .Select(dishId => dishId!.Value)
-            .Distinct()
+        var plannedDays = plan.PlannedDishes
+            .Where(day => day.Selection.DishId is not null)
             .ToArray();
 
-        if (dishIds.Length == 0)
+        if (plannedDays.Length == 0)
         {
-            var emptyResponse = new Response(FormatDate(plan.StartDate), Array.Empty<ShoppingCategory>());
-            var emptyResult = new UseCaseResult(
-                FetchOutcome.Success,
-                emptyResponse,
-                Array.Empty<ValidationError>());
-            return emptyResult;
+            return EmptyResult(plan.StartDate);
         }
+
+        var dishIds = plannedDays
+            .Select(day => day.Selection.DishId!.Value)
+            .Distinct()
+            .ToArray();
 
         var dishes = await LoadDishes(dishIds, cancellationToken);
 
         if (dishes.Count == 0)
         {
-            var emptyResponse = new Response(FormatDate(plan.StartDate), Array.Empty<ShoppingCategory>());
-            var emptyResult = new UseCaseResult(
-                FetchOutcome.Success,
-                emptyResponse,
-                Array.Empty<ValidationError>());
-            return emptyResult;
+            return EmptyResult(plan.StartDate);
         }
 
+        var dishById = dishes.ToDictionary(dish => dish.Id);
         var ingredientLookup = await LoadIngredients(dishes, cancellationToken);
-        var categories = BuildCategories(dishes, ingredientLookup);
+        var defaultServings = await LoadDefaultServings(cancellationToken);
+        var categories = BuildCategories(plannedDays, dishById, ingredientLookup, defaultServings);
         var response = new Response(FormatDate(plan.StartDate), categories);
+        var result = new UseCaseResult(FetchOutcome.Success, response, Array.Empty<ValidationError>());
+
+        return result;
+    }
+
+    // Builds the success result for a plan with nothing to shop for.
+    private static UseCaseResult EmptyResult(DateOnly startDate)
+    {
+        var response = new Response(FormatDate(startDate), Array.Empty<ShoppingCategory>());
         var result = new UseCaseResult(FetchOutcome.Success, response, Array.Empty<ValidationError>());
 
         return result;
@@ -136,15 +140,36 @@ internal sealed class UseCase(AppDbContext dbContext)
         return lookup;
     }
 
-    // Builds shopping list categories from dish ingredients.
+    // Loads the household size used when a planned day does not override servings.
+    private async Task<int> LoadDefaultServings(CancellationToken cancellationToken)
+    {
+        var settings = await _dbContext.PlanningSettings
+            .AsNoTracking()
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return settings?.HouseholdSize ?? PlanningSettings.DefaultHouseholdSize;
+    }
+
+    // Builds shopping list categories from the planned days.
     private static IEnumerable<ShoppingCategory> BuildCategories(
-        IReadOnlyList<Dish> dishes,
-        IReadOnlyDictionary<Guid, Ingredient> ingredientLookup)
+        IReadOnlyList<PlannedDay> plannedDays,
+        IReadOnlyDictionary<Guid, Dish> dishById,
+        IReadOnlyDictionary<Guid, Ingredient> ingredientLookup,
+        int defaultServings)
     {
         var items = new Dictionary<ShoppingKey, ShoppingAggregate>();
 
-        foreach (var dish in dishes)
+        // Iterating days rather than distinct dishes means a dish planned twice in the
+        // same week contributes its ingredients twice, each at that day's servings.
+        foreach (var day in plannedDays)
         {
+            if (!dishById.TryGetValue(day.Selection.DishId!.Value, out var dish))
+            {
+                continue;
+            }
+
+            var servings = day.Servings ?? defaultServings;
+
             foreach (var dishIngredient in dish.Ingredients)
             {
                 if (!ingredientLookup.TryGetValue(dishIngredient.IngredientId, out var ingredient))
@@ -160,11 +185,12 @@ internal sealed class UseCase(AppDbContext dbContext)
                         ingredient.Id,
                         ingredient.Name,
                         ingredient.Category,
-                        dishIngredient.Unit);
+                        dishIngredient.Unit,
+                        ingredient.IsPantryStaple);
                     items.Add(key, aggregate);
                 }
 
-                aggregate.AddAmount(dishIngredient.Quantity);
+                aggregate.AddAmount(dishIngredient.AmountFor(servings));
                 aggregate.AddDish(dish.Name);
             }
         }
@@ -180,14 +206,18 @@ internal sealed class UseCase(AppDbContext dbContext)
                     .Select(item => new ShoppingItem(
                         item.IngredientId.ToString("D"),
                         item.Name,
-                        item.Amount,
+                        Round(item.Amount),
                         item.Unit.ToString(),
-                        item.Dishes))
+                        item.Dishes,
+                        item.IsPantryStaple))
                     .ToArray()))
             .ToArray();
 
         return categories;
     }
+
+    // Trims floating point noise from accumulated per-serving amounts.
+    private static double Round(double amount) => Math.Round(amount, 4, MidpointRounding.AwayFromZero);
 
     // Formats date values for the API response.
     private static string FormatDate(DateOnly date) =>
@@ -212,7 +242,8 @@ internal sealed class ShoppingAggregate(
     Guid ingredientId,
     string name,
     IngredientCategory category,
-    Unit unit)
+    Unit unit,
+    bool isPantryStaple)
 {
     private readonly List<string> _dishes = new();
 
@@ -220,6 +251,7 @@ internal sealed class ShoppingAggregate(
     public string Name { get; } = name;
     public IngredientCategory Category { get; } = category;
     public Unit Unit { get; } = unit;
+    public bool IsPantryStaple { get; } = isPantryStaple;
     public double Amount { get; private set; }
     public IReadOnlyList<string> Dishes => _dishes;
 

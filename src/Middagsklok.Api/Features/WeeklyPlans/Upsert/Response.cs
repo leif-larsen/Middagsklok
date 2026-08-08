@@ -7,7 +7,8 @@ public sealed record Response(
 
 public sealed record PlannedDayResponse(
     string Date,
-    DishSelectionResponse Selection);
+    DishSelectionResponse Selection,
+    int? Servings);
 
 public sealed record DishSelectionResponse(
     string Type,

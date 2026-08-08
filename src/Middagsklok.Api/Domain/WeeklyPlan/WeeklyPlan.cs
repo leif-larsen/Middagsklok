@@ -33,15 +33,19 @@ public sealed record class PlannedDay
     {
     }
 
-    // Creates a planned day with a date and selection.
-    public PlannedDay(DateOnly date, DishSelection selection)
+    // Creates a planned day with a date, selection and optional servings override.
+    public PlannedDay(DateOnly date, DishSelection selection, int? servings = null)
     {
         Date = date;
         Selection = selection;
+        Servings = servings;
     }
 
     public DateOnly Date { get; private set; }
     public DishSelection Selection { get; private set; } = null!;
+
+    // Overrides the household default for this meal, e.g. when guests are coming.
+    public int? Servings { get; private set; }
 }
 
 public sealed record class DishSelection

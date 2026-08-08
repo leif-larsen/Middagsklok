@@ -47,7 +47,8 @@ internal sealed class Validator
             ingredientId,
             name!,
             categoryResult.Value,
-            unitResult.Value);
+            unitResult.Value,
+            request.IsPantryStaple);
 
         return new ValidationResult(true, candidate, Array.Empty<ValidationError>());
     }
@@ -132,7 +133,8 @@ internal sealed record IngredientCandidate(
     Guid Id,
     string Name,
     IngredientCategory Category,
-    Unit DefaultUnit);
+    Unit DefaultUnit,
+    bool IsPantryStaple);
 
 internal sealed record CategoryParseResult(
     bool IsValid,

@@ -39,7 +39,8 @@ internal sealed class UseCase(AppDbContext dbContext)
         var ingredient = new Ingredient(
             validation.Candidate.Name,
             validation.Candidate.Category,
-            validation.Candidate.DefaultUnit);
+            validation.Candidate.DefaultUnit,
+            validation.Candidate.IsPantryStaple);
 
         _dbContext.Ingredients.Add(ingredient);
         await _dbContext.SaveChangesAsync(cancellationToken);
@@ -72,7 +73,8 @@ internal sealed class UseCase(AppDbContext dbContext)
             ingredient.Name,
             ingredient.Category.ToString(),
             ingredient.DefaultUnit.ToString(),
-            usedIn);
+            usedIn,
+            ingredient.IsPantryStaple);
 
     // Normalizes names for case-insensitive comparisons.
     private static string NormalizeName(string value) => value.Trim().ToUpperInvariant();

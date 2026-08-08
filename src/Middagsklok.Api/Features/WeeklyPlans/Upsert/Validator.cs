@@ -76,7 +76,15 @@ internal sealed class Validator
                 continue;
             }
 
-            candidates.Add(new PlannedDayCandidate(date, selectionType, dishId, index));
+            if (day.Servings is < 1 or > 30)
+            {
+                failures.Add(new ValidationError(
+                    BuildDayField(index, nameof(PlannedDayInput.Servings)),
+                    "Servings must be between 1 and 30."));
+                continue;
+            }
+
+            candidates.Add(new PlannedDayCandidate(date, selectionType, dishId, index, day.Servings));
         }
 
         if (startDate != DateOnly.MinValue)
@@ -242,4 +250,5 @@ internal sealed record PlannedDayCandidate(
     DateOnly Date,
     DishSelectionType SelectionType,
     Guid? DishId,
-    int Index);
+    int Index,
+    int? Servings = null);

@@ -21,4 +21,7 @@ public sealed record DishIngredientOverview(
     string Id,
     string IngredientId,
     double Amount,
-    string Label);
+    string Label,
+    string Unit,
+    string Scaling,
+    int? PersonCount);

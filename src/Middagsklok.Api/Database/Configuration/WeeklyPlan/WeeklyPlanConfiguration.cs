@@ -52,6 +52,9 @@ public class WeeklyPlanConfiguration : IEntityTypeConfiguration<WeeklyPlanEntity
                 .HasColumnType("date")
                 .IsRequired();
 
+            dayBuilder.Property(day => day.Servings)
+                .HasColumnName("servings");
+
             dayBuilder.OwnsOne(day => day.Selection, selectionBuilder =>
             {
                 selectionBuilder.Property(selection => selection.Type)

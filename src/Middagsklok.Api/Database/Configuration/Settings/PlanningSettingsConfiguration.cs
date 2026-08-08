@@ -32,6 +32,11 @@ public class PlanningSettingsConfiguration : IEntityTypeConfiguration<PlanningSe
             .HasDefaultValue(14)
             .IsRequired();
 
+        builder.Property(settings => settings.HouseholdSize)
+            .HasColumnName("household_size")
+            .HasDefaultValue(PlanningSettings.DefaultHouseholdSize)
+            .IsRequired();
+
         builder.Property(settings => settings.CreatedAt)
             .HasColumnName("created_at")
             .IsRequired();
