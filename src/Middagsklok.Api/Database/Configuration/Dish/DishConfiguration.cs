@@ -1,6 +1,7 @@
 using DishEntity = Middagsklok.Api.Domain.Dish.Dish;
 using DishIngredientEntity = Middagsklok.Api.Domain.Dish.DishIngredient;
 using IngredientEntity = Middagsklok.Api.Domain.Ingredient.Ingredient;
+using Middagsklok.Api.Domain.Dish;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -101,6 +102,16 @@ public class DishConfiguration : IEntityTypeConfiguration<DishEntity>
                 .HasConversion<string>()
                 .HasMaxLength(10)
                 .IsRequired();
+
+            ingredientBuilder.Property(i => i.Scaling)
+                .HasColumnName("scaling")
+                .HasConversion<string>()
+                .HasMaxLength(20)
+                .HasDefaultValue(IngredientScaling.PerDish)
+                .IsRequired();
+
+            ingredientBuilder.Property(i => i.PersonCount)
+                .HasColumnName("person_count");
 
             ingredientBuilder.Property(i => i.Note)
                 .HasColumnName("note")

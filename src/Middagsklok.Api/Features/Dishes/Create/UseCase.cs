@@ -60,9 +60,11 @@ internal sealed class UseCase(AppDbContext dbContext)
             var dishIngredient = new DishIngredient(
                 ingredient.Id,
                 ingredientCandidate.Amount,
-                ingredient.DefaultUnit,
+                ingredientCandidate.Unit ?? ingredient.DefaultUnit,
                 null,
-                ingredientCandidate.SortOrder);
+                ingredientCandidate.SortOrder,
+                ingredientCandidate.Scaling,
+                ingredientCandidate.PersonCount);
 
             dishIngredients.Add(dishIngredient);
         }
@@ -212,7 +214,10 @@ internal sealed class UseCase(AppDbContext dbContext)
                     id,
                     ingredientId.ToString("D"),
                     ingredient.Quantity,
-                    label);
+                    label,
+                    ingredient.Unit.ToString(),
+                    ingredient.Scaling.ToString(),
+                    ingredient.PersonCount);
             })
             .ToArray();
 
@@ -264,16 +269,7 @@ internal sealed class UseCase(AppDbContext dbContext)
     }
 
     // Formats unit values for labels.
-    private static string FormatUnit(Unit unit) =>
-        unit switch
-        {
-            Unit.G => "g",
-            Unit.Kg => "kg",
-            Unit.Ml => "ml",
-            Unit.L => "l",
-            Unit.Pcs => "pcs",
-            _ => string.Empty
-        };
+    private static string FormatUnit(Unit unit) => PortionTaxonomy.FormatUnit(unit);
 
     // Normalizes names for case-insensitive comparisons.
     private static string NormalizeName(string value) => value.Trim().ToUpperInvariant();

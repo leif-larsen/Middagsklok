@@ -4,7 +4,8 @@ public sealed record Response(
     string Id,
     string WeekStartsOn,
     int SeafoodPerWeek,
-    int DaysBetween);
+    int DaysBetween,
+    int HouseholdSize);
 
 public sealed record ErrorResponse(
     string Message,

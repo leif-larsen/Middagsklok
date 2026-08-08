@@ -148,16 +148,7 @@ internal sealed class UseCase(AppDbContext dbContext)
     }
 
     // Formats unit values for the response.
-    private static string FormatUnit(Unit unit) =>
-        unit switch
-        {
-            Unit.G => "g",
-            Unit.Kg => "kg",
-            Unit.Ml => "ml",
-            Unit.L => "l",
-            Unit.Pcs => "pcs",
-            _ => string.Empty
-        };
+    private static string FormatUnit(Unit unit) => PortionTaxonomy.FormatUnit(unit);
 
     // Formats date values for the API response.
     private static string FormatDate(DateOnly date) =>

@@ -18,7 +18,10 @@ public sealed record DishIngredientResponse(
     string Id,
     string IngredientId,
     double Amount,
-    string Label);
+    string Label,
+    string Unit,
+    string Scaling,
+    int? PersonCount);
 
 public sealed record ErrorResponse(
     string Message,

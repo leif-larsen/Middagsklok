@@ -1,4 +1,5 @@
 using Middagsklok.Api.Domain.Dish;
+using Middagsklok.Api.Domain.Ingredient;
 
 namespace Middagsklok.Api.Features.Dishes.Create;
 
@@ -105,6 +106,13 @@ internal sealed class Validator
                 continue;
             }
 
+            var portion = ParsePortion(ingredient, index);
+            if (portion.Errors.Count > 0)
+            {
+                failures.AddRange(portion.Errors);
+                continue;
+            }
+
             var key = hasId
                 ? $"id:{id}"
                 : $"name:{NormalizeName(ingredientName!)}";
@@ -113,7 +121,15 @@ internal sealed class Validator
                 continue;
             }
 
-            var candidate = new IngredientCandidate(id, hasId ? null : ingredientName, ingredient.Amount, sortOrder, index);
+            var candidate = new IngredientCandidate(
+                id,
+                hasId ? null : ingredientName,
+                ingredient.Amount,
+                sortOrder,
+                index,
+                portion.Unit,
+                portion.Scaling,
+                portion.PersonCount);
             candidates.Add(candidate);
             sortOrder++;
         }
@@ -144,6 +160,58 @@ internal sealed class Validator
             candidates);
 
         return new ValidationResult(true, candidateDish, Array.Empty<ValidationError>());
+    }
+
+    // Validates the unit and scaling fields of a single ingredient input.
+    private static PortionParseResult ParsePortion(IngredientInput ingredient, int index)
+    {
+        var failures = new List<ValidationError>();
+
+        Unit? unit = null;
+        if (!string.IsNullOrWhiteSpace(ingredient.Unit))
+        {
+            if (PortionTaxonomy.TryNormalizeUnit(ingredient.Unit, out var parsedUnit))
+            {
+                unit = parsedUnit;
+            }
+            else
+            {
+                failures.Add(new ValidationError(
+                    BuildIngredientField(index, nameof(IngredientInput.Unit)),
+                    $"Ingredient unit must be one of: {PortionTaxonomy.DescribeAllowedUnits()}."));
+            }
+        }
+
+        var scaling = IngredientScaling.PerDish;
+        if (!string.IsNullOrWhiteSpace(ingredient.Scaling))
+        {
+            if (PortionTaxonomy.TryNormalizeScaling(ingredient.Scaling, out var parsedScaling))
+            {
+                scaling = parsedScaling;
+            }
+            else
+            {
+                failures.Add(new ValidationError(
+                    BuildIngredientField(index, nameof(IngredientInput.Scaling)),
+                    $"Ingredient scaling must be one of: {PortionTaxonomy.DescribeAllowedScalings()}."));
+            }
+        }
+
+        if (scaling is IngredientScaling.PerPerson && ingredient.PersonCount is null or < 1)
+        {
+            failures.Add(new ValidationError(
+                BuildIngredientField(index, nameof(IngredientInput.PersonCount)),
+                "Person count must be >= 1 when scaling is PerPerson."));
+        }
+
+        if (scaling is not IngredientScaling.PerPerson && ingredient.PersonCount is not null)
+        {
+            failures.Add(new ValidationError(
+                BuildIngredientField(index, nameof(IngredientInput.PersonCount)),
+                "Person count is only valid when scaling is PerPerson."));
+        }
+
+        return new PortionParseResult(unit, scaling, ingredient.PersonCount, failures);
     }
 
     // Maps a raw dish type string to the domain dish type.
@@ -278,7 +346,16 @@ internal sealed record IngredientCandidate(
     string? Name,
     double Amount,
     int SortOrder,
-    int Index);
+    int Index,
+    Unit? Unit = null,
+    IngredientScaling Scaling = IngredientScaling.PerDish,
+    int? PersonCount = null);
+
+internal sealed record PortionParseResult(
+    Unit? Unit,
+    IngredientScaling Scaling,
+    int? PersonCount,
+    IReadOnlyList<ValidationError> Errors);
 
 internal sealed record DishTypeParseResult(
     bool IsValid,

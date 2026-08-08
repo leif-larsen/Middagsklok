@@ -71,7 +71,8 @@ internal sealed class UseCase(AppDbContext dbContext)
             ingredient.Name,
             category,
             defaultUnit,
-            usedIn);
+            usedIn,
+            ingredient.IsPantryStaple);
 
         return overview;
     }

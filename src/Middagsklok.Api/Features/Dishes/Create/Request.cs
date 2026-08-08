@@ -18,4 +18,7 @@ public sealed record Request(
 public sealed record IngredientInput(
     [property: JsonPropertyName("id")] string? Id,
     [property: JsonPropertyName("name")] string? Name,
-    [property: JsonPropertyName("amount")] double Amount);
+    [property: JsonPropertyName("amount")] double Amount,
+    [property: JsonPropertyName("unit")] string? Unit = null,
+    [property: JsonPropertyName("scaling")] string? Scaling = null,
+    [property: JsonPropertyName("personCount")] int? PersonCount = null);

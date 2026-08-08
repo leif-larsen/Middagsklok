@@ -42,7 +42,11 @@ internal sealed class Validator
             return new ValidationResult(false, null, failures);
         }
 
-        var candidate = new IngredientCandidate(name!, categoryResult.Value, unitResult.Value);
+        var candidate = new IngredientCandidate(
+            name!,
+            categoryResult.Value,
+            unitResult.Value,
+            request.IsPantryStaple);
 
         return new ValidationResult(true, candidate, Array.Empty<ValidationError>());
     }
@@ -114,7 +118,8 @@ internal sealed record ValidationResult(
 internal sealed record IngredientCandidate(
     string Name,
     IngredientCategory Category,
-    Unit DefaultUnit);
+    Unit DefaultUnit,
+    bool IsPantryStaple);
 
 internal sealed record CategoryParseResult(
     bool IsValid,

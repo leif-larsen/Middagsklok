@@ -1,3 +1,4 @@
+using Middagsklok.Api.Domain.Dish;
 using Middagsklok.Api.Domain.Ingredient;
 
 namespace Middagsklok.Api.Features.Ingredients.Metadata;
@@ -50,14 +51,5 @@ internal sealed class UseCase
         };
 
     // Formats unit values into display labels.
-    private static string FormatUnitLabel(Unit unit) =>
-        unit switch
-        {
-            Unit.G => "g",
-            Unit.Kg => "kg",
-            Unit.Ml => "ml",
-            Unit.L => "l",
-            Unit.Pcs => "pcs",
-            _ => string.Empty
-        };
+    private static string FormatUnitLabel(Unit unit) => PortionTaxonomy.FormatUnit(unit);
 }

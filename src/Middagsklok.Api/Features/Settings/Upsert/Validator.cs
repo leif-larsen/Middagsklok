@@ -49,12 +49,23 @@ internal sealed class Validator
                 "Days between must be between 0 and 30."));
         }
 
+        if (request.HouseholdSize is < 1 or > 20)
+        {
+            failures.Add(new ValidationError(
+                ToFieldName(nameof(Request.HouseholdSize)),
+                "Household size must be between 1 and 20."));
+        }
+
         if (failures.Count > 0)
         {
             return new ValidationResult(false, null, failures);
         }
 
-        var candidate = new PlanningSettingsCandidate(weekStartsOn, seafoodPerWeek, daysBetween);
+        var candidate = new PlanningSettingsCandidate(
+            weekStartsOn,
+            seafoodPerWeek,
+            daysBetween,
+            request.HouseholdSize);
         return new ValidationResult(true, candidate, Array.Empty<ValidationError>());
     }
 
@@ -97,4 +108,5 @@ internal sealed record ValidationResult(
 internal sealed record PlanningSettingsCandidate(
     DayOfWeek WeekStartsOn,
     int SeafoodPerWeek,
-    int DaysBetween);
+    int DaysBetween,
+    int? HouseholdSize);

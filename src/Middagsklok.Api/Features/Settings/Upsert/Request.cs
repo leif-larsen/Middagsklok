@@ -5,4 +5,5 @@ namespace Middagsklok.Api.Features.Settings.Upsert;
 public sealed record Request(
     [property: JsonPropertyName("weekStartsOn")] string? WeekStartsOn,
     [property: JsonPropertyName("seafoodPerWeek")] int? SeafoodPerWeek,
-    [property: JsonPropertyName("daysBetween")] int? DaysBetween);
+    [property: JsonPropertyName("daysBetween")] int? DaysBetween,
+    [property: JsonPropertyName("householdSize")] int? HouseholdSize = null);

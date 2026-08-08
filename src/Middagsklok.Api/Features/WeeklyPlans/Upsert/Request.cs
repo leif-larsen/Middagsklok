@@ -7,7 +7,8 @@ public sealed record Request(
 
 public sealed record PlannedDayInput(
     [property: JsonPropertyName("date")] string? Date,
-    [property: JsonPropertyName("selection")] DishSelectionInput? Selection);
+    [property: JsonPropertyName("selection")] DishSelectionInput? Selection,
+    [property: JsonPropertyName("servings")] int? Servings = null);
 
 public sealed record DishSelectionInput(
     [property: JsonPropertyName("type")] string? Type,

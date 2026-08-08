@@ -32,6 +32,11 @@ public class IngredientConfiguration : IEntityTypeConfiguration<IngredientEntity
             .HasMaxLength(10)
             .IsRequired();
 
+        builder.Property(i => i.IsPantryStaple)
+            .HasColumnName("is_pantry_staple")
+            .HasDefaultValue(false)
+            .IsRequired();
+
         builder.Property(i => i.CreatedAt)
             .HasColumnName("created_at")
             .IsRequired();

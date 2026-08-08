@@ -7,4 +7,5 @@ public sealed record IngredientOverview(
     string Name,
     string Category,
     string DefaultUnit,
-    int UsedIn);
+    int UsedIn,
+    bool IsPantryStaple);

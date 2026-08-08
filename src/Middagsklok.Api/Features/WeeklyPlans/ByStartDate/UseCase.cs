@@ -70,7 +70,8 @@ internal sealed class UseCase(AppDbContext dbContext)
             FormatDate(day.Date),
             new DishSelectionResponse(
                 FormatSelectionType(day.Selection.Type),
-                day.Selection.DishId?.ToString("D")));
+                day.Selection.DishId?.ToString("D")),
+            day.Servings);
 
     // Formats selection types for the API response.
     private static string FormatSelectionType(DishSelectionType type) =>

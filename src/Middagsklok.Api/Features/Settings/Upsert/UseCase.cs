@@ -28,15 +28,18 @@ internal sealed class UseCase(AppDbContext dbContext)
             settings = new PlanningSettings(
                 validation.Candidate.WeekStartsOn,
                 validation.Candidate.SeafoodPerWeek,
-                validation.Candidate.DaysBetween);
+                validation.Candidate.DaysBetween,
+                validation.Candidate.HouseholdSize ?? PlanningSettings.DefaultHouseholdSize);
             _dbContext.PlanningSettings.Add(settings);
         }
         else
         {
+            // Household size is optional on the wire so older clients do not reset it.
             settings.Update(
                 validation.Candidate.WeekStartsOn,
                 validation.Candidate.SeafoodPerWeek,
-                validation.Candidate.DaysBetween);
+                validation.Candidate.DaysBetween,
+                validation.Candidate.HouseholdSize ?? settings.HouseholdSize);
         }
 
         await _dbContext.SaveChangesAsync(cancellationToken);
@@ -53,7 +56,8 @@ internal sealed class UseCase(AppDbContext dbContext)
             settings.Id.ToString("D"),
             settings.WeekStartsOn.ToString(),
             settings.SeafoodPerWeek,
-            settings.DaysBetween);
+            settings.DaysBetween,
+            settings.HouseholdSize);
 }
 
 internal enum UpsertOutcome

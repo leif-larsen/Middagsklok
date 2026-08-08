@@ -5,7 +5,8 @@ public sealed record Response(
     string Name,
     string Category,
     string DefaultUnit,
-    int UsedIn);
+    int UsedIn,
+    bool IsPantryStaple);
 
 public sealed record ErrorResponse(
     string Message,

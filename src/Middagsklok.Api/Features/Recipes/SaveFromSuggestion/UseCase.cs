@@ -616,16 +616,7 @@ internal sealed class UseCase(
     }
 
     // Formats unit values for labels.
-    private static string FormatUnit(Unit unit) =>
-        unit switch
-        {
-            Unit.G => "g",
-            Unit.Kg => "kg",
-            Unit.Ml => "ml",
-            Unit.L => "l",
-            Unit.Pcs => "pcs",
-            _ => string.Empty
-        };
+    private static string FormatUnit(Unit unit) => PortionTaxonomy.FormatUnit(unit);
 
     // Normalizes names for case-insensitive comparisons.
     private static string NormalizeName(string value) => value.Trim().ToUpperInvariant();
