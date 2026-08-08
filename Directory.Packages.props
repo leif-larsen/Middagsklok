@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0"  />
+    <!-- Direct pin past GHSA-v5pm-xwqc-g5wc; Microsoft.AspNetCore.OpenApi 10.0.x still floors this at the vulnerable 2.0.0. -->
+    <PackageVersion Include="Microsoft.OpenApi" Version="2.7.5" />
     <PackageVersion Include="Aspire.Hosting.Azure.AppContainers" Version="13.1.0" />
     <PackageVersion Include="Aspire.Hosting.Azure.PostgreSQL" Version="13.1.0" />
     <PackageVersion Include="Aspire.Hosting.JavaScript" Version="13.1.0"  />
