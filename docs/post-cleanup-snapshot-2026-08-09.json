@@ -1,0 +1,3263 @@
+{
+ "capturedAt": "2026-08-09",
+ "note": "state after the issue #78 cleanup",
+ "ingredients": [
+  {
+   "id": "0a3d9a33-7f2f-4ca0-8e9d-a496cf59d94a",
+   "name": "Agurk",
+   "category": "Produce",
+   "defaultUnit": "Pcs",
+   "usedIn": 3,
+   "isPantryStaple": false
+  },
+  {
+   "id": "866cfaea-58a5-4ee8-ad16-6fff37de05a7",
+   "name": "Amerikansk blanding",
+   "category": "Produce",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "761692ef-fe05-41a5-9d49-d64a5ed61dd5",
+   "name": "Baconterning",
+   "category": "Meat",
+   "defaultUnit": "G",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "fc72229b-17b7-483e-a9c2-3806647510c6",
+   "name": "Blåbærsyltetøy",
+   "category": "Other",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": true
+  },
+  {
+   "id": "d7519b1f-9ea5-464f-860c-c5e4d01b322c",
+   "name": "Blomkål",
+   "category": "Produce",
+   "defaultUnit": "Pcs",
+   "usedIn": 2,
+   "isPantryStaple": false
+  },
+  {
+   "id": "d4b56bd2-2ca5-402d-981e-8e16288657d7",
+   "name": "Bolognese",
+   "category": "Other",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "a55e5f3f-b0a3-4003-8ed2-a05e99143bf8",
+   "name": "Brødskiver",
+   "category": "Bakery",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "9d188ef6-1a57-47c4-ac07-dc5451b9b4e7",
+   "name": "Brokkoli",
+   "category": "Produce",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "cbe5bf8c-fb95-4932-bbb8-a38160f39d4b",
+   "name": "Brunsaus",
+   "category": "PastaAndGrains",
+   "defaultUnit": "Pcs",
+   "usedIn": 2,
+   "isPantryStaple": false
+  },
+  {
+   "id": "396a389e-f8bc-4ab7-94f7-5439eb3e33c4",
+   "name": "Cheddar",
+   "category": "DairyAndEggs",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "e8308715-67ad-4ad7-b1c9-17cca2c8d379",
+   "name": "Chipotle Mayo",
+   "category": "Condiments",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "ae8f047c-0ca2-40bd-aba5-e384c8a84145",
+   "name": "Chorizo",
+   "category": "Meat",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "9e9a675a-fc58-46a3-b099-a88b846bee0b",
+   "name": "Creme Fraiche",
+   "category": "DairyAndEggs",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "319e246c-559c-43e0-b4c9-82791b1ef1f7",
+   "name": "Egg",
+   "category": "PastaAndGrains",
+   "defaultUnit": "Pcs",
+   "usedIn": 2,
+   "isPantryStaple": false
+  },
+  {
+   "id": "32ddc660-98fa-43ff-bd73-6bcc435b62bd",
+   "name": "Eple",
+   "category": "Produce",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "2de4667c-3433-4893-93ea-a0c14caceef2",
+   "name": "Erter",
+   "category": "Other",
+   "defaultUnit": "Pcs",
+   "usedIn": 3,
+   "isPantryStaple": false
+  },
+  {
+   "id": "d6b8ec8e-0f24-4921-a579-6f706f9e96f6",
+   "name": "Fetaost",
+   "category": "DairyAndEggs",
+   "defaultUnit": "Pcs",
+   "usedIn": 2,
+   "isPantryStaple": false
+  },
+  {
+   "id": "bdf371eb-03f7-4185-8ff0-7b88280c19ce",
+   "name": "Fiskeboller",
+   "category": "Seafood",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "731e3adf-0054-4adc-9bb4-2cda392d141f",
+   "name": "Fiskegrateng",
+   "category": "Seafood",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "ee3a090a-20fa-432f-b7eb-64e51ce05ab5",
+   "name": "Fiskekaker",
+   "category": "Seafood",
+   "defaultUnit": "Pcs",
+   "usedIn": 2,
+   "isPantryStaple": false
+  },
+  {
+   "id": "f32a70e6-0805-4c2c-bcba-c2756ca84876",
+   "name": "Flytende margarin",
+   "category": "Other",
+   "defaultUnit": "Pcs",
+   "usedIn": 3,
+   "isPantryStaple": false
+  },
+  {
+   "id": "c1be1b78-95f5-44c2-af49-eb60f88c254d",
+   "name": "Frisk dill",
+   "category": "Produce",
+   "defaultUnit": "G",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "b55e1ad3-20f5-44a6-9392-f95c7783f158",
+   "name": "Frisk persille",
+   "category": "Produce",
+   "defaultUnit": "G",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "50be2f37-b417-4c08-82ab-95bc18890b1f",
+   "name": "Gresk yoghurt",
+   "category": "DairyAndEggs",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "61ca4e04-2225-43f5-bd23-2ad8e7eb6815",
+   "name": "Gressløk",
+   "category": "Produce",
+   "defaultUnit": "G",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "cee06f8f-eb1f-40bb-8249-af9c51d331d1",
+   "name": "Grillpølse",
+   "category": "Meat",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "67c98161-a431-4dc9-acb3-569ba1fef65c",
+   "name": "Grillspyd kylling",
+   "category": "Poultry",
+   "defaultUnit": "G",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "7368ffb9-c01f-47c1-8922-b97b775a0191",
+   "name": "Grønn pesto",
+   "category": "Other",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "077e9fd4-233a-403d-812d-afaaebc7519b",
+   "name": "Grønnsaksbuljong",
+   "category": "Other",
+   "defaultUnit": "Ml",
+   "usedIn": 2,
+   "isPantryStaple": false
+  },
+  {
+   "id": "21863c53-544c-4781-9f8c-1ebf12316f23",
+   "name": "Guacamole",
+   "category": "Other",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "36beb59c-8731-4d6d-9584-eae7b48fc7aa",
+   "name": "Gulrot",
+   "category": "Produce",
+   "defaultUnit": "Pcs",
+   "usedIn": 6,
+   "isPantryStaple": false
+  },
+  {
+   "id": "c54b0ae4-b980-475b-855f-9c9c28dcac3a",
+   "name": "Hakkede Tomater",
+   "category": "CannedGoods",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "5b55f498-8b5a-4886-8dd4-2165d624022a",
+   "name": "Hakkede Tomater - Hvitløk og Oregano",
+   "category": "Produce",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "3ff2634b-8573-41da-99b7-a06996c90872",
+   "name": "Hamburger",
+   "category": "Meat",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "29217ed3-d6b3-434e-ad9c-f3e0301258e2",
+   "name": "Hamburgerbrød",
+   "category": "Bakery",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "6b7aa8c3-ade3-4777-a68a-6a6541dde294",
+   "name": "Hamburgerdressing",
+   "category": "Condiments",
+   "defaultUnit": "Pcs",
+   "usedIn": 2,
+   "isPantryStaple": true
+  },
+  {
+   "id": "8492e82d-a3b6-4ac0-b8b7-2bb6880a3b48",
+   "name": "Hvetemel",
+   "category": "PastaAndGrains",
+   "defaultUnit": "Pcs",
+   "usedIn": 3,
+   "isPantryStaple": false
+  },
+  {
+   "id": "6644cc58-dbc7-407a-b535-f43584883ec3",
+   "name": "Hvitløksbaguette",
+   "category": "Bakery",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "b89df390-440c-4b93-b2c1-06b81b45e7cb",
+   "name": "Hvitløksfedd",
+   "category": "Produce",
+   "defaultUnit": "Pcs",
+   "usedIn": 2,
+   "isPantryStaple": false
+  },
+  {
+   "id": "3836a291-8156-4b70-8b36-ccea3e0447f2",
+   "name": "Hvitost",
+   "category": "DairyAndEggs",
+   "defaultUnit": "Pcs",
+   "usedIn": 2,
+   "isPantryStaple": false
+  },
+  {
+   "id": "b4745b01-cbba-41ad-9cf1-f59273ccfe54",
+   "name": "Italienske urter",
+   "category": "SpicesAndHerbs",
+   "defaultUnit": "G",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "3ac673bf-5a88-4900-afc7-806e8fd06583",
+   "name": "Jordbærsyltetøy",
+   "category": "Other",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": true
+  },
+  {
+   "id": "49594fb9-2cbf-4598-b7cf-4fff99a34e56",
+   "name": "Kålrot",
+   "category": "Produce",
+   "defaultUnit": "G",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "bb37d9ef-defc-4eff-b0f1-310f0847a301",
+   "name": "Karbonadedeig",
+   "category": "Meat",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "388587ac-924e-4254-8877-01bd62fc2fcb",
+   "name": "Karri",
+   "category": "PastaAndGrains",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": true
+  },
+  {
+   "id": "049de4d7-d90f-40bc-bc5c-7b833a91388c",
+   "name": "Ketchup",
+   "category": "Condiments",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": true
+  },
+  {
+   "id": "a8aea31a-0631-4820-8a94-e23f1179ccb7",
+   "name": "Kikerter",
+   "category": "CannedGoods",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "2cf61229-f397-4098-985c-8ba982243bd7",
+   "name": "Kjøttdeig",
+   "category": "Meat",
+   "defaultUnit": "G",
+   "usedIn": 2,
+   "isPantryStaple": false
+  },
+  {
+   "id": "a85e5efb-19d0-4ee1-a92b-45045a0b5111",
+   "name": "Kokt skinke",
+   "category": "Meat",
+   "defaultUnit": "Pcs",
+   "usedIn": 4,
+   "isPantryStaple": false
+  },
+  {
+   "id": "c03f4e1f-f6ad-44d9-99ee-fcc350098daf",
+   "name": "Kyllingfilet",
+   "category": "Meat",
+   "defaultUnit": "Pcs",
+   "usedIn": 2,
+   "isPantryStaple": false
+  },
+  {
+   "id": "e7bb931a-0b11-441f-bec8-d0ce8580e7d1",
+   "name": "Kyllingkjøttdeig",
+   "category": "Meat",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "785b6105-d78d-4fec-8f9b-1fbcf66d90a1",
+   "name": "Laks",
+   "category": "Seafood",
+   "defaultUnit": "Pcs",
+   "usedIn": 4,
+   "isPantryStaple": false
+  },
+  {
+   "id": "73c84489-12b0-48a1-ad37-3ed5d49e33fb",
+   "name": "Lasagne",
+   "category": "Other",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "cdaa7511-6a41-4895-b785-5e57bd3ec4b8",
+   "name": "Løk",
+   "category": "Produce",
+   "defaultUnit": "Pcs",
+   "usedIn": 2,
+   "isPantryStaple": false
+  },
+  {
+   "id": "4dbf03c6-6ba6-4513-ae43-810cd553c194",
+   "name": "Mais",
+   "category": "CannedGoods",
+   "defaultUnit": "Pcs",
+   "usedIn": 3,
+   "isPantryStaple": false
+  },
+  {
+   "id": "6b3713ec-aa85-4070-a4f9-a2f43c85eb7c",
+   "name": "Makaroni",
+   "category": "Other",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "c09ec8e5-ec53-4436-aef6-b4b7db86750c",
+   "name": "Matfløte",
+   "category": "DairyAndEggs",
+   "defaultUnit": "Pcs",
+   "usedIn": 3,
+   "isPantryStaple": false
+  },
+  {
+   "id": "c351a04c-15a5-4756-bb9f-512615173cf0",
+   "name": "Meksikansk gryte",
+   "category": "Other",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "91365bd0-07d1-44f3-8080-4a2023bb4b98",
+   "name": "Melk",
+   "category": "DairyAndEggs",
+   "defaultUnit": "Pcs",
+   "usedIn": 4,
+   "isPantryStaple": false
+  },
+  {
+   "id": "b608da50-83e1-4537-992c-6f72f6c87d68",
+   "name": "Mozzarella",
+   "category": "DairyAndEggs",
+   "defaultUnit": "Pcs",
+   "usedIn": 2,
+   "isPantryStaple": false
+  },
+  {
+   "id": "284f331e-616f-4724-b8b5-6f00e924a6bd",
+   "name": "Muskatnøtt",
+   "category": "SpicesAndHerbs",
+   "defaultUnit": "G",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "24b31c6c-88cd-4ba8-80e5-d2d8bbb5006c",
+   "name": "Nachips",
+   "category": "Other",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "6b2c9780-5f0a-4745-861d-fc8464f779e5",
+   "name": "Nudler",
+   "category": "PastaAndGrains",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "b0657688-13bf-4d41-8593-01c6618316a1",
+   "name": "Ørret",
+   "category": "Seafood",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "6e212584-8196-4771-a545-5b612a50fe83",
+   "name": "Ost",
+   "category": "DairyAndEggs",
+   "defaultUnit": "Pcs",
+   "usedIn": 8,
+   "isPantryStaple": false
+  },
+  {
+   "id": "c87af58b-e20b-4207-aa4e-29de6df72bc8",
+   "name": "Paprika",
+   "category": "Produce",
+   "defaultUnit": "Pcs",
+   "usedIn": 3,
+   "isPantryStaple": false
+  },
+  {
+   "id": "a197b793-bba1-4111-a0ae-fcbf459a2883",
+   "name": "Pasta",
+   "category": "PastaAndGrains",
+   "defaultUnit": "Pcs",
+   "usedIn": 7,
+   "isPantryStaple": false
+  },
+  {
+   "id": "994a5b17-95fd-4c54-a04f-728881a69d64",
+   "name": "Pinsa",
+   "category": "PastaAndGrains",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "4f2dd3dc-2871-4b67-ba9a-282e45c4c12b",
+   "name": "Pitabrød",
+   "category": "PastaAndGrains",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "d448f2a5-8379-4742-8f0e-e59ba533ce54",
+   "name": "Pizzabunn",
+   "category": "PastaAndGrains",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "296c2662-491e-480a-8579-a067ae53214b",
+   "name": "Pizzamel",
+   "category": "Bakery",
+   "defaultUnit": "G",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "f3dde81d-e4ca-4efe-8892-ff98ad789d1e",
+   "name": "Pizzasaus",
+   "category": "Produce",
+   "defaultUnit": "Pcs",
+   "usedIn": 3,
+   "isPantryStaple": false
+  },
+  {
+   "id": "6daeacfc-b020-451d-b26a-f2a87dbabf6d",
+   "name": "Polarbrød",
+   "category": "PastaAndGrains",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "e8aeaf77-3308-4d41-9a2c-199af04d6ed4",
+   "name": "Pommes Express",
+   "category": "PastaAndGrains",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "77f4c69f-e19f-458a-9661-4c06eea0d73c",
+   "name": "Potet",
+   "category": "Produce",
+   "defaultUnit": "Pcs",
+   "usedIn": 7,
+   "isPantryStaple": false
+  },
+  {
+   "id": "3527f1eb-4e90-40c4-b86f-91ca1d0b51cd",
+   "name": "Potetmos",
+   "category": "PastaAndGrains",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "ab5131b1-d626-4a7e-8d07-64f1e26a09bd",
+   "name": "Potetsalat",
+   "category": "DairyAndEggs",
+   "defaultUnit": "G",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "f49eb962-6364-44cb-aead-fb3eff8c003c",
+   "name": "Purreløk",
+   "category": "Produce",
+   "defaultUnit": "Pcs",
+   "usedIn": 2,
+   "isPantryStaple": false
+  },
+  {
+   "id": "1952c391-2a23-4ef1-aeae-12cc8b4ad911",
+   "name": "Pytt i Panne",
+   "category": "FrozenFoods",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "f5c2caa8-f0b9-4d58-ad15-194393180d35",
+   "name": "Rapsolje",
+   "category": "OilsAndVinegars",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": true
+  },
+  {
+   "id": "a47c4c2f-2f18-40f8-8564-a1232bf2087e",
+   "name": "Rømme",
+   "category": "DairyAndEggs",
+   "defaultUnit": "Pcs",
+   "usedIn": 4,
+   "isPantryStaple": false
+  },
+  {
+   "id": "f545e5d7-7a8a-4920-8e4c-728f61be97da",
+   "name": "Salat",
+   "category": "Produce",
+   "defaultUnit": "Pcs",
+   "usedIn": 3,
+   "isPantryStaple": false
+  },
+  {
+   "id": "c2554686-839f-44ce-a780-f81217a6a432",
+   "name": "Salt",
+   "category": "SpicesAndHerbs",
+   "defaultUnit": "Pcs",
+   "usedIn": 5,
+   "isPantryStaple": true
+  },
+  {
+   "id": "0c9c946a-e59a-4673-90ec-26f3b136a091",
+   "name": "Seterømme",
+   "category": "DairyAndEggs",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "7b3b3392-7f3d-4e65-a4c2-9d8bc725697e",
+   "name": "Sitronsaft",
+   "category": "Produce",
+   "defaultUnit": "Ml",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "d9eee733-0f40-4e53-9dba-8bc42fee3cd5",
+   "name": "Skinke",
+   "category": "Meat",
+   "defaultUnit": "G",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "1256e406-e963-4e42-a803-7889bdaa4e68",
+   "name": "Smårettskinke",
+   "category": "Meat",
+   "defaultUnit": "G",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "a963f671-a339-427e-9f92-b123172a8408",
+   "name": "Smør",
+   "category": "DairyAndEggs",
+   "defaultUnit": "G",
+   "usedIn": 3,
+   "isPantryStaple": false
+  },
+  {
+   "id": "6446d89e-8dcb-4fba-aa02-29cb17687c8a",
+   "name": "sort pepper",
+   "category": "SpicesAndHerbs",
+   "defaultUnit": "G",
+   "usedIn": 4,
+   "isPantryStaple": true
+  },
+  {
+   "id": "49afd6c5-c3e2-431d-bf35-023b5373001e",
+   "name": "Spaghetti",
+   "category": "PastaAndGrains",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "18875f35-f76d-4f58-8591-124f62405697",
+   "name": "Sprøbakte fiskefileter",
+   "category": "Seafood",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "bc28751f-db55-49ea-baef-72d61f4977d2",
+   "name": "Strimlet skinke",
+   "category": "Meat",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "b9d3c249-12d3-4091-9a65-89fd2836bd3c",
+   "name": "Sukkerert",
+   "category": "Produce",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "eefc870d-8640-4ce5-82de-d6ecf5662bd7",
+   "name": "Sushi",
+   "category": "Seafood",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "b6bf492b-4b15-498d-acaf-5990b8b7e12b",
+   "name": "Sweet Chili Sauce Ginger",
+   "category": "Condiments",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "6dadb0a1-4621-4c63-8557-bd9ae763b278",
+   "name": "Sweet&Sour saus",
+   "category": "Condiments",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "fe059da2-9722-4c7c-8cd9-4d0be3b1328b",
+   "name": "Tacosaus",
+   "category": "PastaAndGrains",
+   "defaultUnit": "Pcs",
+   "usedIn": 2,
+   "isPantryStaple": false
+  },
+  {
+   "id": "1efab010-1f5d-44a9-a8d7-18fd9c7c934b",
+   "name": "Toastbrød",
+   "category": "Baking",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "a145be55-e0db-4b64-9cb7-0d9902003241",
+   "name": "Tomatpure",
+   "category": "Produce",
+   "defaultUnit": "Pcs",
+   "usedIn": 2,
+   "isPantryStaple": false
+  },
+  {
+   "id": "69dd865c-54ff-4c6a-bffb-49140ff01d06",
+   "name": "Tørrgjær",
+   "category": "Baking",
+   "defaultUnit": "G",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "b1732176-8b45-4b52-98b2-f88bafab13a2",
+   "name": "Torsk",
+   "category": "Seafood",
+   "defaultUnit": "G",
+   "usedIn": 2,
+   "isPantryStaple": false
+  },
+  {
+   "id": "fef6c1ef-a511-499b-92ab-4da31c1dd113",
+   "name": "Tortelloni",
+   "category": "PastaAndGrains",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "13f5e8b0-e621-4c75-95fb-a74a3437b9a1",
+   "name": "Tortillalefse",
+   "category": "PastaAndGrains",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "745d4d69-cdd9-43e7-bc9b-ec5322ca5ba1",
+   "name": "Tortillalefser",
+   "category": "PastaAndGrains",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "69b73dc1-6ad4-4ed9-a848-4d944a1f4493",
+   "name": "Tortilla tubs",
+   "category": "PastaAndGrains",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  },
+  {
+   "id": "0d9f7d7e-2581-4ca8-8efa-8801eb3d3d90",
+   "name": "Vegetarboller",
+   "category": "Other",
+   "defaultUnit": "Pcs",
+   "usedIn": 3,
+   "isPantryStaple": false
+  },
+  {
+   "id": "ac7cdd3f-8009-41ab-8670-1aa46630239a",
+   "name": "Vegetardeig",
+   "category": "Other",
+   "defaultUnit": "Pcs",
+   "usedIn": 2,
+   "isPantryStaple": false
+  },
+  {
+   "id": "ab169c55-5e22-41d5-94d9-81cb9f0bdf3c",
+   "name": "Wokgrønnsaker",
+   "category": "Produce",
+   "defaultUnit": "Pcs",
+   "usedIn": 1,
+   "isPantryStaple": false
+  }
+ ],
+ "dishes": [
+  {
+   "id": "bf123c56-6e90-448f-9634-96c4b789d688",
+   "name": "Alt-i-ett pasta med vegetarboller",
+   "dishType": "Pasta",
+   "prepMinutes": 15,
+   "cookMinutes": 20,
+   "serves": 4,
+   "instructions": "1. Kok pastaen etter anvisning på pakken.\n2. I en stor gryte, varm opp litt olje og stek vegetarbollene til de er gylne på alle sider.\n3. Tilsett en boks hakkede tomater og la det småkoke i 5 minutter.\n4. Smak til med salt, pepper og italienske urter.\n5. Bland inn den kokte pastaen og server med revet ost på toppen.",
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": true,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "a197b793-bba1-4111-a0ae-fcbf459a2883-1",
+     "ingredientId": "a197b793-bba1-4111-a0ae-fcbf459a2883",
+     "amount": 60,
+     "label": "60 g Pasta",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "0d9f7d7e-2581-4ca8-8efa-8801eb3d3d90-2",
+     "ingredientId": "0d9f7d7e-2581-4ca8-8efa-8801eb3d3d90",
+     "amount": 0.33,
+     "label": "0.33 pk Vegetarboller",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "c54b0ae4-b980-475b-855f-9c9c28dcac3a-3",
+     "ingredientId": "c54b0ae4-b980-475b-855f-9c9c28dcac3a",
+     "amount": 1,
+     "label": "1 pcs Hakkede Tomater",
+     "unit": "Pcs",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "6e212584-8196-4771-a545-5b612a50fe83-4",
+     "ingredientId": "6e212584-8196-4771-a545-5b612a50fe83",
+     "amount": 0.1,
+     "label": "0.1 pk Ost",
+     "unit": "Pack",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "b4745b01-cbba-41ad-9cf1-f59273ccfe54-5",
+     "ingredientId": "b4745b01-cbba-41ad-9cf1-f59273ccfe54",
+     "amount": 2,
+     "label": "2 g Italienske urter",
+     "unit": "G",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "c2554686-839f-44ce-a780-f81217a6a432-6",
+     "ingredientId": "c2554686-839f-44ce-a780-f81217a6a432",
+     "amount": 1,
+     "label": "1 pcs Salt",
+     "unit": "Pcs",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "6446d89e-8dcb-4fba-aa02-29cb17687c8a-7",
+     "ingredientId": "6446d89e-8dcb-4fba-aa02-29cb17687c8a",
+     "amount": 1,
+     "label": "1 g sort pepper",
+     "unit": "G",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "f5c2caa8-f0b9-4d58-ad15-194393180d35-8",
+     "ingredientId": "f5c2caa8-f0b9-4d58-ad15-194393180d35",
+     "amount": 1,
+     "label": "1 pcs Rapsolje",
+     "unit": "Pcs",
+     "scaling": "PerDish",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-08-06",
+   "retiredAt": null
+  },
+  {
+   "id": "e0c41762-abde-42a7-8814-5dedda0fa57b",
+   "name": "Blomkålsuppe med smørstekt brød",
+   "dishType": "SoupStew",
+   "prepMinutes": 10,
+   "cookMinutes": 20,
+   "serves": 4,
+   "instructions": "1. Del blomkålen i buketter og sett til side. Skrell og hakk løken grovt. Skrell og hakk hvitløksfeddene.\n2. Varm opp en stor kjele på middels varme. Tilsett smøret og la det smelte. Ha i løk og hvitløk og stek i 4–5 minutter til de er myke og blanke uten å ta farge.\n3. Tilsett blomkålbuketene i kjelen og rør rundt slik at alt er dekket av smøret.\n4. Hell i grønnsaksbuljong slik at det dekker grønnsakene. Kok opp og la småkoke i 12–15 minutter til blomkålen er helt myk og lett kan moses med en gaffel.\n5. Ta kjelen av varmen. Bruk en stavmikser (eller hell suppen over i en blender i porsjoner) og blend suppen til den er helt glatt og fløyelsmyk.\n6. Rør inn fløten og smak til med salt, pepper og eventuelt litt revet muskatnøtt. Varm opp igjen på lav varme uten å koke.\n7. Mens suppen varmes, smelt smør i en stekepanne på middels-høy varme. Legg i brødskivene og stek 2–3 minutter på hver side til de er gylne og sprø på utsiden men myke inni.\n8. Hell suppen i dype tallerkener eller skåler. Legg en smørstekt brødskive ved siden av eller oppå suppen. Pynt gjerne med litt gressløk eller noen dråper olivenolje og server umiddelbart.",
+   "isSeafood": false,
+   "isVegetarian": true,
+   "isVegan": false,
+   "vibeTags": [
+    "ComfortFood",
+    "QuickWeeknight"
+   ],
+   "ingredients": [
+    {
+     "id": "d7519b1f-9ea5-464f-860c-c5e4d01b322c-1",
+     "ingredientId": "d7519b1f-9ea5-464f-860c-c5e4d01b322c",
+     "amount": 200,
+     "label": "200 g Blomkål",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "cdaa7511-6a41-4895-b785-5e57bd3ec4b8-2",
+     "ingredientId": "cdaa7511-6a41-4895-b785-5e57bd3ec4b8",
+     "amount": 0.5,
+     "label": "0.5 pcs Løk",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "b89df390-440c-4b93-b2c1-06b81b45e7cb-3",
+     "ingredientId": "b89df390-440c-4b93-b2c1-06b81b45e7cb",
+     "amount": 3,
+     "label": "3 pcs Hvitløksfedd",
+     "unit": "Pcs",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "a963f671-a339-427e-9f92-b123172a8408-4",
+     "ingredientId": "a963f671-a339-427e-9f92-b123172a8408",
+     "amount": 20,
+     "label": "20 g Smør",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "077e9fd4-233a-403d-812d-afaaebc7519b-5",
+     "ingredientId": "077e9fd4-233a-403d-812d-afaaebc7519b",
+     "amount": 225,
+     "label": "225 ml Grønnsaksbuljong",
+     "unit": "Ml",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "c09ec8e5-ec53-4436-aef6-b4b7db86750c-6",
+     "ingredientId": "c09ec8e5-ec53-4436-aef6-b4b7db86750c",
+     "amount": 38,
+     "label": "38 ml Matfløte",
+     "unit": "Ml",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "c2554686-839f-44ce-a780-f81217a6a432-7",
+     "ingredientId": "c2554686-839f-44ce-a780-f81217a6a432",
+     "amount": 5,
+     "label": "5 g Salt",
+     "unit": "G",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "6446d89e-8dcb-4fba-aa02-29cb17687c8a-8",
+     "ingredientId": "6446d89e-8dcb-4fba-aa02-29cb17687c8a",
+     "amount": 2,
+     "label": "2 g sort pepper",
+     "unit": "G",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "284f331e-616f-4724-b8b5-6f00e924a6bd-9",
+     "ingredientId": "284f331e-616f-4724-b8b5-6f00e924a6bd",
+     "amount": 1,
+     "label": "1 g Muskatnøtt",
+     "unit": "G",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "a55e5f3f-b0a3-4003-8ed2-a05e99143bf8-10",
+     "ingredientId": "a55e5f3f-b0a3-4003-8ed2-a05e99143bf8",
+     "amount": 1,
+     "label": "1 pcs Brødskiver",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "61ca4e04-2225-43f5-bd23-2ad8e7eb6815-11",
+     "ingredientId": "61ca4e04-2225-43f5-bd23-2ad8e7eb6815",
+     "amount": 10,
+     "label": "10 g Gressløk",
+     "unit": "G",
+     "scaling": "PerDish",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": null,
+   "retiredAt": null
+  },
+  {
+   "id": "0389e07f-035d-4f39-8545-4095296a266a",
+   "name": "Fish´n´chips",
+   "dishType": "ProteinVegPlate",
+   "prepMinutes": 15,
+   "cookMinutes": 35,
+   "serves": 4,
+   "instructions": "1. Skrell potetene og skjær dem i staver. Skyll og tørk dem godt.\n2. Fritér potetene på 160°C i 5 minutter, ta dem opp og avslutt på 190°C til de er gylne og sprø.\n3. Bland hvetemel med salt og pepper. Dypp fiskestykkene i melet.\n4. Lav en røre av mel, øl og bakepulver. Dypp fisken i røren.\n5. Fritér fisken på 180°C i 4-5 minutter til gyllen og gjennomstekt.\n6. Server fisken og chipsene med ertepuré og tartarsaus.",
+   "isSeafood": true,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "18875f35-f76d-4f58-8591-124f62405697-1",
+     "ingredientId": "18875f35-f76d-4f58-8591-124f62405697",
+     "amount": 0.33,
+     "label": "0.33 pk Sprøbakte fiskefileter",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "e8aeaf77-3308-4d41-9a2c-199af04d6ed4-2",
+     "ingredientId": "e8aeaf77-3308-4d41-9a2c-199af04d6ed4",
+     "amount": 0.33,
+     "label": "0.33 pk Pommes Express",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "e8308715-67ad-4ad7-b1c9-17cca2c8d379-3",
+     "ingredientId": "e8308715-67ad-4ad7-b1c9-17cca2c8d379",
+     "amount": 20,
+     "label": "20 g Chipotle Mayo",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-07-16",
+   "retiredAt": null
+  },
+  {
+   "id": "6b1fc3b1-dce9-437a-a0b8-eaf32df30699",
+   "name": "Fiskeboller i hvitsaus",
+   "dishType": "SoupStew",
+   "prepMinutes": 15,
+   "cookMinutes": 35,
+   "serves": 4,
+   "instructions": "1. Varm fiskebollene forsiktig i en kjele med litt av kraften fra boksen.\n2. Smelt smør i en annen kjele på middels varme.\n3. Rør inn hvetemel og la det frese i 1 minutt uten å ta farge.\n4. Hell i melk litt etter litt mens du visper.\n5. La sausen småkoke i 5-7 minutter til den tykner.\n6. Smak til med salt, hvit pepper og litt muskatnøtt.\n7. Legg fiskebollene i sausen og varm gjennom.\n8. Server med kokte poteter og gulrøtter.",
+   "isSeafood": true,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "bdf371eb-03f7-4185-8ff0-7b88280c19ce-1",
+     "ingredientId": "bdf371eb-03f7-4185-8ff0-7b88280c19ce",
+     "amount": 0.33,
+     "label": "0.33 pcs Fiskeboller",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "77f4c69f-e19f-458a-9661-4c06eea0d73c-2",
+     "ingredientId": "77f4c69f-e19f-458a-9661-4c06eea0d73c",
+     "amount": 133,
+     "label": "133 g Potet",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "91365bd0-07d1-44f3-8080-4a2023bb4b98-3",
+     "ingredientId": "91365bd0-07d1-44f3-8080-4a2023bb4b98",
+     "amount": 117,
+     "label": "117 ml Melk",
+     "unit": "Ml",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "8492e82d-a3b6-4ac0-b8b7-2bb6880a3b48-4",
+     "ingredientId": "8492e82d-a3b6-4ac0-b8b7-2bb6880a3b48",
+     "amount": 13.3,
+     "label": "13.3 g Hvetemel",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "f32a70e6-0805-4c2c-bcba-c2756ca84876-5",
+     "ingredientId": "f32a70e6-0805-4c2c-bcba-c2756ca84876",
+     "amount": 10,
+     "label": "10 g Flytende margarin",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "36beb59c-8731-4d6d-9584-eae7b48fc7aa-6",
+     "ingredientId": "36beb59c-8731-4d6d-9584-eae7b48fc7aa",
+     "amount": 1,
+     "label": "1 pcs Gulrot",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "388587ac-924e-4254-8877-01bd62fc2fcb-7",
+     "ingredientId": "388587ac-924e-4254-8877-01bd62fc2fcb",
+     "amount": 1,
+     "label": "1 pcs Karri",
+     "unit": "Pcs",
+     "scaling": "PerDish",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-05-05",
+   "retiredAt": null
+  },
+  {
+   "id": "2ed10508-24b1-4910-9f4e-a42668b64217",
+   "name": "Fiskegrateng",
+   "dishType": "CasseroleBake",
+   "prepMinutes": 15,
+   "cookMinutes": 50,
+   "serves": 4,
+   "instructions": "1. Forvarm ovnen til 200°C.\n2. Kok makaroni etter anvisning og avren.\n3. Legg fiskestykkene i en smurt ildfast form.\n4. Lag hvitsaus: Smelt smør, rør inn mel, tilsett melk gradvis og kok til tykk.\n5. Smak til sausen med salt, pepper og dill.\n6. Hell sausen over fisken og legg makaronien på toppen.\n7. Strø over revet ost.\n8. Stek i ovnen i 25-30 minutter til gratinert og gyllen.",
+   "isSeafood": true,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "731e3adf-0054-4adc-9bb4-2cda392d141f-1",
+     "ingredientId": "731e3adf-0054-4adc-9bb4-2cda392d141f",
+     "amount": 0.25,
+     "label": "0.25 pk Fiskegrateng",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "866cfaea-58a5-4ee8-ad16-6fff37de05a7-2",
+     "ingredientId": "866cfaea-58a5-4ee8-ad16-6fff37de05a7",
+     "amount": 0.11,
+     "label": "0.11 pk Amerikansk blanding",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "a47c4c2f-2f18-40f8-8564-a1232bf2087e-3",
+     "ingredientId": "a47c4c2f-2f18-40f8-8564-a1232bf2087e",
+     "amount": 40,
+     "label": "40 g Rømme",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-08-05",
+   "retiredAt": null
+  },
+  {
+   "id": "64329497-d221-44bd-9354-d1a49259c0e2",
+   "name": "Fiskekake i pitabrød",
+   "dishType": "SandwichBurger",
+   "prepMinutes": 15,
+   "cookMinutes": 35,
+   "serves": 4,
+   "instructions": "1. Stek fiskekakene i smør på middels varme til de er gylne på begge sider.\n2. Varm pitabrødene i ovnen eller på en tørr panne.\n3. Skjær opp salat, tomat og agurk.\n4. Bland sammen rømme med litt sitron og dill til dressing.\n5. Åpne pitabrødene og fyll med salat og grønnsaker.\n6. Legg fiskekakene oppi og topp med dressing.\n7. Server umiddelbart.",
+   "isSeafood": true,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "ee3a090a-20fa-432f-b7eb-64e51ce05ab5-1",
+     "ingredientId": "ee3a090a-20fa-432f-b7eb-64e51ce05ab5",
+     "amount": 0.33,
+     "label": "0.33 pk Fiskekaker",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "4f2dd3dc-2871-4b67-ba9a-282e45c4c12b-2",
+     "ingredientId": "4f2dd3dc-2871-4b67-ba9a-282e45c4c12b",
+     "amount": 2,
+     "label": "2 pcs Pitabrød",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "32ddc660-98fa-43ff-bd73-6bcc435b62bd-3",
+     "ingredientId": "32ddc660-98fa-43ff-bd73-6bcc435b62bd",
+     "amount": 0.33,
+     "label": "0.33 pcs Eple",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "b9d3c249-12d3-4091-9a65-89fd2836bd3c-4",
+     "ingredientId": "b9d3c249-12d3-4091-9a65-89fd2836bd3c",
+     "amount": 0.17,
+     "label": "0.17 pk Sukkerert",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "a47c4c2f-2f18-40f8-8564-a1232bf2087e-5",
+     "ingredientId": "a47c4c2f-2f18-40f8-8564-a1232bf2087e",
+     "amount": 50,
+     "label": "50 g Rømme",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "b6bf492b-4b15-498d-acaf-5990b8b7e12b-6",
+     "ingredientId": "b6bf492b-4b15-498d-acaf-5990b8b7e12b",
+     "amount": 20,
+     "label": "20 g Sweet Chili Sauce Ginger",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-05-28",
+   "retiredAt": null
+  },
+  {
+   "id": "fb677919-4c69-45ee-a9af-f2795f4f59a5",
+   "name": "Fiskekaker i brun saus",
+   "dishType": "ProteinVegPlate",
+   "prepMinutes": 15,
+   "cookMinutes": 35,
+   "serves": 4,
+   "instructions": "1. Stek fiskekakene i smør på middels varme til de er gylne på begge sider. Sett til side.\n2. I samme panne, smelt mer smør og tilsett hakket løk. Stek til løken er myk.\n3. Strø over litt hvetemel og rør rundt.\n4. Hell i oksebuljong eller kraft gradvis mens du rører.\n5. La sausen småkoke til den tykner, ca. 5-7 minutter.\n6. Smak til med soyasaus, salt og pepper.\n7. Legg fiskekakene tilbake i sausen og varm gjennom.\n8. Server med kokte poteter og erter.",
+   "isSeafood": true,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "ee3a090a-20fa-432f-b7eb-64e51ce05ab5-1",
+     "ingredientId": "ee3a090a-20fa-432f-b7eb-64e51ce05ab5",
+     "amount": 0.33,
+     "label": "0.33 pk Fiskekaker",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "3527f1eb-4e90-40c4-b86f-91ca1d0b51cd-2",
+     "ingredientId": "3527f1eb-4e90-40c4-b86f-91ca1d0b51cd",
+     "amount": 0.33,
+     "label": "0.33 pk Potetmos",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "36beb59c-8731-4d6d-9584-eae7b48fc7aa-3",
+     "ingredientId": "36beb59c-8731-4d6d-9584-eae7b48fc7aa",
+     "amount": 1,
+     "label": "1 pcs Gulrot",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "cbe5bf8c-fb95-4932-bbb8-a38160f39d4b-4",
+     "ingredientId": "cbe5bf8c-fb95-4932-bbb8-a38160f39d4b",
+     "amount": 0.33,
+     "label": "0.33 pcs Brunsaus",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-06-09",
+   "retiredAt": null
+  },
+  {
+   "id": "43d2eead-b84f-442b-b1cd-483cb100574e",
+   "name": "Grill",
+   "dishType": "ProteinVegPlate",
+   "prepMinutes": 15,
+   "cookMinutes": 25,
+   "serves": 3,
+   "instructions": "Fritt valg per gang. Standardmengdene under er et utgangspunkt, ikke en fast oppskrift.",
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "cee06f8f-eb1f-40bb-8249-af9c51d331d1-1",
+     "ingredientId": "cee06f8f-eb1f-40bb-8249-af9c51d331d1",
+     "amount": 0.33,
+     "label": "0.33 pk Grillpølse",
+     "unit": "Pack",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "67c98161-a431-4dc9-acb3-569ba1fef65c-2",
+     "ingredientId": "67c98161-a431-4dc9-acb3-569ba1fef65c",
+     "amount": 150,
+     "label": "150 g Grillspyd kylling",
+     "unit": "G",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "ab5131b1-d626-4a7e-8d07-64f1e26a09bd-3",
+     "ingredientId": "ab5131b1-d626-4a7e-8d07-64f1e26a09bd",
+     "amount": 200,
+     "label": "200 g Potetsalat",
+     "unit": "G",
+     "scaling": "PerDish",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-07-22",
+   "retiredAt": null
+  },
+  {
+   "id": "001279f5-8618-46b3-b124-3fe0887752e5",
+   "name": "Gryterett",
+   "dishType": "SoupStew",
+   "prepMinutes": 15,
+   "cookMinutes": 35,
+   "serves": 4,
+   "instructions": "1. Skjær kjøtt og grønnsaker i terninger.\n2. Brun kjøttet i smør i en stor gryte.\n3. Tilsett løk og hvitløk, stek i 2 minutter.\n4. Tilsett rotgrønnsaker som gulrot, kålrot og potet.\n5. Hell over buljong til det dekker ingrediensene.\n6. Kok opp og la småkoke i 45-60 minutter til kjøttet er mørt og grønnsakene er myke.\n7. Smak til med salt, pepper og urter.\n8. Server rykende varm med godt brød.",
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "bb37d9ef-defc-4eff-b0f1-310f0847a301-1",
+     "ingredientId": "bb37d9ef-defc-4eff-b0f1-310f0847a301",
+     "amount": 133,
+     "label": "133 g Karbonadedeig",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "c351a04c-15a5-4756-bb9f-512615173cf0-2",
+     "ingredientId": "c351a04c-15a5-4756-bb9f-512615173cf0",
+     "amount": 0.33,
+     "label": "0.33 pk Meksikansk gryte",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "6644cc58-dbc7-407a-b535-f43584883ec3-3",
+     "ingredientId": "6644cc58-dbc7-407a-b535-f43584883ec3",
+     "amount": 0.33,
+     "label": "0.33 pk Hvitløksbaguette",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-02-19",
+   "retiredAt": null
+  },
+  {
+   "id": "ef4e31c5-0a64-4212-837f-913e7d822143",
+   "name": "Hamburger",
+   "dishType": "SandwichBurger",
+   "prepMinutes": 15,
+   "cookMinutes": 25,
+   "serves": 4,
+   "instructions": "1. Bland kjøttdeig med salt og pepper. Form til burgere som er litt større enn brødene.\n2. Stekt burgerne på høy varme i 3-4 minutter på hver side til ønsket stekegrad.\n3. Legg på en skive ost mot slutten og la den smelte.\n4. Varm hamburgerbrødene på en tørr panne eller i ovnen.\n5. Smør brødene med ketchup, sennep eller majones.\n6. Legg på salatblad, tomatskive og løkringer.\n7. Legg burgeren på bunnen og sett lokket på.\n8. Server med pommes frites eller potetsalat.",
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "29217ed3-d6b3-434e-ad9c-f3e0301258e2-1",
+     "ingredientId": "29217ed3-d6b3-434e-ad9c-f3e0301258e2",
+     "amount": 1,
+     "label": "1 pcs Hamburgerbrød",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "3ff2634b-8573-41da-99b7-a06996c90872-2",
+     "ingredientId": "3ff2634b-8573-41da-99b7-a06996c90872",
+     "amount": 1,
+     "label": "1 pcs Hamburger",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "0a3d9a33-7f2f-4ca0-8e9d-a496cf59d94a-3",
+     "ingredientId": "0a3d9a33-7f2f-4ca0-8e9d-a496cf59d94a",
+     "amount": 0.2,
+     "label": "0.2 pcs Agurk",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "f545e5d7-7a8a-4920-8e4c-728f61be97da-4",
+     "ingredientId": "f545e5d7-7a8a-4920-8e4c-728f61be97da",
+     "amount": 0.15,
+     "label": "0.15 pk Salat",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "396a389e-f8bc-4ab7-94f7-5439eb3e33c4-5",
+     "ingredientId": "396a389e-f8bc-4ab7-94f7-5439eb3e33c4",
+     "amount": 0.33,
+     "label": "0.33 pk Cheddar",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "6b7aa8c3-ade3-4777-a68a-6a6541dde294-6",
+     "ingredientId": "6b7aa8c3-ade3-4777-a68a-6a6541dde294",
+     "amount": 20,
+     "label": "20 g Hamburgerdressing",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "049de4d7-d90f-40bc-bc5c-7b833a91388c-7",
+     "ingredientId": "049de4d7-d90f-40bc-bc5c-7b833a91388c",
+     "amount": 1,
+     "label": "1 pcs Ketchup",
+     "unit": "Pcs",
+     "scaling": "PerDish",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-07-19",
+   "retiredAt": null
+  },
+  {
+   "id": "d3fdb1ad-1872-4f59-b90e-55e9f9e9917f",
+   "name": "Hjemmelagd Pizza",
+   "dishType": "PizzaPie",
+   "prepMinutes": 15,
+   "cookMinutes": 30,
+   "serves": 4,
+   "instructions": "1. Forvarm ovnen til 250°C med en stekeplate eller pizzastein i ovnen.\n2. Elt pizzadeigen og kjevle den ut til ønsket størrelse.\n3. Smør pizzabunnen med tomatsaus eller pizzasaus.\n4. Legg på revet mozzarella.\n5. Topp med dine favorittingredienser som skinke, paprika, sopp eller oliven.\n6. Skyv pizzaen inn i ovnen på den varme platen.\n7. Stek i 8-12 minutter til bunnen er sprø og osten er smeltet og gyllen.\n8. Ta ut og strø over fersk basilikum før servering.",
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "d448f2a5-8379-4742-8f0e-e59ba533ce54-1",
+     "ingredientId": "d448f2a5-8379-4742-8f0e-e59ba533ce54",
+     "amount": 0.33,
+     "label": "0.33 pcs Pizzabunn",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "2cf61229-f397-4098-985c-8ba982243bd7-2",
+     "ingredientId": "2cf61229-f397-4098-985c-8ba982243bd7",
+     "amount": 66.7,
+     "label": "66.7 g Kjøttdeig",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "f3dde81d-e4ca-4efe-8892-ff98ad789d1e-3",
+     "ingredientId": "f3dde81d-e4ca-4efe-8892-ff98ad789d1e",
+     "amount": 0.33,
+     "label": "0.33 pcs Pizzasaus",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "6e212584-8196-4771-a545-5b612a50fe83-4",
+     "ingredientId": "6e212584-8196-4771-a545-5b612a50fe83",
+     "amount": 0.25,
+     "label": "0.25 pk Ost",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "a85e5efb-19d0-4ee1-a92b-45045a0b5111-5",
+     "ingredientId": "a85e5efb-19d0-4ee1-a92b-45045a0b5111",
+     "amount": 1.33,
+     "label": "1.33 pcs Kokt skinke",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-04-11",
+   "retiredAt": null
+  },
+  {
+   "id": "618b53aa-82ee-4124-a4f9-a5d14da9a22a",
+   "name": "Italiensk torskepanne",
+   "dishType": "CasseroleBake",
+   "prepMinutes": 15,
+   "cookMinutes": 40,
+   "serves": 4,
+   "instructions": "1. Skjær torsken i passende biter og krydre med salt og pepper.\n2. Stek torskestykkene raskt i olivenolje, 2 minutter på hver side. Ta ut og sett til side.\n3. Stek hakket løk og hvitløk i pannen til de er myke.\n4. Tilsett hakkede tomater, kapers og oliven.\n5. La sausen småkoke i 10 minutter.\n6. Smak til med basilikum, oregano, salt og pepper.\n7. Legg torskestykkene tilbake i sausen og la det hele småkoke i 5 minutter.\n8. Server med kokt pasta eller godt brød.",
+   "isSeafood": true,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "b1732176-8b45-4b52-98b2-f88bafab13a2-1",
+     "ingredientId": "b1732176-8b45-4b52-98b2-f88bafab13a2",
+     "amount": 133,
+     "label": "133 g Torsk",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "77f4c69f-e19f-458a-9661-4c06eea0d73c-2",
+     "ingredientId": "77f4c69f-e19f-458a-9661-4c06eea0d73c",
+     "amount": 133,
+     "label": "133 g Potet",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "9e9a675a-fc58-46a3-b099-a88b846bee0b-3",
+     "ingredientId": "9e9a675a-fc58-46a3-b099-a88b846bee0b",
+     "amount": 0.33,
+     "label": "0.33 pcs Creme Fraiche",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "b608da50-83e1-4537-992c-6f72f6c87d68-4",
+     "ingredientId": "b608da50-83e1-4537-992c-6f72f6c87d68",
+     "amount": 0.33,
+     "label": "0.33 pcs Mozzarella",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "5b55f498-8b5a-4886-8dd4-2165d624022a-5",
+     "ingredientId": "5b55f498-8b5a-4886-8dd4-2165d624022a",
+     "amount": 0.33,
+     "label": "0.33 pcs Hakkede Tomater - Hvitløk og Oregano",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": null,
+   "retiredAt": null
+  },
+  {
+   "id": "a165960f-c46b-4796-accc-fd71fe3e62ed",
+   "name": "Kjappkjo",
+   "dishType": "Pasta",
+   "prepMinutes": 15,
+   "cookMinutes": 35,
+   "serves": 4,
+   "instructions": "1. Skjær kjøttet i tynne strimler.\n2. Varm opp en stekepanne på høy varme med litt olje.\n3. Stek kjøttet i porsjoner for å få brun farge, ca. 2 minutter per porsjon.\n4. Tilsett hakket løk og paprika, stek i 2-3 minutter.\n5. Rør inn 2 ss soyasaus og 1 ss østerssaus.\n6. Tilsett litt vann eller kraft om nødvendig.\n7. Smak til med pepper og eventuelt chili.\n8. Server umiddelbart med ris eller nudler.",
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "761692ef-fe05-41a5-9d49-d64a5ed61dd5-1",
+     "ingredientId": "761692ef-fe05-41a5-9d49-d64a5ed61dd5",
+     "amount": 83,
+     "label": "83 g Baconterning",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "a145be55-e0db-4b64-9cb7-0d9902003241-2",
+     "ingredientId": "a145be55-e0db-4b64-9cb7-0d9902003241",
+     "amount": 0.33,
+     "label": "0.33 pcs Tomatpure",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "6b3713ec-aa85-4070-a4f9-a2f43c85eb7c-3",
+     "ingredientId": "6b3713ec-aa85-4070-a4f9-a2f43c85eb7c",
+     "amount": 56,
+     "label": "56 g Makaroni",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-07-23",
+   "retiredAt": null
+  },
+  {
+   "id": "8acc7ede-248c-41a3-9022-e371abacb2ab",
+   "name": "Kyllingwok",
+   "dishType": "Noodles",
+   "prepMinutes": 15,
+   "cookMinutes": 35,
+   "serves": 4,
+   "instructions": "1. Skjær kyllingfileten i tynne strimler.\n2. Skjær grønnsaker som paprika, brokkoli, gulrot og vårløk i biter.\n3. Varm en wok eller stor panne på høy varme med litt sesamolje.\n4. Stek kyllingen i 3-4 minutter til gjennomstekt. Ta ut og sett til side.\n5. Tilsett mer olje og wok grønnsakene i 2-3 minutter til de er sprø-møre.\n6. Legg kyllingen tilbake i woken.\n7. Hell over soyasaus og eventuelt litt østerssaus.\n8. Smak til med ingefær og hvitløk. Server over ris eller nudler.",
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "c03f4e1f-f6ad-44d9-99ee-fcc350098daf-1",
+     "ingredientId": "c03f4e1f-f6ad-44d9-99ee-fcc350098daf",
+     "amount": 55,
+     "label": "55 g Kyllingfilet",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "ab169c55-5e22-41d5-94d9-81cb9f0bdf3c-2",
+     "ingredientId": "ab169c55-5e22-41d5-94d9-81cb9f0bdf3c",
+     "amount": 133,
+     "label": "133 g Wokgrønnsaker",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "6b2c9780-5f0a-4745-861d-fc8464f779e5-3",
+     "ingredientId": "6b2c9780-5f0a-4745-861d-fc8464f779e5",
+     "amount": 0.67,
+     "label": "0.67 pcs Nudler",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "6dadb0a1-4621-4c63-8557-bd9ae763b278-4",
+     "ingredientId": "6dadb0a1-4621-4c63-8557-bd9ae763b278",
+     "amount": 0.33,
+     "label": "0.33 pcs Sweet&Sour saus",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-06-16",
+   "retiredAt": null
+  },
+  {
+   "id": "46c19c32-587b-47c7-9f0d-2ac7722b2311",
+   "name": "Laks m/erte- og potetstappe",
+   "dishType": "ProteinVegPlate",
+   "prepMinutes": 15,
+   "cookMinutes": 35,
+   "serves": 4,
+   "instructions": "1. Forvarm ovnen til 200°C.\n2. Legg laksestykkene på et stekebrett med bakepapir. Krydre med salt og pepper.\n3. Stek laksen i ovnen i 15-18 minutter til den er gjennomstekt.\n4. I mellomtiden, kok poteten i saltet vann til de er møre.\n5. Kok frosne erter i 3-4 minutter og avren.\n6. Mos potetene med smør og melk.\n7. Tilsett ertene i potetstappen og rør forsiktig.\n8. Anrett laksen med erte- og potetstappen ved siden av. Dryss over litt dill.",
+   "isSeafood": true,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "77f4c69f-e19f-458a-9661-4c06eea0d73c-1",
+     "ingredientId": "77f4c69f-e19f-458a-9661-4c06eea0d73c",
+     "amount": 133,
+     "label": "133 g Potet",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "2de4667c-3433-4893-93ea-a0c14caceef2-2",
+     "ingredientId": "2de4667c-3433-4893-93ea-a0c14caceef2",
+     "amount": 0.33,
+     "label": "0.33 pk Erter",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "785b6105-d78d-4fec-8f9b-1fbcf66d90a1-3",
+     "ingredientId": "785b6105-d78d-4fec-8f9b-1fbcf66d90a1",
+     "amount": 133,
+     "label": "133 g Laks",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "ae8f047c-0ca2-40bd-aba5-e384c8a84145-4",
+     "ingredientId": "ae8f047c-0ca2-40bd-aba5-e384c8a84145",
+     "amount": 0.17,
+     "label": "0.17 pk Chorizo",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-06-18",
+   "retiredAt": null
+  },
+  {
+   "id": "b39f15b2-ca65-46e6-ba77-87597dfab8fe",
+   "name": "Laks m/pasta",
+   "dishType": "Pasta",
+   "prepMinutes": 0,
+   "cookMinutes": 0,
+   "serves": 4,
+   "instructions": "1. Kok pasta etter anvisning på pakken. Spar litt kokvann.\n2. Skjær laksen i terninger og krydre med salt og pepper.\n3. Stek laksen forsiktig i smør i 3-4 minutter til den er gjennomstekt.\n4. I en annen panne, fres hvitløk i smør. Tilsett fløte og la det småkoke.\n5. Smak til sausen med sitron, dill, salt og pepper.\n6. Bland den kokte pastaen inn i sausen. Tilsett litt pastakokvann om nødvendig.\n7. Vend laksen forsiktig inn i pastaen.\n8. Server umiddelbart med revet parmesan og frisk dill på toppen.",
+   "isSeafood": true,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "785b6105-d78d-4fec-8f9b-1fbcf66d90a1-1",
+     "ingredientId": "785b6105-d78d-4fec-8f9b-1fbcf66d90a1",
+     "amount": 133,
+     "label": "133 g Laks",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "a197b793-bba1-4111-a0ae-fcbf459a2883-2",
+     "ingredientId": "a197b793-bba1-4111-a0ae-fcbf459a2883",
+     "amount": 60,
+     "label": "60 g Pasta",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-03-05",
+   "retiredAt": null
+  },
+  {
+   "id": "95f10513-a35b-45ed-b7b2-8b5840de99f4",
+   "name": "Lapskaus med grønnsaker",
+   "dishType": "SoupStew",
+   "prepMinutes": 15,
+   "cookMinutes": 30,
+   "serves": 4,
+   "instructions": "1. Skrell og skjær potetene i terninger på ca. 2x2 cm.\n2. Skrell gulrøttene og skjær dem i skiver eller terninger.\n3. Skrell kålroten og skjær den i terninger på ca. 2x2 cm.\n4. Skrell løken og hakk den grovt.\n5. Ha grønnsakskraften i en stor kjele og varm den opp til kokepunktet.\n6. Tilsett løk og kålrot i kraften, da disse trenger lengst koketid. La det koke i 5 minutter.\n7. Tilsett gulrot og potet i kjelen.\n8. Kok alt på middels varme i ca. 20-25 minutter, eller til alle grønnsakene er helt møre og myke.\n9. Smak til med salt og pepper.\n10. Tilsett smør og rør inn i lapskausen for ekstra fylde og smak.\n11. Dryss over hakket persille rett før servering.\n12. Server lapskausen rykende varm med godt brød eller flatbrød ved siden av.",
+   "isSeafood": false,
+   "isVegetarian": true,
+   "isVegan": true,
+   "vibeTags": [
+    "ComfortFood"
+   ],
+   "ingredients": [
+    {
+     "id": "77f4c69f-e19f-458a-9661-4c06eea0d73c-1",
+     "ingredientId": "77f4c69f-e19f-458a-9661-4c06eea0d73c",
+     "amount": 150,
+     "label": "150 g Potet",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "36beb59c-8731-4d6d-9584-eae7b48fc7aa-2",
+     "ingredientId": "36beb59c-8731-4d6d-9584-eae7b48fc7aa",
+     "amount": 1,
+     "label": "1 pcs Gulrot",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "49594fb9-2cbf-4598-b7cf-4fff99a34e56-3",
+     "ingredientId": "49594fb9-2cbf-4598-b7cf-4fff99a34e56",
+     "amount": 75,
+     "label": "75 g Kålrot",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "cdaa7511-6a41-4895-b785-5e57bd3ec4b8-4",
+     "ingredientId": "cdaa7511-6a41-4895-b785-5e57bd3ec4b8",
+     "amount": 0.5,
+     "label": "0.5 pcs Løk",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "077e9fd4-233a-403d-812d-afaaebc7519b-5",
+     "ingredientId": "077e9fd4-233a-403d-812d-afaaebc7519b",
+     "amount": 250,
+     "label": "250 ml Grønnsaksbuljong",
+     "unit": "Ml",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "a963f671-a339-427e-9f92-b123172a8408-6",
+     "ingredientId": "a963f671-a339-427e-9f92-b123172a8408",
+     "amount": 8,
+     "label": "8 g Smør",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "c2554686-839f-44ce-a780-f81217a6a432-7",
+     "ingredientId": "c2554686-839f-44ce-a780-f81217a6a432",
+     "amount": 5,
+     "label": "5 g Salt",
+     "unit": "G",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "6446d89e-8dcb-4fba-aa02-29cb17687c8a-8",
+     "ingredientId": "6446d89e-8dcb-4fba-aa02-29cb17687c8a",
+     "amount": 2,
+     "label": "2 g sort pepper",
+     "unit": "G",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "b55e1ad3-20f5-44a6-9392-f95c7783f158-9",
+     "ingredientId": "b55e1ad3-20f5-44a6-9392-f95c7783f158",
+     "amount": 20,
+     "label": "20 g Frisk persille",
+     "unit": "G",
+     "scaling": "PerDish",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": null,
+   "retiredAt": null
+  },
+  {
+   "id": "97c1e79b-e9aa-4c41-8bdb-ca12d6e62f3e",
+   "name": "Lapskaus m/vegetarboller",
+   "dishType": "SoupStew",
+   "prepMinutes": 15,
+   "cookMinutes": 35,
+   "serves": 4,
+   "instructions": "1. Skrell og skjær poteter, gulrøtter og kålrot i terninger.\n2. Kok grønnsakene i buljong til de er nesten møre, ca. 15 minutter.\n3. I mellomtiden, del vegetarbollene i to eller kvarter.\n4. Stek vegetarbollene lett i en panne til de får litt farge.\n5. Tilsett vegetarbollene i lapskausen.\n6. La det hele småkoke i 10 minutter til.\n7. Smak til med salt, pepper og timian.\n8. Server med flatbrød og smør.",
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "0d9f7d7e-2581-4ca8-8efa-8801eb3d3d90-1",
+     "ingredientId": "0d9f7d7e-2581-4ca8-8efa-8801eb3d3d90",
+     "amount": 0.33,
+     "label": "0.33 pk Vegetarboller",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "77f4c69f-e19f-458a-9661-4c06eea0d73c-2",
+     "ingredientId": "77f4c69f-e19f-458a-9661-4c06eea0d73c",
+     "amount": 133,
+     "label": "133 g Potet",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "36beb59c-8731-4d6d-9584-eae7b48fc7aa-3",
+     "ingredientId": "36beb59c-8731-4d6d-9584-eae7b48fc7aa",
+     "amount": 1,
+     "label": "1 pcs Gulrot",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "f49eb962-6364-44cb-aead-fb3eff8c003c-4",
+     "ingredientId": "f49eb962-6364-44cb-aead-fb3eff8c003c",
+     "amount": 0.33,
+     "label": "0.33 pcs Purreløk",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-04-07",
+   "retiredAt": null
+  },
+  {
+   "id": "456785f7-59ee-4bab-8769-1bbb8fb98139",
+   "name": "Lasagne",
+   "dishType": "CasseroleBake",
+   "prepMinutes": 15,
+   "cookMinutes": 45,
+   "serves": 4,
+   "instructions": "1. Forvarm ovnen til 180°C.\n2. Brun kjøttdeig med hakket løk og hvitløk. Tilsett hakkede tomater og tomatpuré.\n3. Krydre med oregano, basilikum, salt og pepper. La kjøttsausen småkoke i 20 minutter.\n4. Lag hvitsaus: Smelt smør, rør inn mel, tilsett melk gradvis og kok til tykk.\n5. Legg et lag kjøttsaus i bunnen av en ildfast form.\n6. Legg på lasagneplater, hvitsaus og revet ost. Gjenta lagene.\n7. Avslutt med hvitsaus og rikelig med ost på toppen.\n8. Stek i ovnen i 35-40 minutter til den er gyllen og bobler.",
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "e7bb931a-0b11-441f-bec8-d0ce8580e7d1-1",
+     "ingredientId": "e7bb931a-0b11-441f-bec8-d0ce8580e7d1",
+     "amount": 133,
+     "label": "133 g Kyllingkjøttdeig",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "73c84489-12b0-48a1-ad37-3ed5d49e33fb-2",
+     "ingredientId": "73c84489-12b0-48a1-ad37-3ed5d49e33fb",
+     "amount": 0.33,
+     "label": "0.33 pk Lasagne",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "91365bd0-07d1-44f3-8080-4a2023bb4b98-3",
+     "ingredientId": "91365bd0-07d1-44f3-8080-4a2023bb4b98",
+     "amount": 167,
+     "label": "167 ml Melk",
+     "unit": "Ml",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "6e212584-8196-4771-a545-5b612a50fe83-4",
+     "ingredientId": "6e212584-8196-4771-a545-5b612a50fe83",
+     "amount": 0.25,
+     "label": "0.25 pk Ost",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-07-26",
+   "retiredAt": null
+  },
+  {
+   "id": "86b80f5c-a522-44c4-b7e8-f7e5c2e1145e",
+   "name": "Myk laksepasta med fløtesaus",
+   "dishType": "Pasta",
+   "prepMinutes": 10,
+   "cookMinutes": 20,
+   "serves": 4,
+   "instructions": "1. Kok opp en stor kjele med godt saltet vann. Kok pastaen (penne eller fusilli) etter anvisningen på pakken til al dente. Spar 1 dl pastakokevannet før du heller av.\n2. Skjær laksefileten i grove biter på ca. 3–4 cm. Krydre lett med salt og hvit pepper.\n3. Varm en stor stekepanne på middels varme med litt smør. Legg i laksebitene og stek forsiktig i ca. 2–3 minutter per side til de så vidt er gjennomstekt. Ta laksen ut av pannen og sett til side.\n4. I samme panne, skru ned varmen til lav-middels. Ha i resten av smøret og fres hvitløken i ca. 1 minutt til den er myk og dufter, uten at den blir brun.\n5. Hell i fløten og rør godt. La sausen småkoke på svak varme i ca. 4–5 minutter til den tykner litt.\n6. Press sitronsaften inn i sausen og rør inn dill. Smak til med salt og hvit pepper. Tilsett litt pastavann om sausen er for tykk.\n7. Ha den kokte, avrente pastaen i pannen med sausen og vend forsiktig til pastaen er godt dekket.\n8. Legg laksebitene tilbake i pannen og vend dem forsiktig inn i pastaen – laksen skal gjerne falle litt fra hverandre.\n9. Server umiddelbart, gjerne med litt ekstra frisk dill og sitronbåter på siden.",
+   "isSeafood": true,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [
+    "ComfortFood",
+    "QuickWeeknight",
+    "FamilyFriendly"
+   ],
+   "ingredients": [
+    {
+     "id": "a197b793-bba1-4111-a0ae-fcbf459a2883-1",
+     "ingredientId": "a197b793-bba1-4111-a0ae-fcbf459a2883",
+     "amount": 100,
+     "label": "100 g Pasta",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "785b6105-d78d-4fec-8f9b-1fbcf66d90a1-2",
+     "ingredientId": "785b6105-d78d-4fec-8f9b-1fbcf66d90a1",
+     "amount": 150,
+     "label": "150 g Laks",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "c09ec8e5-ec53-4436-aef6-b4b7db86750c-3",
+     "ingredientId": "c09ec8e5-ec53-4436-aef6-b4b7db86750c",
+     "amount": 75,
+     "label": "75 ml Matfløte",
+     "unit": "Ml",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "a963f671-a339-427e-9f92-b123172a8408-4",
+     "ingredientId": "a963f671-a339-427e-9f92-b123172a8408",
+     "amount": 8,
+     "label": "8 g Smør",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "b89df390-440c-4b93-b2c1-06b81b45e7cb-5",
+     "ingredientId": "b89df390-440c-4b93-b2c1-06b81b45e7cb",
+     "amount": 3,
+     "label": "3 pcs Hvitløksfedd",
+     "unit": "Pcs",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "7b3b3392-7f3d-4e65-a4c2-9d8bc725697e-6",
+     "ingredientId": "7b3b3392-7f3d-4e65-a4c2-9d8bc725697e",
+     "amount": 30,
+     "label": "30 ml Sitronsaft",
+     "unit": "Ml",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "c1be1b78-95f5-44c2-af49-eb60f88c254d-7",
+     "ingredientId": "c1be1b78-95f5-44c2-af49-eb60f88c254d",
+     "amount": 20,
+     "label": "20 g Frisk dill",
+     "unit": "G",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "c2554686-839f-44ce-a780-f81217a6a432-8",
+     "ingredientId": "c2554686-839f-44ce-a780-f81217a6a432",
+     "amount": 5,
+     "label": "5 g Salt",
+     "unit": "G",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "6446d89e-8dcb-4fba-aa02-29cb17687c8a-9",
+     "ingredientId": "6446d89e-8dcb-4fba-aa02-29cb17687c8a",
+     "amount": 2,
+     "label": "2 g sort pepper",
+     "unit": "G",
+     "scaling": "PerDish",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-08-04",
+   "retiredAt": null
+  },
+  {
+   "id": "ec584260-6d24-4da0-980a-962c91a2d308",
+   "name": "Nachos",
+   "dishType": "SnackBoard",
+   "prepMinutes": 15,
+   "cookMinutes": 20,
+   "serves": 4,
+   "instructions": "1. Forvarm ovnen til 200°C.\n2. Legg tortillachips i et jevnt lag på et stekebrett med bakepapir.\n3. Brun kjøttdeig med løk og tacokrydder, eller varm opp bønner.\n4. Fordel kjøttblandingen over chipsene.\n5. Strø rikelig med revet ost over.\n6. Stek i ovnen i 5-8 minutter til osten er smeltet.\n7. Ta ut og topp med jalapeño, rømme, guacamole og salsa.\n8. Server umiddelbart mens de fortsatt er varme og sprø.",
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "24b31c6c-88cd-4ba8-80e5-d2d8bbb5006c-1",
+     "ingredientId": "24b31c6c-88cd-4ba8-80e5-d2d8bbb5006c",
+     "amount": 0.11,
+     "label": "0.11 pk Nachips",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "ac7cdd3f-8009-41ab-8670-1aa46630239a-2",
+     "ingredientId": "ac7cdd3f-8009-41ab-8670-1aa46630239a",
+     "amount": 0.33,
+     "label": "0.33 pk Vegetardeig",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "6e212584-8196-4771-a545-5b612a50fe83-3",
+     "ingredientId": "6e212584-8196-4771-a545-5b612a50fe83",
+     "amount": 0.25,
+     "label": "0.25 pk Ost",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "4dbf03c6-6ba6-4513-ae43-810cd553c194-4",
+     "ingredientId": "4dbf03c6-6ba6-4513-ae43-810cd553c194",
+     "amount": 0.11,
+     "label": "0.11 pcs Mais",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "c87af58b-e20b-4207-aa4e-29de6df72bc8-5",
+     "ingredientId": "c87af58b-e20b-4207-aa4e-29de6df72bc8",
+     "amount": 0.11,
+     "label": "0.11 pcs Paprika",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-07-18",
+   "retiredAt": null
+  },
+  {
+   "id": "e48712e2-6d81-46e3-9f3f-361e549d5e7d",
+   "name": "Napolitansk pizza",
+   "dishType": "PizzaPie",
+   "prepMinutes": 45,
+   "cookMinutes": 10,
+   "serves": 0,
+   "instructions": null,
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "296c2662-491e-480a-8579-a067ae53214b-1",
+     "ingredientId": "296c2662-491e-480a-8579-a067ae53214b",
+     "amount": 500,
+     "label": "500 g Pizzamel",
+     "unit": "G",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "69dd865c-54ff-4c6a-bffb-49140ff01d06-2",
+     "ingredientId": "69dd865c-54ff-4c6a-bffb-49140ff01d06",
+     "amount": 1,
+     "label": "1 g Tørrgjær",
+     "unit": "G",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "f3dde81d-e4ca-4efe-8892-ff98ad789d1e-3",
+     "ingredientId": "f3dde81d-e4ca-4efe-8892-ff98ad789d1e",
+     "amount": 1,
+     "label": "1 pcs Pizzasaus",
+     "unit": "Pcs",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "b608da50-83e1-4537-992c-6f72f6c87d68-4",
+     "ingredientId": "b608da50-83e1-4537-992c-6f72f6c87d68",
+     "amount": 2,
+     "label": "2 pcs Mozzarella",
+     "unit": "Pcs",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "a85e5efb-19d0-4ee1-a92b-45045a0b5111-5",
+     "ingredientId": "a85e5efb-19d0-4ee1-a92b-45045a0b5111",
+     "amount": 4,
+     "label": "4 pcs Kokt skinke",
+     "unit": "Pcs",
+     "scaling": "PerDish",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": null,
+   "retiredAt": null
+  },
+  {
+   "id": "fadb92bc-40a8-4b06-ba60-80b4c14bd1a7",
+   "name": "Omelett",
+   "dishType": "ProteinVegPlate",
+   "prepMinutes": 0,
+   "cookMinutes": 0,
+   "serves": 1,
+   "instructions": "1. Pisk sammen eggene med en klype salt og pepper i en bolle.\n2. Smelt smør i en stekepanne på middels varme.\n3. Hell eggeblandingen i pannen og la den stivne på bunnen.\n4. Bruk en stekespade til å trekke de stivnede kantene inn mot midten.\n5. Vipp pannen slik at den flytende eggen renner ut til kantene.\n6. Når omeletten er nesten stivnet men fortsatt litt rå på toppen, legg på fyll.\n7. Fyll med skinke, ost, sopp eller grønnsaker etter ønske.\n8. Brett omeletten over fyllet og skyv over på en tallerken.",
+   "isSeafood": false,
+   "isVegetarian": true,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "319e246c-559c-43e0-b4c9-82791b1ef1f7-1",
+     "ingredientId": "319e246c-559c-43e0-b4c9-82791b1ef1f7",
+     "amount": 3,
+     "label": "3 pcs Egg",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "6e212584-8196-4771-a545-5b612a50fe83-2",
+     "ingredientId": "6e212584-8196-4771-a545-5b612a50fe83",
+     "amount": 0.15,
+     "label": "0.15 pk Ost",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-03-04",
+   "retiredAt": null
+  },
+  {
+   "id": "b789d280-9185-4411-9dbb-5aea79c6200f",
+   "name": "Ørret m/ pasta",
+   "dishType": "Pasta",
+   "prepMinutes": 15,
+   "cookMinutes": 35,
+   "serves": 4,
+   "instructions": "1. Kok pastaen etter anvisning på pakken. Spar litt kokvann.\n2. Skjær ørretfileten i biter og krydre med salt og pepper.\n3. Stek ørreten forsiktig i smør i 3-4 minutter til den er gjennomstekt.\n4. I samme panne, tilsett fløte og la det småkoke.\n5. Rør inn litt sitron og hakket dill.\n6. Smak til med salt og hvit pepper.\n7. Bland pastaen inn i sausen. Tilsett pastakokvann om sausen er for tykk.\n8. Vend forsiktig inn ørretbitene og server med fersk dill på toppen.",
+   "isSeafood": true,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "b0657688-13bf-4d41-8593-01c6618316a1-1",
+     "ingredientId": "b0657688-13bf-4d41-8593-01c6618316a1",
+     "amount": 133,
+     "label": "133 g Ørret",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "a197b793-bba1-4111-a0ae-fcbf459a2883-2",
+     "ingredientId": "a197b793-bba1-4111-a0ae-fcbf459a2883",
+     "amount": 60,
+     "label": "60 g Pasta",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "f49eb962-6364-44cb-aead-fb3eff8c003c-3",
+     "ingredientId": "f49eb962-6364-44cb-aead-fb3eff8c003c",
+     "amount": 0.33,
+     "label": "0.33 pcs Purreløk",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "d7519b1f-9ea5-464f-860c-c5e4d01b322c-4",
+     "ingredientId": "d7519b1f-9ea5-464f-860c-c5e4d01b322c",
+     "amount": 133,
+     "label": "133 g Blomkål",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "2de4667c-3433-4893-93ea-a0c14caceef2-5",
+     "ingredientId": "2de4667c-3433-4893-93ea-a0c14caceef2",
+     "amount": 0.17,
+     "label": "0.17 pk Erter",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "c09ec8e5-ec53-4436-aef6-b4b7db86750c-6",
+     "ingredientId": "c09ec8e5-ec53-4436-aef6-b4b7db86750c",
+     "amount": 100,
+     "label": "100 ml Matfløte",
+     "unit": "Ml",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "50be2f37-b417-4c08-82ab-95bc18890b1f-7",
+     "ingredientId": "50be2f37-b417-4c08-82ab-95bc18890b1f",
+     "amount": 50,
+     "label": "50 g Gresk yoghurt",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-05-19",
+   "retiredAt": null
+  },
+  {
+   "id": "93dc93b8-06cc-4985-af4a-2fb3e926915a",
+   "name": "Ovnsbakt laks med rotgrønnsaker",
+   "dishType": "ProteinVegPlate",
+   "prepMinutes": 20,
+   "cookMinutes": 45,
+   "serves": 4,
+   "instructions": "Skru ovnen på 200°C over/undervarme\nVent. Ikke start med noe før ovnen er på.\nVask potetene\nDel dem i like store biter (ca. 3–4 cm)\nLegg dem i en langpanne\nHell over 2 ss olje\nDryss over 1 ts salt\nBland med hendene\n➡️ Sett i ovnen midt i\n➡️ Steketid: 35–40 minutter\n➡️ Etter 20 minutter: ta ut brettet og snu potetene én gang\nGulrøtter\n\nSkrell\n\nDel i staver (som tykke pommes frites)\nBrokkoli\nDel i små buketter\nIKKE stek dem nå.\nLegg dem klare – de skal kokes senere.\nLegg bakepapir i en form\nLegg laksen oppå\nDryss litt salt og pepper på toppen\nLegg 2–3 små smørklatter oppå laksen\nDekk formen løst med aluminiumsfolie\n➡️ Når potetene har stått i ovnen 20 minutter, sett laksen inn\n➡️ Steketid: 15 minutter\nEtter 15 min:\n– Ta av folien\n– Stek 5 minutter til\nKok opp en kjele med vann\nHa i 1 ts salt\nLegg i gulrøtter først – kok 5 minutter\nLegg i brokkoli – kok 2–3 minutter\nHell av vannet\nSmelt 100 g smør på lav varme\nIkke la det koke\nNår smøret er smeltet:\nTilsett 1 ss sitronsaft (valgfritt)\nEn liten klype salt\nRør én gang",
+   "isSeafood": true,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "785b6105-d78d-4fec-8f9b-1fbcf66d90a1-1",
+     "ingredientId": "785b6105-d78d-4fec-8f9b-1fbcf66d90a1",
+     "amount": 133,
+     "label": "133 g Laks",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "77f4c69f-e19f-458a-9661-4c06eea0d73c-2",
+     "ingredientId": "77f4c69f-e19f-458a-9661-4c06eea0d73c",
+     "amount": 133,
+     "label": "133 g Potet",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "36beb59c-8731-4d6d-9584-eae7b48fc7aa-3",
+     "ingredientId": "36beb59c-8731-4d6d-9584-eae7b48fc7aa",
+     "amount": 1,
+     "label": "1 pcs Gulrot",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "9d188ef6-1a57-47c4-ac07-dc5451b9b4e7-4",
+     "ingredientId": "9d188ef6-1a57-47c4-ac07-dc5451b9b4e7",
+     "amount": 0.33,
+     "label": "0.33 pcs Brokkoli",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-04-21",
+   "retiredAt": null
+  },
+  {
+   "id": "8a65dcc0-0621-467f-bedb-08340c6aa165",
+   "name": "Pannekake",
+   "dishType": "BreakfastDinner",
+   "prepMinutes": 15,
+   "cookMinutes": 35,
+   "serves": 4,
+   "instructions": "1. Bland mel, sukker og salt i en bolle.\n2. Visp inn egg ett om gangen.\n3. Tilsett melk gradvis mens du visper til røren er glatt og uten klumper.\n4. La røren hvile i 15-30 minutter i kjøleskapet.\n5. Varm en stekepanne med litt smør på middels varme.\n6. Hell i en øse med røre og vipp pannen slik at røren fordeler seg jevnt.\n7. Stek til bunnen er gyllen, ca. 1-2 minutter, snu og stek andre siden.\n8. Server med sukker, syltetøy, bacon og sirup, eller annen topping etter ønske.",
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "8492e82d-a3b6-4ac0-b8b7-2bb6880a3b48-1",
+     "ingredientId": "8492e82d-a3b6-4ac0-b8b7-2bb6880a3b48",
+     "amount": 100,
+     "label": "100 g Hvetemel",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "319e246c-559c-43e0-b4c9-82791b1ef1f7-2",
+     "ingredientId": "319e246c-559c-43e0-b4c9-82791b1ef1f7",
+     "amount": 1.33,
+     "label": "1.33 pcs Egg",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "91365bd0-07d1-44f3-8080-4a2023bb4b98-3",
+     "ingredientId": "91365bd0-07d1-44f3-8080-4a2023bb4b98",
+     "amount": 200,
+     "label": "200 ml Melk",
+     "unit": "Ml",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "f32a70e6-0805-4c2c-bcba-c2756ca84876-4",
+     "ingredientId": "f32a70e6-0805-4c2c-bcba-c2756ca84876",
+     "amount": 10,
+     "label": "10 g Flytende margarin",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "c2554686-839f-44ce-a780-f81217a6a432-5",
+     "ingredientId": "c2554686-839f-44ce-a780-f81217a6a432",
+     "amount": 1,
+     "label": "1 pcs Salt",
+     "unit": "Pcs",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "fc72229b-17b7-483e-a9c2-3806647510c6-6",
+     "ingredientId": "fc72229b-17b7-483e-a9c2-3806647510c6",
+     "amount": 1,
+     "label": "1 pcs Blåbærsyltetøy",
+     "unit": "Pcs",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "3ac673bf-5a88-4900-afc7-806e8fd06583-7",
+     "ingredientId": "3ac673bf-5a88-4900-afc7-806e8fd06583",
+     "amount": 1,
+     "label": "1 pcs Jordbærsyltetøy",
+     "unit": "Pcs",
+     "scaling": "PerDish",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-05-17",
+   "retiredAt": null
+  },
+  {
+   "id": "dd634868-838a-4063-9ccb-d0c737c400ed",
+   "name": "Pasta Bolognese",
+   "dishType": "Pasta",
+   "prepMinutes": 15,
+   "cookMinutes": 35,
+   "serves": 4,
+   "instructions": "1. Hakk løk, gulrot og selleri fint (soffritto).\n2. Brun kjøttdeig i olivenolje i en stor kjele. Del opp klumper med en sleiv.\n3. Ta ut kjøttet og fres grønnsakene i samme kjele til de er myke.\n4. Legg kjøttet tilbake og tilsett hakkede tomater og tomatpuré.\n5. Hell i litt rødvin (valgfritt) og buljong.\n6. Krydre med oregano, basilikum, salt og pepper.\n7. La sausen småkoke i minst 30 minutter, helst lenger.\n8. Kok spaghetti, bland med sausen og server med revet parmesan.",
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "49afd6c5-c3e2-431d-bf35-023b5373001e-1",
+     "ingredientId": "49afd6c5-c3e2-431d-bf35-023b5373001e",
+     "amount": 60,
+     "label": "60 g Spaghetti",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "ac7cdd3f-8009-41ab-8670-1aa46630239a-2",
+     "ingredientId": "ac7cdd3f-8009-41ab-8670-1aa46630239a",
+     "amount": 0.33,
+     "label": "0.33 pk Vegetardeig",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "d4b56bd2-2ca5-402d-981e-8e16288657d7-3",
+     "ingredientId": "d4b56bd2-2ca5-402d-981e-8e16288657d7",
+     "amount": 0.33,
+     "label": "0.33 pcs Bolognese",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-06-04",
+   "retiredAt": null
+  },
+  {
+   "id": "e4621fc4-dadb-4d0c-9fb8-a96066a3406a",
+   "name": "Pasta og skinke i hvit saus",
+   "dishType": "Pasta",
+   "prepMinutes": 15,
+   "cookMinutes": 35,
+   "serves": 4,
+   "instructions": "1. Kok pastaen etter anvisning på pakken. Avren og spar litt kokvann.\n2. Skjær skinken i strimler.\n3. Smelt smør i en kjele. Rør inn hvetemel og la det frese i 1 minutt.\n4. Hell i melk gradvis mens du visper. Kok til sausen tykner.\n5. Smak til med salt, hvit pepper og revet muskatnøtt.\n6. Tilsett skinkestimlene og riv inn litt ost.\n7. Bland pastaen inn i sausen. Tilsett pastakokvann om sausen er for tykk.\n8. Server umiddelbart med revet parmesan og hakket persille på toppen.",
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "a197b793-bba1-4111-a0ae-fcbf459a2883-1",
+     "ingredientId": "a197b793-bba1-4111-a0ae-fcbf459a2883",
+     "amount": 60,
+     "label": "60 g Pasta",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "91365bd0-07d1-44f3-8080-4a2023bb4b98-2",
+     "ingredientId": "91365bd0-07d1-44f3-8080-4a2023bb4b98",
+     "amount": 117,
+     "label": "117 ml Melk",
+     "unit": "Ml",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "8492e82d-a3b6-4ac0-b8b7-2bb6880a3b48-3",
+     "ingredientId": "8492e82d-a3b6-4ac0-b8b7-2bb6880a3b48",
+     "amount": 13.3,
+     "label": "13.3 g Hvetemel",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "f32a70e6-0805-4c2c-bcba-c2756ca84876-4",
+     "ingredientId": "f32a70e6-0805-4c2c-bcba-c2756ca84876",
+     "amount": 10,
+     "label": "10 g Flytende margarin",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "2de4667c-3433-4893-93ea-a0c14caceef2-5",
+     "ingredientId": "2de4667c-3433-4893-93ea-a0c14caceef2",
+     "amount": 0.17,
+     "label": "0.17 pk Erter",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "bc28751f-db55-49ea-baef-72d61f4977d2-6",
+     "ingredientId": "bc28751f-db55-49ea-baef-72d61f4977d2",
+     "amount": 0.33,
+     "label": "0.33 pk Strimlet skinke",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-06-10",
+   "retiredAt": null
+  },
+  {
+   "id": "1a3d6302-ed19-4526-b202-6f1af4e4b703",
+   "name": "Pastasalat",
+   "dishType": "Salad",
+   "prepMinutes": 15,
+   "cookMinutes": 35,
+   "serves": 4,
+   "instructions": "1. Kok pastaen etter anvisning. Skyll i kaldt vann og avren godt.\n2. Skjær grønnsaker som paprika, agurk, cherrytomater og vårløk.\n3. Bland pastaen og grønnsakene i en stor bolle.\n4. Tilsett eventuelt skinketerninger, ost eller kylling.\n5. Lav dressing av majones, rømme, litt sitronsaft og urter.\n6. Bland dressingen inn i salaten.\n7. Smak til med salt og pepper.\n8. La salaten stå 30 minutter i kjøleskapet før servering for at smakene skal trekke.",
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "a197b793-bba1-4111-a0ae-fcbf459a2883-1",
+     "ingredientId": "a197b793-bba1-4111-a0ae-fcbf459a2883",
+     "amount": 60,
+     "label": "60 g Pasta",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "c87af58b-e20b-4207-aa4e-29de6df72bc8-2",
+     "ingredientId": "c87af58b-e20b-4207-aa4e-29de6df72bc8",
+     "amount": 0.33,
+     "label": "0.33 pcs Paprika",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "0a3d9a33-7f2f-4ca0-8e9d-a496cf59d94a-3",
+     "ingredientId": "0a3d9a33-7f2f-4ca0-8e9d-a496cf59d94a",
+     "amount": 0.17,
+     "label": "0.17 pcs Agurk",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "4dbf03c6-6ba6-4513-ae43-810cd553c194-4",
+     "ingredientId": "4dbf03c6-6ba6-4513-ae43-810cd553c194",
+     "amount": 0.33,
+     "label": "0.33 pcs Mais",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "d6b8ec8e-0f24-4921-a579-6f706f9e96f6-5",
+     "ingredientId": "d6b8ec8e-0f24-4921-a579-6f706f9e96f6",
+     "amount": 0.33,
+     "label": "0.33 pk Fetaost",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-06-17",
+   "retiredAt": null
+  },
+  {
+   "id": "196fba0f-e6e3-44c6-9e23-240a1c56e152",
+   "name": "Pinsapizza",
+   "dishType": "PizzaPie",
+   "prepMinutes": 15,
+   "cookMinutes": 35,
+   "serves": 4,
+   "instructions": "1. Forvarm ovnen til høyeste temperatur, gjerne 250°C eller mer.\n2. Strekk ut pinsadeigen forsiktig til en oval form. La kantene være litt tykkere.\n3. Smør bunnen tynt med olivenolje.\n4. Legg på mozzarella jevnt fordelt.\n5. Topp med syltetomater eller hakkede tomater.\n6. Tilsett andre ingredienser som spekemat, oliven eller ruccola.\n7. Stek i ovnen i 8-12 minutter til bunnen er sprø og osten gyllen.\n8. Ta ut, drypp over olivenolje og server umiddelbart.",
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "994a5b17-95fd-4c54-a04f-728881a69d64-1",
+     "ingredientId": "994a5b17-95fd-4c54-a04f-728881a69d64",
+     "amount": 0.33,
+     "label": "0.33 pk Pinsa",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "f3dde81d-e4ca-4efe-8892-ff98ad789d1e-2",
+     "ingredientId": "f3dde81d-e4ca-4efe-8892-ff98ad789d1e",
+     "amount": 0.17,
+     "label": "0.17 pcs Pizzasaus",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "6e212584-8196-4771-a545-5b612a50fe83-3",
+     "ingredientId": "6e212584-8196-4771-a545-5b612a50fe83",
+     "amount": 0.17,
+     "label": "0.17 pk Ost",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "a85e5efb-19d0-4ee1-a92b-45045a0b5111-4",
+     "ingredientId": "a85e5efb-19d0-4ee1-a92b-45045a0b5111",
+     "amount": 0.67,
+     "label": "0.67 pcs Kokt skinke",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "c03f4e1f-f6ad-44d9-99ee-fcc350098daf-5",
+     "ingredientId": "c03f4e1f-f6ad-44d9-99ee-fcc350098daf",
+     "amount": 50,
+     "label": "50 g Kyllingfilet",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-06-19",
+   "retiredAt": null
+  },
+  {
+   "id": "a2c4428f-91dc-4571-9b6d-7638a48a380a",
+   "name": "Polarpizza med ost og skinke",
+   "dishType": "PizzaPie",
+   "prepMinutes": 5,
+   "cookMinutes": 20,
+   "serves": 4,
+   "instructions": "1. Forvarm ovnen til 225°C.\n2. Ta polarpizzaen ut av fryseren og legg den på et stekebrett.\n3. La pizzaen tine i 5 minutter om ønskelig for jevnere steking.\n4. Sett pizzaen midt i ovnen.\n5. Stek i 12-15 minutter, eller til osten er smeltet og kantene er gylne.\n6. Ta pizzaen ut av ovnen og la den avkjøle i 1-2 minutter.\n7. Skjær pizzaen i biter.\n8. Server umiddelbart, gjerne med en enkel salat ved siden av.",
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "6daeacfc-b020-451d-b26a-f2a87dbabf6d-1",
+     "ingredientId": "6daeacfc-b020-451d-b26a-f2a87dbabf6d",
+     "amount": 3,
+     "label": "3 pcs Polarbrød",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "a145be55-e0db-4b64-9cb7-0d9902003241-2",
+     "ingredientId": "a145be55-e0db-4b64-9cb7-0d9902003241",
+     "amount": 0.083,
+     "label": "0.08 pcs Tomatpure",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "3836a291-8156-4b70-8b36-ccea3e0447f2-3",
+     "ingredientId": "3836a291-8156-4b70-8b36-ccea3e0447f2",
+     "amount": 0.083,
+     "label": "0.08 pk Hvitost",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "a85e5efb-19d0-4ee1-a92b-45045a0b5111-4",
+     "ingredientId": "a85e5efb-19d0-4ee1-a92b-45045a0b5111",
+     "amount": 1,
+     "label": "1 pcs Kokt skinke",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-06-15",
+   "retiredAt": null
+  },
+  {
+   "id": "611da287-35f7-441b-b9c3-053366ca5bfb",
+   "name": "Pytt i panne",
+   "dishType": "ProteinVegPlate",
+   "prepMinutes": 15,
+   "cookMinutes": 20,
+   "serves": 4,
+   "instructions": null,
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "1952c391-2a23-4ef1-aeae-12cc8b4ad911-1",
+     "ingredientId": "1952c391-2a23-4ef1-aeae-12cc8b4ad911",
+     "amount": 0.33,
+     "label": "0.33 pk Pytt i Panne",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "1256e406-e963-4e42-a803-7889bdaa4e68-2",
+     "ingredientId": "1256e406-e963-4e42-a803-7889bdaa4e68",
+     "amount": 66.7,
+     "label": "66.7 g Smårettskinke",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": null,
+   "retiredAt": null
+  },
+  {
+   "id": "8aaf9f01-68f8-4b46-81ef-6cc0448045ce",
+   "name": "Quesedilas m/kikerter og rømme",
+   "dishType": "WrapTaco",
+   "prepMinutes": 15,
+   "cookMinutes": 15,
+   "serves": 4,
+   "instructions": null,
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "13f5e8b0-e621-4c75-95fb-a74a3437b9a1-1",
+     "ingredientId": "13f5e8b0-e621-4c75-95fb-a74a3437b9a1",
+     "amount": 2,
+     "label": "2 pcs Tortillalefse",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "a8aea31a-0631-4820-8a94-e23f1179ccb7-2",
+     "ingredientId": "a8aea31a-0631-4820-8a94-e23f1179ccb7",
+     "amount": 0.33,
+     "label": "0.33 pcs Kikerter",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "0c9c946a-e59a-4673-90ec-26f3b136a091-3",
+     "ingredientId": "0c9c946a-e59a-4673-90ec-26f3b136a091",
+     "amount": 0.17,
+     "label": "0.17 pk Seterømme",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "a47c4c2f-2f18-40f8-8564-a1232bf2087e-4",
+     "ingredientId": "a47c4c2f-2f18-40f8-8564-a1232bf2087e",
+     "amount": 50,
+     "label": "50 g Rømme",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "fe059da2-9722-4c7c-8cd9-4d0be3b1328b-5",
+     "ingredientId": "fe059da2-9722-4c7c-8cd9-4d0be3b1328b",
+     "amount": 30,
+     "label": "30 g Tacosaus",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "21863c53-544c-4781-9f8c-1ebf12316f23-6",
+     "ingredientId": "21863c53-544c-4781-9f8c-1ebf12316f23",
+     "amount": 0.17,
+     "label": "0.17 pk Guacamole",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "6e212584-8196-4771-a545-5b612a50fe83-7",
+     "ingredientId": "6e212584-8196-4771-a545-5b612a50fe83",
+     "amount": 0.25,
+     "label": "0.25 pk Ost",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-06-13",
+   "retiredAt": null
+  },
+  {
+   "id": "3cb49082-83fc-4068-aa33-afda11413ce3",
+   "name": "Sushi",
+   "dishType": "Other",
+   "prepMinutes": 15,
+   "cookMinutes": 35,
+   "serves": 4,
+   "instructions": null,
+   "isSeafood": true,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "eefc870d-8640-4ce5-82de-d6ecf5662bd7-1",
+     "ingredientId": "eefc870d-8640-4ce5-82de-d6ecf5662bd7",
+     "amount": 1,
+     "label": "1 pcs Sushi",
+     "unit": "Pcs",
+     "scaling": "PerDish",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": null,
+   "retiredAt": null
+  },
+  {
+   "id": "8b4cf6da-953d-413d-8faf-c435c79f6892",
+   "name": "Taco",
+   "dishType": "WrapTaco",
+   "prepMinutes": 15,
+   "cookMinutes": 35,
+   "serves": 4,
+   "instructions": null,
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "745d4d69-cdd9-43e7-bc9b-ec5322ca5ba1-1",
+     "ingredientId": "745d4d69-cdd9-43e7-bc9b-ec5322ca5ba1",
+     "amount": 1.17,
+     "label": "1.17 pcs Tortillalefser",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "69b73dc1-6ad4-4ed9-a848-4d944a1f4493-2",
+     "ingredientId": "69b73dc1-6ad4-4ed9-a848-4d944a1f4493",
+     "amount": 2.67,
+     "label": "2.67 pcs Tortilla tubs",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "2cf61229-f397-4098-985c-8ba982243bd7-3",
+     "ingredientId": "2cf61229-f397-4098-985c-8ba982243bd7",
+     "amount": 75,
+     "label": "75 g Kjøttdeig",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "6e212584-8196-4771-a545-5b612a50fe83-4",
+     "ingredientId": "6e212584-8196-4771-a545-5b612a50fe83",
+     "amount": 0.25,
+     "label": "0.25 pk Ost",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "d6b8ec8e-0f24-4921-a579-6f706f9e96f6-5",
+     "ingredientId": "d6b8ec8e-0f24-4921-a579-6f706f9e96f6",
+     "amount": 0.25,
+     "label": "0.25 pk Fetaost",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "c87af58b-e20b-4207-aa4e-29de6df72bc8-6",
+     "ingredientId": "c87af58b-e20b-4207-aa4e-29de6df72bc8",
+     "amount": 0.43,
+     "label": "0.43 pcs Paprika",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "0a3d9a33-7f2f-4ca0-8e9d-a496cf59d94a-7",
+     "ingredientId": "0a3d9a33-7f2f-4ca0-8e9d-a496cf59d94a",
+     "amount": 0.27,
+     "label": "0.27 pcs Agurk",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "4dbf03c6-6ba6-4513-ae43-810cd553c194-8",
+     "ingredientId": "4dbf03c6-6ba6-4513-ae43-810cd553c194",
+     "amount": 0.33,
+     "label": "0.33 pcs Mais",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "f545e5d7-7a8a-4920-8e4c-728f61be97da-9",
+     "ingredientId": "f545e5d7-7a8a-4920-8e4c-728f61be97da",
+     "amount": 0.25,
+     "label": "0.25 pk Salat",
+     "unit": "Pack",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "a47c4c2f-2f18-40f8-8564-a1232bf2087e-10",
+     "ingredientId": "a47c4c2f-2f18-40f8-8564-a1232bf2087e",
+     "amount": 50,
+     "label": "50 g Rømme",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "fe059da2-9722-4c7c-8cd9-4d0be3b1328b-11",
+     "ingredientId": "fe059da2-9722-4c7c-8cd9-4d0be3b1328b",
+     "amount": 30,
+     "label": "30 g Tacosaus",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "6b7aa8c3-ade3-4777-a68a-6a6541dde294-12",
+     "ingredientId": "6b7aa8c3-ade3-4777-a68a-6a6541dde294",
+     "amount": 20,
+     "label": "20 g Hamburgerdressing",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-07-31",
+   "retiredAt": null
+  },
+  {
+   "id": "edb7c86f-f2d5-424b-b7c1-70b06989fd4e",
+   "name": "Toast",
+   "dishType": "BreakfastDinner",
+   "prepMinutes": 5,
+   "cookMinutes": 10,
+   "serves": 4,
+   "instructions": null,
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "1efab010-1f5d-44a9-a8d7-18fd9c7c934b-1",
+     "ingredientId": "1efab010-1f5d-44a9-a8d7-18fd9c7c934b",
+     "amount": 4,
+     "label": "4 pcs Toastbrød",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "3836a291-8156-4b70-8b36-ccea3e0447f2-2",
+     "ingredientId": "3836a291-8156-4b70-8b36-ccea3e0447f2",
+     "amount": 2.67,
+     "label": "2.67 pcs Hvitost",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "d9eee733-0f40-4e53-9dba-8bc42fee3cd5-3",
+     "ingredientId": "d9eee733-0f40-4e53-9dba-8bc42fee3cd5",
+     "amount": 1.33,
+     "label": "1.33 pcs Skinke",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-05-18",
+   "retiredAt": null
+  },
+  {
+   "id": "2f749cc9-289a-425d-b8d6-dd0375e94454",
+   "name": "Torsk m/ pastasalat og pesto",
+   "dishType": "ProteinVegPlate",
+   "prepMinutes": 15,
+   "cookMinutes": 35,
+   "serves": 4,
+   "instructions": null,
+   "isSeafood": true,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "b1732176-8b45-4b52-98b2-f88bafab13a2-1",
+     "ingredientId": "b1732176-8b45-4b52-98b2-f88bafab13a2",
+     "amount": 133,
+     "label": "133 g Torsk",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "a197b793-bba1-4111-a0ae-fcbf459a2883-2",
+     "ingredientId": "a197b793-bba1-4111-a0ae-fcbf459a2883",
+     "amount": 60,
+     "label": "60 g Pasta",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "f545e5d7-7a8a-4920-8e4c-728f61be97da-3",
+     "ingredientId": "f545e5d7-7a8a-4920-8e4c-728f61be97da",
+     "amount": 0.25,
+     "label": "0.25 pk Salat",
+     "unit": "Pack",
+     "scaling": "PerDish",
+     "personCount": null
+    },
+    {
+     "id": "7368ffb9-c01f-47c1-8922-b97b775a0191-4",
+     "ingredientId": "7368ffb9-c01f-47c1-8922-b97b775a0191",
+     "amount": 0.17,
+     "label": "0.17 pcs Grønn pesto",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": null,
+   "retiredAt": null
+  },
+  {
+   "id": "b7232208-ca43-4590-9d9a-f35124cd645a",
+   "name": "Tortelloini",
+   "dishType": "Pasta",
+   "prepMinutes": 4,
+   "cookMinutes": 4,
+   "serves": 4,
+   "instructions": null,
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "fef6c1ef-a511-499b-92ab-4da31c1dd113-1",
+     "ingredientId": "fef6c1ef-a511-499b-92ab-4da31c1dd113",
+     "amount": 1,
+     "label": "1 pcs Tortelloni",
+     "unit": "Pcs",
+     "scaling": "PerDish",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": "2026-07-01",
+   "retiredAt": null
+  },
+  {
+   "id": "431685ba-13ef-4b32-88c2-a2c9e8f9edd8",
+   "name": "Vegetarboller i brunsaus",
+   "dishType": "ProteinVegPlate",
+   "prepMinutes": 15,
+   "cookMinutes": 35,
+   "serves": 4,
+   "instructions": null,
+   "isSeafood": false,
+   "isVegetarian": false,
+   "isVegan": false,
+   "vibeTags": [],
+   "ingredients": [
+    {
+     "id": "0d9f7d7e-2581-4ca8-8efa-8801eb3d3d90-1",
+     "ingredientId": "0d9f7d7e-2581-4ca8-8efa-8801eb3d3d90",
+     "amount": 0.33,
+     "label": "0.33 pk Vegetarboller",
+     "unit": "Pack",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "77f4c69f-e19f-458a-9661-4c06eea0d73c-2",
+     "ingredientId": "77f4c69f-e19f-458a-9661-4c06eea0d73c",
+     "amount": 133,
+     "label": "133 g Potet",
+     "unit": "G",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "36beb59c-8731-4d6d-9584-eae7b48fc7aa-3",
+     "ingredientId": "36beb59c-8731-4d6d-9584-eae7b48fc7aa",
+     "amount": 1,
+     "label": "1 pcs Gulrot",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    },
+    {
+     "id": "cbe5bf8c-fb95-4932-bbb8-a38160f39d4b-4",
+     "ingredientId": "cbe5bf8c-fb95-4932-bbb8-a38160f39d4b",
+     "amount": 0.33,
+     "label": "0.33 pcs Brunsaus",
+     "unit": "Pcs",
+     "scaling": "PerServing",
+     "personCount": null
+    }
+   ],
+   "lastEatenOn": null,
+   "retiredAt": null
+  }
+ ]
+}
