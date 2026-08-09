@@ -2,6 +2,7 @@ export type PlanningSettingsRequest = {
   weekStartsOn?: string | null;
   seafoodPerWeek?: number | null;
   daysBetween?: number | null;
+  householdSize?: number | null;
 };
 
 export type PlanningSettingsResponse = {
@@ -9,4 +10,5 @@ export type PlanningSettingsResponse = {
   weekStartsOn: string;
   seafoodPerWeek: number;
   daysBetween: number;
+  householdSize: number;
 };

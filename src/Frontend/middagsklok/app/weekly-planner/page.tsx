@@ -57,6 +57,12 @@ const buildPlan = (days: WeekDay[]) =>
     return accumulator;
   }, {});
 
+const buildServingsPlan = (days: WeekDay[]) =>
+  days.reduce<Record<string, string>>((accumulator, day) => {
+    accumulator[day.key] = "";
+    return accumulator;
+  }, {});
+
 const formatSelectionType = (value: string) => value.trim().toUpperCase();
 
 const mapResponseToPlan = (response: WeeklyPlanUpsertResponse) => {
@@ -68,6 +74,17 @@ const mapResponseToPlan = (response: WeeklyPlanUpsertResponse) => {
   });
 
   return nextPlan;
+};
+
+const mapResponseToServings = (response: WeeklyPlanUpsertResponse) => {
+  const nextServings: Record<string, string> = {};
+
+  response.days.forEach((day) => {
+    nextServings[day.date] =
+      day.servings !== null && day.servings !== undefined ? String(day.servings) : "";
+  });
+
+  return nextServings;
 };
 
 const monthFormatter = new Intl.DateTimeFormat("nb-NO", {
@@ -198,11 +215,28 @@ export default function WeeklyPlannerPage() {
   const [plan, setPlan] = useState<Record<string, string | null>>(
     () => defaultPlan,
   );
+  const defaultServingsPlan = useMemo(() => buildServingsPlan(weekDays), [weekDays]);
+  const [servingsPlan, setServingsPlan] = useState<Record<string, string>>(
+    () => defaultServingsPlan,
+  );
 
   useEffect(() => {
     setPlan(defaultPlan);
+    setServingsPlan(defaultServingsPlan);
     setOpenDayKey(null);
-  }, [defaultPlan]);
+  }, [defaultPlan, defaultServingsPlan]);
+
+  const handleServingsChange = (dayKey: string, value: string) => {
+    if (isPlanMarkedAsEaten) {
+      return;
+    }
+
+    setServingsPlan((current) => ({
+      ...current,
+      [dayKey]: value,
+    }));
+    setSaveMessage(null);
+  };
 
   const weekRangeLabel = useMemo(() => {
     const startDate = weekDays[0]?.date;
@@ -287,12 +321,17 @@ export default function WeeklyPlannerPage() {
   const buildUpsertRequest = (): WeeklyPlanUpsertRequest => ({
     days: weekDays.map((day) => {
       const dishId = plan[day.key] ?? null;
+      const servingsValue = servingsPlan[day.key]?.trim() ?? "";
+      const parsedServings = servingsValue ? Number.parseInt(servingsValue, 10) : null;
+      const servings =
+        parsedServings !== null && Number.isFinite(parsedServings) ? parsedServings : null;
 
       return {
         date: day.key,
         selection: dishId
           ? { type: "DISH", dishId }
           : { type: "EMPTY", dishId: null },
+        servings,
       };
     }),
   });
@@ -313,6 +352,7 @@ export default function WeeklyPlannerPage() {
       const payload = buildUpsertRequest();
       const response = await apiClient.upsertWeeklyPlan(startDate, payload);
       setPlan(mapResponseToPlan(response));
+      setServingsPlan(mapResponseToServings(response));
       setSaveMessage("Ukentlig plan lagret.");
     } catch (error) {
       if (error instanceof ApiError) {
@@ -355,6 +395,7 @@ export default function WeeklyPlannerPage() {
     try {
       const response = await apiClient.generateWeeklyPlan(startDate);
       setPlan(mapResponseToPlan(response));
+      setServingsPlan(mapResponseToServings(response));
       const notes = response.notes?.filter((note) => note.trim().length > 0) ?? [];
       const noteSuffix = notes.length > 0 ? ` ${notes.join(" ")}` : "";
       setSaveMessage(`Ukentlig plan generert.${noteSuffix}`);
@@ -441,12 +482,14 @@ export default function WeeklyPlannerPage() {
         const response = await apiClient.getWeeklyPlan(startDate);
         if (isActive) {
           setPlan(mapResponseToPlan(response));
+          setServingsPlan(mapResponseToServings(response));
           setIsPlanMarkedAsEaten(response.isMarkedAsEaten);
         }
       } catch (error) {
         if (error instanceof ApiError && error.status === 404) {
           if (isActive) {
             setPlan(buildPlan(weekDays));
+            setServingsPlan(buildServingsPlan(weekDays));
             setIsPlanMarkedAsEaten(false);
           }
         } else {
@@ -681,7 +724,7 @@ export default function WeeklyPlannerPage() {
                         ) : null}
                       </div>
 
-                      <div className="mt-auto">
+                      <div className="mt-auto space-y-3">
                         {dishType ? (
                           <span className="inline-flex rounded-full bg-[#e7f0e8] px-3 py-1 text-xs font-semibold text-[#3a5a44]">
                             {dishType}
@@ -691,6 +734,21 @@ export default function WeeklyPlannerPage() {
                             No dish type selected
                           </span>
                         )}
+                        <label className="flex items-center justify-between gap-2 text-xs font-semibold text-[#5c6b60]">
+                          <span>Porsjoner (overstyrer husstandsstørrelse)</span>
+                          <input
+                            type="number"
+                            min={1}
+                            max={30}
+                            placeholder="Auto"
+                            aria-label={`Porsjoner for ${weekdayFormatter.format(day.date)}`}
+                            value={servingsPlan[day.key] ?? ""}
+                            disabled={isPlanMarkedAsEaten}
+                            onChange={(event) =>
+                              handleServingsChange(day.key, event.target.value)}
+                            className="w-16 rounded-lg border border-[#dfe7d7] bg-white px-2 py-1 text-right text-xs font-semibold text-[#2f6b4f] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
+                          />
+                        </label>
                       </div>
                     </article>
                   );

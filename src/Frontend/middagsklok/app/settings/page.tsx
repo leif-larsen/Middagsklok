@@ -89,6 +89,7 @@ export default function SettingsPage() {
   const [weekStartsOn, setWeekStartsOn] = useState("Monday");
   const [seafoodPerWeek, setSeafoodPerWeek] = useState(2);
   const [daysBetween, setDaysBetween] = useState(14);
+  const [householdSize, setHouseholdSize] = useState(3);
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
   const [settingsLoadError, setSettingsLoadError] = useState<string | null>(null);
   const [isSavingSettings, setIsSavingSettings] = useState(false);
@@ -138,6 +139,7 @@ export default function SettingsPage() {
           setWeekStartsOn(matched?.value ?? "Monday");
           setSeafoodPerWeek(response.seafoodPerWeek ?? 2);
           setDaysBetween(response.daysBetween ?? 14);
+          setHouseholdSize(response.householdSize ?? 3);
         }
       } catch (error) {
         if (error instanceof ApiError && error.status === 404) {
@@ -145,6 +147,7 @@ export default function SettingsPage() {
             setWeekStartsOn("Monday");
             setSeafoodPerWeek(2);
             setDaysBetween(14);
+            setHouseholdSize(3);
           }
         } else {
           if (error instanceof ApiError) {
@@ -183,10 +186,12 @@ export default function SettingsPage() {
         weekStartsOn,
         seafoodPerWeek,
         daysBetween,
+        householdSize,
       });
       setWeekStartsOn(response.weekStartsOn ?? weekStartsOn);
       setSeafoodPerWeek(response.seafoodPerWeek ?? seafoodPerWeek);
       setDaysBetween(response.daysBetween ?? daysBetween);
+      setHouseholdSize(response.householdSize ?? householdSize);
       setSaveMessage("Innstillinger lagret.");
     } catch (error) {
       if (error instanceof ApiError) {
@@ -315,6 +320,26 @@ export default function SettingsPage() {
                       Lavere score gis til retter spist innen dette antall dager, men de kan fortsatt velges.
                     </p>
                   </div>
+
+                  <label className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#e1e8dc] bg-white/70 px-4 py-3 text-sm font-semibold text-[#1f2a22] shadow-[0_12px_24px_-20px_rgba(32,70,48,0.35)]">
+                    <span>
+                      Husstandsstørrelse
+                      <p className="mt-1 text-xs font-normal text-[#7b8a7f]">
+                        Antall personer handlelisten skaleres for, med mindre en dag har en egen porsjonsoverstyring.
+                      </p>
+                    </span>
+                    <input
+                      type="number"
+                      min={1}
+                      max={20}
+                      value={householdSize}
+                      disabled={isLoadingSettings}
+                      onChange={(event) =>
+                        setHouseholdSize(Number(event.target.value))
+                      }
+                      className="w-20 rounded-xl border border-[#dfe7d7] bg-white px-3 py-2 text-right text-sm font-semibold text-[#2f6b4f] focus:outline-none"
+                    />
+                  </label>
 
                   <div className="space-y-4 border-t border-[#e1e8dc] pt-4">
                     <ToggleRow

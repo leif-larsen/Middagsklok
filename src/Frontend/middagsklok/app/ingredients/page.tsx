@@ -20,6 +20,7 @@ const emptyIngredient = {
   category: "" as Ingredient["category"],
   defaultUnit: "" as Ingredient["defaultUnit"],
   usedIn: 0,
+  isPantryStaple: false,
 };
 
 const formatUsage = (count: number) => `${count} rett(er)`;
@@ -38,6 +39,7 @@ export default function IngredientsPage() {
   const [formDefaultUnit, setFormDefaultUnit] = useState<
     Ingredient["defaultUnit"] | ""
   >("");
+  const [formIsPantryStaple, setFormIsPantryStaple] = useState(false);
   const [validationErrors, setValidationErrors] = useState<
     IngredientValidationError[]
   >([]);
@@ -160,6 +162,7 @@ export default function IngredientsPage() {
     setFormName(activeIngredient.name ?? "");
     setFormCategory(activeIngredient.category ?? "");
     setFormDefaultUnit(activeIngredient.defaultUnit ?? "");
+    setFormIsPantryStaple(activeIngredient.isPantryStaple ?? false);
     setValidationErrors([]);
     setSubmitError(null);
   }, [activeIngredient, isModalOpen]);
@@ -259,6 +262,7 @@ export default function IngredientsPage() {
         name: formName.trim(),
         category: formCategory as Ingredient["category"],
         defaultUnit: formDefaultUnit as Ingredient["defaultUnit"],
+        isPantryStaple: formIsPantryStaple,
       };
 
       if (isEditMode) {
@@ -385,6 +389,11 @@ export default function IngredientsPage() {
                     >
                       <td className="px-5 py-4 font-semibold text-[#1f2a22]">
                         {ingredient.name}
+                        {ingredient.isPantryStaple ? (
+                          <span className="ml-2 inline-flex rounded-full bg-[#f1e4bb] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#8a6a2a]">
+                            Lagervare
+                          </span>
+                        ) : null}
                       </td>
                       <td className="px-5 py-4">
                         <span className="inline-flex rounded-full bg-[#edf1ea] px-3 py-1 text-xs font-semibold text-[#4f5f55]">
@@ -556,6 +565,16 @@ export default function IngredientsPage() {
               </div>
             </label>
           </div>
+
+          <label className="inline-flex items-center gap-3 rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm font-semibold text-[#3f4b43]">
+            <input
+              type="checkbox"
+              checked={formIsPantryStaple}
+              onChange={(event) => setFormIsPantryStaple(event.target.checked)}
+              className="h-4 w-4 rounded border-[#b9c8bd] text-[#2f6b4f] focus:ring-[#2f6b4f]/30"
+            />
+            Lagervare (alltid på lager, vises ikke som noe å kjøpe)
+          </label>
         </div>
       </Modal>
 

@@ -6,6 +6,7 @@ import { apiClient, ApiError } from "../../lib/api/client";
 import { useEffect, useMemo, useState } from "react";
 import { useDishesMetadata } from "../components/DishesMetadataProvider";
 import { useIngredientsCatalog } from "../components/IngredientsProvider";
+import { useIngredientsMetadata } from "../components/IngredientsMetadataProvider";
 import type {
   DishCreateErrorResponse,
   DishCreateValidationError,
@@ -19,6 +20,9 @@ type Ingredient = {
   ingredientId: string;
   amount: number;
   label: string;
+  unit: string;
+  scaling: string;
+  personCount?: number | null;
 };
 
 type DraftIngredient = {
@@ -26,7 +30,22 @@ type DraftIngredient = {
   ingredientId: string;
   label: string;
   amount?: string | null;
+  unit: string;
+  scaling: string;
+  personCount?: string | null;
 };
+
+const scalingOptions: { value: string; label: string }[] = [
+  { value: "PerDish", label: "Per rett" },
+  { value: "PerServing", label: "Per porsjon" },
+  { value: "PerPerson", label: "Per person" },
+];
+
+const scalingLabelMap = new Map(
+  scalingOptions.map((option) => [option.value, option.label]),
+);
+
+const defaultScaling = "PerDish";
 
 type Dish = {
   id: string;
@@ -96,6 +115,9 @@ export default function DishesPage() {
   const [draftIngredients, setDraftIngredients] = useState<DraftIngredient[]>([]);
   const [selectedIngredientId, setSelectedIngredientId] = useState("");
   const [ingredientAmount, setIngredientAmount] = useState("");
+  const [ingredientUnit, setIngredientUnit] = useState("");
+  const [ingredientScaling, setIngredientScaling] = useState(defaultScaling);
+  const [ingredientPersonCount, setIngredientPersonCount] = useState("");
   const {
     dishTypes: dishTypeMetadata,
     isLoading: dishTypesLoading,
@@ -106,6 +128,37 @@ export default function DishesPage() {
     isLoading: ingredientsLoading,
     error: ingredientsError,
   } = useIngredientsCatalog();
+  const { units: unitMetadata } = useIngredientsMetadata();
+
+  const unitOptions = useMemo(
+    () => unitMetadata,
+    [unitMetadata],
+  );
+
+  const unitLabelMap = useMemo(
+    () =>
+      new Map<string, string>(
+        unitMetadata.map((unit) => [unit.value, unit.label]),
+      ),
+    [unitMetadata],
+  );
+
+  const formatIngredientAmount = (ingredient: {
+    amount?: string | null | number;
+    unit: string;
+    scaling: string;
+    personCount?: string | null | number;
+  }) => {
+    const amount = ingredient.amount ?? "";
+    const unitLabel = unitLabelMap.get(ingredient.unit) ?? ingredient.unit;
+    const scalingLabel = scalingLabelMap.get(ingredient.scaling) ?? ingredient.scaling;
+    const personSuffix =
+      ingredient.scaling === "PerPerson" && ingredient.personCount
+        ? ` (${ingredient.personCount} pers.)`
+        : "";
+
+    return `${amount} ${unitLabel} ${scalingLabel}${personSuffix}`.trim();
+  };
 
   useEffect(() => {
     let isActive = true;
@@ -263,10 +316,19 @@ export default function DishesPage() {
         ingredientId: ingredient.ingredientId,
         label: ingredient.label,
         amount: String(ingredient.amount),
+        unit: ingredient.unit || "G",
+        scaling: ingredient.scaling || defaultScaling,
+        personCount:
+          ingredient.personCount !== null && ingredient.personCount !== undefined
+            ? String(ingredient.personCount)
+            : null,
       })),
     );
     setSelectedIngredientId("");
     setIngredientAmount("");
+    setIngredientUnit("");
+    setIngredientScaling(defaultScaling);
+    setIngredientPersonCount("");
   }, [activeDish, defaultDishType, isEditMode, isModalOpen]);
 
   useEffect(() => {
@@ -327,6 +389,15 @@ export default function DishesPage() {
     return Number.isFinite(parsed) ? parsed : 0;
   };
 
+  const parseOptionalInt = (value?: string | null) => {
+    if (!value || !value.trim()) {
+      return null;
+    }
+
+    const parsed = Number.parseInt(value, 10);
+    return Number.isFinite(parsed) ? parsed : null;
+  };
+
   const parseImportPayload = async (file: File) => {
     const raw = await file.text();
     const parsed = JSON.parse(raw) as unknown;
@@ -369,6 +440,12 @@ export default function DishesPage() {
           id: ingredient.ingredientId,
           name: ingredient.label,
           amount: parseNumber(ingredient.amount ?? ""),
+          unit: ingredient.unit,
+          scaling: ingredient.scaling,
+          personCount:
+            ingredient.scaling === "PerPerson"
+              ? parseOptionalInt(ingredient.personCount)
+              : null,
         })),
       };
 
@@ -492,6 +569,7 @@ export default function DishesPage() {
     }
 
     const normalizedAmount = ingredientAmount.trim();
+    const unit = ingredientUnit || selected.defaultUnit;
 
     setDraftIngredients((current) => {
       if (current.some((ingredient) => ingredient.id === selected.id)) {
@@ -505,16 +583,53 @@ export default function DishesPage() {
           ingredientId: selected.id,
           label: selected.name,
           amount: normalizedAmount ? normalizedAmount : null,
+          unit,
+          scaling: ingredientScaling,
+          personCount:
+            ingredientScaling === "PerPerson" ? ingredientPersonCount : null,
         },
       ];
     });
     setSelectedIngredientId("");
     setIngredientAmount("");
+    setIngredientUnit("");
+    setIngredientScaling(defaultScaling);
+    setIngredientPersonCount("");
   };
 
   const handleRemoveIngredient = (ingredientId: string) => {
     setDraftIngredients((current) =>
       current.filter((ingredient) => ingredient.id !== ingredientId));
+  };
+
+  const handleDraftIngredientUnitChange = (ingredientId: string, unit: string) => {
+    setDraftIngredients((current) =>
+      current.map((ingredient) =>
+        ingredient.id === ingredientId ? { ...ingredient, unit } : ingredient));
+  };
+
+  const handleDraftIngredientScalingChange = (
+    ingredientId: string,
+    scaling: string,
+  ) => {
+    setDraftIngredients((current) =>
+      current.map((ingredient) =>
+        ingredient.id === ingredientId
+          ? {
+              ...ingredient,
+              scaling,
+              personCount: scaling === "PerPerson" ? ingredient.personCount : null,
+            }
+          : ingredient));
+  };
+
+  const handleDraftIngredientPersonCountChange = (
+    ingredientId: string,
+    personCount: string,
+  ) => {
+    setDraftIngredients((current) =>
+      current.map((ingredient) =>
+        ingredient.id === ingredientId ? { ...ingredient, personCount } : ingredient));
   };
 
   return (
@@ -676,6 +791,9 @@ export default function DishesPage() {
                         >
                           <span className="h-2 w-2 rounded-full bg-[#9bb09f]" />
                           {ingredient.label}
+                          <span className="text-xs text-[#8a968f]">
+                            ({scalingLabelMap.get(ingredient.scaling) ?? ingredient.scaling})
+                          </span>
                         </li>
                       ))}
                       {remainingCount > 0 ? (
@@ -866,13 +984,21 @@ export default function DishesPage() {
             <div className="text-sm font-semibold text-[#3f4b43]">
               Ingredienser
             </div>
-            <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_140px_auto]">
+            <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_100px] lg:grid-cols-[1fr_90px_90px_130px_90px_auto]">
               <div className="relative">
                 <select
                   aria-label="Select ingredient"
                   value={selectedIngredientId}
-                  onChange={(event) =>
-                    setSelectedIngredientId(event.target.value)}
+                  onChange={(event) => {
+                    const nextId = event.target.value;
+                    setSelectedIngredientId(nextId);
+                    const nextIngredient = ingredientOptions.find(
+                      (ingredient) => ingredient.id === nextId,
+                    );
+                    if (nextIngredient) {
+                      setIngredientUnit(nextIngredient.defaultUnit);
+                    }
+                  }}
                   disabled={isIngredientSelectDisabled}
                   className="w-full appearance-none rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30 disabled:cursor-not-allowed disabled:bg-[#f6f8f4] disabled:text-[#9aa69f]"
                 >
@@ -894,6 +1020,49 @@ export default function DishesPage() {
                 onChange={(event) => setIngredientAmount(event.target.value)}
                 className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
               />
+              <select
+                aria-label="Enhet"
+                value={ingredientUnit || unitOptions[0]?.value || ""}
+                onChange={(event) => setIngredientUnit(event.target.value)}
+                className="rounded-xl border border-[#e1e7dd] bg-white px-2 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
+              >
+                {unitOptions.map((unit) => (
+                  <option key={unit.value} value={unit.value}>
+                    {unit.label}
+                  </option>
+                ))}
+              </select>
+              <select
+                aria-label="Skalering"
+                value={ingredientScaling}
+                onChange={(event) => {
+                  const nextScaling = event.target.value;
+                  setIngredientScaling(nextScaling);
+                  if (nextScaling !== "PerPerson") {
+                    setIngredientPersonCount("");
+                  }
+                }}
+                className="rounded-xl border border-[#e1e7dd] bg-white px-2 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
+              >
+                {scalingOptions.map((scaling) => (
+                  <option key={scaling.value} value={scaling.value}>
+                    {scaling.label}
+                  </option>
+                ))}
+              </select>
+              {ingredientScaling === "PerPerson" ? (
+                <input
+                  type="number"
+                  min={1}
+                  placeholder="Personer"
+                  aria-label="Antall personer"
+                  value={ingredientPersonCount}
+                  onChange={(event) => setIngredientPersonCount(event.target.value)}
+                  className="rounded-xl border border-[#e1e7dd] bg-white px-3 py-2 text-sm text-[#2e3b33] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
+                />
+              ) : (
+                <div />
+              )}
               <button
                 type="button"
                 onClick={handleAddIngredient}
@@ -914,25 +1083,76 @@ export default function DishesPage() {
                 draftIngredients.map((ingredient) => (
                   <li
                     key={ingredient.id}
-                    className="flex items-center justify-between gap-3"
+                    className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#e1e7dd] bg-white/60 px-3 py-2"
                   >
                     <span className="flex items-center gap-2">
                       <span className="h-2 w-2 rounded-full bg-[#9bb09f]" />
-                      {ingredient.label}
+                      <span className="font-semibold text-[#2e3b33]">
+                        {ingredient.label}
+                      </span>
                       {ingredient.amount ? (
                         <span className="text-xs text-[#7a887f]">
-                          ({ingredient.amount})
+                          ({formatIngredientAmount(ingredient)})
                         </span>
                       ) : null}
                     </span>
-                    <button
-                      type="button"
-                      aria-label={`Remove ${ingredient.label}`}
-                      onClick={() => handleRemoveIngredient(ingredient.id)}
-                      className="grid h-8 w-8 place-items-center rounded-full border border-[#f0dada] text-[#d76b6b] transition hover:bg-[#fbeeee]"
-                    >
-                      <TrashIcon className="h-4 w-4" />
-                    </button>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <select
+                        aria-label={`Enhet for ${ingredient.label}`}
+                        value={ingredient.unit}
+                        onChange={(event) =>
+                          handleDraftIngredientUnitChange(
+                            ingredient.id,
+                            event.target.value,
+                          )}
+                        className="rounded-lg border border-[#e1e7dd] bg-white px-2 py-1 text-xs font-semibold text-[#3f4b43] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
+                      >
+                        {unitOptions.map((unit) => (
+                          <option key={unit.value} value={unit.value}>
+                            {unit.label}
+                          </option>
+                        ))}
+                      </select>
+                      <select
+                        aria-label={`Skalering for ${ingredient.label}`}
+                        value={ingredient.scaling}
+                        onChange={(event) =>
+                          handleDraftIngredientScalingChange(
+                            ingredient.id,
+                            event.target.value,
+                          )}
+                        className="rounded-lg border border-[#e1e7dd] bg-white px-2 py-1 text-xs font-semibold text-[#3f4b43] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
+                      >
+                        {scalingOptions.map((scaling) => (
+                          <option key={scaling.value} value={scaling.value}>
+                            {scaling.label}
+                          </option>
+                        ))}
+                      </select>
+                      {ingredient.scaling === "PerPerson" ? (
+                        <input
+                          type="number"
+                          min={1}
+                          placeholder="Personer"
+                          aria-label={`Antall personer for ${ingredient.label}`}
+                          value={ingredient.personCount ?? ""}
+                          onChange={(event) =>
+                            handleDraftIngredientPersonCountChange(
+                              ingredient.id,
+                              event.target.value,
+                            )}
+                          className="w-24 rounded-lg border border-[#e1e7dd] bg-white px-2 py-1 text-xs font-semibold text-[#3f4b43] focus:outline-none focus:ring-2 focus:ring-[#2f6b4f]/30"
+                        />
+                      ) : null}
+                      <button
+                        type="button"
+                        aria-label={`Remove ${ingredient.label}`}
+                        onClick={() => handleRemoveIngredient(ingredient.id)}
+                        className="grid h-8 w-8 place-items-center rounded-full border border-[#f0dada] text-[#d76b6b] transition hover:bg-[#fbeeee]"
+                      >
+                        <TrashIcon className="h-4 w-4" />
+                      </button>
+                    </div>
                   </li>
                 ))
               ) : (

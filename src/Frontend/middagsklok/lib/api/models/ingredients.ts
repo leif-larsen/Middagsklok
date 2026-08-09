@@ -15,6 +15,9 @@ export type DishOverviewIngredient = {
   ingredientId: string;
   amount: number;
   label: string;
+  unit: string;
+  scaling: string;
+  personCount?: number | null;
 };
 
 export type IngredientOverview = {
@@ -23,12 +26,14 @@ export type IngredientOverview = {
   category: IngredientCategoryValue;
   defaultUnit: IngredientUnitValue;
   usedIn: number;
+  isPantryStaple: boolean;
 };
 
 export type IngredientCreateRequest = {
   name: string;
   category: IngredientCategoryValue;
   defaultUnit: IngredientUnitValue;
+  isPantryStaple?: boolean;
 };
 
 export type IngredientCreateResponse = IngredientOverview;

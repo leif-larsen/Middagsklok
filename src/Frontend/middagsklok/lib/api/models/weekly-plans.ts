@@ -6,6 +6,7 @@ export type WeeklyPlanSelectionInput = {
 export type WeeklyPlanDayInput = {
   date?: string | null;
   selection?: WeeklyPlanSelectionInput | null;
+  servings?: number | null;
 };
 
 export type WeeklyPlanUpsertRequest = {
@@ -20,6 +21,7 @@ export type WeeklyPlanSelection = {
 export type WeeklyPlanDay = {
   date: string;
   selection: WeeklyPlanSelection;
+  servings?: number | null;
 };
 
 export type WeeklyPlanUpsertResponse = {
