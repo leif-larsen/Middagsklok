@@ -44,6 +44,7 @@ internal sealed class UseCase(AppDbContext dbContext)
             .ToArray();
 
         var ingredientByName = await LoadExistingIngredients(allIngredientNames, cancellationToken);
+        var ingredientByMatchKey = await LoadIngredientsByMatchKey(cancellationToken);
         var dishesToAdd = new List<Dish>();
 
         foreach (var dish in dishes)
@@ -63,6 +64,18 @@ internal sealed class UseCase(AppDbContext dbContext)
                 continue;
             }
 
+            var duplicateFailures = FindNearDuplicateIngredients(
+                validation.Candidate,
+                ingredientByName,
+                ingredientByMatchKey);
+
+            if (duplicateFailures.Count > 0)
+            {
+                failed++;
+                failures.AddRange(duplicateFailures);
+                continue;
+            }
+
             normalizedDishName = NormalizeName(validation.Candidate.Name);
             seenDishNames.Add(normalizedDishName);
 
@@ -73,7 +86,7 @@ internal sealed class UseCase(AppDbContext dbContext)
             var ingredients = new List<DishIngredient>();
             foreach (var ingredientCandidate in validation.Candidate.Ingredients)
             {
-                var ingredient = GetOrCreateIngredient(ingredientCandidate, ingredientByName);
+                var ingredient = GetOrCreateIngredient(ingredientCandidate, ingredientByName, ingredientByMatchKey);
                 var dishIngredient = new DishIngredient(
                     ingredient.Id,
                     ingredientCandidate.Amount,
@@ -156,10 +169,76 @@ internal sealed class UseCase(AppDbContext dbContext)
         return lookup;
     }
 
+    // Loads every existing ingredient keyed by its loose match key, for near-duplicate detection.
+    private async Task<Dictionary<string, Ingredient>> LoadIngredientsByMatchKey(CancellationToken cancellationToken)
+    {
+        var items = await _dbContext.Ingredients
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+
+        var lookup = new Dictionary<string, Ingredient>(StringComparer.Ordinal);
+
+        foreach (var item in items)
+        {
+            lookup.TryAdd(IngredientNameMatching.MatchKey(item.Name), item);
+        }
+
+        return lookup;
+    }
+
+    // Reports imported ingredient names that denote a product already held under different wording.
+    private static IReadOnlyList<Failure> FindNearDuplicateIngredients(
+        DishCandidate candidate,
+        IDictionary<string, Ingredient> ingredientByName,
+        IDictionary<string, Ingredient> ingredientByMatchKey)
+    {
+        var failures = new List<Failure>();
+        var newNamesByMatchKey = new Dictionary<string, string>(StringComparer.Ordinal);
+
+        foreach (var ingredient in candidate.Ingredients)
+        {
+            // An exact name match already resolves to the existing record, so it is never a duplicate.
+            if (ingredientByName.ContainsKey(NormalizeName(ingredient.Name)))
+            {
+                continue;
+            }
+
+            var matchKey = IngredientNameMatching.MatchKey(ingredient.Name);
+
+            if (matchKey.Length == 0)
+            {
+                continue;
+            }
+
+            if (ingredientByMatchKey.TryGetValue(matchKey, out var existing))
+            {
+                failures.Add(new Failure(
+                    candidate.Name,
+                    $"Ingredient looks like the existing ingredient '{existing.Name}'. Reuse that name, or rename it if it is a different product.",
+                    ingredient.Name));
+                continue;
+            }
+
+            if (newNamesByMatchKey.TryGetValue(matchKey, out var earlier))
+            {
+                failures.Add(new Failure(
+                    candidate.Name,
+                    $"Ingredient looks like '{earlier}' in the same dish. Use one name per product.",
+                    ingredient.Name));
+                continue;
+            }
+
+            newNamesByMatchKey[matchKey] = ingredient.Name;
+        }
+
+        return failures;
+    }
+
     // Gets an existing ingredient or creates a new one from a candidate.
     private Ingredient GetOrCreateIngredient(
         IngredientCandidate candidate,
-        IDictionary<string, Ingredient> ingredientByName)
+        IDictionary<string, Ingredient> ingredientByName,
+        IDictionary<string, Ingredient> ingredientByMatchKey)
     {
         var normalizedName = NormalizeName(candidate.Name);
         if (ingredientByName.TryGetValue(normalizedName, out var existing))
@@ -169,6 +248,7 @@ internal sealed class UseCase(AppDbContext dbContext)
 
         var ingredient = new Ingredient(candidate.Name, candidate.Category, candidate.Unit);
         ingredientByName[normalizedName] = ingredient;
+        ingredientByMatchKey.TryAdd(IngredientNameMatching.MatchKey(candidate.Name), ingredient);
         _dbContext.Ingredients.Add(ingredient);
 
         return ingredient;

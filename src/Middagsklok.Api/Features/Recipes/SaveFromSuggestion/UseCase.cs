@@ -60,13 +60,14 @@ internal sealed class UseCase(
 
         var recipe = expandedRecipe.Recipe;
         var ingredientsByName = await LoadIngredientsByName(recipe.Ingredients, cancellationToken);
+        var ingredientsByMatchKey = await LoadIngredientsByMatchKey(cancellationToken);
         var ingredientLookup = new Dictionary<Guid, Ingredient>();
         var dishIngredients = new List<DishIngredient>();
 
         var sortOrder = 1;
         foreach (var ingredientData in recipe.Ingredients)
         {
-            var ingredient = ResolveIngredient(ingredientData, ingredientsByName);
+            var ingredient = ResolveIngredient(ingredientData, ingredientsByName, ingredientsByMatchKey);
             ingredientLookup[ingredient.Id] = ingredient;
 
             var dishIngredient = new DishIngredient(
@@ -455,10 +456,29 @@ internal sealed class UseCase(
         return lookup;
     }
 
+    // Loads every existing ingredient keyed by its loose match key, for near-duplicate detection.
+    private async Task<Dictionary<string, Ingredient>> LoadIngredientsByMatchKey(CancellationToken cancellationToken)
+    {
+        var items = await _dbContext.Ingredients
+            .ToListAsync(cancellationToken);
+
+        var lookup = new Dictionary<string, Ingredient>(StringComparer.Ordinal);
+
+        foreach (var item in items)
+        {
+            lookup.TryAdd(IngredientNameMatching.MatchKey(item.Name), item);
+        }
+
+        return lookup;
+    }
+
     // Resolves an ingredient by name, creating it if necessary.
+    // Unlike the dish endpoints this folds near-duplicates into the existing record rather than
+    // rejecting them: the names come from the AI, not from a caller who could send an id instead.
     private Ingredient ResolveIngredient(
         ExpandedIngredient ingredientData,
-        IDictionary<string, Ingredient> ingredientsByName)
+        IDictionary<string, Ingredient> ingredientsByName,
+        IDictionary<string, Ingredient> ingredientsByMatchKey)
     {
         var normalizedName = NormalizeName(ingredientData.Name);
 
@@ -467,10 +487,25 @@ internal sealed class UseCase(
             return existing;
         }
 
+        var matchKey = IngredientNameMatching.MatchKey(ingredientData.Name);
+
+        if (matchKey.Length > 0 && ingredientsByMatchKey.TryGetValue(matchKey, out var nearDuplicate))
+        {
+            ingredientsByName[normalizedName] = nearDuplicate;
+
+            return nearDuplicate;
+        }
+
         var category = InferCategory(ingredientData.Name);
         var unit = ParseUnit(ingredientData.Unit);
         var ingredient = new Ingredient(ingredientData.Name, category, unit);
         ingredientsByName[normalizedName] = ingredient;
+
+        if (matchKey.Length > 0)
+        {
+            ingredientsByMatchKey[matchKey] = ingredient;
+        }
+
         _dbContext.Ingredients.Add(ingredient);
 
         return ingredient;

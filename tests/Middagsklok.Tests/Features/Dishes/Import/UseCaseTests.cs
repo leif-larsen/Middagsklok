@@ -44,6 +44,31 @@ public sealed class UseCaseTests
     // Creates a request containing multiple dishes.
     private static Request CreateRequest(params DishInput[] dishes) => new(dishes);
 
+    // Verifies that an import naming an existing ingredient differently fails that dish.
+    [Test]
+    public async Task FailsDishWhoseIngredientDuplicatesAnExistingIngredient()
+    {
+        var databaseName = Guid.NewGuid().ToString("N");
+        await using var context = CreateContext(databaseName);
+
+        context.Ingredients.Add(new Ingredient("Potet", IngredientCategory.Produce, Unit.G));
+        await context.SaveChangesAsync(CancellationToken.None);
+
+        var useCase = new UseCase(context);
+        var request = CreateRequest(CreateDish("Lapskaus", "poteter"));
+
+        var response = await useCase.Execute(request, CancellationToken.None);
+
+        await Assert.That(response.Imported).IsEqualTo(0);
+        await Assert.That(response.Failed).IsEqualTo(1);
+        await Assert.That(response.Failures.Count).IsEqualTo(1);
+        await Assert.That(response.Failures[0].IngredientName).IsEqualTo("poteter");
+        await Assert.That(response.Failures[0].Reason).Contains("Potet");
+
+        var ingredientCount = await context.Ingredients.CountAsync(CancellationToken.None);
+        await Assert.That(ingredientCount).IsEqualTo(1);
+    }
+
     // Verifies that dishes are imported and shared ingredients are reused.
     [Test]
     public async Task ImportsDishesAndReusesIngredients()
