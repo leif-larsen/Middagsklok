@@ -83,6 +83,9 @@ export type DishCreateIngredientInput = {
   id?: string | null;
   name?: string | null;
   amount: number;
+  unit?: string | null;
+  scaling?: string | null;
+  personCount?: number | null;
 };
 
 export type DishCreateRequest = {

@@ -140,6 +140,7 @@ const unitLabels: Record<string, string> = {
   Ml: "ml",
   L: "l",
   Pcs: "pcs",
+  Pack: "pk",
 };
 
 const formatQuantity = (value: number) => {
@@ -171,6 +172,7 @@ export default function ShoppingListPage() {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [isLoadingPlans, setIsLoadingPlans] = useState(true);
   const [planLoadError, setPlanLoadError] = useState<string | null>(null);
+  const [hidePantryStaples, setHidePantryStaples] = useState(false);
 
   const activePlan = useMemo(
     () => planOptions.find((plan) => plan.startDate === selectedPlanStartDate),
@@ -182,31 +184,36 @@ export default function ShoppingListPage() {
     [shoppingList],
   );
 
+  const activeSections = useMemo(
+    () =>
+      activeCategories
+        .map((category) => ({
+          id: category.category,
+          title: formatCategoryLabel(category.category),
+          items: category.items
+            .filter((item) => !hidePantryStaples || !item.isPantryStaple)
+            .map((item) => ({
+              id: `${item.ingredientId}-${item.unit}`,
+              name: item.name,
+              amount: formatAmount(item.amount, item.unit),
+              dishes: item.dishes ?? [],
+              isPantryStaple: item.isPantryStaple,
+            })),
+        }))
+        .filter((category) => category.items.length > 0),
+    [activeCategories, hidePantryStaples],
+  );
+
   const totalItems = useMemo(
     () =>
-      activeCategories.reduce(
+      activeSections.reduce(
         (total, category) => total + category.items.length,
         0,
       ),
-    [activeCategories],
+    [activeSections],
   );
 
-  const totalCategories = activeCategories.length;
-
-  const activeSections = useMemo(
-    () =>
-      activeCategories.map((category) => ({
-        id: category.category,
-        title: formatCategoryLabel(category.category),
-        items: category.items.map((item) => ({
-          id: `${item.ingredientId}-${item.unit}`,
-          name: item.name,
-          amount: formatAmount(item.amount, item.unit),
-          dishes: item.dishes ?? [],
-        })),
-      })),
-    [activeCategories],
-  );
+  const totalCategories = activeSections.length;
 
   useEffect(() => {
     let isActive = true;
@@ -407,6 +414,15 @@ export default function ShoppingListPage() {
                   {planHelperLabel}
                 </span>
               </div>
+              <label className="flex items-center gap-2 rounded-2xl border border-[#e1e8dc] bg-white/80 px-4 py-3 text-sm font-semibold text-[#1f2a22] shadow-[0_12px_24px_-20px_rgba(32,70,48,0.35)]">
+                <input
+                  type="checkbox"
+                  checked={hidePantryStaples}
+                  onChange={(event) => setHidePantryStaples(event.target.checked)}
+                  className="h-4 w-4 rounded border-[#b9c8bd] text-[#2f6b4f] focus:ring-[#2f6b4f]/30"
+                />
+                Skjul lagervarer
+              </label>
             </div>
           </header>
 
@@ -454,7 +470,11 @@ export default function ShoppingListPage() {
                       {section.items.map((item) => (
                         <li
                           key={item.id}
-                          className="rounded-2xl border border-[#e1e8dc] bg-white/70 px-4 py-3 shadow-[0_14px_26px_-22px_rgba(30,60,40,0.35)]"
+                          className={`rounded-2xl border px-4 py-3 shadow-[0_14px_26px_-22px_rgba(30,60,40,0.35)] ${
+                            item.isPantryStaple
+                              ? "border-[#e8ddc0] bg-[#fbf6e9]"
+                              : "border-[#e1e8dc] bg-white/70"
+                          }`}
                         >
                           <div className="flex flex-wrap items-center justify-between gap-3">
                             <div className="space-y-1">
@@ -463,6 +483,11 @@ export default function ShoppingListPage() {
                                 <span className="ml-2 text-sm font-medium text-[#7b8a7f]">
                                   {item.amount}
                                 </span>
+                                {item.isPantryStaple ? (
+                                  <span className="ml-2 inline-flex rounded-full bg-[#f1e4bb] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#8a6a2a]">
+                                    Lagervare
+                                  </span>
+                                ) : null}
                               </div>
                               {item.dishes.length > 0 ? (
                                 <div className="text-xs text-[#7b8a7f]">

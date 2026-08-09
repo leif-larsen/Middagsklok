@@ -4,6 +4,7 @@ export type ShoppingListItem = {
   amount: number;
   unit: string;
   dishes: string[];
+  isPantryStaple: boolean;
 };
 
 export type ShoppingListCategory = {
