@@ -21,6 +21,75 @@ public sealed class UseCaseTests
         return context;
     }
 
+    // Verifies that a bare name denoting an existing ingredient is rejected instead of creating a duplicate.
+    [Test]
+    public async Task RejectsIngredientNameThatDuplicatesAnExistingIngredient()
+    {
+        var databaseName = Guid.NewGuid().ToString("N");
+        await using var context = CreateContext(databaseName);
+
+        context.Ingredients.Add(new Ingredient("Potet", IngredientCategory.Produce, Unit.G));
+        await context.SaveChangesAsync(CancellationToken.None);
+
+        var useCase = new UseCase(context);
+        var request = new Request(
+            "Duplicate Dish",
+            "Pasta",
+            10,
+            20,
+            4,
+            null,
+            false,
+            false,
+            false,
+            null,
+            [new IngredientInput(null, "poteter", 500)]);
+
+        var result = await useCase.Execute(request, CancellationToken.None);
+
+        await Assert.That(result.Outcome).IsEqualTo(CreateOutcome.Invalid);
+        await Assert.That(result.Errors.Count).IsEqualTo(1);
+        await Assert.That(result.Errors[0].Message).Contains("Potet");
+
+        var ingredientCount = await context.Ingredients.CountAsync(CancellationToken.None);
+        await Assert.That(ingredientCount).IsEqualTo(1);
+
+        var dishCount = await context.Dishes.CountAsync(CancellationToken.None);
+        await Assert.That(dishCount).IsEqualTo(0);
+    }
+
+    // Verifies that an unrelated bare name still creates an ingredient.
+    [Test]
+    public async Task CreatesIngredientForUnrelatedName()
+    {
+        var databaseName = Guid.NewGuid().ToString("N");
+        await using var context = CreateContext(databaseName);
+
+        context.Ingredients.Add(new Ingredient("Potet", IngredientCategory.Produce, Unit.G));
+        await context.SaveChangesAsync(CancellationToken.None);
+
+        var useCase = new UseCase(context);
+        var request = new Request(
+            "Fresh Dish",
+            "Pasta",
+            10,
+            20,
+            4,
+            null,
+            false,
+            false,
+            false,
+            null,
+            [new IngredientInput(null, "Brokkoli", 300)]);
+
+        var result = await useCase.Execute(request, CancellationToken.None);
+
+        await Assert.That(result.Outcome).IsEqualTo(CreateOutcome.Success);
+
+        var ingredientCount = await context.Ingredients.CountAsync(CancellationToken.None);
+        await Assert.That(ingredientCount).IsEqualTo(2);
+    }
+
     // Verifies that create persists normalized vibe tags and returns them in the response.
     [Test]
     public async Task PersistsNormalizedVibeTags()

@@ -49,6 +49,18 @@ internal sealed class UseCase(AppDbContext dbContext)
             return invalidResult;
         }
 
+        var ingredientsByMatchKey = await LoadIngredientsByMatchKey(validation.Candidate.Ingredients, cancellationToken);
+        var duplicateErrors = ValidateNearDuplicateNames(
+            validation.Candidate.Ingredients,
+            ingredientsByName,
+            ingredientsByMatchKey);
+
+        if (duplicateErrors.Count > 0)
+        {
+            var duplicateResult = new UseCaseResult(CreateOutcome.Invalid, null, duplicateErrors);
+            return duplicateResult;
+        }
+
         var ingredientLookup = new Dictionary<Guid, Ingredient>();
         var dishIngredients = new List<DishIngredient>();
 
@@ -142,6 +154,83 @@ internal sealed class UseCase(AppDbContext dbContext)
             StringComparer.OrdinalIgnoreCase);
 
         return lookup;
+    }
+
+    // Loads every existing ingredient keyed by its loose match key, for near-duplicate detection.
+    private async Task<IReadOnlyDictionary<string, Ingredient>> LoadIngredientsByMatchKey(
+        IReadOnlyList<IngredientCandidate> ingredients,
+        CancellationToken cancellationToken)
+    {
+        var hasNameCandidates = ingredients.Any(ingredient => ingredient.Id is null);
+
+        if (!hasNameCandidates)
+        {
+            return new Dictionary<string, Ingredient>(StringComparer.Ordinal);
+        }
+
+        var items = await _dbContext.Ingredients
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+
+        var lookup = new Dictionary<string, Ingredient>(StringComparer.Ordinal);
+
+        foreach (var item in items)
+        {
+            lookup.TryAdd(IngredientNameMatching.MatchKey(item.Name), item);
+        }
+
+        return lookup;
+    }
+
+    // Rejects bare names that denote an ingredient the database already holds under different wording.
+    private static IReadOnlyList<ValidationError> ValidateNearDuplicateNames(
+        IReadOnlyList<IngredientCandidate> ingredients,
+        IReadOnlyDictionary<string, Ingredient> ingredientsByName,
+        IReadOnlyDictionary<string, Ingredient> ingredientsByMatchKey)
+    {
+        var failures = new List<ValidationError>();
+        var newNamesByMatchKey = new Dictionary<string, string>(StringComparer.Ordinal);
+
+        foreach (var ingredient in ingredients)
+        {
+            if (ingredient.Id is not null)
+            {
+                continue;
+            }
+
+            // An exact name match already resolves to the existing record, so it is never a duplicate.
+            if (ingredientsByName.ContainsKey(NormalizeName(ingredient.Name!)))
+            {
+                continue;
+            }
+
+            var matchKey = IngredientNameMatching.MatchKey(ingredient.Name);
+
+            if (matchKey.Length == 0)
+            {
+                continue;
+            }
+
+            if (ingredientsByMatchKey.TryGetValue(matchKey, out var existing))
+            {
+                failures.Add(new ValidationError(
+                    BuildIngredientField(ingredient.Index, nameof(IngredientInput.Name)),
+                    $"'{ingredient.Name}' looks like the existing ingredient '{existing.Name}'. Send its id instead, or rename it if it is a different product."));
+                continue;
+            }
+
+            if (newNamesByMatchKey.TryGetValue(matchKey, out var earlier))
+            {
+                failures.Add(new ValidationError(
+                    BuildIngredientField(ingredient.Index, nameof(IngredientInput.Name)),
+                    $"'{ingredient.Name}' looks like '{earlier}' in the same request. Use one name per product."));
+                continue;
+            }
+
+            newNamesByMatchKey[matchKey] = ingredient.Name!;
+        }
+
+        return failures;
     }
 
     // Validates that id-based ingredient references exist.

@@ -21,6 +21,54 @@ public sealed class UseCaseTests
         return context;
     }
 
+    // Verifies that an update cannot introduce an ingredient that duplicates an existing one.
+    [Test]
+    public async Task RejectsIngredientNameThatDuplicatesAnExistingIngredient()
+    {
+        var databaseName = Guid.NewGuid().ToString("N");
+        await using var context = CreateContext(databaseName);
+
+        var ingredient = new Ingredient("Gulrot", IngredientCategory.Produce, Unit.G);
+        var dish = new Dish(
+            "Lapskaus",
+            DishType.SoupStew,
+            10,
+            20,
+            4,
+            null,
+            false,
+            false,
+            false,
+            [new DishIngredient(ingredient.Id, 1, Unit.Pcs, null, 1)]);
+
+        context.Ingredients.Add(ingredient);
+        context.Dishes.Add(dish);
+        await context.SaveChangesAsync(CancellationToken.None);
+
+        var useCase = new UseCase(context);
+        var request = new Request(
+            "Lapskaus",
+            "SoupStew",
+            10,
+            20,
+            4,
+            null,
+            false,
+            false,
+            false,
+            null,
+            [new IngredientInput(null, "Gulrot, i skiver", 300)]);
+
+        var result = await useCase.Execute(dish.Id.ToString("D"), request, CancellationToken.None);
+
+        await Assert.That(result.Outcome).IsEqualTo(UpdateOutcome.Invalid);
+        await Assert.That(result.Errors.Count).IsEqualTo(1);
+        await Assert.That(result.Errors[0].Message).Contains("Gulrot");
+
+        var ingredientCount = await context.Ingredients.CountAsync(CancellationToken.None);
+        await Assert.That(ingredientCount).IsEqualTo(1);
+    }
+
     // Verifies that update persists normalized vibe tags and returns them in the response.
     [Test]
     public async Task PersistsNormalizedVibeTags()
