@@ -22,6 +22,8 @@ internal static class DishesDeleteEndpoint
             DeleteOutcome.Success => Results.Ok(),
             DeleteOutcome.NotFound =>
                 Results.NotFound(new ErrorResponse("Dish not found.", result.Errors)),
+            DeleteOutcome.Conflict =>
+                Results.Conflict(new ErrorResponse("Dish cannot be deleted.", result.Errors)),
             _ =>
                 Results.BadRequest(new ErrorResponse("Validation failed.", result.Errors))
         };

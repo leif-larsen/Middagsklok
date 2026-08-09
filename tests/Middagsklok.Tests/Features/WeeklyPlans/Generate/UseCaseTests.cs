@@ -294,6 +294,36 @@ public sealed class UseCaseTests
         var weekendFirstDishName = weekendDishNamesById[weekendFirstDishId!];
         await Assert.That(weekendFirstDishName).IsEqualTo("Comfort Pasta");
     }
+
+    // Verifies that retired dishes are excluded from plan generation.
+    [Test]
+    public async Task ExcludesRetiredDishesFromGeneration()
+    {
+        var databaseName = Guid.NewGuid().ToString("N");
+        await using var context = CreateContext(databaseName);
+
+        var activeDish = CreateDish("Active Dish", false);
+        var retiredDish = CreateDish("Retired Dish", false);
+        retiredDish.Retire();
+
+        for (var i = 0; i < 6; i++)
+        {
+            context.Dishes.Add(CreateDish($"Active Dish {i}", false));
+        }
+
+        context.Dishes.Add(activeDish);
+        context.Dishes.Add(retiredDish);
+        await context.SaveChangesAsync(CancellationToken.None);
+
+        var useCase = new UseCase(context);
+        var result = await useCase.Execute("2026-08-11", CancellationToken.None);
+
+        await Assert.That(result.Outcome).IsEqualTo(GenerateOutcome.Success);
+
+        var retiredDishIdString = retiredDish.Id.ToString("D");
+        var usedRetired = result.Plan!.Days.Any(day => day.Selection.DishId == retiredDishIdString);
+        await Assert.That(usedRetired).IsFalse();
+    }
 }
 
 internal sealed class DeterministicRandomSource(double nextDoubleValue) : IRandomSource

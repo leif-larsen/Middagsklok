@@ -11,10 +11,11 @@ internal static class DishesOverviewEndpoint
 
     // Handles the HTTP request and delegates to the use case.
     private static async Task<IResult> Handle(
+        bool includeRetired,
         UseCase useCase,
         CancellationToken cancellationToken)
     {
-        var response = await useCase.Execute(cancellationToken);
+        var response = await useCase.Execute(includeRetired, cancellationToken);
 
         return Results.Ok(response);
     }

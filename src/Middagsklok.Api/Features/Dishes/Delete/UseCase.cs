@@ -29,6 +29,23 @@ internal sealed class UseCase(AppDbContext dbContext)
             return notFoundResult;
         }
 
+        var planReferenceCount = await _dbContext.WeeklyPlans
+            .AsNoTracking()
+            .SelectMany(plan => plan.Days)
+            .CountAsync(day => day.Selection.DishId == dish.Id, cancellationToken);
+
+        var consumptionReferenceCount = await _dbContext.DishConsumptionEvents
+            .AsNoTracking()
+            .CountAsync(evt => evt.DishId == dish.Id, cancellationToken);
+
+        if (planReferenceCount > 0 || consumptionReferenceCount > 0)
+        {
+            var message = $"Dish is referenced by {planReferenceCount} weekly plan day(s) and {consumptionReferenceCount} consumption event(s). Retire the dish instead.";
+            var conflictError = new ValidationError("id", message);
+            var conflictResult = new UseCaseResult(DeleteOutcome.Conflict, new[] { conflictError });
+            return conflictResult;
+        }
+
         _dbContext.Dishes.Remove(dish);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
@@ -42,7 +59,8 @@ internal enum DeleteOutcome
 {
     Success,
     Invalid,
-    NotFound
+    NotFound,
+    Conflict
 }
 
 internal sealed record UseCaseResult(

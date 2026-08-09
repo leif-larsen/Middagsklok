@@ -11,11 +11,19 @@ internal sealed class UseCase(AppDbContext dbContext)
     private readonly AppDbContext _dbContext = dbContext;
 
     // Executes the query for all dishes.
-    public async Task<Response> Execute(CancellationToken cancellationToken)
+    public async Task<Response> Execute(bool includeRetired, CancellationToken cancellationToken)
     {
-        var dishes = await _dbContext.Dishes
+        var query = _dbContext.Dishes
             .AsNoTracking()
             .Include(d => d.Ingredients)
+            .AsQueryable();
+
+        if (!includeRetired)
+        {
+            query = query.Where(d => d.RetiredAt == null);
+        }
+
+        var dishes = await query
             .OrderBy(d => d.Name)
             .ToListAsync(cancellationToken);
 
@@ -119,7 +127,8 @@ internal sealed class UseCase(AppDbContext dbContext)
             dish.IsVegan,
             dish.VibeTags.ToArray(),
             ingredients,
-            lastEatenOn);
+            lastEatenOn,
+            dish.RetiredAt);
 
         return overview;
     }
