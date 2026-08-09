@@ -12,6 +12,8 @@
     <PackageVersion Include="Aspire.Hosting.Azure.PostgreSQL" Version="13.1.0" />
     <PackageVersion Include="Aspire.Hosting.JavaScript" Version="13.1.0"  />
     <PackageVersion Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="13.1.0" />
+    <!-- Direct pin past GHSA-2f33-pr97-265q and 8 sibling advisories; StreamJsonRpc 2.22.23 (via Aspire.Hosting 13.1.0) floors this at the vulnerable 2.5.192. -->
+    <PackageVersion Include="MessagePack" Version="2.5.302" />
     <PackageVersion Include="FakeItEasy" Version="9.0.1" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.1" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.1" />
