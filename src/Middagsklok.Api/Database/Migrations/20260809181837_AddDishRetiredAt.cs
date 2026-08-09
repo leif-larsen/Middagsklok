@@ -1,10 +1,13 @@
 using System;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Middagsklok.Api.Database.Migrations
 {
+    [DbContext(typeof(AppDbContext))]
+    [Migration("20260809181837_AddDishRetiredAt")]
     /// <inheritdoc />
     public partial class AddDishRetiredAt : Migration
     {
