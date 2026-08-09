@@ -60,6 +60,11 @@ public class DishConfiguration : IEntityTypeConfiguration<DishEntity>
             .HasDefaultValue(false)
             .IsRequired();
 
+        builder.Property(d => d.RetiredAt)
+            .HasColumnName("retired_at");
+
+        builder.Ignore(d => d.IsRetired);
+
         builder.Property<List<string>>("_vibeTags")
             .HasColumnName("vibe_tags")
             .HasColumnType("text[]")

@@ -41,6 +41,9 @@ public class Dish(
     public bool IsVegan { get; private set; } = isVegan;
     public IReadOnlyList<DishIngredient> Ingredients => _ingredients;
     public IReadOnlyList<string> VibeTags => _vibeTags;
+    public DateTime? RetiredAt { get; private set; }
+
+    public bool IsRetired => RetiredAt is not null;
 
     public int TotalTimeMinutes => PrepTimeMinutes + CookTimeMinutes;
 
@@ -73,6 +76,20 @@ public class Dish(
         _vibeTags.Clear();
         _vibeTags.AddRange(NormalizeVibeTags(vibeTags));
 
+        Touch();
+    }
+
+    // Retires the dish so it is excluded from weekly plan generation.
+    public void Retire()
+    {
+        RetiredAt ??= DateTime.UtcNow;
+        Touch();
+    }
+
+    // Restores the dish to active status.
+    public void Unretire()
+    {
+        RetiredAt = null;
         Touch();
     }
 

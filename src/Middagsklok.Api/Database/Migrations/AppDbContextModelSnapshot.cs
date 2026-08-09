@@ -81,6 +81,10 @@ namespace Middagsklok.Api.Database.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("servings");
 
+                    b.Property<DateTime?>("RetiredAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("retired_at");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");

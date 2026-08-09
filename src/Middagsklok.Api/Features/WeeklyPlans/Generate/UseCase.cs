@@ -86,6 +86,7 @@ internal sealed class UseCase(AppDbContext dbContext, IRandomSource? randomSourc
     {
         var dishEntities = await _dbContext.Dishes
             .AsNoTracking()
+            .Where(dish => dish.RetiredAt == null)
             .OrderBy(dish => dish.Name)
             .ToListAsync(cancellationToken);
 
