@@ -44,7 +44,7 @@ public sealed class UseCaseTests
             ingredientId.HasValue
                 ? new[] { new DishIngredient(ingredientId.Value, 200, Unit.G, "chopped", 1) }
                 : Array.Empty<DishIngredient>(),
-            new[] { "comfort", "easy" });
+            new[] { "ComfortFood", "QuickWeeknight" });
 
     // Creates a test weekly plan with a planned dish for a specific date.
     private static WeeklyPlan CreateWeeklyPlan(DateOnly startDate, Guid dishId, DateOnly plannedDate)
@@ -183,7 +183,7 @@ public sealed class UseCaseTests
 
         var response = result.Data!;
         await Assert.That(response.Dish.VibeTags).Count().IsEqualTo(2);
-        await Assert.That(response.Dish.VibeTags).Contains("comfort");
-        await Assert.That(response.Dish.VibeTags).Contains("easy");
+        await Assert.That(response.Dish.VibeTags).Contains("ComfortFood");
+        await Assert.That(response.Dish.VibeTags).Contains("QuickWeeknight");
     }
 }
