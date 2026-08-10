@@ -100,7 +100,7 @@ public class Dish(
         return string.IsNullOrWhiteSpace(trimmed) ? null : trimmed;
     }
 
-    // Normalizes vibe tags for persistence.
+    // Normalizes vibe tags for persistence, silently dropping unknown values.
     private static List<string> NormalizeVibeTags(IEnumerable<string>? tags)
     {
         if (tags is null)
@@ -108,11 +108,21 @@ public class Dish(
             return [];
         }
 
-        var normalized = tags
-            .Where(tag => !string.IsNullOrWhiteSpace(tag))
-            .Select(tag => tag.Trim())
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToList();
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var normalized = new List<string>();
+
+        foreach (var tag in tags)
+        {
+            if (!DishTaxonomy.TryNormalizeVibeTag(tag, out var canonicalTag))
+            {
+                continue;
+            }
+
+            if (seen.Add(canonicalTag))
+            {
+                normalized.Add(canonicalTag);
+            }
+        }
 
         return normalized;
     }

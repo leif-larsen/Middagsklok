@@ -294,7 +294,7 @@ internal sealed class UseCase(
               "isSeafood": boolean,
               "isVegetarian": boolean,
               "isVegan": boolean,
-              "vibeTags": string[] (e.g., ["quick", "healthy", "comfort food"]),
+              "vibeTags": string[] (zero or more of: "ComfortFood", "QuickWeeknight", "WeekendTreat", "LightFresh", "FamilyFriendly"),
               "instructions": string (detailed step-by-step instructions as a single text block, each step on a new line),
               "ingredients": [{ "name": string, "quantity": number, "unit": string (one of: g, kg, ml, l, pcs) }]
             }
