@@ -101,6 +101,9 @@ public class Dish(
     }
 
     // Normalizes vibe tags for persistence, silently dropping unknown values.
+    // Note: this method guards the write path only. EF Core materializes Dish via the private
+    // constructor (vibeTags: null) and then sets _vibeTags directly from the stored column,
+    // bypassing this method. Whatever is in vibe_tags is what callers read back unchanged.
     private static List<string> NormalizeVibeTags(IEnumerable<string>? tags)
     {
         if (tags is null)
