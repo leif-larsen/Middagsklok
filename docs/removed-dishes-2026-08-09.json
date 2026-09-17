@@ -1,0 +1,441 @@
+[
+  {
+    "id": "2033a9f6-ad69-40d0-949b-1bfeda21281b",
+    "name": "Vegetar Moussaka",
+    "dishType": "CasseroleBake",
+    "prepMinutes": 30,
+    "cookMinutes": 60,
+    "serves": 4,
+    "instructions": "1. Forvarm ovnen til 200°C (vifte 180°C). Skjær auberginene i 1 cm tykke skiver. Legg på et stekebrett, pensle med olivenolje på begge sider og krydre med salt og pepper. Stek i 20 minutter til de er gylne og møre, snu halvveis. Ta ut og sett til side.\n2. Mens auberginene stekes, tilbered linse-tomatsausen. Varm 2 ss olivenolje i en stor panne på middels varme. Tilsett hakket løk og stek i 5 minutter til den er myk. Tilsett hvitløken og stek i ett minutt til.\n3. Rør inn kanel, allehånde, spisskummen og oregano. Stek i 30 sekunder til det dufter. Tilsett tomatpuré og rør godt. Hell i hakkede tomater og rødvin. Tilsett de kokte linsene og bland godt. Smak til med salt og pepper. La småkoke i 15 minutter til sausen tykner. Ta av varmen.\n4. For å lage bechamelsausen, smelt smøret i en mellomstor kjele på middels varme. Visp inn melet og stek i 1-2 minutter mens du rører hele tiden. Tilsett melken gradvis mens du visper kontinuerlig for å unngå klumper. Kok i 5-7 minutter til sausen tykner og dekker baksiden av en skje. Ta av varmen, rør inn muskatnøtt og halvparten av den revne osten. Smak til med salt og pepper. La avkjøle litt, visp deretter inn eggeplommene én om gangen.\n5. Senk ovnstemperaturen til 180°C. Smør en stor ildfast form (ca. 30x20 cm) lett. Legg halvparten av de stekte auberginskivene i bunnen av formen. Fordel all linse-tomatsausen jevnt over auberginene. Legg de resterende auberginskivene på toppen. Hell bechamelsausen over og fordel jevnt. Strø over resten av den revne osten.\n6. Stek i ovnen i 35-40 minutter til toppen er gyllenbrun og bobler. Ta ut av ovnen og la hvile i 10-15 minutter før du skjærer opp og serverer.\n7. Mens moussakaen hviler, tilbered gresk salat. Skjær tomatene, agurken og rødløken i biter. Tilsett oliven og smuldret fetaost. Dryss over olivenolje, krydre med salt, pepper og tørket oregano. Bland forsiktig og server ved siden av moussakaen.",
+    "isSeafood": false,
+    "isVegetarian": true,
+    "isVegan": false,
+    "vibeTags": [
+      "comfort food",
+      "hearty",
+      "mediterranean",
+      "classic",
+      "oven-baked"
+    ],
+    "ingredients": [
+      {
+        "id": "0556e419-30b6-41bb-8660-9db11bfc93f4-1",
+        "ingredientId": "0556e419-30b6-41bb-8660-9db11bfc93f4",
+        "amount": 2,
+        "label": "2 pcs aubergine",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "7ab99e46-801a-4dfa-9378-28157990cdad-2",
+        "ingredientId": "7ab99e46-801a-4dfa-9378-28157990cdad",
+        "amount": 60,
+        "label": "60 ml olive oil",
+        "unit": "Ml",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "ebbbfc85-52c3-443e-9dee-0cc44a1e5623-3",
+        "ingredientId": "ebbbfc85-52c3-443e-9dee-0cc44a1e5623",
+        "amount": 1,
+        "label": "1 pcs yellow onion",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "23edade5-140b-40a7-b5a6-53a0496fc006-4",
+        "ingredientId": "23edade5-140b-40a7-b5a6-53a0496fc006",
+        "amount": 3,
+        "label": "3 pcs garlic cloves",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "a4001cc8-4d6f-4c29-808a-551b7ed7ee4d-5",
+        "ingredientId": "a4001cc8-4d6f-4c29-808a-551b7ed7ee4d",
+        "amount": 30,
+        "label": "30 ml tomato paste",
+        "unit": "Ml",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "7e53ac01-bc34-412c-a7a7-5a7fe92c83ab-6",
+        "ingredientId": "7e53ac01-bc34-412c-a7a7-5a7fe92c83ab",
+        "amount": 400,
+        "label": "400 g crushed tomatoes",
+        "unit": "G",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "de5f7c56-49b8-435b-9a86-5944bb27d61d-7",
+        "ingredientId": "de5f7c56-49b8-435b-9a86-5944bb27d61d",
+        "amount": 100,
+        "label": "100 ml red wine",
+        "unit": "Ml",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "d7f8b8ac-dd61-48e2-b4ce-f85b62a0b3ed-8",
+        "ingredientId": "d7f8b8ac-dd61-48e2-b4ce-f85b62a0b3ed",
+        "amount": 400,
+        "label": "400 g cooked green lentils",
+        "unit": "G",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "a7f07ea2-36c4-42ae-b69f-e169b6eda9bb-9",
+        "ingredientId": "a7f07ea2-36c4-42ae-b69f-e169b6eda9bb",
+        "amount": 5,
+        "label": "5 g ground cinnamon",
+        "unit": "G",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "78a104ec-10e5-485a-9079-ee3cadda6856-10",
+        "ingredientId": "78a104ec-10e5-485a-9079-ee3cadda6856",
+        "amount": 3,
+        "label": "3 g ground allspice",
+        "unit": "G",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "1d5022cc-0e9b-44a8-8ccb-9941092c8377-11",
+        "ingredientId": "1d5022cc-0e9b-44a8-8ccb-9941092c8377",
+        "amount": 3,
+        "label": "3 g ground cumin",
+        "unit": "G",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "1dfd4663-3a46-4802-a590-86c354d5a9cf-12",
+        "ingredientId": "1dfd4663-3a46-4802-a590-86c354d5a9cf",
+        "amount": 5,
+        "label": "5 g dried oregano",
+        "unit": "G",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "7233d5ea-8465-417c-b4c9-67aadf5a0e4c-13",
+        "ingredientId": "7233d5ea-8465-417c-b4c9-67aadf5a0e4c",
+        "amount": 60,
+        "label": "60 g butter",
+        "unit": "G",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "222342dc-20a4-41de-9b44-5939a4ae2326-14",
+        "ingredientId": "222342dc-20a4-41de-9b44-5939a4ae2326",
+        "amount": 60,
+        "label": "60 g plain flour",
+        "unit": "G",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "fef998cf-5423-4951-91e2-8c85dd90a624-15",
+        "ingredientId": "fef998cf-5423-4951-91e2-8c85dd90a624",
+        "amount": 600,
+        "label": "600 ml whole milk",
+        "unit": "Ml",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "690074f5-a81c-4107-ba6f-748d9a548b25-16",
+        "ingredientId": "690074f5-a81c-4107-ba6f-748d9a548b25",
+        "amount": 2,
+        "label": "2 g ground nutmeg",
+        "unit": "G",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "5b355cda-4bcb-4fbb-8aa4-9496e59b46bc-17",
+        "ingredientId": "5b355cda-4bcb-4fbb-8aa4-9496e59b46bc",
+        "amount": 80,
+        "label": "80 g grated parmesan or kefalotyri cheese",
+        "unit": "G",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "83802040-bfcb-4948-a9c1-9bdb03c1554a-18",
+        "ingredientId": "83802040-bfcb-4948-a9c1-9bdb03c1554a",
+        "amount": 2,
+        "label": "2 pcs egg yolks",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "4c9c7a9b-b06a-43a0-940d-d79d1c44a0e6-19",
+        "ingredientId": "4c9c7a9b-b06a-43a0-940d-d79d1c44a0e6",
+        "amount": 250,
+        "label": "250 g cherry tomatoes",
+        "unit": "G",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "029f6a34-a9da-49ea-b52a-ce5577a4eee4-20",
+        "ingredientId": "029f6a34-a9da-49ea-b52a-ce5577a4eee4",
+        "amount": 1,
+        "label": "1 pcs cucumber",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "d9b3e199-2597-4f47-a224-6ef4d85aa66d-21",
+        "ingredientId": "d9b3e199-2597-4f47-a224-6ef4d85aa66d",
+        "amount": 1,
+        "label": "1 pcs red onion",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "ba664fc5-972c-49b3-b2cf-e90e0280c49a-22",
+        "ingredientId": "ba664fc5-972c-49b3-b2cf-e90e0280c49a",
+        "amount": 80,
+        "label": "80 g kalamata olives",
+        "unit": "G",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "dbf1db95-fc5d-4a2f-9a7a-f05753b5b518-23",
+        "ingredientId": "dbf1db95-fc5d-4a2f-9a7a-f05753b5b518",
+        "amount": 150,
+        "label": "150 g feta cheese",
+        "unit": "G",
+        "scaling": "PerDish",
+        "personCount": null
+      }
+    ],
+    "lastEatenOn": null
+  },
+  {
+    "id": "1a4b5f2c-62f2-4afc-87cc-2fa22dc0044b",
+    "name": "Kylling quesadillas",
+    "dishType": "None",
+    "prepMinutes": 15,
+    "cookMinutes": 35,
+    "serves": 4,
+    "instructions": "1. Skjær kyllingfileten i tynne strimler og krydre med tacokrydder.\n2. Stek kyllingen i en panne til den er gjennomstekt, ca. 5-6 minutter. Sett til side.\n3. Legg en tortilla i en tørr panne og strø over revet ost på den ene halvdelen.\n4. Legg kyllingstykkene over osten.\n5. Topp med litt mais, paprika og eventuelt jalapeño.\n6. Brett tortillaen over og stek på middels varme til osten smelter og tortillaen er sprø.\n7. Snu forsiktig og stek andre siden.\n8. Skjær i trekanter og server med guacamole og rømme.",
+    "isSeafood": false,
+    "isVegetarian": false,
+    "isVegan": false,
+    "vibeTags": [],
+    "ingredients": [
+      {
+        "id": "c03f4e1f-f6ad-44d9-99ee-fcc350098daf-1",
+        "ingredientId": "c03f4e1f-f6ad-44d9-99ee-fcc350098daf",
+        "amount": 1,
+        "label": "1 pcs Kyllingfilet",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "f4ecadad-17a0-4ac8-b205-31c277f41c63-2",
+        "ingredientId": "f4ecadad-17a0-4ac8-b205-31c277f41c63",
+        "amount": 1,
+        "label": "1 pcs Fullkornstortilla",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "cdaa7511-6a41-4895-b785-5e57bd3ec4b8-3",
+        "ingredientId": "cdaa7511-6a41-4895-b785-5e57bd3ec4b8",
+        "amount": 1,
+        "label": "1 pcs Løk",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "2e080fbd-faca-4d4e-bbe7-4eb24831679d-4",
+        "ingredientId": "2e080fbd-faca-4d4e-bbe7-4eb24831679d",
+        "amount": 1,
+        "label": "1 pcs Vårløk",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "c87af58b-e20b-4207-aa4e-29de6df72bc8-5",
+        "ingredientId": "c87af58b-e20b-4207-aa4e-29de6df72bc8",
+        "amount": 1,
+        "label": "1 pcs Paprika",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "f5c2caa8-f0b9-4d58-ad15-194393180d35-6",
+        "ingredientId": "f5c2caa8-f0b9-4d58-ad15-194393180d35",
+        "amount": 1,
+        "label": "1 pcs Rapsolje",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "3836a291-8156-4b70-8b36-ccea3e0447f2-7",
+        "ingredientId": "3836a291-8156-4b70-8b36-ccea3e0447f2",
+        "amount": 1,
+        "label": "1 pcs Hvitost",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      }
+    ],
+    "lastEatenOn": null
+  },
+  {
+    "id": "1f34671e-0c21-4c69-ab28-d3d8a4fb0bdc",
+    "name": "Burrito Bowl",
+    "dishType": "None",
+    "prepMinutes": 15,
+    "cookMinutes": 35,
+    "serves": 4,
+    "instructions": "1. Kok risen etter anvisning på pakken.\n2. Skyll og avren en boks sorte bønner.\n3. Skjær en avokado i skiver eller terninger.\n4. Stek kjøttdeig med tacokrydder til det er gjennomstekt, eller varm opp vegetaralternativ.\n5. Anrett risen i bunnen av skålen.\n6. Topp med bønner, kjøtt, avokado, mais, salat og rømme.\n7. Server med salsa og lime.",
+    "isSeafood": false,
+    "isVegetarian": false,
+    "isVegan": false,
+    "vibeTags": [],
+    "ingredients": [
+      {
+        "id": "c03f4e1f-f6ad-44d9-99ee-fcc350098daf-1",
+        "ingredientId": "c03f4e1f-f6ad-44d9-99ee-fcc350098daf",
+        "amount": 1,
+        "label": "1 pcs Kyllingfilet",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "115687f2-3baa-4f5b-8767-1b5997d03a07-2",
+        "ingredientId": "115687f2-3baa-4f5b-8767-1b5997d03a07",
+        "amount": 1,
+        "label": "1 pcs Røde bønner",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "4dbf03c6-6ba6-4513-ae43-810cd553c194-3",
+        "ingredientId": "4dbf03c6-6ba6-4513-ae43-810cd553c194",
+        "amount": 1,
+        "label": "1 pcs Mais",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "9e9a675a-fc58-46a3-b099-a88b846bee0b-4",
+        "ingredientId": "9e9a675a-fc58-46a3-b099-a88b846bee0b",
+        "amount": 1,
+        "label": "1 pcs Creme Fraiche",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "f545e5d7-7a8a-4920-8e4c-728f61be97da-5",
+        "ingredientId": "f545e5d7-7a8a-4920-8e4c-728f61be97da",
+        "amount": 1,
+        "label": "1 pcs Salat",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "90e2ae72-77ef-4255-bfb2-fadf86bfb1f4-6",
+        "ingredientId": "90e2ae72-77ef-4255-bfb2-fadf86bfb1f4",
+        "amount": 1,
+        "label": "1 pcs Tortillachips",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "6e212584-8196-4771-a545-5b612a50fe83-7",
+        "ingredientId": "6e212584-8196-4771-a545-5b612a50fe83",
+        "amount": 1,
+        "label": "1 pcs Ost",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "fe059da2-9722-4c7c-8cd9-4d0be3b1328b-8",
+        "ingredientId": "fe059da2-9722-4c7c-8cd9-4d0be3b1328b",
+        "amount": 1,
+        "label": "1 pcs Tacosaus",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      }
+    ],
+    "lastEatenOn": null
+  },
+  {
+    "id": "6a8f6d09-1715-41a7-819d-54d3646ce405",
+    "name": "Kyllingsalat",
+    "dishType": "None",
+    "prepMinutes": 15,
+    "cookMinutes": 15,
+    "serves": 4,
+    "instructions": "1. Kok eller stek kyllingfileten til den er gjennomstekt. Avkjøl og skjær i skiver.\n2. Vask og riv salatblader i munrette biter.\n3. Skjær tomat, agurk og paprika i biter.\n4. Del cherrytomater i to.\n5. Bland salaten, grønnsakene og kyllingen i en stor bolle.\n6. Lav en enkel dressing av olivenolje, sitronsaft, salt og pepper.\n7. Dryss over ristede solsikkefrø eller pinjekjerner.\n8. Hell dressingen over og bland forsiktig. Server umiddelbart.",
+    "isSeafood": false,
+    "isVegetarian": false,
+    "isVegan": false,
+    "vibeTags": [],
+    "ingredients": [
+      {
+        "id": "e7bb931a-0b11-441f-bec8-d0ce8580e7d1-1",
+        "ingredientId": "e7bb931a-0b11-441f-bec8-d0ce8580e7d1",
+        "amount": 1,
+        "label": "1 pcs Kyllingkjøttdeig",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "f545e5d7-7a8a-4920-8e4c-728f61be97da-2",
+        "ingredientId": "f545e5d7-7a8a-4920-8e4c-728f61be97da",
+        "amount": 1,
+        "label": "1 pcs Salat",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      },
+      {
+        "id": "d6b8ec8e-0f24-4921-a579-6f706f9e96f6-3",
+        "ingredientId": "d6b8ec8e-0f24-4921-a579-6f706f9e96f6",
+        "amount": 1,
+        "label": "1 pcs Fetaost",
+        "unit": "Pcs",
+        "scaling": "PerDish",
+        "personCount": null
+      }
+    ],
+    "lastEatenOn": null
+  }
+]

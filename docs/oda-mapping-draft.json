@@ -1,0 +1,152 @@
+[
+  {
+    "ingredient": "Agurk",
+    "odaProductId": 9281,
+    "product": "Agurk Norge",
+    "pack": "1 stk"
+  },
+  {
+    "ingredient": "Blåbærsyltetøy",
+    "odaProductId": 40694,
+    "product": "Lerum Blåbær Original u/ tilsatt sukker",
+    "pack": "435 g"
+  },
+  {
+    "ingredient": "Brokkoli",
+    "odaProductId": 62000,
+    "product": "Brokkoli Vår Laveste Pris",
+    "pack": "1 stk"
+  },
+  {
+    "ingredient": "Brunsaus",
+    "odaProductId": 10691,
+    "product": "Toro Brun saus med løk",
+    "pack": "47 g"
+  },
+  {
+    "ingredient": "Chipotle Mayo",
+    "odaProductId": 69081,
+    "product": "Broken Taco Chipotle Mayo",
+    "pack": "200 ml"
+  },
+  {
+    "ingredient": "Fetaost",
+    "odaProductId": 4603,
+    "product": "Apetina soltørket tomater",
+    "pack": "100 g"
+  },
+  {
+    "ingredient": "Hvitost",
+    "odaProductId": 990,
+    "product": "TINE Jarlsberg Skivet",
+    "pack": "250 g"
+  },
+  {
+    "ingredient": "Kjøttdeig",
+    "odaProductId": 63590,
+    "product": "Vår Laveste Pris Kjøttdeig storfe 14%",
+    "pack": "400 g"
+  },
+  {
+    "ingredient": "Kokt skinke",
+    "odaProductId": 4750,
+    "product": "Kokt skinke",
+    "pack": "100 g"
+  },
+  {
+    "ingredient": "Kyllingkjøttdeig",
+    "odaProductId": 64295,
+    "product": "Ytterøy Kylling kjøttdeig",
+    "pack": "400 g"
+  },
+  {
+    "ingredient": "Laks",
+    "odaProductId": 27247,
+    "product": "Norsk Sjømat Laksefilet m/ skinn",
+    "pack": "500 g"
+  },
+  {
+    "ingredient": "Lasagne",
+    "odaProductId": 700,
+    "product": "Toro Lasagne",
+    "pack": "200 g"
+  },
+  {
+    "ingredient": "Ost",
+    "odaProductId": 161,
+    "product": "TINE Revet ost Original",
+    "pack": "300 g"
+  },
+  {
+    "ingredient": "Polarbrød",
+    "odaProductId": 39377,
+    "product": "Polarbrød Hvete",
+    "pack": "12 stk"
+  },
+  {
+    "ingredient": "Pommes Express",
+    "odaProductId": 20950,
+    "product": "R Pommes Express",
+    "pack": "450 g"
+  },
+  {
+    "ingredient": "Rømme",
+    "odaProductId": 8059,
+    "product": "TINE Lettrømme 10%",
+    "pack": "300 g"
+  },
+  {
+    "ingredient": "Salat",
+    "odaProductId": 9428,
+    "product": "Huseby Gaard Crispisalat beger",
+    "pack": "150 g"
+  },
+  {
+    "ingredient": "Sprøbakte fiskefileter",
+    "odaProductId": 25352,
+    "product": "FINDUS Sprøbakte fiskefileter MSC",
+    "pack": "500 g"
+  },
+  {
+    "ingredient": "Stand'n Stuff soft tortillas",
+    "odaProductId": 3487,
+    "product": "Old El Paso Stand'n Stuff Soft Tortillas",
+    "pack": "8 stk"
+  },
+  {
+    "ingredient": "Tacosaus",
+    "odaProductId": 7258,
+    "product": "Old El Paso Taco Sauce Hot",
+    "pack": "230 g"
+  },
+  {
+    "ingredient": "Tomatpure",
+    "odaProductId": 15441,
+    "product": "Stavland Tomatpuré",
+    "pack": "180 g"
+  },
+  {
+    "ingredient": "Tortillalefser",
+    "odaProductId": 37882,
+    "product": "Santa Maria Tortilla Original Medium",
+    "pack": "8 stk"
+  },
+  {
+    "ingredient": "Vegetarboller",
+    "odaProductId": 31480,
+    "product": "Stabburet Vegetarboller",
+    "pack": "300 g"
+  },
+  {
+    "ingredient": "Nudler",
+    "odaProductId": 15199,
+    "product": "R Nudler med kyllingsmak 5x85g",
+    "pack": "5 stk"
+  },
+  {
+    "ingredient": "Chipotle Mayo (preferred)",
+    "odaProductId": 69644,
+    "product": "Døgnvill Chipotlemajones",
+    "pack": "250 g"
+  }
+]
