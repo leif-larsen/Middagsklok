@@ -1,0 +1,34 @@
+{
+  "id": "b39f15b2-ca65-46e6-ba77-87597dfab8fe",
+  "name": "Laks m/pasta",
+  "dishType": "Pasta",
+  "prepMinutes": 0,
+  "cookMinutes": 0,
+  "serves": 4,
+  "instructions": "1. Kok pasta etter anvisning på pakken. Spar litt kokvann.\n2. Skjær laksen i terninger og krydre med salt og pepper.\n3. Stek laksen forsiktig i smør i 3-4 minutter til den er gjennomstekt.\n4. I en annen panne, fres hvitløk i smør. Tilsett fløte og la det småkoke.\n5. Smak til sausen med sitron, dill, salt og pepper.\n6. Bland den kokte pastaen inn i sausen. Tilsett litt pastakokvann om nødvendig.\n7. Vend laksen forsiktig inn i pastaen.\n8. Server umiddelbart med revet parmesan og frisk dill på toppen.",
+  "isSeafood": true,
+  "isVegetarian": false,
+  "isVegan": false,
+  "vibeTags": [],
+  "ingredients": [
+    {
+      "id": "785b6105-d78d-4fec-8f9b-1fbcf66d90a1-1",
+      "ingredientId": "785b6105-d78d-4fec-8f9b-1fbcf66d90a1",
+      "amount": 400,
+      "label": "400 pcs Laks",
+      "unit": "Pcs",
+      "scaling": "PerDish",
+      "personCount": null
+    },
+    {
+      "id": "a197b793-bba1-4111-a0ae-fcbf459a2883-2",
+      "ingredientId": "a197b793-bba1-4111-a0ae-fcbf459a2883",
+      "amount": 180,
+      "label": "180 pcs Pasta",
+      "unit": "Pcs",
+      "scaling": "PerDish",
+      "personCount": null
+    }
+  ],
+  "lastEatenOn": "2026-03-05"
+}
