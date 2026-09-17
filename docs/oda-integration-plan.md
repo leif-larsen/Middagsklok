@@ -252,7 +252,14 @@ split the shopping list into two lines that each round up to their own package, 
 over-buys. The three generated recipes get converted to portion scaling as part of the cleanup,
 since remapping them to canonical ingredients is the same operation.
 
-## Phase 4: the MCP server
+## Phase 4: the MCP server (done, 2026-09-17)
+
+Built as designed. Usage, configuration and the tool table: `mcp-server.md`. Two notes:
+
+- The API is reached through the frontend proxy at `http://praxis-server:3000/api`, not `:5116`,
+  so `MIDDAGSKLOK_API_URL` carries the full base including `/api`.
+- `set_weekly_plan` merges edits into the existing week before calling the API's upsert, which
+  requires all seven days. Days not named keep their value.
 
 New project `src/Middagsklok.Mcp`, .NET 10, stdio transport, official C# MCP SDK
 (`ModelContextProtocol` on NuGet; pin the version at implementation time rather than assuming).

@@ -31,4 +31,6 @@ This starts the full local environment (API, frontend, and PostgreSQL).
 - `src/Middagsklok.Api` - Backend API and domain logic
 - `src/Frontend/middagsklok` - Next.js frontend
 - `src/Middagsklok.AppHost` - Aspire app host for local development
-- `tests/Middagsklok.Tests` - Unit tests
+- `src/Middagsklok.Mcp` - stdio MCP server for Claude Code, see `docs/mcp-server.md`
+- `tests/Middagsklok.Tests` - API unit tests
+- `tests/Middagsklok.Mcp.Tests` - MCP server unit tests
