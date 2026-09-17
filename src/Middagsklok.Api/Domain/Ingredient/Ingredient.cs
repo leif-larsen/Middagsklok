@@ -13,6 +13,10 @@ public class Ingredient(
     // Pantry staples are excluded from shopping suggestions because they are always in stock.
     public bool IsPantryStaple { get; private set; } = isPantryStaple;
 
+    // The Oda product this ingredient resolves to, or a record that Oda does not stock it.
+    // Null means nobody has looked yet.
+    public OdaProductMapping? OdaMapping { get; private set; }
+
     // Updates the ingredient details.
     public void Update(string name, IngredientCategory category, Unit defaultUnit, bool isPantryStaple = false)
     {
@@ -20,6 +24,20 @@ public class Ingredient(
         Category = category;
         DefaultUnit = defaultUnit;
         IsPantryStaple = isPantryStaple;
+        Touch();
+    }
+
+    // Sets or replaces the Oda mapping for this ingredient.
+    public void SetOdaMapping(OdaProductMapping mapping)
+    {
+        OdaMapping = mapping;
+        Touch();
+    }
+
+    // Removes the Oda mapping so the ingredient counts as unmapped again.
+    public void ClearOdaMapping()
+    {
+        OdaMapping = null;
         Touch();
     }
 }

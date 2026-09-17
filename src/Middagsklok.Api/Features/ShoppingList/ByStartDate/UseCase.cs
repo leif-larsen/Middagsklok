@@ -186,7 +186,8 @@ internal sealed class UseCase(AppDbContext dbContext)
                         ingredient.Name,
                         ingredient.Category,
                         dishIngredient.Unit,
-                        ingredient.IsPantryStaple);
+                        ingredient.IsPantryStaple,
+                        ingredient.OdaMapping);
                     items.Add(key, aggregate);
                 }
 
@@ -209,11 +210,47 @@ internal sealed class UseCase(AppDbContext dbContext)
                         Round(item.Amount),
                         item.Unit.ToString(),
                         item.Dishes,
-                        item.IsPantryStaple))
+                        item.IsPantryStaple,
+                        OdaStatusFor(item.OdaMapping),
+                        OdaProductFor(item)))
                     .ToArray()))
             .ToArray();
 
         return categories;
+    }
+
+    // Describes whether the ingredient is unmapped, mapped to a product, or known to be missing at Oda.
+    private static string OdaStatusFor(OdaProductMapping? mapping) =>
+        mapping switch
+        {
+            null => OdaStatus.Unmapped,
+            { Availability: OdaAvailability.NotAvailable } => OdaStatus.NotAvailable,
+            _ => OdaStatus.Mapped
+        };
+
+    // Builds the Oda product block for a mapped ingredient, including the package count that covers the amount.
+    private static OdaProduct? OdaProductFor(ShoppingAggregate item)
+    {
+        var mapping = item.OdaMapping;
+
+        if (mapping is null
+            || mapping.Availability is not OdaAvailability.Available
+            || mapping.OdaProductId is null
+            || mapping.PackQuantity is null
+            || mapping.PackUnit is null)
+        {
+            return null;
+        }
+
+        var product = new OdaProduct(
+            mapping.OdaProductId.Value,
+            mapping.OdaProductName ?? string.Empty,
+            mapping.PackQuantity.Value,
+            mapping.PackUnit.Value.ToString(),
+            mapping.SuggestedPackCount(item.Amount, item.Unit),
+            mapping.IsConfirmed);
+
+        return product;
     }
 
     // Trims floating point noise from accumulated per-serving amounts.
@@ -238,12 +275,20 @@ internal sealed record UseCaseResult(
 
 internal readonly record struct ShoppingKey(Guid IngredientId, Unit Unit);
 
+internal static class OdaStatus
+{
+    public const string Unmapped = "Unmapped";
+    public const string Mapped = "Mapped";
+    public const string NotAvailable = "NotAvailable";
+}
+
 internal sealed class ShoppingAggregate(
     Guid ingredientId,
     string name,
     IngredientCategory category,
     Unit unit,
-    bool isPantryStaple)
+    bool isPantryStaple,
+    OdaProductMapping? odaMapping)
 {
     private readonly List<string> _dishes = new();
 
@@ -252,6 +297,7 @@ internal sealed class ShoppingAggregate(
     public IngredientCategory Category { get; } = category;
     public Unit Unit { get; } = unit;
     public bool IsPantryStaple { get; } = isPantryStaple;
+    public OdaProductMapping? OdaMapping { get; } = odaMapping;
     public double Amount { get; private set; }
     public IReadOnlyList<string> Dishes => _dishes;
 

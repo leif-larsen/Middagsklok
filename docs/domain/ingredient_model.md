@@ -71,8 +71,42 @@ Minimum set inferred from the UI:
 | `ML`| ml |
 | `L` | l |
 | `KG` | kg |
+| `PACK` | pk |
 
-*(Can naturally be extended if the domain grows.)*
+`PACK` is a fraction of one retail package, for amounts that are naturally "most of a bag".
+
+---
+
+## Oda product mapping
+
+An ingredient may carry at most one `OdaProductMapping`, stored in `ingredient_oda_products` and
+loaded with the ingredient. It answers the question "what do I put in the Oda cart for this?".
+
+| Field | Type | Notes |
+|---|---|---|
+| `availability` | `Available` \| `NotAvailable` | `NotAvailable` records that Oda does not stock the ingredient (takeaway, caravan-trip food), so nobody searches for it again. |
+| `odaProductId` | int, nullable | Oda product id. Null when `NotAvailable`. |
+| `odaProductName` | string, nullable | Snapshot of the product name at mapping time, for display and drift detection. |
+| `packQuantity` + `packUnit` | double + `Unit`, nullable | Size of one retail package, e.g. `400 G`. |
+| `confirmedAt` | datetime, nullable | Null means auto-suggested; set once a person confirms the product. |
+
+Three states follow from this: **unmapped** (no row), **mapped** (row with a product) and
+**not available** (row without a product). The shopping list exposes them as `odaStatus`.
+
+### Package count rule
+
+`SuggestedPackCount(amount, unit)` returns `ceil(amount / packQuantity)` when the units share a
+dimension. `G` and `Kg` convert, as do `Ml` and `L`. A `Pack` amount already counts packages and
+ignores the pack size. `Pcs` against a weight or volume pack does not convert; each piece counts
+as one package. Any other combination returns `null`, and the caller has to ask.
+
+### Endpoints
+
+| Method | Route | Body |
+|---|---|---|
+| `GET` | `/ingredients/oda-mappings` | Returns `mappings` and `unmapped` (ordered by how many dishes use the ingredient). |
+| `PUT` | `/ingredients/{id}/oda-mapping` | `{ "productId", "productName", "packQuantity", "packUnit", "confirmed" }` or `{ "notAvailable": true }`. Replaces any existing mapping. |
+| `DELETE` | `/ingredients/{id}/oda-mapping` | Clears the mapping. |
 
 ---
 

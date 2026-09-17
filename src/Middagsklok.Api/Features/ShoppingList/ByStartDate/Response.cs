@@ -14,7 +14,18 @@ public sealed record ShoppingItem(
     double Amount,
     string Unit,
     IReadOnlyList<string> Dishes,
-    bool IsPantryStaple);
+    bool IsPantryStaple,
+    string OdaStatus,
+    OdaProduct? OdaProduct);
+
+// Present only when the ingredient maps to a concrete Oda product.
+public sealed record OdaProduct(
+    int ProductId,
+    string ProductName,
+    double PackQuantity,
+    string PackUnit,
+    int? SuggestedPackCount,
+    bool Confirmed);
 
 public sealed record ErrorResponse(
     string Message,
