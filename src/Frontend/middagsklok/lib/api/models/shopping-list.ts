@@ -1,3 +1,14 @@
+export type OdaProduct = {
+  productId: number;
+  productName: string;
+  packQuantity: number;
+  packUnit: string;
+  suggestedPackCount: number | null;
+  confirmed: boolean;
+};
+
+export type OdaStatus = "Unmapped" | "Mapped" | "NotAvailable";
+
 export type ShoppingListItem = {
   ingredientId: string;
   name: string;
@@ -5,6 +16,8 @@ export type ShoppingListItem = {
   unit: string;
   dishes: string[];
   isPantryStaple: boolean;
+  odaStatus: OdaStatus;
+  odaProduct: OdaProduct | null;
 };
 
 export type ShoppingListCategory = {

@@ -149,7 +149,17 @@ Order by rotation value, not alphabetically:
 
 Skip the six dishes that already have clean data.
 
-## Phase 3: Oda product mapping
+## Phase 3: Oda product mapping (done, 2026-09-17)
+
+Built as designed below, with three deviations worth knowing about:
+
+- The mapping is an EF Core `OwnsOne` on `Ingredient`, so the table is keyed by `ingredient_id`
+  and has no separate `id` column. It loads with the ingredient.
+- "Not available at Oda" lives in the same row as an `availability` column, with the product
+  fields nullable. The shopping list reports `odaStatus` as `Unmapped`, `Mapped` or `NotAvailable`.
+- `PUT /ingredients/{id}/oda-mapping` takes either product fields or `{ "notAvailable": true }`.
+
+Details and the package-count rule: `domain/ingredient_model.md`.
 
 Now much more valuable, because amounts are real and pack arithmetic means something.
 

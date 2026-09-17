@@ -45,6 +45,54 @@ public class IngredientConfiguration : IEntityTypeConfiguration<IngredientEntity
             .HasColumnName("updated_at")
             .IsRequired();
 
+        builder.OwnsOne(i => i.OdaMapping, mappingBuilder =>
+        {
+            mappingBuilder.ToTable("ingredient_oda_products");
+
+            mappingBuilder.WithOwner()
+                .HasForeignKey("ingredient_id");
+
+            mappingBuilder.Property(m => m.Availability)
+                .HasColumnName("availability")
+                .HasConversion<string>()
+                .HasMaxLength(20)
+                .IsRequired();
+
+            mappingBuilder.Property(m => m.OdaProductId)
+                .HasColumnName("oda_product_id");
+
+            mappingBuilder.Property(m => m.OdaProductName)
+                .HasColumnName("oda_product_name")
+                .HasMaxLength(300);
+
+            mappingBuilder.Property(m => m.PackQuantity)
+                .HasColumnName("pack_quantity");
+
+            mappingBuilder.Property(m => m.PackUnit)
+                .HasColumnName("pack_unit")
+                .HasConversion<string>()
+                .HasMaxLength(10);
+
+            mappingBuilder.Property(m => m.ConfirmedAt)
+                .HasColumnName("confirmed_at");
+
+            mappingBuilder.Property(m => m.CreatedAt)
+                .HasColumnName("created_at")
+                .IsRequired();
+
+            mappingBuilder.Property(m => m.UpdatedAt)
+                .HasColumnName("updated_at")
+                .IsRequired();
+
+            mappingBuilder.Ignore(m => m.IsConfirmed);
+
+            mappingBuilder.HasIndex(m => m.OdaProductId)
+                .HasDatabaseName("ix_ingredient_oda_products_oda_product_id");
+        });
+
+        builder.Navigation(i => i.OdaMapping)
+            .AutoInclude();
+
         builder.HasIndex(i => i.Name)
             .HasDatabaseName("ix_ingredients_name");
     }
