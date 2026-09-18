@@ -1,12 +1,13 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
 var postgres = builder.AddAzurePostgresFlexibleServer("postgres")
-    .RunAsContainer(c => {
+    .RunAsContainer(c =>
+    {
         c.WithDataVolume("middagsklok-postgres-data");
         c.WithPgAdmin(pgAdmin =>
         {
             pgAdmin.WithHostPort(5050);
-        });    
+        });
     });
 
 var database = postgres.AddDatabase("middagsklok");
@@ -22,5 +23,5 @@ var frontend = builder.AddJavaScriptApp("frontend", "../frontend/middagsklok/")
     .WithExternalHttpEndpoints();
 
 apiService.WithEnvironment("Cors__AllowedOrigins__0", frontend.GetEndpoint("http"));
-    
+
 builder.Build().Run();
