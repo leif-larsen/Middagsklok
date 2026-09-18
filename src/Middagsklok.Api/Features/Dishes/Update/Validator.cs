@@ -249,7 +249,7 @@ internal sealed class Validator
         return DishTypeParseResult.Valid(normalized);
     }
 
-    // Normalizes planner vibe tags, silently dropping any value outside the vocabulary.
+    // Validates and normalizes planner vibe tags.
     private static VibeTagParseResult ParseVibeTags(IReadOnlyList<string>? rawVibeTags)
     {
         var values = rawVibeTags ?? Array.Empty<string>();
@@ -259,12 +259,18 @@ internal sealed class Validator
         }
 
         var normalizedValues = new List<string>();
+        var failures = new List<ValidationError>();
         var seenValues = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var allowed = string.Join(", ", DishTaxonomy.GetVibeTags().Select(tag => tag.Value));
 
-        foreach (var rawValue in values)
+        for (var index = 0; index < values.Count; index++)
         {
+            var rawValue = values[index];
             if (!DishTaxonomy.TryNormalizeVibeTag(rawValue, out var normalizedValue))
             {
+                failures.Add(new ValidationError(
+                    BuildVibeTagField(index),
+                    $"Vibe tag must be one of: {allowed}."));
                 continue;
             }
 
@@ -276,7 +282,7 @@ internal sealed class Validator
             normalizedValues.Add(normalizedValue);
         }
 
-        return new VibeTagParseResult(normalizedValues, Array.Empty<ValidationError>());
+        return new VibeTagParseResult(normalizedValues, failures);
     }
 
     // Normalizes free-form instructions input.

@@ -30,9 +30,9 @@ public sealed class ValidatorTests
         await Assert.That(result.Errors.Any(error => error.Field == "dishType")).IsTrue();
     }
 
-    // Verifies that unknown vibe tags are silently dropped and do not cause a validation failure.
+    // Verifies that unknown vibe tags are rejected in update requests.
     [Test]
-    public async Task DropsUnknownVibeTagsWithoutFailure()
+    public async Task RejectsUnknownVibeTag()
     {
         var validator = new Validator();
         var request = new Request(
@@ -50,13 +50,13 @@ public sealed class ValidatorTests
 
         var result = validator.Validate(Guid.NewGuid().ToString("D"), request);
 
-        await Assert.That(result.IsValid).IsTrue();
-        await Assert.That(result.Candidate!.VibeTags).IsEmpty();
+        await Assert.That(result.IsValid).IsFalse();
+        await Assert.That(result.Errors.Any(error => error.Field == "vibeTags[0]")).IsTrue();
     }
 
-    // Verifies that a dish round-tripped with a mix of known and unknown vibe tags retains only the known ones.
+    // Verifies that a dish round-tripped with a mix of casings of a known vibe tag retains only one, deduplicated entry.
     [Test]
-    public async Task RoundTripWithMixedVibeTagsKeepsOnlyKnown()
+    public async Task RoundTripWithDuplicateVibeTagCasingKeepsOneEntry()
     {
         var validator = new Validator();
         var request = new Request(
@@ -69,7 +69,7 @@ public sealed class ValidatorTests
             false,
             false,
             false,
-            ["comfort food", "ComfortFood", "smooth"],
+            ["comfortfood", "ComfortFood"],
             [new IngredientInput(null, "Salt", 1)]);
 
         var result = validator.Validate(Guid.NewGuid().ToString("D"), request);
