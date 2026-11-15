@@ -13,6 +13,7 @@ import type {
   RecipeSuggestionRequest,
   RecipeSuggestionsResponse,
   RecipeInstructionsResponse,
+  RecipeScaledIngredientsResponse,
   SaveFromSuggestionRequest,
   SaveFromSuggestionResponse,
 } from "./models/recipes";
@@ -111,6 +112,11 @@ export type ApiClient = {
   getDishesLookup: (init?: RequestInit) => Promise<DishesLookupResponse>;
   getDishesMetadata: (init?: RequestInit) => Promise<DishesMetadataResponse>;
   getRecipeInstructions: (init?: RequestInit) => Promise<RecipeInstructionsResponse>;
+  getRecipeScaledIngredients: (
+    dishId: string,
+    servings?: number | null,
+    init?: RequestInit,
+  ) => Promise<RecipeScaledIngredientsResponse>;
   getRecipeSuggestions: (
     payload: RecipeSuggestionRequest,
     init?: RequestInit,
@@ -203,6 +209,16 @@ export const apiClient: ApiClient = {
       method: "GET",
       ...init,
     }),
+  getRecipeScaledIngredients: (dishId, servings, init) => {
+    const query = servings ? `?servings=${servings}` : "";
+    return request<RecipeScaledIngredientsResponse>(
+      `/api/recipes/${encodeURIComponent(dishId)}/ingredients${query}`,
+      {
+        method: "GET",
+        ...init,
+      },
+    );
+  },
   getRecipeSuggestions: (payload, init) =>
     request<RecipeSuggestionsResponse>("/api/recipes/suggestions", {
       method: "POST",

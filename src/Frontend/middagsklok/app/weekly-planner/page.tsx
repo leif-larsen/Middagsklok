@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { ApiError, apiClient } from "../../lib/api/client";
 import type { DishLookup } from "../../lib/api/models/dishes";
@@ -62,6 +63,17 @@ const buildServingsPlan = (days: WeekDay[]) =>
     accumulator[day.key] = "";
     return accumulator;
   }, {});
+
+// Links to the recipe view, carrying the day's servings override when one is set.
+const buildRecipeHref = (dishId: string, servingsValue: string | undefined) => {
+  const params = new URLSearchParams({ dishId });
+  const servings = Number.parseInt(servingsValue?.trim() ?? "", 10);
+  if (Number.isFinite(servings) && servings > 0) {
+    params.set("servings", String(servings));
+  }
+
+  return `/recipes?${params.toString()}`;
+};
 
 const formatSelectionType = (value: string) => value.trim().toUpperCase();
 
@@ -725,6 +737,14 @@ export default function WeeklyPlannerPage() {
                       </div>
 
                       <div className="mt-auto space-y-3">
+                        {day.dishId ? (
+                          <Link
+                            href={buildRecipeHref(day.dishId, servingsPlan[day.key])}
+                            className="inline-flex items-center gap-1 text-xs font-semibold text-[#2f6b4f] underline-offset-2 hover:underline"
+                          >
+                            Se oppskrift →
+                          </Link>
+                        ) : null}
                         {dishType ? (
                           <span className="inline-flex rounded-full bg-[#e7f0e8] px-3 py-1 text-xs font-semibold text-[#3a5a44]">
                             {dishType}
