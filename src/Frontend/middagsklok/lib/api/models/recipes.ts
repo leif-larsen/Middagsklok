@@ -22,6 +22,25 @@ export type RecipeInstruction = {
   steps: RecipeInstructionStep[];
 };
 
+export type RecipeScaledIngredient = {
+  ingredientId: string;
+  name: string;
+  amount: number;
+  unit: string;
+  scaling: string;
+  displayAmount: string;
+  displayUnit: string;
+  note?: string | null;
+};
+
+export type RecipeScaledIngredientsResponse = {
+  dishId: string;
+  dishName: string;
+  serves: number;
+  servings: number;
+  ingredients: RecipeScaledIngredient[];
+};
+
 export type RecipeInstructionsResponse = {
   recipes: RecipeInstruction[];
 };

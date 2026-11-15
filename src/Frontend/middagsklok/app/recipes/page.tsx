@@ -3,9 +3,29 @@
 import { useMemo, useState, useCallback, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import { apiClient, ApiError } from "../../lib/api/client";
-import type { RecipeSuggestion, RecipeInstruction } from "../../lib/api/models/recipes";
+import type {
+  RecipeSuggestion,
+  RecipeInstruction,
+  RecipeScaledIngredientsResponse,
+} from "../../lib/api/models/recipes";
 
 type TabKey = "instructions" | "ai";
+
+const MIN_SERVINGS = 1;
+const MAX_SERVINGS = 30;
+
+const clampServings = (value: number) =>
+  Math.min(MAX_SERVINGS, Math.max(MIN_SERVINGS, Math.round(value)));
+
+// Reads `?dishId=...&servings=...` so a planned day can open its recipe at that day's servings.
+const readRecipeLink = () => {
+  const params = new URLSearchParams(window.location.search);
+  const dishId = params.get("dishId");
+  const servingsValue = Number.parseInt(params.get("servings") ?? "", 10);
+  const servings = Number.isFinite(servingsValue) ? clampServings(servingsValue) : null;
+
+  return { dishId, servings };
+};
 
 export default function RecipesPage() {
   const [activeTab, setActiveTab] = useState<TabKey>("ai");
@@ -21,6 +41,11 @@ export default function RecipesPage() {
   const [recipesLoading, setRecipesLoading] = useState(false);
   const [recipesError, setRecipesError] = useState<string | null>(null);
   const [selectedDishId, setSelectedDishId] = useState<string | null>(null);
+  // Null means "let the API pick", which is the household size from the planning settings.
+  const [requestedServings, setRequestedServings] = useState<number | null>(null);
+  const [scaled, setScaled] = useState<RecipeScaledIngredientsResponse | null>(null);
+  const [scaledLoading, setScaledLoading] = useState(false);
+  const [scaledError, setScaledError] = useState<string | null>(null);
 
   const selectedRecipe = useMemo(
     () => recipes.find((recipe) => recipe.dishId === selectedDishId) ?? null,
@@ -49,6 +74,74 @@ export default function RecipesPage() {
 
     loadRecipes();
   }, []);
+
+  useEffect(() => {
+    const link = readRecipeLink();
+    if (!link.dishId) {
+      return;
+    }
+
+    setActiveTab("instructions");
+    setSelectedDishId(link.dishId);
+    setRequestedServings(link.servings);
+  }, []);
+
+  useEffect(() => {
+    if (!selectedDishId) {
+      setScaled(null);
+      return;
+    }
+
+    const controller = new AbortController();
+
+    const loadScaled = async () => {
+      setScaledLoading(true);
+      setScaledError(null);
+
+      try {
+        const response = await apiClient.getRecipeScaledIngredients(
+          selectedDishId,
+          requestedServings,
+          { signal: controller.signal },
+        );
+        setScaled(response);
+      } catch (err) {
+        if (controller.signal.aborted) {
+          return;
+        }
+
+        if (err instanceof ApiError) {
+          const body = err.body as { message?: string } | undefined;
+          setScaledError(body?.message ?? `Kunne ikke beregne mengder: ${err.message}`);
+        } else {
+          setScaledError("En uventet feil oppstod under beregning av mengder.");
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setScaledLoading(false);
+        }
+      }
+    };
+
+    loadScaled();
+
+    return () => controller.abort();
+  }, [selectedDishId, requestedServings]);
+
+  // Only trust the scaled response once it belongs to the dish on screen.
+  const scaledForSelected = scaled?.dishId === selectedDishId ? scaled : null;
+  const currentServings = requestedServings ?? scaledForSelected?.servings ?? null;
+
+  const changeServings = useCallback(
+    (delta: number) => {
+      if (currentServings === null) {
+        return;
+      }
+
+      setRequestedServings(clampServings(currentServings + delta));
+    },
+    [currentServings],
+  );
 
   const showAiEmptyState = useMemo(
     () => activeTab === "ai" && suggestions.length === 0 && !isLoading && !error,
@@ -217,20 +310,57 @@ export default function RecipesPage() {
                                   ~{selectedRecipe.totalMinutes} min
                                 </span>
                               )}
-                              {selectedRecipe.servings && (
-                                <span className="inline-flex items-center gap-1">
-                                  <ServingsIcon className="h-3.5 w-3.5" />
-                                  {selectedRecipe.servings} porsjoner
-                                </span>
-                              )}
                             </div>
                           </div>
 
                           <div className="space-y-3">
-                            <h4 className="text-sm font-semibold text-[#1f2a22]">Ingredienser</h4>
-                            {selectedRecipe.ingredients.length > 0 ? (
-                              <ul className="space-y-2">
-                                {selectedRecipe.ingredients.map((ingredient) => (
+                            <div className="flex flex-wrap items-center justify-between gap-3">
+                              <h4 className="text-sm font-semibold text-[#1f2a22]">Ingredienser</h4>
+                              <div
+                                role="group"
+                                aria-label="Antall porsjoner"
+                                className="inline-flex items-center gap-1 rounded-full border border-[#dfe7d7] bg-white p-1 text-sm text-[#1f2a22]"
+                              >
+                                <button
+                                  type="button"
+                                  onClick={() => changeServings(-1)}
+                                  disabled={currentServings === null || currentServings <= MIN_SERVINGS}
+                                  aria-label="Færre porsjoner"
+                                  className="grid h-7 w-7 place-items-center rounded-full text-base font-semibold text-[#2f6b4f] transition hover:bg-[#eef4ee] disabled:cursor-not-allowed disabled:opacity-40"
+                                >
+                                  −
+                                </button>
+                                <span className="inline-flex min-w-28 items-center justify-center gap-1.5 px-1 font-medium">
+                                  <ServingsIcon className="h-3.5 w-3.5 text-[#6c7a70]" />
+                                  <span aria-live="polite">
+                                    {currentServings ?? "–"} porsjoner
+                                  </span>
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => changeServings(1)}
+                                  disabled={currentServings === null || currentServings >= MAX_SERVINGS}
+                                  aria-label="Flere porsjoner"
+                                  className="grid h-7 w-7 place-items-center rounded-full text-base font-semibold text-[#2f6b4f] transition hover:bg-[#eef4ee] disabled:cursor-not-allowed disabled:opacity-40"
+                                >
+                                  +
+                                </button>
+                              </div>
+                            </div>
+                            {scaledError ? (
+                              <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                                {scaledError}
+                              </div>
+                            ) : !scaledForSelected ? (
+                              <div className="flex items-center gap-2 text-sm text-[#6c7a70]">
+                                <LoadingIcon className="h-4 w-4 animate-spin text-[#2f6b4f]" />
+                                Beregner mengder...
+                              </div>
+                            ) : scaledForSelected.ingredients.length > 0 ? (
+                              <ul
+                                className={`space-y-2 transition-opacity ${scaledLoading ? "opacity-60" : ""}`}
+                              >
+                                {scaledForSelected.ingredients.map((ingredient) => (
                                   <li
                                     key={ingredient.ingredientId}
                                     className="flex items-center gap-3 rounded-xl border border-[#dfe7d7] bg-white px-4 py-3"
@@ -247,8 +377,8 @@ export default function RecipesPage() {
                                           </span>
                                         )}
                                       </span>
-                                      <span className="text-sm font-medium text-[#4f5f55]">
-                                        {ingredient.quantity} {ingredient.unit.toLowerCase()}
+                                      <span className="whitespace-nowrap text-sm font-medium text-[#4f5f55]">
+                                        {ingredient.displayAmount} {ingredient.displayUnit}
                                       </span>
                                     </div>
                                   </li>
